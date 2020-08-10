@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "1015866752187",
+    "firebase_url": "https://fc-chipchop-test.firebaseio.com",
+    "project_id": "fc-chipchop-test",
+    "storage_bucket": "fc-chipchop-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015866752187:android:32e7f401837448f5627d9e",
+        "android_client_info": {
+          "package_name": "com.chipchop.buyer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB3aK3rImYdWvrQ-d6vTQlCxMtofTrJxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015866752187:android:d5cb291e06f001f9627d9e",
+        "android_client_info": {
+          "package_name": "com.chipchop.seller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB3aK3rImYdWvrQ-d6vTQlCxMtofTrJxA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
