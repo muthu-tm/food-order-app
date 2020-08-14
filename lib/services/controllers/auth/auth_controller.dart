@@ -1,5 +1,6 @@
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_preferences.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/hash_generator.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
@@ -16,8 +17,8 @@ class AuthController {
       String hKey = HashGenerator.hmacGenerator(
           passkey, countryCode + mobileNumber.toString());
       user.password = hKey;
-      user.countryCode = countryCode;
       user.mobileNumber = mobileNumber;
+      user.countryCode = countryCode;
       user.firstName = firstName;
       user.lastName = lastName;
       user.guid = uid;
@@ -25,7 +26,7 @@ class AuthController {
       user.preferences = UserPreferences.fromJson(UserPreferences().toJson());
       user = await user.create();
 
-      Analytics.signupEvent(mobileNumber.toString());
+      Analytics.signupEvent(countryCode + mobileNumber.toString());
 
       var platformData = await UserFCM().getPlatformDetails();
 
@@ -34,7 +35,7 @@ class AuthController {
       } else {
         Analytics.reportError({
           "type": 'platform_update_error',
-          "user_id": mobileNumber,
+          "user_id": countryCode + mobileNumber.toString(),
           'name': firstName,
           'error': "Unable to update User's platform details"
         }, 'platform_update');
@@ -44,7 +45,7 @@ class AuthController {
       user.setLastSignInTime(DateTime.now());
 
       // cache the user data
-      // _userService.setCachedUser(user);
+      cachedLocalUser = user;
 
       return CustomResponse.getSuccesReponse(user.toJson());
     } catch (err) {
@@ -61,18 +62,18 @@ class AuthController {
       } else {
         Analytics.reportError({
           "type": 'platform_update_error',
-          "user_id": user.mobileNumber,
+          "user_id": user.countryCode + user.mobileNumber.toString(),
           'error': "Unable to update User's platform details"
         }, 'platform_update');
       }
 
-      Analytics.loginEvent(user.mobileNumber.toString());
+      Analytics.loginEvent(user.countryCode + user.mobileNumber.toString());
 
       // update cloud firestore "users" collection
       user.update({'last_signed_in_at': DateTime.now()});
 
       // cache the user data
-      // _userService.setCachedUser(user);
+      cachedLocalUser = user;
 
       return CustomResponse.getSuccesReponse(user);
     } catch (err) {

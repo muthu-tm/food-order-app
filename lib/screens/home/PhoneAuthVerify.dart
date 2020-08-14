@@ -211,12 +211,13 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
           _scaffoldKey.currentState
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
-          try {} catch (err) {
+          try {
+            await _success();
+          } catch (err) {
             _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
                 AppLocalizations.of(context).translate('unable_to_login'), 2));
             return;
           }
-          await _success();
         }
       }
     }).catchError((error) {
