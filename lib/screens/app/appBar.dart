@@ -22,7 +22,7 @@ Widget appBar(BuildContext context) {
     actions: <Widget>[
       IconButton(
         icon: Icon(
-          Icons.search,
+          Icons.shopping_cart,
           size: 30.0,
           color: CustomColors.buyerWhite,
         ),

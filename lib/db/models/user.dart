@@ -1,5 +1,6 @@
 import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
+import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/db/models/user_preferences.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -105,6 +106,10 @@ class User extends Model {
     return _userCollRef;
   }
 
+  CollectionReference getLocationCollectionRef() {
+    return _userCollRef.document(getID()).collection("user_locations");
+  }
+
   DocumentReference getDocumentReference() {
     return _userCollRef.document(getID());
   }
@@ -125,6 +130,20 @@ class User extends Model {
     await super.add(this.toJson());
 
     return this;
+  }
+
+  Future<List<UserLocations>> getLocations() async {
+    QuerySnapshot snap = await getLocationCollectionRef().getDocuments();
+
+    List<UserLocations> locations = [];
+
+    if (snap.documents.isEmpty) return [];
+
+    for (var loc in snap.documents) {
+      locations.add(UserLocations.fromJson(loc.data));
+    }
+
+    return locations;
   }
 
   Future updatePlatformDetails(Map<String, dynamic> data) async {
