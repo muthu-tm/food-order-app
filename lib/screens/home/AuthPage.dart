@@ -428,7 +428,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
       return;
     } else {
       String hashKey = HashGenerator.hmacGenerator(
-          _pController.text, _user.countryCode + _user.mobileNumber.toString());
+          _pController.text, _user.countryCode.toString() + _user.mobileNumber.toString());
       if (hashKey != _user.password) {
         widget._scaffoldKey.currentState.showSnackBar(
             CustomSnackBar.errorSnackBar(

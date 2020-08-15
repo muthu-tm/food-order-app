@@ -16,7 +16,7 @@ class PhoneAuthVerify extends StatefulWidget {
 
   final bool isRegister;
   final String number;
-  final String countryCode;
+  final int countryCode;
   final String passKey;
   final String name;
   final String verificationID;
@@ -203,7 +203,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
         }
       } else {
         Map<String, dynamic> _uJSON =
-            await User().getByID(widget.countryCode + widget.number);
+            await User().getByID(widget.countryCode.toString() + widget.number);
         dynamic result =
             await _authController.signInWithMobileNumber(User.fromJson(_uJSON));
         if (!result['is_success']) {
@@ -231,7 +231,8 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   _success() async {
     final SharedPreferences prefs = await _prefs;
-    prefs.setString("mobile_number", widget.countryCode + widget.number);
+    prefs.setString(
+        "mobile_number", widget.countryCode.toString() + widget.number);
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(

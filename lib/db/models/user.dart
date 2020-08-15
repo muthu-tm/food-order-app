@@ -12,14 +12,14 @@ class User extends Model {
 
   @JsonKey(name: 'guid', nullable: false)
   String guid;
-  @JsonKey(name: 'first_name', defaultValue: "")
+  @JsonKey(name: 'first_name', nullable: false)
   String firstName;
   @JsonKey(name: 'last_name', defaultValue: "")
   String lastName;
   @JsonKey(name: 'mobile_number', nullable: false)
   int mobileNumber;
   @JsonKey(name: 'country_code', nullable: false)
-  String countryCode;
+  int countryCode;
   @JsonKey(name: 'emailID', defaultValue: "")
   String emailID;
   @JsonKey(name: 'password', nullable: false)
@@ -110,7 +110,7 @@ class User extends Model {
   }
 
   String getID() {
-    return this.countryCode+this.mobileNumber.toString();
+    return this.countryCode.toString() + this.mobileNumber.toString();
   }
 
   Stream<DocumentSnapshot> streamUserData() {

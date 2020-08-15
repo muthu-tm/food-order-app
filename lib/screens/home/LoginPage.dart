@@ -34,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   User _user;
 
   String number = "";
-  String countryCode = "+91";
+  int countryCode = 91;
   String _smsVerificationCode;
 
   @override
@@ -275,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
       number = _nController.text;
       try {
         Map<String, dynamic> _uJSON =
-            await User().getByID(countryCode + number);
+            await User().getByID(countryCode.toString() + number);
         if (_uJSON == null) {
           Navigator.pop(context);
           _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
@@ -301,7 +301,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _verifyPhoneNumber() async {
-    String phoneNumber = countryCode + number;
+    String phoneNumber = '+' + countryCode.toString() + number;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -322,7 +322,7 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithCredential(authCredential)
         .then((AuthResult authResult) async {
       final SharedPreferences prefs = await _prefs;
-      prefs.setString("mobile_number", countryCode + number);
+      prefs.setString("mobile_number", countryCode.toString() + number);
 
       var result = await _authController.signInWithMobileNumber(_user);
 

@@ -20,7 +20,7 @@ class MobileSignInPage extends StatefulWidget {
 
 class _MobileSignInPageState extends State<MobileSignInPage> {
   String number, _smsVerificationCode;
-  String countryCode = "+91";
+  int countryCode = 91;
   bool _passwordVisible = true;
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
@@ -261,11 +261,11 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           context, AppLocalizations.of(context).translate('checking_user'));
       this.number = _phoneNumberController.text;
 
-      var data = await User().getByID(countryCode + number);
+      var data = await User().getByID(countryCode.toString() + number);
       if (data != null) {
         Analytics.reportError({
           "type": 'sign_up_error',
-          "user_id": countryCode + number,
+          "user_id": countryCode.toString() + number,
           'name': _nameController.text,
           'error': "Found an existing user for this mobile number"
         }, 'sign_up');
@@ -279,7 +279,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   }
 
   _verifyPhoneNumber() async {
-    String phoneNumber = countryCode + number;
+    String phoneNumber = '+' + countryCode.toString() + number;
     final FirebaseAuth _auth = FirebaseAuth.instance;
     await _auth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
@@ -312,7 +312,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
         final SharedPreferences prefs = await _prefs;
-        prefs.setString("mobile_number", countryCode + number);
+        prefs.setString("mobile_number", countryCode.toString() + number);
 
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
