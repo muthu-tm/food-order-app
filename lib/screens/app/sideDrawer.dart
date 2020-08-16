@@ -1,12 +1,13 @@
 import 'package:chipchop_buyer/screens/Home/AuthPage.dart';
 import 'package:chipchop_buyer/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import '../../app_localizations.dart';
 
-Widget spenDrawer(BuildContext context) {
+Widget sideDrawer(BuildContext context) {
   return Drawer(
     child: ListView(
       children: <Widget>[
@@ -73,18 +74,6 @@ Widget spenDrawer(BuildContext context) {
             ),
           ],
         ),
-        ListTile(
-          leading: Icon(Icons.description, color: CustomColors.mfinButtonGreen),
-          title: Text(
-            AppLocalizations.of(context).translate('reports'),
-          ),
-        ),
-        ListTile(
-          leading: Icon(Icons.assessment, color: CustomColors.mfinButtonGreen),
-          title: Text(
-            AppLocalizations.of(context).translate('statistics'),
-          ),
-        ),
         Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
         ListTile(
           leading: Icon(Icons.notifications_active,
@@ -95,17 +84,19 @@ Widget spenDrawer(BuildContext context) {
         ),
         Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.store_mall_directory,
-              color: CustomColors.mfinButtonGreen),
-          title: Text(
-            "Store settings",
-          ),
-        ),
-        ListTile(
           leading: Icon(Icons.settings, color: CustomColors.mfinButtonGreen),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SettingsHome(),
+                settings: RouteSettings(name: '/settings'),
+              ),
+            );
+          },
         ),
         Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
         ListTile(

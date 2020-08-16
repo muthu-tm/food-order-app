@@ -1,5 +1,6 @@
 import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
+import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/db/models/user_preferences.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -12,14 +13,14 @@ class User extends Model {
 
   @JsonKey(name: 'guid', nullable: false)
   String guid;
-  @JsonKey(name: 'first_name', defaultValue: "")
+  @JsonKey(name: 'first_name', nullable: false)
   String firstName;
   @JsonKey(name: 'last_name', defaultValue: "")
   String lastName;
   @JsonKey(name: 'mobile_number', nullable: false)
   int mobileNumber;
   @JsonKey(name: 'country_code', nullable: false)
-  String countryCode;
+  int countryCode;
   @JsonKey(name: 'emailID', defaultValue: "")
   String emailID;
   @JsonKey(name: 'password', nullable: false)
@@ -49,46 +50,6 @@ class User extends Model {
 
   User();
 
-  setGuid(String uid) {
-    this.guid = uid;
-  }
-
-  setPassword(String password) {
-    this.password = password;
-  }
-
-  setGender(String gender) {
-    this.gender = gender;
-  }
-
-  setEmailID(String emailID) {
-    this.emailID = emailID;
-  }
-
-  setFirstName(String fname) {
-    this.firstName = fname;
-  }
-
-  setLastName(String lname) {
-    this.lastName = lname;
-  }
-
-  setDOB(DateTime date) {
-    this.dateOfBirth = DateUtils.getUTCDateEpoch(date);
-  }
-
-  setLastSignInTime(DateTime dateTime) {
-    this.lastSignInTime = dateTime;
-  }
-
-  setProfilePathOrg(String displayPath) {
-    this.profilePathOrg = displayPath;
-  }
-
-  setAddress(Address address) {
-    this.address = address;
-  }
-
   String getProfilePicPath() {
     if (this.profilePath != null && this.profilePath != "")
       return this.profilePath;
@@ -105,12 +66,20 @@ class User extends Model {
     return _userCollRef;
   }
 
+  CollectionReference getLocationCollectionRef() {
+    return _userCollRef.document(getID()).collection("user_locations");
+  }
+
   DocumentReference getDocumentReference() {
     return _userCollRef.document(getID());
   }
 
   String getID() {
-    return this.countryCode+this.mobileNumber.toString();
+    return this.countryCode.toString() + this.mobileNumber.toString();
+  }
+
+  int getMobileNumber() {
+    return int.parse(this.countryCode.toString() + this.mobileNumber.toString());
   }
 
   Stream<DocumentSnapshot> streamUserData() {
@@ -125,6 +94,32 @@ class User extends Model {
     await super.add(this.toJson());
 
     return this;
+  }
+
+  Future<List<UserLocations>> getLocations() async {
+    QuerySnapshot snap = await getLocationCollectionRef().getDocuments();
+
+    List<UserLocations> locations = [];
+
+    if (snap.documents.isEmpty) return [];
+
+    for (var loc in snap.documents) {
+      locations.add(UserLocations.fromJson(loc.data));
+    }
+
+    return locations;
+  }
+
+  Future addLocations(UserLocations loc) async {
+    DocumentReference docRef = getLocationCollectionRef().document();
+    loc.uuid = docRef.documentID;
+    loc.userNumber = getMobileNumber();
+    await docRef.setData(loc.toJson());
+  }
+
+  Future updateLocations(String uuid, Map<String, dynamic> loc) async {
+    DocumentReference docRef = getLocationCollectionRef().document(uuid);
+    await docRef.updateData(loc);
   }
 
   Future updatePlatformDetails(Map<String, dynamic> data) async {
