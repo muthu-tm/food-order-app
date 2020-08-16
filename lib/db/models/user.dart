@@ -50,46 +50,6 @@ class User extends Model {
 
   User();
 
-  setGuid(String uid) {
-    this.guid = uid;
-  }
-
-  setPassword(String password) {
-    this.password = password;
-  }
-
-  setGender(String gender) {
-    this.gender = gender;
-  }
-
-  setEmailID(String emailID) {
-    this.emailID = emailID;
-  }
-
-  setFirstName(String fname) {
-    this.firstName = fname;
-  }
-
-  setLastName(String lname) {
-    this.lastName = lname;
-  }
-
-  setDOB(DateTime date) {
-    this.dateOfBirth = DateUtils.getUTCDateEpoch(date);
-  }
-
-  setLastSignInTime(DateTime dateTime) {
-    this.lastSignInTime = dateTime;
-  }
-
-  setProfilePathOrg(String displayPath) {
-    this.profilePathOrg = displayPath;
-  }
-
-  setAddress(Address address) {
-    this.address = address;
-  }
-
   String getProfilePicPath() {
     if (this.profilePath != null && this.profilePath != "")
       return this.profilePath;
@@ -118,6 +78,10 @@ class User extends Model {
     return this.countryCode.toString() + this.mobileNumber.toString();
   }
 
+  int getMobileNumber() {
+    return int.parse(this.countryCode.toString() + this.mobileNumber.toString());
+  }
+
   Stream<DocumentSnapshot> streamUserData() {
     return getDocumentReference().snapshots();
   }
@@ -144,6 +108,18 @@ class User extends Model {
     }
 
     return locations;
+  }
+
+  Future addLocations(UserLocations loc) async {
+    DocumentReference docRef = getLocationCollectionRef().document();
+    loc.uuid = docRef.documentID;
+    loc.userNumber = getMobileNumber();
+    await docRef.setData(loc.toJson());
+  }
+
+  Future updateLocations(String uuid, Map<String, dynamic> loc) async {
+    DocumentReference docRef = getLocationCollectionRef().document(uuid);
+    await docRef.updateData(loc);
   }
 
   Future updatePlatformDetails(Map<String, dynamic> data) async {

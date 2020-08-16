@@ -20,7 +20,7 @@ StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
         ? new Address()
         : Address.fromJson(json['address'] as Map<String, dynamic>)
     ..geoPoint = json['geo_point'] == null
-        ? new GeoPointData()
+        ? null
         : GeoPointData.fromJson(json['geo_point'] as Map<String, dynamic>)
     ..isActive = json['is_active'] as bool ?? true
     ..contacts = (json['contacts'] as List)

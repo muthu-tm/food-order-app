@@ -78,10 +78,16 @@
     "secret_key_mismatch": "Error! Secret KEY mismatch!",
     "secret_key_updated_successfully": "Your Secret KEY updated successfully",
     "save": "Save",
-    "search": "Search",
-    
+
     "home": "Home",
     "orders": "Orders",
     "search": "Search",
-    "settings": "Settings"
+    "settings": "Settings",
+
+    "hint_search_with_picode": "Search with Address/Pincode",
+    "title_add_location": "Add Location",
+    "button_add_location": "Add Location",
+    "location_name": "Location Name",
+    "location": "Location",
+    "button_next": "Next"
 }

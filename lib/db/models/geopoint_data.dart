@@ -1,15 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'geopoint_data.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class GeoPointData {
-  @JsonKey(name: 'latitude')
-  double latitude;
-  @JsonKey(name: 'longitude')
-  double longitude;
-  @JsonKey(name: 'geo_hash')
+  @JsonKey(name: 'geohash')
   String geoHash;
+  @JsonKey(name: 'geopoint')
+  GeoPoint geoPoint;
 
   GeoPointData();
 

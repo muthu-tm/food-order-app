@@ -4,7 +4,9 @@ import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/db/models/store_contacts.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/geopoint_data.dart';
+import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'store_locations.g.dart';
@@ -15,7 +17,7 @@ class StoreLocations {
   String uuid;
   @JsonKey(name: 'loc_name', defaultValue: "")
   String locationName;
-  @JsonKey(name: 'geo_point', defaultValue: "")
+  @JsonKey(name: 'geo_point')
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')
   List<int> availProducts;
@@ -54,5 +56,19 @@ class StoreLocations {
 
   DocumentReference getDocumentReference(String storeUUID, String locUUID) {
     return getCollectionRef(uuid).document();
+  }
+
+  Stream<List<DocumentSnapshot>> streamNearByStores(UserLocations loc) {
+    Geoflutterfire geo = Geoflutterfire();
+    GeoFirePoint usersAddressGeoFirePoint = geo.point(
+        latitude: loc.geoPoint.geoPoint.latitude,
+        longitude: loc.geoPoint.geoPoint.longitude);
+    double radius = 5;
+
+    return geo.collection(collectionRef: getGroupQuery()).within(
+        center: usersAddressGeoFirePoint,
+        radius: radius,
+        field: 'geo_point',
+        strictMode: true);
   }
 }

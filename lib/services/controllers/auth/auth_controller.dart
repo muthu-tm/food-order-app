@@ -42,7 +42,7 @@ class AuthController {
       }
 
       user.update({'last_signed_in_at': DateTime.now()});
-      user.setLastSignInTime(DateTime.now());
+      user.lastSignInTime = DateTime.now();
 
       // cache the user data
       cachedLocalUser = user;

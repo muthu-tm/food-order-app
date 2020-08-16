@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/store_locations.dart';
+import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
@@ -44,23 +45,4 @@ class Store extends Model {
     return getDocumentReference(getID()).snapshots();
   }
 
-  Future<Store> create(StoreLocations loc) async {
-    this.createdAt = DateTime.now();
-    this.updatedAt = DateTime.now();
-
-    WriteBatch bWrite = Model.db.batch();
-
-    DocumentReference docRef = this.getCollectionRef().document();
-    this.uuid = docRef.documentID;
-    bWrite.setData(docRef, this.toJson());
-
-    DocumentReference locDocRef = getDocumentReference(this.uuid)
-        .collection("store_locations")
-        .document();
-
-    loc.uuid = locDocRef.documentID;
-    bWrite.setData(locDocRef, loc.toJson());
-    await bWrite.commit();
-    return this;
-  }
 }
