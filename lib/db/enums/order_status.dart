@@ -4,7 +4,8 @@ enum OrderStatus {
   CancelledByUser,
   CancelledByStore,
   DisPatched,
-  Delivered
+  Delivered,
+  Returned
 }
 
 extension OrderStatusExtension on OrderStatus {
@@ -27,6 +28,9 @@ extension OrderStatusExtension on OrderStatus {
         break;
       case OrderStatus.Delivered:
         return 5;
+        break;
+      case OrderStatus.Returned:
+        return 6;
         break;
       default:
         return 0;
