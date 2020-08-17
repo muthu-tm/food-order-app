@@ -8,7 +8,7 @@ class SearchHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: Colors.white,
         title: SearchBarWidget(
           performSearch: null,
         ),
@@ -16,6 +16,7 @@ class SearchHome extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
+          color: Colors.white,
           alignment: Alignment.center,
           child: Column(
             children: [
