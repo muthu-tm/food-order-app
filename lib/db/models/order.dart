@@ -15,10 +15,18 @@ class Order extends Model {
   String storeUUID;
   @JsonKey(name: 'user_number', nullable: false)
   int userNumber;
-  @JsonKey(name: 'customer_notes', nullable: true)
+  @JsonKey(name: 'delivery_contact', nullable: false)
+  int deliveryContact;
+  @JsonKey(name: 'customer_notes', defaultValue: "")
   String customerNotes;
-  @JsonKey(name: 'status', defaultValue: true)
+  @JsonKey(name: 'status', defaultValue: 0)
   int status;
+  @JsonKey(name: 'is_returnable', defaultValue: false)
+  bool isReturnable;
+  @JsonKey(name: 'return_days', defaultValue: false)
+  int returnDays;
+  @JsonKey(name: 'returned_at', nullable: true)
+  int returnedAt;
   @JsonKey(name: 'cancelled_at', nullable: true)
   int cancelledAt;
   @JsonKey(name: 'delivery')
