@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,11 @@ Widget bottomBar(BuildContext context) {
             child: InkWell(
               onTap: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                    settings: RouteSettings(name: '/'),
-                  )
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                      settings: RouteSettings(name: '/'),
+                    ));
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -56,14 +56,14 @@ Widget bottomBar(BuildContext context) {
             color: CustomColors.mfinBlue,
             child: InkWell(
               onTap: () {
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => TransactionScreen(),
-                //     settings: RouteSettings(name: '/orders'),
-                //   ),
-                //   (Route<dynamic> route) => false,
-                // );
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchHome(),
+                    settings: RouteSettings(name: '/search'),
+                  ),
+                  (Route<dynamic> route) => false,
+                );
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -133,12 +133,11 @@ Widget bottomBar(BuildContext context) {
             child: InkWell(
               onTap: () {
                 Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SettingsHome(),
-                    settings: RouteSettings(name: '/settings'),
-                  )
-                );
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SettingsHome(),
+                      settings: RouteSettings(name: '/settings'),
+                    ));
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
