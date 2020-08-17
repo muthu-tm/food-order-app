@@ -2,9 +2,9 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
-  //final performSearch;
+  final performSearch;
 
-  const SearchBarWidget({Key key}) : super(key: key);
+  const SearchBarWidget({Key key, @required this.performSearch}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

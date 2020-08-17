@@ -9,7 +9,9 @@ class SearchHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: CustomColors.mfinBlue,
-        title: SearchBarWidget(),
+        title: SearchBarWidget(
+          performSearch: null,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
