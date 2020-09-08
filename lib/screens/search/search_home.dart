@@ -14,9 +14,6 @@ class SearchHome extends StatefulWidget {
 }
 
 class _SearchHomeState extends State<SearchHome> {
-  UserLocations locations;
-  Stream<List<DocumentSnapshot>> stores;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,13 +38,17 @@ class _SearchHomeState extends State<SearchHome> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                   side: BorderSide(color: CustomColors.mfinButtonGreen)),
-              onPressed: () {
-                getUserLocation();
-                getNearBuyStores();
+              onPressed: () async {
+                List<UserLocations> userLocations =
+                    await cachedLocalUser.getLocations();
+                Stream<List<DocumentSnapshot>> stores =
+                    StoreLocations().streamNearByStores(userLocations.first);
+                    
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => StoresInMap(stores, locations),
+                    builder: (context) =>
+                        StoresInMap(stores, userLocations.first),
                     settings: RouteSettings(name: '/settings/user/edit'),
                   ),
                 );
@@ -62,14 +63,5 @@ class _SearchHomeState extends State<SearchHome> {
       ),
       bottomNavigationBar: bottomBar(context),
     );
-  }
-
-  void getUserLocation() async {
-    List<UserLocations> userLocations = await cachedLocalUser.getLocations();
-    locations = userLocations.first;
-  }
-
-  void getNearBuyStores() async {
-    stores = StoreLocations().streamNearByStores(locations);
   }
 }
