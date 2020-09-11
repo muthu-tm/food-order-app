@@ -10,6 +10,7 @@ import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/auth/auth_controller.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chipchop_buyer/app_localizations.dart';
 
@@ -42,24 +43,16 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
       key: _scaffoldKey,
       backgroundColor: CustomColors.buyerLightGrey,
       body: SingleChildScrollView(
-        child: _getBody(),
+        child: _getColumnBody(),
       ),
     );
   }
 
-  Widget _getBody() => SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Center(
-          child: _getColumnBody(),
-        ),
-      );
-
   Widget _getColumnBody() => Column(
-        mainAxisSize: MainAxisSize.min,
+        //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(5.0),
+            padding: EdgeInsets.only(top: 25),
             child: ClipRRect(
               child: Image.asset(
                 "images/icons/logo.png",
@@ -69,79 +62,110 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-            child: Card(
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    " +91",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: CustomColors.mfinBlue,
-                    ),
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      controller: _phoneNumberController,
-                      autofocus: false,
-                      keyboardType: TextInputType.number,
-                      key: Key('EnterPhone-TextFormField'),
-                      decoration: InputDecoration(
-                        fillColor: CustomColors.buyerWhite,
-                        filled: true,
-                        suffixIcon: Icon(
-                          Icons.phone_android,
-                          color: CustomColors.mfinFadedButtonGreen,
-                          size: 35.0,
-                        ),
-                        hintText: AppLocalizations.of(context)
-                            .translate('enter_phone_number'),
-                        border: InputBorder.none,
-                        errorMaxLines: 1,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              "Welcome",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold),
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-            child: Card(
-              child: TextFormField(
-                controller: _nameController,
-                autofocus: false,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Text(
+              "Register account",
+              style: TextStyle(fontSize: 16, color: Colors.black),
+            ),
+          ),
+          Container(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
+              child: TextField(
+                textAlign: TextAlign.left,
+                keyboardType: TextInputType.number,
+                inputFormatters:[
+                  FilteringTextInputFormatter(RegExp(r"^\d{1,10}$"), allow: true)
+                ],
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context).translate('name'),
-                  fillColor: CustomColors.buyerWhite,
-                  filled: true,
-                  suffixIcon: Icon(
-                    Icons.sentiment_satisfied,
+                  prefixIcon: Icon(
+                    Icons.phone,
                     color: CustomColors.mfinFadedButtonGreen,
                     size: 35.0,
                   ),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 75,
+                  ),
+                  fillColor: CustomColors.buyerWhite,
+                  hintText: "Mobile Number",
+                  hintStyle: TextStyle(
+                      fontSize: 16.0,
+                      fontFamily: 'Montserrat',
+                      color: Colors.black54),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                  filled: true,
+                  contentPadding: EdgeInsets.all(14),
                 ),
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-            child: Card(
-              child: TextFormField(
-                controller: _passKeyController,
-                obscureText: _passwordVisible,
+          SizedBox(height: 5),
+          Container(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
+              child: TextField(
+                textAlign: TextAlign.left,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    Icons.person_outline,
+                    color: CustomColors.mfinFadedButtonGreen,
+                    size: 35.0,
+                  ),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 75,
+                  ),
+                  fillColor: CustomColors.buyerWhite,
+                  hintText: "Name",
+                  hintStyle: TextStyle(
+                      fontSize: 16.0,
+                      fontFamily: 'Montserrat',
+                      color: Colors.black54),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                  filled: true,
+                  contentPadding: EdgeInsets.all(14),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 5),
+          Container(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
+              child: TextField(
+                textAlign: TextAlign.left,
                 keyboardType: TextInputType.number,
                 maxLength: 4,
+                controller: _passKeyController,
+                obscureText: _passwordVisible,
                 maxLengthEnforced: true,
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)
-                      .translate('four_digit_secret'),
-                  fillColor: CustomColors.buyerWhite,
-                  filled: true,
-                  suffixIcon: IconButton(
+                  prefixIcon: IconButton(
                     icon: Icon(
                       _passwordVisible
                           ? Icons.visibility_off
@@ -155,6 +179,24 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       });
                     },
                   ),
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 75,
+                  ),
+                  fillColor: CustomColors.buyerWhite,
+                  hintText: "4-digit secret key",
+                  hintStyle: TextStyle(
+                      fontSize: 16.0,
+                      fontFamily: 'Montserrat',
+                      color: Colors.black54),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
+                  filled: true,
+                  contentPadding: EdgeInsets.all(14),
                 ),
               ),
             ),
@@ -212,15 +254,15 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          Padding(padding: EdgeInsets.all(25.0)),
+          Padding(padding: EdgeInsets.only(bottom: 10)),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
                 child: Text(
                   AppLocalizations.of(context).translate('already_account'),
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: 14,
                     fontFamily: 'Georgia',
                     color: CustomColors.buyerPositiveGreen,
                   ),
