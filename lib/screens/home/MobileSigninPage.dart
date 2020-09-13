@@ -86,7 +86,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 textAlign: TextAlign.left,
                 keyboardType: TextInputType.number,
                 inputFormatters:[
-                  FilteringTextInputFormatter(RegExp(r"^\d{1,10}$"), allow: true)
+                  LengthLimitingTextInputFormatter(10),
                 ],
                 decoration: InputDecoration(
                   prefixIcon: Icon(
