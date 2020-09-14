@@ -1,14 +1,14 @@
 import 'dart:async';
-
+import 'package:chipchop_buyer/db/models/store_locations.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
+import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class StoresInMap extends StatefulWidget {
-  final Stream<List<DocumentSnapshot>> stores;
   final UserLocations locations;
-  StoresInMap(this.stores, this.locations);
+  StoresInMap(this.locations);
 
   @override
   _StoresInMapState createState() => _StoresInMapState();
@@ -16,7 +16,7 @@ class StoresInMap extends StatefulWidget {
 
 class _StoresInMapState extends State<StoresInMap> {
   Completer<GoogleMapController> _controller = Completer();
-  Set<Marker> storesMarker = {};
+  Set<Marker> markers = Set();
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _StoresInMapState extends State<StoresInMap> {
       body: Stack(
         children: [
           _buildGoogleMap(context),
-          //_buildContainer(),
+          _buildContainer(),
         ],
       ),
     );
@@ -52,27 +52,26 @@ class _StoresInMapState extends State<StoresInMap> {
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
-        markers: storesMarker,
+        markers: markers,
       ),
     );
   }
 
   void _addStoresMarker() {
-    widget.stores.forEach((element) {
-      element.forEach((DocumentSnapshot document) {
-        GeoPoint pos = document.data['geo_point']['geopoint'];
+    StoreLocations().streamNearByStores(widget.locations).forEach((element) {
+      element.forEach((element) {
+        GeoPoint pos = element.data['geo_point']['geopoint'];
 
         var marker = Marker(
-          markerId: MarkerId(document.data['uuid']),
-
+          markerId: MarkerId(element.data['uuid']),
+          infoWindow: InfoWindow(title: element.data['loc_name']),
           icon: BitmapDescriptor.defaultMarkerWithHue(
             BitmapDescriptor.hueMagenta,
           ),
           position: LatLng(pos.latitude, pos.longitude),
         );
-
         setState(() {
-          storesMarker.add(marker);
+          markers.add(marker);
         });
       });
     });
@@ -82,37 +81,73 @@ class _StoresInMapState extends State<StoresInMap> {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
+        color: Colors.white,
         margin: EdgeInsets.symmetric(vertical: 20.0),
         height: 150.0,
         child: StreamBuilder(
-            stream: widget.stores,
-            builder: (context, asyncSnapshot) {
-              return ListView(
-                children: [
-                  SizedBox(width: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _boxes(asyncSnapshot.data),
+            stream: StoreLocations().streamNearByStores(widget.locations),
+            builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+              Widget child;
+
+              if (snapshot.hasData) {
+                if (snapshot.data.length == 0) {
+                  child = Container(
+                    child: Text(
+                      "No stores",
+                      style: TextStyle(color: CustomColors.buyerBlack),
+                    ),
+                  );
+                } else {
+                  child = ListView.builder(
+                      //scrollDirection: Axis.horizontal,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        StoreLocations locations =
+                            StoreLocations.fromJson(snapshot.data[index].data);
+
+                        GeoPoint pos = locations.geoPoint.geoPoint;
+
+                        return ListBody(
+                          //mainAxis: Axis.horizontal,
+                          children: [
+                            SizedBox(width: 10.0),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: _boxes(
+                                  "https://lh5.googleusercontent.com/p/AF1QipO3VPL9m-b355xWeg4MXmOQTauFAEkavSluTtJU=w225-h160-k-no",
+                                  pos.latitude,
+                                  pos.longitude,
+                                  locations.locationName),
+                            ),
+                          ],
+                        );
+                      });
+                }
+              } else if (snapshot.hasError) {
+                child = Container(
+                  child: Text(
+                    "Error...",
+                    style: TextStyle(color: CustomColors.buyerBlack),
                   ),
-                  SizedBox(width: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                );
+              } else {
+                child = Container(
+                  child: Text(
+                    "Loading...",
+                    style: TextStyle(color: CustomColors.buyerBlack),
                   ),
-                  SizedBox(width: 10.0),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                  ),
-                ],
-              );
+                );
+              }
+              return child;
             }),
       ),
     );
   }
 
-  Widget _boxes(snapshot) {
+  Widget _boxes(String _image, double lat, double long, String restaurantName) {
     return GestureDetector(
       onTap: () {
-        //_gotoLocation(lat,long);
+        _gotoLocation(lat, long);
       },
       child: Container(
         child: new FittedBox(
@@ -125,9 +160,20 @@ class _StoresInMapState extends State<StoresInMap> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
+                    width: 180,
+                    height: 200,
+                    child: ClipRRect(
+                      borderRadius: new BorderRadius.circular(24.0),
+                      child: Image(
+                        fit: BoxFit.fill,
+                        image: NetworkImage(_image),
+                      ),
+                    ),
+                  ),
+                  Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(snapshot.toString()),
+                      child: myDetailsContainer1(restaurantName),
                     ),
                   ),
                 ],
@@ -136,4 +182,72 @@ class _StoresInMapState extends State<StoresInMap> {
       ),
     );
   }
+
+  Future<void> _gotoLocation(double lat, double long) async {
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: LatLng(lat, long),
+      zoom: 15,
+      tilt: 50.0,
+      bearing: 45.0,
+    )));
+  }
+}
+
+Widget myDetailsContainer1(String restaurantName) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: <Widget>[
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0),
+        child: Container(
+            child: Text(
+          restaurantName,
+          style: TextStyle(
+              color: Color(0xff6200ee),
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold),
+        )),
+      ),
+      SizedBox(height: 5.0),
+      Container(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Container(
+              child: Text(
+            "4.1",
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 18.0,
+            ),
+          )),
+          Container(
+              child: Text(
+            "(946)",
+            style: TextStyle(
+              color: Colors.black54,
+              fontSize: 18.0,
+            ),
+          )),
+        ],
+      )),
+      SizedBox(height: 5.0),
+      Container(
+          child: Text(
+        "American \u00B7 \u0024\u0024 \u00B7 1.6 mi",
+        style: TextStyle(
+          color: Colors.black54,
+          fontSize: 18.0,
+        ),
+      )),
+      SizedBox(height: 5.0),
+      Container(
+          child: Text(
+        "Closed \u00B7 Opens 17:00 Thu",
+        style: TextStyle(
+            color: Colors.black54, fontSize: 18.0, fontWeight: FontWeight.bold),
+      )),
+    ],
+  );
 }

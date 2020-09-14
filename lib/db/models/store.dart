@@ -1,5 +1,3 @@
-import 'package:chipchop_buyer/db/models/store_locations.dart';
-import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
