@@ -81,7 +81,6 @@ class _StoresInMapState extends State<StoresInMap> {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        color: Colors.white,
         margin: EdgeInsets.symmetric(vertical: 20.0),
         height: 150.0,
         child: StreamBuilder(
@@ -117,7 +116,9 @@ class _StoresInMapState extends State<StoresInMap> {
                                   "https://lh5.googleusercontent.com/p/AF1QipO3VPL9m-b355xWeg4MXmOQTauFAEkavSluTtJU=w225-h160-k-no",
                                   pos.latitude,
                                   pos.longitude,
-                                  locations.locationName),
+                                  locations.locationName,
+                                  locations.activeFrom,
+                                  locations.activeTill),
                             ),
                           ],
                         );
@@ -144,7 +145,8 @@ class _StoresInMapState extends State<StoresInMap> {
     );
   }
 
-  Widget _boxes(String _image, double lat, double long, String restaurantName) {
+  Widget _boxes(String _image, double lat, double long, String storeName,
+      String activeFrom, String activeTill) {
     return GestureDetector(
       onTap: () {
         _gotoLocation(lat, long);
@@ -160,8 +162,8 @@ class _StoresInMapState extends State<StoresInMap> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    width: 180,
-                    height: 200,
+                    width: 100,
+                    height: 120,
                     child: ClipRRect(
                       borderRadius: new BorderRadius.circular(24.0),
                       child: Image(
@@ -173,7 +175,7 @@ class _StoresInMapState extends State<StoresInMap> {
                   Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: myDetailsContainer1(restaurantName),
+                      child: myDetailsContainer1(storeName, activeFrom, activeTill),
                     ),
                   ),
                 ],
@@ -194,7 +196,7 @@ class _StoresInMapState extends State<StoresInMap> {
   }
 }
 
-Widget myDetailsContainer1(String restaurantName) {
+Widget myDetailsContainer1(String storeName, String activeFrom, String activeTill) {
   return Column(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
@@ -202,7 +204,7 @@ Widget myDetailsContainer1(String restaurantName) {
         padding: const EdgeInsets.only(left: 8.0),
         child: Container(
             child: Text(
-          restaurantName,
+          storeName,
           style: TextStyle(
               color: Color(0xff6200ee),
               fontSize: 24.0,
@@ -244,7 +246,7 @@ Widget myDetailsContainer1(String restaurantName) {
       SizedBox(height: 5.0),
       Container(
           child: Text(
-        "Closed \u00B7 Opens 17:00 Thu",
+        "Timings - $activeFrom : $activeTill",
         style: TextStyle(
             color: Colors.black54, fontSize: 18.0, fontWeight: FontWeight.bold),
       )),

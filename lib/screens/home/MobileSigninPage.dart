@@ -43,7 +43,9 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
       key: _scaffoldKey,
       backgroundColor: CustomColors.buyerLightGrey,
       body: SingleChildScrollView(
-        child: _getColumnBody(),
+        child: Center(
+          child: _getColumnBody(),
+        ),
       ),
     );
   }
@@ -85,14 +87,14 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: TextField(
                 textAlign: TextAlign.left,
                 keyboardType: TextInputType.number,
-                inputFormatters:[
+                inputFormatters: [
                   LengthLimitingTextInputFormatter(10),
                 ],
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.phone,
                     color: CustomColors.mfinFadedButtonGreen,
-                    size: 35.0,
+                    size: 30.0,
                   ),
                   prefixIconConstraints: BoxConstraints(
                     minWidth: 75,
@@ -128,7 +130,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   prefixIcon: Icon(
                     Icons.person_outline,
                     color: CustomColors.mfinFadedButtonGreen,
-                    size: 35.0,
+                    size: 30.0,
                   ),
                   prefixIconConstraints: BoxConstraints(
                     minWidth: 75,
@@ -171,7 +173,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                           ? Icons.visibility_off
                           : Icons.visibility,
                       color: CustomColors.mfinFadedButtonGreen,
-                      size: 35.0,
+                      size: 30.0,
                     ),
                     onPressed: () {
                       setState(() {
