@@ -91,7 +91,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             ),
           ),
           Text(
-            'ChipChop',
+            'Uniques',
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: CustomColors.buyerWhite,

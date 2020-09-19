@@ -154,7 +154,7 @@ Widget sideDrawer(BuildContext context) {
                 ),
               ),
             ),
-            applicationName: 'ChipChop',
+            applicationName: 'Uniques',
             applicationLegalese:
                 AppLocalizations.of(context).translate('copyright'),
             child: ListTile(
@@ -170,7 +170,7 @@ Widget sideDrawer(BuildContext context) {
                   ),
                   children: <TextSpan>[
                     TextSpan(
-                      text: 'ChipChop',
+                      text: 'Uniques',
                       style: TextStyle(
                         color: CustomColors.mfinFadedButtonGreen,
                         fontFamily: 'Georgia',
@@ -188,7 +188,7 @@ Widget sideDrawer(BuildContext context) {
               Divider(),
               ListTile(
                 leading: Text(
-                  'ChipChop',
+                  'Uniques',
                   style: TextStyle(
                     color: CustomColors.mfinBlue,
                     fontFamily: 'Georgia',
