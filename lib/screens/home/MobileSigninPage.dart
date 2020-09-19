@@ -85,6 +85,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               padding:
                   const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
               child: TextField(
+                controller: _phoneNumberController,
                 textAlign: TextAlign.left,
                 keyboardType: TextInputType.number,
                 inputFormatters: [
@@ -124,8 +125,9 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               padding:
                   const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
               child: TextField(
+                controller: _nameController,
                 textAlign: TextAlign.left,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.person_outline,
@@ -162,7 +164,9 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: TextField(
                 textAlign: TextAlign.left,
                 keyboardType: TextInputType.number,
-                maxLength: 4,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(4),
+                ],
                 controller: _passKeyController,
                 obscureText: _passwordVisible,
                 maxLengthEnforced: true,
