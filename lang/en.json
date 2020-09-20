@@ -89,5 +89,6 @@
     "button_add_location": "Add Location",
     "location_name": "Location Name",
     "location": "Location",
-    "button_next": "Next"
+    "button_next": "Next",
+    "set_location": "Please set location"
 }

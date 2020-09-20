@@ -3,8 +3,11 @@ import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/stores_in_map.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
+
+import '../../app_localizations.dart';
 
 class SearchHome extends StatefulWidget {
   @override
@@ -12,9 +15,12 @@ class SearchHome extends StatefulWidget {
 }
 
 class _SearchHomeState extends State<SearchHome> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -39,15 +45,23 @@ class _SearchHomeState extends State<SearchHome> {
               onPressed: () async {
                 List<UserLocations> userLocations =
                     await cachedLocalUser.getLocations();
-                    
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        StoresInMap(userLocations.first),
-                    settings: RouteSettings(name: '/settings/user/edit'),
-                  ),
-                );
+
+                if (userLocations.isNotEmpty && userLocations != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StoresInMap(userLocations.first),
+                      settings: RouteSettings(name: '/settings/user/edit'),
+                    ),
+                  );
+                } else {
+                  _scaffoldKey.currentState.showSnackBar(
+                    CustomSnackBar.errorSnackBar(
+                      AppLocalizations.of(context).translate('set_location'),
+                      2,
+                    ),
+                  );
+                }
               },
               child: Text(
                 "Nearby stores in map",
