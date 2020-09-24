@@ -39,6 +39,10 @@ class StoreLocations {
   List<StoreContacts> contacts;
   @JsonKey(name: 'delivery')
   List<DeliveryDetails> deliveryDetails;
+  @JsonKey(name: 'created_at', nullable: true)
+  DateTime createdAt;
+  @JsonKey(name: 'updated_at', nullable: true)
+  DateTime updatedAt;
 
   StoreLocations();
 

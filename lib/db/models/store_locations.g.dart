@@ -38,7 +38,19 @@ StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
         ?.map((e) => e == null
             ? new DeliveryDetails()
             : DeliveryDetails.fromJson(e as Map<String, dynamic>))
-        ?.toList();
+        ?.toList()
+    ..createdAt = json['created_at'] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(
+            _getMillisecondsSinceEpoch(json['created_at'] as Timestamp))
+    ..updatedAt = json['updated_at'] == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(
+            _getMillisecondsSinceEpoch(json['updated_at'] as Timestamp));
+}
+
+int _getMillisecondsSinceEpoch(Timestamp ts) {
+  return ts.millisecondsSinceEpoch;
 }
 
 Map<String, dynamic> _$StoreLocationsToJson(StoreLocations instance) =>
@@ -46,6 +58,8 @@ Map<String, dynamic> _$StoreLocationsToJson(StoreLocations instance) =>
       'uuid': instance.uuid,
       'loc_name': instance.locationName,
       'avail_products': instance.availProducts,
+      'avail_product_categories': instance.availProductCategories,
+      'avail_product_sub_categories': instance.availProductSubCategories,
       'working_days': instance.workingDays,
       'active_from': instance.activeFrom,
       'active_till': instance.activeTill,
@@ -54,4 +68,6 @@ Map<String, dynamic> _$StoreLocationsToJson(StoreLocations instance) =>
       'is_active': instance.isActive,
       'contacts': instance.contacts?.map((e) => e?.toJson())?.toList(),
       'delivery': instance.deliveryDetails?.map((e) => e?.toJson())?.toList(),
+      'created_at': instance.createdAt,
+      'updated_at': instance.updatedAt,
     };
