@@ -12,7 +12,7 @@ class ViewStoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: CustomColors.blue, title: Text(store.storeName)),
+          backgroundColor: CustomColors.green, title: Text(store.storeName)),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -22,35 +22,15 @@ class ViewStoreScreen extends StatelessWidget {
                 height: 150.0,
                 width: double.infinity,
                 child: Carousel(
-                  images: [
-                    CachedNetworkImage(
-                      imageUrl: store.getProfilePicPath(),
-                      imageBuilder: (context, imageProvider) => Image(
-                        height: 150,
-                        width: double.infinity,
-                        fit: BoxFit.contain,
-                        image: imageProvider,
-                      ),
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                      errorWidget: (context, url, error) => Icon(
-                        Icons.error,
-                        size: 35,
-                      ),
-                      fadeOutDuration: Duration(seconds: 1),
-                      fadeInDuration: Duration(seconds: 2),
-                    ),
-                  ],
-                  dotSize: 4.0,
-                  dotSpacing: 15.0,
-                  dotColor: CustomColors.green,
+                  images: getImages(),
+                  dotSize: 5.0,
+                  dotSpacing: 20.0,
+                  dotColor: CustomColors.blue,
                   indicatorBgPadding: 5.0,
-                  dotBgColor: CustomColors.black.withOpacity(0.1),
+                  dotBgColor: CustomColors.black.withOpacity(0.2),
                   borderRadius: true,
                   radius: Radius.circular(20),
-                  moveIndicatorFromBottom: 180.0,
+                  // moveIndicatorFromBottom: 180.0,
                   noRadiusForIndicator: true,
                 ),
               ),
@@ -59,5 +39,31 @@ class ViewStoreScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> getImages() {
+    List<Widget> images = [];
+
+    for (var item in store.getStoreImages()) {
+      images.add(CachedNetworkImage(
+        imageUrl: item,
+        imageBuilder: (context, imageProvider) => Image(
+          height: 150,
+          width: double.infinity,
+          fit: BoxFit.contain,
+          image: imageProvider,
+        ),
+        progressIndicatorBuilder: (context, url, downloadProgress) =>
+            CircularProgressIndicator(value: downloadProgress.progress),
+        errorWidget: (context, url, error) => Icon(
+          Icons.error,
+          size: 35,
+        ),
+        fadeOutDuration: Duration(seconds: 1),
+        fadeInDuration: Duration(seconds: 2),
+      ));
+    }
+
+    return images;
   }
 }

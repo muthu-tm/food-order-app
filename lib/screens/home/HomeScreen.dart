@@ -195,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: CachedNetworkImage(
                                         imageUrl:
-                                            store.getMediumProfilePicPath(),
+                                            store.getStoreImages().first,
                                         imageBuilder:
                                             (context, imageProvider) => Image(
                                           fit: BoxFit.fill,
