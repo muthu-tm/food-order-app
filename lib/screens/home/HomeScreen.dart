@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    "Top Store Categories",
+                    "Favourite Stores",
                     style: TextStyle(
                         fontFamily: "Georgia",
                         color: CustomColors.grey,
