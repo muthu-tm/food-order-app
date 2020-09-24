@@ -21,7 +21,7 @@ class GradientText extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: CustomColors.buyerWhite,
+          color: CustomColors.white,
           fontSize: size,
         ),
       ),

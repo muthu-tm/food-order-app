@@ -2,6 +2,7 @@ import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/screens/Home/AuthPage.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -49,7 +50,7 @@ class _MyAppState extends State<MyApp> {
     Analytics.setupAnalytics(analytics, observer);
     return MaterialApp(
       locale: this.locale,
-      title: 'ChipChop',
+      title: buyer_app_name,
       theme: ThemeData(
         brightness: Brightness.light,
         fontFamily: 'Georgia',
@@ -59,7 +60,7 @@ class _MyAppState extends State<MyApp> {
           bodyText2: TextStyle(
             fontSize: 14.0,
             fontFamily: 'Hind',
-            color: CustomColors.buyerWhite,
+            color: CustomColors.white,
           ),
         ),
       ),

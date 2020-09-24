@@ -26,11 +26,11 @@ class _ChangeSecretState extends State<ChangeSecret> {
       appBar: AppBar(
         title:
             Text(AppLocalizations.of(context).translate('change_secret_key')),
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.blue,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.blue,
         onPressed: () async {
           _submit();
         },
@@ -42,7 +42,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        splashColor: CustomColors.buyerWhite,
+        splashColor: CustomColors.white,
       ),
       body: Form(
         key: _formKey,
@@ -50,7 +50,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
           child: Padding(
             padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
             child: Card(
-              color: CustomColors.buyerAlertRed.withOpacity(0.7),
+              color: CustomColors.alertRed.withOpacity(0.7),
               elevation: 5.0,
               child: Column(
                 children: <Widget>[
@@ -63,16 +63,16 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.blue,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        fillColor: CustomColors.buyerWhite,
+                        fillColor: CustomColors.white,
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: CustomColors.buyerWhite)),
+                                BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {
@@ -91,16 +91,16 @@ class _ChangeSecretState extends State<ChangeSecret> {
                       obscureText: true,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.blue,
                         ),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        fillColor: CustomColors.buyerWhite,
+                        fillColor: CustomColors.white,
                         filled: true,
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
                             borderSide:
-                                BorderSide(color: CustomColors.buyerWhite)),
+                                BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {
@@ -135,7 +135,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
     final FormState form = _formKey.currentState;
 
     if (form.validate()) {
-      CustomDialogs.actionWaiting(context, "Updating KEY!");
+      CustomDialogs.actionWaiting(context);
 
       var result = await UserController().updateSecretKey(secretKey);
       if (!result['is_success']) {

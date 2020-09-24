@@ -2,6 +2,7 @@ import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/db/models/user_preferences.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'user.g.dart';
@@ -26,8 +27,6 @@ class User extends Model {
   String password;
   @JsonKey(name: 'gender', defaultValue: "")
   String gender;
-  @JsonKey(name: 'profile_path_org', defaultValue: "")
-  String profilePathOrg;
   @JsonKey(name: 'profile_path', defaultValue: "")
   String profilePath;
   @JsonKey(name: 'date_of_birth', defaultValue: "")
@@ -52,8 +51,23 @@ class User extends Model {
   String getProfilePicPath() {
     if (this.profilePath != null && this.profilePath != "")
       return this.profilePath;
-    else if (this.profilePathOrg != null && this.profilePathOrg != "")
-      return this.profilePathOrg;
+    return "";
+  }
+
+  String getSmallProfilePicPath() {
+    if (this.profilePath != null && this.profilePath != "")
+      return this
+          .profilePath
+          .replaceFirst(firebase_storage_path, image_kit_path + ik_small_size);
+    else
+      return "";
+  }
+
+  String getMediumProfilePicPath() {
+    if (this.profilePath != null && this.profilePath != "")
+      return this
+          .profilePath
+          .replaceFirst(firebase_storage_path, image_kit_path + ik_medium_size);
     else
       return "";
   }
@@ -77,8 +91,9 @@ class User extends Model {
     return this.countryCode.toString() + this.mobileNumber.toString();
   }
 
-  int getMobileNumber() {
-    return int.parse(this.countryCode.toString() + this.mobileNumber.toString());
+  int getIntID() {
+    return int.parse(
+        this.countryCode.toString() + this.mobileNumber.toString());
   }
 
   Stream<DocumentSnapshot> streamUserData() {
@@ -112,7 +127,7 @@ class User extends Model {
   Future addLocations(UserLocations loc) async {
     DocumentReference docRef = getLocationCollectionRef().document();
     loc.uuid = docRef.documentID;
-    loc.userNumber = getMobileNumber();
+    loc.userNumber = getIntID();
     await docRef.setData(loc.toJson());
   }
 

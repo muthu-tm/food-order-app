@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 Widget appBar(BuildContext context) {
   return AppBar(
-    backgroundColor: CustomColors.mfinBlue,
+    backgroundColor: CustomColors.green,
     titleSpacing: 0.0,
     automaticallyImplyLeading: false,
     title: Builder(
@@ -14,7 +14,7 @@ Widget appBar(BuildContext context) {
           child: Icon(
             Icons.menu,
             size: 30.0,
-            color: CustomColors.buyerWhite,
+            color: CustomColors.white,
           ),
         ),
       ),
@@ -24,7 +24,7 @@ Widget appBar(BuildContext context) {
         icon: Icon(
           Icons.shopping_cart,
           size: 30.0,
-          color: CustomColors.buyerWhite,
+          color: CustomColors.white,
         ),
         onPressed: () {
           // Navigator.push(

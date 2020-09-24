@@ -27,11 +27,11 @@ class _UserSettingState extends State<UserSetting> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('profile_settings')),
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.blue,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.buyerAlertRed.withOpacity(0.7),
+        backgroundColor: CustomColors.alertRed.withOpacity(0.7),
         onPressed: () async {
           await forceDeactivate(context);
         },
@@ -41,14 +41,14 @@ class _UserSettingState extends State<UserSetting> {
             fontSize: 17,
             fontFamily: "Georgia",
             fontWeight: FontWeight.bold,
-            color: CustomColors.buyerWhite,
+            color: CustomColors.white,
           ),
         ),
-        splashColor: CustomColors.buyerWhite,
+        splashColor: CustomColors.white,
         icon: Icon(
           Icons.delete_forever,
           size: 35,
-          color: CustomColors.buyerWhite,
+          color: CustomColors.white,
         ),
       ),
       body: SingleChildScrollView(
@@ -73,7 +73,7 @@ class _UserSettingState extends State<UserSetting> {
           title: Text(
             "Confirm!",
             style: TextStyle(
-                color: CustomColors.buyerAlertRed,
+                color: CustomColors.alertRed,
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold),
             textAlign: TextAlign.start,
@@ -92,7 +92,7 @@ class _UserSettingState extends State<UserSetting> {
                     controller: _pController,
                     decoration: InputDecoration(
                       hintText: 'Secret KEY',
-                      fillColor: CustomColors.buyerLightGrey,
+                      fillColor: CustomColors.lightGrey,
                       filled: true,
                     ),
                   ),
@@ -102,11 +102,11 @@ class _UserSettingState extends State<UserSetting> {
           ),
           actions: <Widget>[
             FlatButton(
-              color: CustomColors.mfinBlue,
+              color: CustomColors.blue,
               child: Text(
                 "NO",
                 style: TextStyle(
-                    color: CustomColors.mfinBlue,
+                    color: CustomColors.blue,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,
@@ -114,11 +114,11 @@ class _UserSettingState extends State<UserSetting> {
               onPressed: () => Navigator.pop(context),
             ),
             FlatButton(
-              color: CustomColors.buyerAlertRed,
+              color: CustomColors.alertRed,
               child: Text(
                 "YES",
                 style: TextStyle(
-                    color: CustomColors.buyerLightGrey,
+                    color: CustomColors.lightGrey,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,

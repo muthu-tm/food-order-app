@@ -20,7 +20,11 @@ class StoreLocations {
   @JsonKey(name: 'geo_point')
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')
-  List<int> availProducts;
+  List<String> availProducts;
+  @JsonKey(name: 'avail_product_categories')
+  List<String> availProductCategories;
+  @JsonKey(name: 'avail_product_sub_categories')
+  List<String> availProductSubCategories;
   @JsonKey(name: 'working_days')
   List<int> workingDays;
   @JsonKey(name: 'active_from')

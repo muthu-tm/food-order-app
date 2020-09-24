@@ -1,7 +1,9 @@
 import 'package:chipchop_buyer/screens/app/appBar.dart';
+import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class SettingsHome extends StatefulWidget {
@@ -32,7 +34,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.mfinBlue
+                                color: CustomColors.blue
                                     .withOpacity(0.3),
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
@@ -48,7 +50,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color:
-                                      CustomColors.mfinBlue.withOpacity(0.3),
+                                      CustomColors.blue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -56,7 +58,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                                   child: Icon(
                                     Icons.person,
                                     size: 35,
-                                    color: CustomColors.mfinBlue,
+                                    color: CustomColors.blue,
                                   ),
                                 ),
                               ),
@@ -72,7 +74,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                         style: TextStyle(
                           fontSize: 16.0,
                           fontFamily: 'Georgia',
-                          color: CustomColors.buyerBlack,
+                          color: CustomColors.black,
                         ),
                       ),
                     ),
@@ -90,7 +92,7 @@ class _SettingsHomeState extends State<SettingsHome> {
               ),
               Divider(
                 indent: 45,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 thickness: 2.0,
                 height: 0,
               ),
@@ -106,7 +108,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.mfinBlue
+                                color: CustomColors.blue
                                     .withOpacity(0.3),
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
@@ -122,7 +124,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color:
-                                      CustomColors.mfinBlue.withOpacity(0.3),
+                                      CustomColors.blue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -130,7 +132,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                                   child: Icon(
                                     Icons.store_mall_directory,
                                     size: 35,
-                                    color: CustomColors.mfinBlue,
+                                    color: CustomColors.blue,
                                   ),
                                 ),
                               ),
@@ -146,7 +148,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                         style: TextStyle(
                           fontSize: 16.0,
                           fontFamily: 'Georgia',
-                          color: CustomColors.buyerBlack,
+                          color: CustomColors.black,
                         ),
                       ),
                     ),
@@ -164,7 +166,7 @@ class _SettingsHomeState extends State<SettingsHome> {
               ),
               Divider(
                 indent: 45,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 thickness: 2.0,
                 height: 0,
               ),
@@ -180,7 +182,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.mfinBlue
+                                color: CustomColors.blue
                                     .withOpacity(0.3),
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
@@ -196,7 +198,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color:
-                                      CustomColors.mfinBlue.withOpacity(0.3),
+                                      CustomColors.blue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -204,7 +206,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                                   child: Icon(
                                     Icons.local_offer,
                                     size: 35,
-                                    color: CustomColors.mfinBlue,
+                                    color: CustomColors.blue,
                                   ),
                                 ),
                               ),
@@ -220,7 +222,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                         style: TextStyle(
                           fontSize: 16.0,
                           fontFamily: 'Georgia',
-                          color: CustomColors.buyerBlack,
+                          color: CustomColors.black,
                         ),
                       ),
                     ),
@@ -238,7 +240,7 @@ class _SettingsHomeState extends State<SettingsHome> {
               ),
               Divider(
                 indent: 45,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 thickness: 2.0,
                 height: 0,
               ),
@@ -254,7 +256,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.mfinBlue
+                                color: CustomColors.blue
                                     .withOpacity(0.3),
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
@@ -270,7 +272,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
                                   color:
-                                      CustomColors.mfinBlue.withOpacity(0.3),
+                                      CustomColors.blue.withOpacity(0.3),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -294,11 +296,11 @@ class _SettingsHomeState extends State<SettingsHome> {
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        "ChipChop Seller",
+                        buyer_app_name,
                         style: TextStyle(
                           fontSize: 16.0,
                           fontFamily: 'Georgia',
-                          color: CustomColors.buyerBlack,
+                          color: CustomColors.black,
                         ),
                       ),
                     ),
@@ -316,7 +318,7 @@ class _SettingsHomeState extends State<SettingsHome> {
               ),
               Divider(
                 indent: 45,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 thickness: 2.0,
                 height: 0,
               ),
@@ -324,6 +326,7 @@ class _SettingsHomeState extends State<SettingsHome> {
           ),
         ),
       ),
+      bottomNavigationBar: bottomBar(context),
     );
   }
 }

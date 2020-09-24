@@ -18,7 +18,7 @@ class _AddressWidgetState extends State<AddressWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: CustomColors.buyerLightGrey,
+      color: CustomColors.lightGrey,
       elevation: 5.0,
       margin: EdgeInsets.all(5.0),
       child: Column(
@@ -35,12 +35,12 @@ class _AddressWidgetState extends State<AddressWidget> {
                 fontSize: 18,
                 fontFamily: "Georgia",
                 fontWeight: FontWeight.bold,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
               ),
             ),
           ),
           Divider(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.blue,
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
@@ -57,14 +57,14 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.blue,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.buyerWhite,
+                              color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
                       filled: true,
                     ),
                     validator: (street) {
@@ -92,14 +92,14 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.blue,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.buyerWhite,
+                              color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
                       filled: true,
                     ),
                     validator: (city) {
@@ -121,14 +121,14 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.blue,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.buyerWhite,
+                              color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
                       filled: true,
                     ),
                     validator: (state) {
@@ -156,14 +156,14 @@ class _AddressWidgetState extends State<AddressWidget> {
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
-                        color: CustomColors.mfinBlue,
+                        color: CustomColors.blue,
                       ),
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
                           borderSide: BorderSide(
-                              color: CustomColors.mfinFadedButtonGreen)),
-                      fillColor: CustomColors.buyerWhite,
+                              color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
                       filled: true,
                     ),
                     validator: (pinCode) {

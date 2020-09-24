@@ -1,8 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/screens/Home/AuthPage.dart';
 import 'package:chipchop_buyer/screens/app/ContactAndSupportWidget.dart';
+import 'package:chipchop_buyer/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import '../../app_localizations.dart';
@@ -12,12 +16,160 @@ Widget sideDrawer(BuildContext context) {
     child: ListView(
       children: <Widget>[
         DrawerHeader(
-            decoration: BoxDecoration(
-              color: CustomColors.mfinBlue,
-            ),
-            child: Container()),
+          decoration: BoxDecoration(
+            color: CustomColors.green,
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                child: cachedLocalUser.getProfilePicPath() == ""
+                    ? Container(
+                        width: 90,
+                        height: 90,
+                        margin: EdgeInsets.only(bottom: 5),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: CustomColors.blue,
+                            style: BorderStyle.solid,
+                            width: 2.0,
+                          ),
+                        ),
+                        child: FlatButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              routeSettings:
+                                  RouteSettings(name: "/profile/upload"),
+                              builder: (context) {
+                                return Center(
+                                  child: ProfilePictureUpload(
+                                      0,
+                                      cachedLocalUser.getMediumProfilePicPath(),
+                                      HashGenerator.hmacGenerator(
+                                          cachedLocalUser.getID(),
+                                          cachedLocalUser
+                                              .createdAt.millisecondsSinceEpoch
+                                              .toString()),
+                                      cachedLocalUser.getIntID()),
+                                );
+                              },
+                            );
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.all(5),
+                                child: Icon(
+                                  Icons.person,
+                                  size: 45.0,
+                                  color: CustomColors.lightGrey,
+                                ),
+                              ),
+                              Text(
+                                AppLocalizations.of(context)
+                                    .translate('upload'),
+                                style: TextStyle(
+                                  fontSize: 8.0,
+                                  color: CustomColors.lightGrey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container(
+                        child: Stack(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 95.0,
+                              height: 95.0,
+                              child: Center(
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      cachedLocalUser.getMediumProfilePicPath(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      CircleAvatar(
+                                    radius: 45.0,
+                                    backgroundImage: imageProvider,
+                                    backgroundColor: Colors.transparent,
+                                  ),
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    size: 35,
+                                  ),
+                                  fadeOutDuration: Duration(seconds: 1),
+                                  fadeInDuration: Duration(seconds: 2),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              bottom: -8,
+                              left: 35,
+                              child: FlatButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    routeSettings:
+                                        RouteSettings(name: "/profile/upload"),
+                                    builder: (context) {
+                                      return Center(
+                                        child: ProfilePictureUpload(
+                                            0,
+                                            cachedLocalUser
+                                                .getMediumProfilePicPath(),
+                                            HashGenerator.hmacGenerator(
+                                                cachedLocalUser.getID(),
+                                                cachedLocalUser.createdAt
+                                                    .millisecondsSinceEpoch
+                                                    .toString()),
+                                            cachedLocalUser.getIntID()),
+                                      );
+                                    },
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor: CustomColors.blue,
+                                  radius: 15,
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: CustomColors.green,
+                                    size: 20.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+              Text(
+                cachedLocalUser.firstName,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w500,
+                  color: CustomColors.lightGrey,
+                ),
+              ),
+              Text(
+                cachedLocalUser.mobileNumber.toString(),
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w500,
+                  color: CustomColors.lightGrey,
+                ),
+              ),
+            ],
+          ),
+        ),
         ListTile(
-            leading: Icon(Icons.home, color: CustomColors.mfinButtonGreen),
+            leading: Icon(Icons.home, color: CustomColors.green),
             title: Text(
               "Home",
             ),
@@ -31,13 +183,12 @@ Widget sideDrawer(BuildContext context) {
                 (Route<dynamic> route) => false,
               );
             }),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ExpansionTile(
           title: Text(
             "Orders",
           ),
-          leading:
-              Icon(Icons.content_copy, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.content_copy, color: CustomColors.green),
           children: <Widget>[
             ListTile(
               title: Text(
@@ -53,38 +204,16 @@ Widget sideDrawer(BuildContext context) {
             ),
           ],
         ),
-        ExpansionTile(
-          leading: Icon(Icons.supervisor_account,
-              color: CustomColors.mfinButtonGreen),
-          title: Text(
-            "Products",
-          ),
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                "Add Product",
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              title: Text(
-                "View Product",
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-          ],
-        ),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.notifications_active,
-              color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.notifications_active, color: CustomColors.green),
           title: Text(
             "Notifications",
           ),
         ),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.settings, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.settings, color: CustomColors.green),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
@@ -98,9 +227,9 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
-        Divider(indent: 15.0, color: CustomColors.mfinBlue, thickness: 1.0),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.headset_mic, color: CustomColors.mfinButtonGreen),
+          leading: Icon(Icons.headset_mic, color: CustomColors.green),
           title: Text(
             AppLocalizations.of(context).translate('help_and_support'),
           ),
@@ -116,8 +245,9 @@ Widget sideDrawer(BuildContext context) {
             );
           },
         ),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.error, color: CustomColors.buyerAlertRed),
+          leading: Icon(Icons.error, color: CustomColors.alertRed),
           title: Text(
             AppLocalizations.of(context).translate('logout'),
           ),
@@ -136,8 +266,8 @@ Widget sideDrawer(BuildContext context) {
             );
           }, () => Navigator.pop(context, false)),
         ),
+        Divider(color: CustomColors.blue, thickness: 1.0),
         Container(
-          color: CustomColors.mfinBlue,
           child: AboutListTile(
             dense: true,
             applicationIcon: Container(
@@ -163,7 +293,7 @@ Widget sideDrawer(BuildContext context) {
                 text: TextSpan(
                   text: '',
                   style: TextStyle(
-                    color: CustomColors.mfinLightBlue,
+                    color: CustomColors.lightBlue,
                     fontFamily: 'Georgia',
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -172,7 +302,7 @@ Widget sideDrawer(BuildContext context) {
                     TextSpan(
                       text: 'Uniques',
                       style: TextStyle(
-                        color: CustomColors.mfinFadedButtonGreen,
+                        color: CustomColors.green,
                         fontFamily: 'Georgia',
                         fontSize: 16.0,
                       ),
@@ -190,7 +320,7 @@ Widget sideDrawer(BuildContext context) {
                 leading: Text(
                   'Uniques',
                   style: TextStyle(
-                    color: CustomColors.mfinBlue,
+                    color: CustomColors.blue,
                     fontFamily: 'Georgia',
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -203,14 +333,14 @@ Widget sideDrawer(BuildContext context) {
               ListTile(
                 leading: Icon(
                   Icons.info,
-                  color: CustomColors.mfinBlue,
+                  color: CustomColors.blue,
                   size: 35.0,
                 ),
                 title: Text(
                   AppLocalizations.of(context)
                       .translate('terms_and_conditions'),
                   style: TextStyle(
-                    color: CustomColors.mfinLightBlue,
+                    color: CustomColors.lightBlue,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
                   ),

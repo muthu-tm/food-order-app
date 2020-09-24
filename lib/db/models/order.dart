@@ -15,6 +15,10 @@ class Order extends Model {
   String storeUUID;
   @JsonKey(name: 'user_number', nullable: false)
   int userNumber;
+  @JsonKey(name: 'order_images', defaultValue: [""])
+  List<String> orderImages;
+  @JsonKey(name: 'written_orders', defaultValue: "")
+  String writtenOrders;
   @JsonKey(name: 'delivery_contact', nullable: false)
   int deliveryContact;
   @JsonKey(name: 'customer_notes', defaultValue: "")

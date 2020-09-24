@@ -31,11 +31,11 @@ class _AddLocationState extends State<AddLocation> {
         title: Text(
           AppLocalizations.of(context).translate('title_add_location'),
         ),
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.blue,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.blue,
         onPressed: () {
           final FormState form = _formKey.currentState;
 
@@ -80,7 +80,7 @@ class _AddLocationState extends State<AddLocation> {
                       AppLocalizations.of(context).translate('location_name'),
                       style: TextStyle(
                           fontFamily: "Georgia",
-                          color: CustomColors.buyerGrey,
+                          color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),
@@ -94,13 +94,13 @@ class _AddLocationState extends State<AddLocation> {
                     textAlign: TextAlign.start,
                     initialValue: locName,
                     decoration: InputDecoration(
-                      fillColor: CustomColors.buyerWhite,
+                      fillColor: CustomColors.white,
                       filled: true,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                       border: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: CustomColors.buyerGrey)),
+                              BorderSide(color: CustomColors.grey)),
                     ),
                     validator: (name) {
                       if (name.isEmpty) {

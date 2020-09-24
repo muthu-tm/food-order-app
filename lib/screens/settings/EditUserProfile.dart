@@ -49,11 +49,11 @@ class _EditUserProfileState extends State<EditUserProfile> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('edit_profile')),
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.blue,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.mfinBlue,
+        backgroundColor: CustomColors.blue,
         onPressed: () {
           _submit();
         },
@@ -65,7 +65,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        splashColor: CustomColors.buyerWhite,
+        splashColor: CustomColors.white,
       ),
       body: Form(
         key: _formKey,
@@ -74,7 +74,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Card(
-                color: CustomColors.buyerLightGrey,
+                color: CustomColors.lightGrey,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
@@ -86,7 +86,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('first_name'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.buyerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -100,13 +100,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)
                               .translate('first_name'),
-                          fillColor: CustomColors.buyerWhite,
+                          fillColor: CustomColors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 3.0, horizontal: 3.0),
                           border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: CustomColors.buyerWhite)),
+                                  BorderSide(color: CustomColors.white)),
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
@@ -125,7 +125,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('last_name'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.buyerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -139,13 +139,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)
                               .translate('last_name'),
-                          fillColor: CustomColors.buyerWhite,
+                          fillColor: CustomColors.white,
                           filled: true,
                           contentPadding: EdgeInsets.symmetric(
                               vertical: 3.0, horizontal: 3.0),
                           border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: CustomColors.buyerWhite)),
+                                  BorderSide(color: CustomColors.white)),
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
@@ -165,7 +165,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('email'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.buyerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -178,13 +178,13 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(context)
                                 .translate('enter_email_id'),
-                            fillColor: CustomColors.buyerWhite,
+                            fillColor: CustomColors.white,
                             filled: true,
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 3.0, horizontal: 3.0),
                             border: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: CustomColors.buyerWhite)),
+                                    BorderSide(color: CustomColors.white)),
                           ),
                           validator: (email) {
                             if (email.trim().isEmpty) {
@@ -204,7 +204,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('dob'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.buyerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -221,19 +221,19 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.always,
                               labelStyle: TextStyle(
-                                color: CustomColors.mfinBlue,
+                                color: CustomColors.blue,
                               ),
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 3.0, horizontal: 10.0),
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: CustomColors.buyerWhite)),
-                              fillColor: CustomColors.buyerWhite,
+                                      color: CustomColors.white)),
+                              fillColor: CustomColors.white,
                               filled: true,
                               suffixIcon: Icon(
                                 Icons.perm_contact_calendar,
                                 size: 35,
-                                color: CustomColors.mfinBlue,
+                                color: CustomColors.blue,
                               ),
                             ),
                           ),
@@ -248,7 +248,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           AppLocalizations.of(context).translate('gender'),
                           style: TextStyle(
                               fontFamily: "Georgia",
-                              color: CustomColors.buyerGrey,
+                              color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
                         ),
@@ -261,7 +261,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           child: RadioListTile(
                             title: Text(
                               AppLocalizations.of(context).translate('male'),
-                              style: TextStyle(color: CustomColors.mfinBlue),
+                              style: TextStyle(color: CustomColors.blue),
                             ),
                             value: "Male",
                             selected: gender.contains("Male"),
@@ -278,7 +278,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                           child: RadioListTile(
                             title: Text(
                               AppLocalizations.of(context).translate('female'),
-                              style: TextStyle(color: CustomColors.mfinBlue),
+                              style: TextStyle(color: CustomColors.blue),
                             ),
                             value: "Female",
                             selected: gender.contains("Female"),
@@ -329,7 +329,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     final FormState form = _formKey.currentState;
 
     if (form.validate()) {
-      CustomDialogs.actionWaiting(context, "Updating YOU!");
+      CustomDialogs.actionWaiting(context);
       updatedUser['address'] = updatedAddress.toJson();
       var result = await _userController.updateUser(updatedUser);
 

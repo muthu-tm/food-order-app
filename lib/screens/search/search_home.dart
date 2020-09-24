@@ -38,10 +38,10 @@ class _SearchHomeState extends State<SearchHome> {
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
             RaisedButton(
-              color: CustomColors.mfinBlue,
+              color: CustomColors.blue,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: CustomColors.mfinButtonGreen)),
+                  side: BorderSide(color: CustomColors.green)),
               onPressed: () async {
                 List<UserLocations> userLocations =
                     await cachedLocalUser.getLocations();

@@ -21,7 +21,7 @@ class SearchBarWidget extends StatelessWidget {
             GestureDetector(
               child: Icon(
                 Icons.search,
-                color: CustomColors.mfinButtonGreen,
+                color: CustomColors.green,
               ),
               onTap: () {},
             ),
@@ -46,7 +46,7 @@ class SearchBarWidget extends StatelessWidget {
               onTap: () {},
               child: Icon(
                 Icons.filter_list,
-                color: CustomColors.mfinButtonGreen,
+                color: CustomColors.green,
               ),
             ),
           ],

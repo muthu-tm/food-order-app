@@ -20,18 +20,18 @@ Widget contactAndSupportDialog(context) {
             leading: Icon(
               Icons.headset_mic,
               size: 35.0,
-              color: CustomColors.mfinBlue,
+              color: CustomColors.blue,
             ),
             title: Text(
               AppLocalizations.of(context).translate('help_and_support'),
               style: TextStyle(
-                  color: CustomColors.buyerPositiveGreen,
+                  color: CustomColors.positiveGreen,
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold),
             ),
           ),
           Divider(
-            color: CustomColors.mfinButtonGreen,
+            color: CustomColors.green,
           ),
           SizedBox(height: 5),
           ClipRRect(
@@ -46,7 +46,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('lost_need_help'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -54,7 +54,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('happy_to_help'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.buyerPositiveGreen,
+                color: CustomColors.positiveGreen,
                 fontSize: 14.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -63,7 +63,7 @@ Widget contactAndSupportDialog(context) {
             AppLocalizations.of(context).translate('contact_us'),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold),
           ),
@@ -77,24 +77,24 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.email,
-                  color: CustomColors.buyerLightGrey,
+                  color: CustomColors.lightGrey,
                 ),
                 elevation: 15.0,
                 onPressed: () {
                   UrlLauncherUtils.sendEmail(
                       'hello.ifin@gmail.com',
-                      'ChipChop Buyer - Help %26 Support',
+                      'Uniques - Help %26 Support',
                       'Please type your query/issue here with your mobile number.. We will get back to you ASAP!');
                 },
                 label: Text(
                     AppLocalizations.of(context).translate('email'),
                     style: TextStyle(
-                      color: CustomColors.mfinButtonGreen,
+                      color: CustomColors.green,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -105,7 +105,7 @@ Widget contactAndSupportDialog(context) {
               RaisedButton.icon(
                 icon: Icon(
                   Icons.phone,
-                  color: CustomColors.buyerLightGrey,
+                  color: CustomColors.lightGrey,
                 ),
                 elevation: 15.0,
                 onPressed: () {
@@ -114,12 +114,12 @@ Widget contactAndSupportDialog(context) {
                 label: Text(
                     AppLocalizations.of(context).translate('phone'),
                     style: TextStyle(
-                      color: CustomColors.mfinButtonGreen,
+                      color: CustomColors.green,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

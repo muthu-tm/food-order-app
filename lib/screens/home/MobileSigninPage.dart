@@ -41,7 +41,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: CustomColors.buyerLightGrey,
+      backgroundColor: CustomColors.lightGrey,
       body: SingleChildScrollView(
         child: Center(
           child: _getColumnBody(),
@@ -94,13 +94,13 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.phone,
-                    color: CustomColors.mfinFadedButtonGreen,
+                    color: CustomColors.lightGreen,
                     size: 30.0,
                   ),
                   prefixIconConstraints: BoxConstraints(
                     minWidth: 75,
                   ),
-                  fillColor: CustomColors.buyerWhite,
+                  fillColor: CustomColors.white,
                   hintText: "Mobile Number",
                   hintStyle: TextStyle(
                       fontSize: 16.0,
@@ -131,13 +131,13 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.person_outline,
-                    color: CustomColors.mfinFadedButtonGreen,
+                    color: CustomColors.lightGreen,
                     size: 30.0,
                   ),
                   prefixIconConstraints: BoxConstraints(
                     minWidth: 75,
                   ),
-                  fillColor: CustomColors.buyerWhite,
+                  fillColor: CustomColors.white,
                   hintText: "Name",
                   hintStyle: TextStyle(
                       fontSize: 16.0,
@@ -176,7 +176,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       _passwordVisible
                           ? Icons.visibility_off
                           : Icons.visibility,
-                      color: CustomColors.mfinFadedButtonGreen,
+                      color: CustomColors.lightGreen,
                       size: 30.0,
                     ),
                     onPressed: () {
@@ -188,7 +188,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   prefixIconConstraints: BoxConstraints(
                     minWidth: 75,
                   ),
-                  fillColor: CustomColors.buyerWhite,
+                  fillColor: CustomColors.white,
                   hintText: "4-digit secret key",
                   hintStyle: TextStyle(
                       fontSize: 16.0,
@@ -212,7 +212,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(width: 5),
-              Icon(Icons.info, color: CustomColors.buyerAlertRed, size: 20.0),
+              Icon(Icons.info, color: CustomColors.alertRed, size: 20.0),
               SizedBox(width: 10.0),
               Expanded(
                 child: RichText(
@@ -221,20 +221,20 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       text: AppLocalizations.of(context)
                           .translate('we_will_send'),
                       style: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.blue,
                           fontWeight: FontWeight.w400)),
                   TextSpan(
                       text: AppLocalizations.of(context)
                           .translate('one_time_password'),
                       style: TextStyle(
-                          color: CustomColors.buyerAlertRed,
+                          color: CustomColors.alertRed,
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700)),
                   TextSpan(
                       text: AppLocalizations.of(context)
                           .translate('to_mobile_no'),
                       style: TextStyle(
-                          color: CustomColors.mfinBlue,
+                          color: CustomColors.blue,
                           fontWeight: FontWeight.w400)),
                 ])),
               ),
@@ -250,12 +250,12 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: Text(
                 AppLocalizations.of(context).translate('get_otp'),
                 style: TextStyle(
-                  color: CustomColors.mfinButtonGreen,
+                  color: CustomColors.green,
                   fontSize: 18.0,
                 ),
               ),
             ),
-            color: CustomColors.mfinBlue,
+            color: CustomColors.blue,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -270,7 +270,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontFamily: 'Georgia',
-                    color: CustomColors.buyerPositiveGreen,
+                    color: CustomColors.positiveGreen,
                   ),
                 ),
               ),
@@ -282,7 +282,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.mfinBlue,
+                    color: CustomColors.blue,
                   ),
                 ),
               ),
@@ -305,8 +305,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           AppLocalizations.of(context).translate('secret_key_validation'), 2));
       return;
     } else {
-      CustomDialogs.actionWaiting(
-          context, AppLocalizations.of(context).translate('checking_user'));
+      CustomDialogs.actionWaiting(context);
       this.number = _phoneNumberController.text;
 
       var data = await User().getByID(countryCode.toString() + number);
@@ -386,8 +385,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
     _smsVerificationCode = verificationId;
     Navigator.pop(context);
-    CustomDialogs.actionWaiting(
-        context, AppLocalizations.of(context).translate('verify_user'));
+    CustomDialogs.actionWaiting(context);
   }
 
   _verificationFailed(AuthException authException, BuildContext context) {

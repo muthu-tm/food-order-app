@@ -93,7 +93,7 @@ class _StoresInMapState extends State<StoresInMap> {
                   child = Container(
                     child: Text(
                       "No stores",
-                      style: TextStyle(color: CustomColors.buyerBlack),
+                      style: TextStyle(color: CustomColors.black),
                     ),
                   );
                 } else {
@@ -128,14 +128,14 @@ class _StoresInMapState extends State<StoresInMap> {
                 child = Container(
                   child: Text(
                     "Error...",
-                    style: TextStyle(color: CustomColors.buyerBlack),
+                    style: TextStyle(color: CustomColors.black),
                   ),
                 );
               } else {
                 child = Container(
                   child: Text(
                     "Loading...",
-                    style: TextStyle(color: CustomColors.buyerBlack),
+                    style: TextStyle(color: CustomColors.black),
                   ),
                 );
               }

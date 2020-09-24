@@ -17,7 +17,7 @@ Widget bottomBar(BuildContext context) {
         SizedBox.fromSize(
           size: size,
           child: Material(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.green,
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -33,7 +33,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.home,
                     size: 30.0,
-                    color: CustomColors.mfinButtonGreen,
+                    color: CustomColors.black,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('home'),
@@ -42,7 +42,7 @@ Widget bottomBar(BuildContext context) {
                     style: TextStyle(
                       fontFamily: "Georgia",
                       fontSize: 12,
-                      color: CustomColors.buyerGrey,
+                      color: CustomColors.lightGrey,
                     ),
                   ),
                 ],
@@ -53,7 +53,7 @@ Widget bottomBar(BuildContext context) {
         SizedBox.fromSize(
           size: size,
           child: Material(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.green,
             child: InkWell(
               onTap: () {
                 Navigator.pushAndRemoveUntil(
@@ -71,7 +71,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.search,
                     size: 30.0,
-                    color: CustomColors.mfinButtonGreen,
+                    color: CustomColors.black,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('search'),
@@ -80,7 +80,7 @@ Widget bottomBar(BuildContext context) {
                     style: TextStyle(
                       fontFamily: "Georgia",
                       fontSize: 12,
-                      color: CustomColors.buyerGrey,
+                      color: CustomColors.lightGrey,
                     ),
                   ),
                 ],
@@ -91,7 +91,7 @@ Widget bottomBar(BuildContext context) {
         SizedBox.fromSize(
           size: size,
           child: Material(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.green,
             child: InkWell(
               onTap: () {
                 // Navigator.pushAndRemoveUntil(
@@ -109,7 +109,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.content_copy,
                     size: 30.0,
-                    color: CustomColors.mfinButtonGreen,
+                    color: CustomColors.black,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('orders'),
@@ -118,7 +118,7 @@ Widget bottomBar(BuildContext context) {
                     style: TextStyle(
                       fontFamily: "Georgia",
                       fontSize: 12,
-                      color: CustomColors.buyerGrey,
+                      color: CustomColors.lightGrey,
                     ),
                   ),
                 ],
@@ -129,7 +129,7 @@ Widget bottomBar(BuildContext context) {
         SizedBox.fromSize(
           size: size,
           child: Material(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.green,
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -145,7 +145,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.settings,
                     size: 30.0,
-                    color: CustomColors.mfinButtonGreen,
+                    color: CustomColors.black,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('settings'),
@@ -154,7 +154,7 @@ Widget bottomBar(BuildContext context) {
                     style: TextStyle(
                       fontFamily: "Georgia",
                       fontSize: 12,
-                      color: CustomColors.buyerGrey,
+                      color: CustomColors.lightGrey,
                     ),
                   ),
                 ],

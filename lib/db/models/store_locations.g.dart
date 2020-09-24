@@ -11,7 +11,13 @@ StoreLocations _$StoreLocationsFromJson(Map<String, dynamic> json) {
     ..uuid = json['uuid'] as String ?? ''
     ..locationName = json['loc_name'] as String ?? ''
     ..availProducts =
-        (json['avail_products'] as List)?.map((e) => e as int)?.toList()
+        (json['avail_products'] as List)?.map((e) => e as String)?.toList()
+    ..availProductCategories = (json['avail_product_categories'] as List)
+        ?.map((e) => e as String)
+        ?.toList()
+    ..availProductSubCategories = (json['avail_product_sub_categories'] as List)
+        ?.map((e) => e as String)
+        ?.toList()
     ..workingDays =
         (json['working_days'] as List)?.map((e) => e as int)?.toList()
     ..activeFrom = json['active_from'] as String

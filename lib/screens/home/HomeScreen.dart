@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: appBar(context),
       drawer: sideDrawer(context),
-      backgroundColor: CustomColors.buyerWhite,
+      backgroundColor: CustomColors.white,
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
                   child: Container(
                     width: 250,
                     decoration: BoxDecoration(
-                        border: Border.all(color: CustomColors.buyerBlack)),
+                        border: Border.all(color: CustomColors.black)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
@@ -35,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                             padding: EdgeInsets.all(5.0),
                             child: Icon(Icons.location_on,
                                 size: 20,
-                                color: CustomColors.buyerPositiveGreen)),
+                                color: CustomColors.positiveGreen)),
                         Padding(
                           padding: EdgeInsets.all(5),
                           child: getLocation(),
@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                     "Orders",
                     style: TextStyle(
                         fontFamily: "Georgia",
-                        color: CustomColors.buyerGrey,
+                        color: CustomColors.grey,
                         fontWeight: FontWeight.bold,
                         fontSize: 17),
                   ),
@@ -71,7 +71,7 @@ class HomeScreen extends StatelessWidget {
                     "Top Store Categories",
                     style: TextStyle(
                         fontFamily: "Georgia",
-                        color: CustomColors.buyerGrey,
+                        color: CustomColors.grey,
                         fontWeight: FontWeight.bold,
                         fontSize: 17),
                   ),
@@ -110,7 +110,7 @@ class HomeScreen extends StatelessWidget {
               child: Container(
                 child: Text(
                   "Add Location",
-                  style: TextStyle(color: CustomColors.buyerBlack),
+                  style: TextStyle(color: CustomColors.black),
                 ),
               ),
             );
@@ -138,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       "${snapshot.data.first.locationName}",
-                      style: TextStyle(color: CustomColors.buyerBlack),
+                      style: TextStyle(color: CustomColors.black),
                     ),
                     NearByStores(snapshot.data.first),
                   ],
@@ -383,7 +383,7 @@ class HomeScreen extends StatelessWidget {
               child: Container(
                 child: Text(
                   "Add Location",
-                  style: TextStyle(color: CustomColors.buyerBlack),
+                  style: TextStyle(color: CustomColors.black),
                 ),
               ),
             );

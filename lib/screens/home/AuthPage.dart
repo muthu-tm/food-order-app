@@ -9,6 +9,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/auth/auth_controller.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:chipchop_buyer/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
@@ -32,7 +33,7 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: CustomColors.buyerLightGrey,
+      backgroundColor: CustomColors.lightGrey,
       body: Center(
         child: SingleChildScrollView(
           child: FutureBuilder<String>(
@@ -79,7 +80,7 @@ class _AuthPageState extends State<AuthPage> {
                               Padding(
                                 padding: EdgeInsets.all(5),
                                 child:
-                                    shadowGradientText("ChipChop", 16.0),
+                                    shadowGradientText(buyer_app_name, 16.0),
                               ),
                               SizedBox(
                                 height:
@@ -89,7 +90,7 @@ class _AuthPageState extends State<AuthPage> {
                                 "Serving From",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: CustomColors.buyerGrey,
+                                  color: CustomColors.grey,
                                   fontSize: 12,
                                   fontFamily: "Georgia",
                                 ),
@@ -130,8 +131,8 @@ class _AuthPageState extends State<AuthPage> {
     return ShaderMask(
       shaderCallback: (bounds) => LinearGradient(
         colors: [
-          CustomColors.mfinButtonGreen,
-          CustomColors.mfinBlue,
+          CustomColors.green,
+          CustomColors.blue,
         ],
       ).createShader(
         Rect.fromLTWH(0, 0, bounds.width, bounds.height),
@@ -140,7 +141,7 @@ class _AuthPageState extends State<AuthPage> {
         text,
         textAlign: TextAlign.center,
         style: TextStyle(
-          color: CustomColors.buyerWhite,
+          color: CustomColors.white,
           fontSize: size,
           fontFamily: "Georgia",
         ),
@@ -176,7 +177,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
       child: Column(
         children: <Widget>[
           Card(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.blue,
             elevation: 2.0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8.0)),
@@ -195,14 +196,14 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                  color: CustomColors.mfinFadedButtonGreen,
+                                  color: CustomColors.lightGreen,
                                   style: BorderStyle.solid,
                                   width: 2.0),
                             ),
                             child: Icon(
                               Icons.person,
                               size: 45.0,
-                              color: CustomColors.buyerLightGrey,
+                              color: CustomColors.lightGrey,
                             ),
                           )
                         : CircleAvatar(
@@ -217,7 +218,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: CustomColors.buyerLightGrey,
+                      color: CustomColors.lightGrey,
                     ),
                   ),
                   Text(
@@ -225,7 +226,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: CustomColors.buyerLightGrey,
+                      color: CustomColors.lightGrey,
                     ),
                   ),
                   Padding(
@@ -239,7 +240,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                         decoration: InputDecoration(
                           hintText: AppLocalizations.of(context)
                               .translate('secret_key'),
-                          fillColor: CustomColors.buyerWhite,
+                          fillColor: CustomColors.white,
                           filled: true,
                         ),
                       ),
@@ -257,7 +258,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                                 "Fingerprint",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: CustomColors.buyerGrey,
+                                  color: CustomColors.grey,
                                   fontSize: 11.0,
                                 ),
                               ),
@@ -276,7 +277,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                           AppLocalizations.of(context).translate('forget_key'),
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                            color: CustomColors.buyerAlertRed,
+                            color: CustomColors.alertRed,
                             fontSize: 11.0,
                           ),
                         ),
@@ -292,7 +293,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                       width: 150.0,
                       height: 50.0,
                       decoration: BoxDecoration(
-                        color: CustomColors.mfinFadedButtonGreen,
+                        color: CustomColors.lightGreen,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: Center(
@@ -302,7 +303,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                           style: TextStyle(
                             fontSize: 18.0,
                             fontFamily: 'Georgia',
-                            color: CustomColors.mfinBlue,
+                            color: CustomColors.blue,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -324,7 +325,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     fontSize: 13.0,
                     fontFamily: 'Georgia',
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.buyerAlertRed.withOpacity(0.7),
+                    color: CustomColors.alertRed.withOpacity(0.7),
                   ),
                 ),
                 FlatButton(
@@ -341,7 +342,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.buyerPositiveGreen,
+                      color: CustomColors.positiveGreen,
                     ),
                   ),
                 ),
@@ -396,8 +397,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
   }
 
   login(User _user) async {
-    CustomDialogs.actionWaiting(
-        context, AppLocalizations.of(context).translate('logging_in'));
+    CustomDialogs.actionWaiting(context);
 
     var result = await _authController.signInWithMobileNumber(_user);
 

@@ -17,19 +17,19 @@ class UserProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: CustomColors.buyerLightGrey,
+      color: CustomColors.lightGrey,
       child: Column(
         children: <Widget>[
           ListTile(
             leading: Icon(
               Icons.assignment_ind,
               size: 35.0,
-              color: CustomColors.mfinBlue,
+              color: CustomColors.blue,
             ),
             title: Text(
               title,
               style: TextStyle(
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
                 fontSize: 18.0,
               ),
             ),
@@ -37,14 +37,14 @@ class UserProfileWidget extends StatelessWidget {
               icon: Icon(
                 Icons.edit,
                 size: 35.0,
-                color: CustomColors.mfinBlue,
+                color: CustomColors.blue,
               ),
               onPressed: () {
                 if (user.mobileNumber != cachedLocalUser.mobileNumber) {
                   CustomDialogs.information(
                       context,
                       "Warning",
-                      CustomColors.buyerAlertRed,
+                      CustomColors.alertRed,
                       "You are not allowed to edit this user data!");
                 } else {
                   Navigator.push(
@@ -59,7 +59,7 @@ class UserProfileWidget extends StatelessWidget {
             ),
           ),
           Divider(
-            color: CustomColors.mfinBlue,
+            color: CustomColors.blue,
           ),
           ListTile(
             leading: SizedBox(
@@ -70,19 +70,19 @@ class UserProfileWidget extends StatelessWidget {
                     fontSize: 14,
                     fontFamily: "Georgia",
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.buyerGrey),
+                    color: CustomColors.grey),
               ),
             ),
             title: TextFormField(
               initialValue: user.firstName,
               decoration: InputDecoration(
-                fillColor: CustomColors.buyerWhite,
+                fillColor: CustomColors.white,
                 filled: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
                 border: OutlineInputBorder(
                     borderSide: BorderSide(
-                  color: CustomColors.buyerGrey,
+                  color: CustomColors.grey,
                 )),
               ),
               readOnly: true,
@@ -97,7 +97,7 @@ class UserProfileWidget extends StatelessWidget {
                     fontSize: 14,
                     fontFamily: "Georgia",
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.buyerGrey),
+                    color: CustomColors.grey),
               ),
             ),
             title: TextFormField(
@@ -105,12 +105,12 @@ class UserProfileWidget extends StatelessWidget {
                   ' ' +
                   user.mobileNumber.toString(),
               decoration: InputDecoration(
-                fillColor: CustomColors.buyerLightGrey,
+                fillColor: CustomColors.lightGrey,
                 filled: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.buyerGrey)),
+                    borderSide: BorderSide(color: CustomColors.grey)),
               ),
               enabled: false,
               autofocus: false,
@@ -126,7 +126,7 @@ class UserProfileWidget extends StatelessWidget {
                           fontSize: 14,
                           fontFamily: "Georgia",
                           fontWeight: FontWeight.bold,
-                          color: CustomColors.buyerGrey),
+                          color: CustomColors.grey),
                     ),
                   ),
                   title: TextFormField(
@@ -134,24 +134,24 @@ class UserProfileWidget extends StatelessWidget {
                     textAlign: TextAlign.start,
                     obscureText: true,
                     decoration: InputDecoration(
-                      fillColor: CustomColors.buyerWhite,
+                      fillColor: CustomColors.white,
                       filled: true,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                       border: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: CustomColors.buyerGrey)),
+                              BorderSide(color: CustomColors.grey)),
                     ),
                     readOnly: true,
                   ),
                   trailing: IconButton(
-                    highlightColor: CustomColors.buyerAlertRed.withOpacity(0.5),
+                    highlightColor: CustomColors.alertRed.withOpacity(0.5),
                     tooltip: AppLocalizations.of(context)
                         .translate('change_password'),
                     icon: Icon(
                       Icons.edit,
                       size: 25.0,
-                      color: CustomColors.buyerAlertRed.withOpacity(0.7),
+                      color: CustomColors.alertRed.withOpacity(0.7),
                     ),
                     onPressed: () {
                       if (user.mobileNumber == cachedLocalUser.mobileNumber) {
@@ -177,18 +177,18 @@ class UserProfileWidget extends StatelessWidget {
                     fontSize: 14,
                     fontFamily: "Georgia",
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.buyerGrey),
+                    color: CustomColors.grey),
               ),
             ),
             title: TextFormField(
               initialValue: user.gender,
               decoration: InputDecoration(
-                fillColor: CustomColors.buyerWhite,
+                fillColor: CustomColors.white,
                 filled: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.buyerGrey)),
+                    borderSide: BorderSide(color: CustomColors.grey)),
               ),
               readOnly: true,
             ),
@@ -202,18 +202,18 @@ class UserProfileWidget extends StatelessWidget {
                     fontSize: 14,
                     fontFamily: "Georgia",
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.buyerGrey),
+                    color: CustomColors.grey),
               ),
             ),
             title: TextFormField(
               initialValue: user.emailID,
               decoration: InputDecoration(
-                fillColor: CustomColors.buyerWhite,
+                fillColor: CustomColors.white,
                 filled: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.buyerWhite)),
+                    borderSide: BorderSide(color: CustomColors.white)),
               ),
               readOnly: true,
             ),
@@ -227,7 +227,7 @@ class UserProfileWidget extends StatelessWidget {
                     fontSize: 14,
                     fontFamily: "Georgia",
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.buyerGrey),
+                    color: CustomColors.grey),
               ),
             ),
             title: TextFormField(
@@ -236,16 +236,16 @@ class UserProfileWidget extends StatelessWidget {
                   : DateUtils.formatDate(
                       DateTime.fromMillisecondsSinceEpoch(user.dateOfBirth)),
               decoration: InputDecoration(
-                fillColor: CustomColors.buyerWhite,
+                fillColor: CustomColors.white,
                 filled: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.buyerGrey)),
+                    borderSide: BorderSide(color: CustomColors.grey)),
                 suffixIcon: Icon(
                   Icons.perm_contact_calendar,
                   size: 35,
-                  color: CustomColors.mfinBlue,
+                  color: CustomColors.blue,
                 ),
               ),
               readOnly: true,
@@ -260,19 +260,19 @@ class UserProfileWidget extends StatelessWidget {
                     fontSize: 14,
                     fontFamily: "Georgia",
                     fontWeight: FontWeight.bold,
-                    color: CustomColors.buyerGrey),
+                    color: CustomColors.grey),
               ),
             ),
             title: TextFormField(
               initialValue: user.address.toString(),
               maxLines: 5,
               decoration: InputDecoration(
-                fillColor: CustomColors.buyerWhite,
+                fillColor: CustomColors.white,
                 filled: true,
                 contentPadding:
                     EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                 border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.buyerGrey)),
+                    borderSide: BorderSide(color: CustomColors.grey)),
               ),
               readOnly: true,
             ),
