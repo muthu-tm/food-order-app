@@ -5,6 +5,8 @@ import 'package:chipchop_buyer/db/models/user_preferences.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'user_locations.dart';
 part 'user.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -39,8 +41,12 @@ class User extends Model {
   bool isActive;
   @JsonKey(name: 'deactivated_at', nullable: true)
   int deactivatedAt;
+  @JsonKey(name: 'favourite_stores')
+  List<String> favStores;
   @JsonKey(name: 'preferences')
   UserPreferences preferences;
+  @JsonKey(name: 'primary_location')
+  UserLocations primaryLocation;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)

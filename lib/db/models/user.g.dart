@@ -18,12 +18,18 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..preferences = json['preferences'] == null
         ? new UserPreferences()
         : UserPreferences.fromJson(json['preferences'] as Map<String, dynamic>)
+    ..primaryLocation = json['primary_location'] == null
+        ? null
+        : UserLocations.fromJson(
+            json['primary_location'] as Map<String, dynamic>)
     ..lastSignInTime = json['last_signed_in_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
             _getMillisecondsSinceEpoch(json['last_signed_in_at'] as Timestamp))
     ..isActive = json['is_active'] as bool ?? true
     ..deactivatedAt = json['deactivated_at'] as int
+    ..favStores =
+        (json['favourite_stores'] as List)?.map((e) => e as String)?.toList()
     ..createdAt = json['created_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
@@ -51,9 +57,11 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'date_of_birth': instance.dateOfBirth,
       'address': instance.address?.toJson(),
       'preferences': instance.preferences?.toJson(),
+      'primary_location': instance.primaryLocation?.toJson(),
       'last_signed_in_at': instance.lastSignInTime,
       'is_active': instance.isActive,
       'deactivated_at': instance.deactivatedAt,
+      'favourite_stores': instance.favStores,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

@@ -62,7 +62,7 @@ class _StoresInMapState extends State<StoresInMap> {
   }
 
   void _addStoresMarker() {
-    Store().streamNearByStores(widget.locations).forEach((element) {
+    Store().streamNearByStores(widget.locations, 5).forEach((element) {
       element.forEach((element) {
         GeoPoint pos = element.data['geo_point']['geopoint'];
 
@@ -88,7 +88,7 @@ class _StoresInMapState extends State<StoresInMap> {
         margin: EdgeInsets.symmetric(vertical: 20.0),
         height: 150.0,
         child: StreamBuilder(
-            stream: Store().streamNearByStores(widget.locations),
+            stream: Store().streamNearByStores(widget.locations, 5),
             builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
               Widget child;
 

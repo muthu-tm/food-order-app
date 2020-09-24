@@ -61,6 +61,7 @@ class LocationPickerState extends State<LocationPicker> {
           try {
             // await cachedLocalUser.updateLocations("Ei50FS5lOMSTI43QbEUQ", {'geo_point': geoPointData});
             await cachedLocalUser.addLocations(widget.loc);
+            cachedLocalUser.primaryLocation = widget.loc;
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (BuildContext context) => HomeScreen(),
@@ -153,7 +154,7 @@ class LocationPickerState extends State<LocationPicker> {
         ),
       );
     } catch (e) {
-      print(e.toString());
+      print(e);
     }
   }
 

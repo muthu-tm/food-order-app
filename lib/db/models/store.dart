@@ -8,6 +8,7 @@ import 'package:chipchop_buyer/db/models/geopoint_data.dart';
 import 'package:chipchop_buyer/db/models/store_user_access.dart';
 import 'package:chipchop_buyer/db/models/delivery_details.dart';
 
+import '../../services/controllers/user/user_service.dart';
 import '../../services/utils/constants.dart';
 import 'user_locations.dart';
 part 'store.g.dart';
@@ -63,8 +64,8 @@ class Store extends Model {
           .storeProfile
           .replaceFirst(firebase_storage_path, image_kit_path + ik_medium_size);
     else
-        return no_image_placeholder.replaceFirst(
-            firebase_storage_path, image_kit_path + ik_medium_size);
+      return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
   }
 
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
@@ -86,7 +87,8 @@ class Store extends Model {
     return getDocumentReference(getID()).snapshots();
   }
 
-  Stream<List<DocumentSnapshot>> streamNearByStores(UserLocations loc) {
+  Stream<List<DocumentSnapshot>> streamNearByStores(
+      UserLocations loc, double radius) {
     Geoflutterfire geo = Geoflutterfire();
     GeoFirePoint usersAddressGeoFirePoint = geo.point(
         latitude: loc.geoPoint.geoPoint.latitude,
@@ -98,5 +100,46 @@ class Store extends Model {
         radius: radius,
         field: 'geo_point',
         strictMode: true);
+  }
+
+  Future<List<Store>> streamFavStores(UserLocations loc) async {
+    List<Store> stores = [];
+
+    try {
+      if (loc != null && (cachedLocalUser.favStores == null ||
+          cachedLocalUser.favStores.isEmpty)) {
+        await streamNearByStores(loc, 10).take(1).forEach((snap) {
+          for (var i = 0; i < snap.length; i++) {
+            Store _s = Store.fromJson(snap[i].data);
+            stores.add(_s);
+          }
+        });
+      } else if (cachedLocalUser.favStores != null) {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('uuid', whereIn: cachedLocalUser.favStores)
+            .getDocuments();
+        if (snap.documents.isNotEmpty) {
+          for (var i = 0; i < snap.documents.length; i++) {
+            Store _s = Store.fromJson(snap.documents[i].data);
+            stores.add(_s);
+          }
+        }
+      }
+
+      if (stores.isEmpty) {
+        QuerySnapshot snap = await getCollectionRef().limit(5).getDocuments();
+        if (snap.documents.isNotEmpty) {
+          for (var i = 0; i < snap.documents.length; i++) {
+            Store _s = Store.fromJson(snap.documents[i].data);
+            stores.add(_s);
+          }
+        }
+      }
+
+      return stores;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 }
