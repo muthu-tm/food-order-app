@@ -68,6 +68,16 @@ class Store extends Model {
           firebase_storage_path, image_kit_path + ik_medium_size);
   }
 
+  String getProfilePicPath() {
+    if (this.storeProfile != null && this.storeProfile != "")
+      return this
+          .storeProfile
+          .replaceFirst(firebase_storage_path, image_kit_path);
+    else
+      return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path);
+  }
+
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
   Map<String, dynamic> toJson() => _$StoreToJson(this);
 
@@ -106,8 +116,9 @@ class Store extends Model {
     List<Store> stores = [];
 
     try {
-      if (loc != null && (cachedLocalUser.favStores == null ||
-          cachedLocalUser.favStores.isEmpty)) {
+      if (loc != null &&
+          (cachedLocalUser.favStores == null ||
+              cachedLocalUser.favStores.isEmpty)) {
         await streamNearByStores(loc, 10).take(1).forEach((snap) {
           for (var i = 0; i < snap.length; i++) {
             Store _s = Store.fromJson(snap[i].data);

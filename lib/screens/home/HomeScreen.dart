@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
 import 'package:chipchop_buyer/screens/user/NearByStores.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -169,70 +170,86 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.all(5.0),
                       child: Container(
                         child: FittedBox(
-                          child: Material(
-                            color: CustomColors.white,
-                            elevation: 10.0,
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: store.getMediumProfilePicPath(),
-                                      imageBuilder: (context, imageProvider) =>
-                                          Image(
-                                        fit: BoxFit.fill,
-                                        image: imageProvider,
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewStoreScreen(store),
+                                  settings: RouteSettings(name: '/store'),
+                                ),
+                              );
+                            },
+                            child: Material(
+                              color: CustomColors.white,
+                              elevation: 10.0,
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: CachedNetworkImage(
+                                        imageUrl:
+                                            store.getMediumProfilePicPath(),
+                                        imageBuilder:
+                                            (context, imageProvider) => Image(
+                                          fit: BoxFit.fill,
+                                          image: imageProvider,
+                                        ),
+                                        progressIndicatorBuilder: (context, url,
+                                                downloadProgress) =>
+                                            CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(
+                                          Icons.error,
+                                          size: 35,
+                                        ),
+                                        fadeOutDuration: Duration(seconds: 1),
+                                        fadeInDuration: Duration(seconds: 2),
                                       ),
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(
-                                        Icons.error,
-                                        size: 35,
-                                      ),
-                                      fadeOutDuration: Duration(seconds: 1),
-                                      fadeInDuration: Duration(seconds: 2),
                                     ),
                                   ),
-                                ),
-                                Container(
-                                  child: Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: <Widget>[
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            child: Container(
-                                                child: Text(
-                                              store.storeName,
-                                              style: TextStyle(
-                                                  color: CustomColors.blue,
-                                                  fontSize: 18.0,
-                                                  fontWeight: FontWeight.bold),
-                                            )),
-                                          ),
-                                          SizedBox(height: 5.0),
-                                          Container(
-                                              child: Text(
-                                            "Timings - ${store.activeFrom} : ${store.activeTill}",
-                                            style: TextStyle(
-                                              color: CustomColors.black,
-                                              fontSize: 16.0,
+                                  Container(
+                                    child: Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 5.0),
+                                              child: Container(
+                                                  child: Text(
+                                                store.storeName,
+                                                style: TextStyle(
+                                                    color: CustomColors.blue,
+                                                    fontSize: 18.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )),
                                             ),
-                                          )),
-                                        ],
-                                      )),
-                                ),
-                              ],
+                                            SizedBox(height: 5.0),
+                                            Container(
+                                                child: Text(
+                                              "Timings - ${store.activeFrom} : ${store.activeTill}",
+                                              style: TextStyle(
+                                                color: CustomColors.black,
+                                                fontSize: 16.0,
+                                              ),
+                                            )),
+                                          ],
+                                        )),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
