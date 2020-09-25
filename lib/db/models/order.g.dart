@@ -3,9 +3,13 @@ part of 'order.dart';
 Order _$OrderFromJson(Map<String, dynamic> json) {
   return Order()
     ..uuid = json['uuid'] as String ?? ''
-    ..storeUUID = json['store_uuid'] as String
+    ..storeID = json['store_uuid'] as String
     ..userNumber = json['user_number'] as int
     ..totalProducts = json['total_products'] as int
+    ..products = (json['products'] as List)
+        ?.map((e) =>
+            e == null ? null : OrderProduct.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..orderImages = (json['order_images'] as List)
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
@@ -39,10 +43,11 @@ int _getMillisecondsSinceEpoch(Timestamp ts) {
 }
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
-      'guuid': instance.uuid,
-      'store_uuid': instance.storeUUID,
+      'uuid': instance.uuid,
+      'store_uuid': instance.storeID,
       'user_number': instance.userNumber,
       'total_products': instance.totalProducts,
+      'products': instance.products?.map((e) => e?.toJson())?.toList(),
       'order_images': instance.orderImages == null ? [] : instance.orderImages,
       'written_orders': instance.writtenOrders ?? '',
       'delivery_contact': instance.deliveryContact,

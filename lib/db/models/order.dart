@@ -1,8 +1,10 @@
-import 'package:chipchop_buyer/db/models/model.dart';
-import 'package:chipchop_buyer/db/models/order_amount.dart';
-import 'package:chipchop_buyer/db/models/order_delivery.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import './model.dart';
+import './order_amount.dart';
+import './order_delivery.dart';
+import './order_product.dart';
 part 'order.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -12,11 +14,13 @@ class Order extends Model {
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
   @JsonKey(name: 'store_uuid', nullable: false)
-  String storeUUID;
+  String storeID;
   @JsonKey(name: 'user_number', nullable: false)
   int userNumber;
   @JsonKey(name: 'total_products', nullable: false)
   int totalProducts;
+  @JsonKey(name: 'products', nullable: false)
+  List<OrderProduct> products;
   @JsonKey(name: 'order_images', defaultValue: [""])
   List<String> orderImages;
   @JsonKey(name: 'written_orders', defaultValue: "")
