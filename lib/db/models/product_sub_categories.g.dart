@@ -3,7 +3,10 @@ part of 'product_sub_categories.dart';
 ProductSubCategories _$ProductSubCategoriesFromJson(Map<String, dynamic> json) {
   return ProductSubCategories()
     ..uuid = json['uuid'] as String
-    ..categoryUUID = json['category_uuid'] as String
+    ..categoryID = (json['category_uuid'] as List)
+            ?.map((e) => e == null ? null : e as String)
+            ?.toList() ??
+        []
     ..name = json['name'] as String ?? ''
     ..shortDetails = json['short_details'] as String
     ..productImages = (json['product_images'] as List)
@@ -24,10 +27,11 @@ int _getMillisecondsSinceEpoch(Timestamp ts) {
   return ts.millisecondsSinceEpoch;
 }
 
-Map<String, dynamic> _$ProductSubCategoriesToJson(ProductSubCategories instance) =>
+Map<String, dynamic> _$ProductSubCategoriesToJson(
+        ProductSubCategories instance) =>
     <String, dynamic>{
       'uuid': instance.uuid,
-      'category_uuid': instance.categoryUUID,
+      'category_uuid': instance.categoryID,
       'name': instance.name,
       'short_details': instance.shortDetails,
       'product_images':

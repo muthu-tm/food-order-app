@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/db/models/product_categories.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -5,11 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 part 'product_sub_categories.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class ProductSubCategories {
+class ProductSubCategories extends Model {
+  static CollectionReference _subCategoriesCollRef =
+      Model.db.collection("product_sub_categories");
+
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
   @JsonKey(name: 'category_uuid', nullable: false)
-  String categoryUUID;
+  List<String> categoryID;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
   @JsonKey(name: 'short_details', defaultValue: "")
@@ -39,10 +43,8 @@ class ProductSubCategories {
       _$ProductSubCategoriesFromJson(json);
   Map<String, dynamic> toJson() => _$ProductSubCategoriesToJson(this);
 
-  CollectionReference getCollectionRef(String typeUUID, String catUUID) {
-    return ProductCategories()
-        .getDocumentReference(typeUUID, catUUID)
-        .collection("product_sub_categories");
+  CollectionReference getCollectionRef() {
+    return _subCategoriesCollRef;
   }
 
   String getID() {
@@ -54,9 +56,9 @@ class ProductSubCategories {
     List<ProductSubCategories> subCategories = [];
 
     for (var i = 0; i < categories.length; i++) {
-      QuerySnapshot snap =
-          await getCollectionRef(categories[i].typeUUID, categories[i].uuid)
-              .getDocuments();
+      QuerySnapshot snap = await getCollectionRef()
+          .where('category_uuid', arrayContains: categories[i].uuid)
+          .getDocuments();
       if (snap.documents.isEmpty)
         continue;
       else {
@@ -69,5 +71,20 @@ class ProductSubCategories {
     }
 
     return subCategories;
+  }
+
+  Future<List<ProductSubCategories>> getSubCategoriesForIDs(
+      List<String> ids) async {
+    List<ProductSubCategories> categories = [];
+
+    QuerySnapshot snap =
+        await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
+    for (var j = 0; j < snap.documents.length; j++) {
+      ProductSubCategories _c =
+          ProductSubCategories.fromJson(snap.documents[j].data);
+      categories.add(_c);
+    }
+
+    return categories;
   }
 }
