@@ -22,7 +22,7 @@ class Store extends Model {
   @JsonKey(name: 'owned_by', defaultValue: "")
   String ownedBy;
   @JsonKey(name: 'store_name', defaultValue: "")
-  String storeName;
+  String name;
   @JsonKey(name: 'geo_point', defaultValue: "")
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')

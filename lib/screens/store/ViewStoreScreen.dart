@@ -14,7 +14,9 @@ class ViewStoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: CustomColors.green, title: Text(store.storeName)),
+        backgroundColor: CustomColors.green,
+        title: Text(store.name),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

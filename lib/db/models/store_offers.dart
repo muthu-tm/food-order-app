@@ -1,5 +1,5 @@
 import 'package:chipchop_buyer/db/models/model.dart';
-import 'package:chipchop_buyer/db/models/store_locations.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -7,8 +7,8 @@ part 'store_offers.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class StoreOffers {
-  @JsonKey(name: 'store_loc_id', defaultValue: "")
-  String storeLocationID;
+  @JsonKey(name: 'store_uuid', defaultValue: "")
+  String storeID;
   @JsonKey(name: 'offer_code', defaultValue: "")
   String offerCode;
   @JsonKey(name: 'offer_name', defaultValue: "")
@@ -34,8 +34,8 @@ class StoreOffers {
       _$StoreOffersFromJson(json);
   Map<String, dynamic> toJson() => _$StoreOffersToJson(this);
 
-  CollectionReference getCollectionRef(String storeUUID, String locUUID) {
-    return StoreLocations().getDocumentReference(storeUUID, locUUID).collection("store_offers");
+  CollectionReference getCollectionRef(String storeID) {
+    return Store().getDocumentReference(storeID).collection("store_offers");
   }
 
   Query getGroupQuery() {

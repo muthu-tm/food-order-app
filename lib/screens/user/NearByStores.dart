@@ -1,4 +1,4 @@
-import 'package:chipchop_buyer/db/models/store_locations.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +11,7 @@ class NearByStores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: StoreLocations().streamNearByStores(loc),
+      stream: Store().streamNearByStores(loc, 5),
       builder: (context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
         Widget child;
 
@@ -24,11 +24,11 @@ class NearByStores extends StatelessWidget {
               ),
             );
           } else {
-            StoreLocations locations =
-                StoreLocations.fromJson(snapshot.data[0].data);
+            Store store =
+                Store.fromJson(snapshot.data[0].data);
             child = Container(
               child: Text(
-                "${locations.locationName}",
+                "${store.name}",
                 style: TextStyle(color: CustomColors.black),
               ),
             );

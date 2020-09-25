@@ -21,9 +21,7 @@ class Products extends Model {
   @JsonKey(name: 'short_details', defaultValue: "")
   String shortDetails;
   @JsonKey(name: 'store_uuid', defaultValue: "")
-  String storeUUID;
-  @JsonKey(name: 'loc_uuid', defaultValue: "")
-  String locUUID;
+  String storeID;
   @JsonKey(name: 'product_images', defaultValue: [""])
   List<String> productImages;
   @JsonKey(name: 'weight')

@@ -228,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   EdgeInsets.only(left: 5.0),
                                               child: Container(
                                                   child: Text(
-                                                store.storeName,
+                                                store.name,
                                                 style: TextStyle(
                                                     color: CustomColors.blue,
                                                     fontSize: 18.0,

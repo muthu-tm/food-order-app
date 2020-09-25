@@ -9,7 +9,7 @@ part of 'store.dart';
 Store _$StoreFromJson(Map<String, dynamic> json) {
   return Store()
     ..uuid = json['uuid'] as String
-    ..storeName = json['store_name'] as String ?? ''
+    ..name = json['store_name'] as String ?? ''
     ..ownedBy = json['owned_by'] as String
     ..availProducts =
         (json['avail_products'] as List)?.map((e) => e as String)?.toList()
@@ -69,7 +69,7 @@ int _getMillisecondsSinceEpoch(Timestamp ts) {
 
 Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'uuid': instance.uuid,
-      'store_name': instance.storeName,
+      'store_name': instance.name,
       'owned_by': instance.ownedBy,
       'avail_products': instance.availProducts,
       'avail_product_categories': instance.availProductCategories,

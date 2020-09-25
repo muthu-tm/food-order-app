@@ -5,6 +5,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     ..uuid = json['uuid'] as String ?? ''
     ..storeUUID = json['store_uuid'] as String
     ..userNumber = json['user_number'] as int
+    ..totalProducts = json['total_products'] as int
     ..orderImages = (json['order_images'] as List)
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
@@ -41,6 +42,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'guuid': instance.uuid,
       'store_uuid': instance.storeUUID,
       'user_number': instance.userNumber,
+      'total_products': instance.totalProducts,
       'order_images': instance.orderImages == null ? [] : instance.orderImages,
       'written_orders': instance.writtenOrders ?? '',
       'delivery_contact': instance.deliveryContact,
