@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/screens/store/PopularItemsWidget.dart';
+import 'package:chipchop_buyer/screens/store/StoreSearchBar.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,7 @@ class ViewStoreScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            StoreSearchBar(),
             Padding(
               padding: EdgeInsets.only(left: 10, right: 10),
               child: Container(
@@ -30,11 +33,11 @@ class ViewStoreScreen extends StatelessWidget {
                   dotBgColor: CustomColors.black.withOpacity(0.2),
                   borderRadius: true,
                   radius: Radius.circular(20),
-                  // moveIndicatorFromBottom: 180.0,
                   noRadiusForIndicator: true,
                 ),
               ),
             ),
+            PopularMenu(),
           ],
         ),
       ),
