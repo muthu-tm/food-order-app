@@ -59,10 +59,6 @@ class Order extends Model {
     return this.uuid;
   }
 
-  Stream<DocumentSnapshot> streamUserData() {
-    return getDocumentReference().snapshots();
-  }
-
   String getStatus() {
     if (this.status == 0) {
       return "Ordered";

@@ -89,8 +89,8 @@ class User extends Model {
     return _userCollRef.document(getID()).collection("user_locations");
   }
 
-  DocumentReference getDocumentReference() {
-    return _userCollRef.document(getID());
+  DocumentReference getDocumentReference(String id) {
+    return _userCollRef.document(id);
   }
 
   String getID() {
@@ -100,10 +100,6 @@ class User extends Model {
   int getIntID() {
     return int.parse(
         this.countryCode.toString() + this.mobileNumber.toString());
-  }
-
-  Stream<DocumentSnapshot> streamUserData() {
-    return getDocumentReference().snapshots();
   }
 
   Future<User> create() async {
