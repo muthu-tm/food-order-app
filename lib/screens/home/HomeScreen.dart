@@ -65,7 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 17),
               ),
             ),
-            Divider(indent: 50, color: CustomColors.blue,),
+            Divider(
+              indent: 50,
+              color: CustomColors.blue,
+            ),
             Padding(
               padding: EdgeInsets.all(5),
               child: getOrdersCard(context),
@@ -85,7 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 17),
               ),
             ),
-            Divider(indent: 50, color: CustomColors.blue,),
+            Divider(
+              indent: 50,
+              color: CustomColors.blue,
+            ),
             getFavStores(context),
           ],
         ),
@@ -199,15 +205,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         progressIndicatorBuilder:
                                             (context, url, downloadProgress) =>
-                                                SizedBox(
-                                          height: 50.0,
-                                          width: 50.0,
-                                          child: CircularProgressIndicator(
-                                              value: downloadProgress.progress,
-                                              valueColor:
-                                                  AlwaysStoppedAnimation(
-                                                      CustomColors.blue),
-                                              strokeWidth: 2.0),
+                                                Center(
+                                          child: SizedBox(
+                                            height: 50.0,
+                                            width: 50.0,
+                                            child: CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                                valueColor:
+                                                    AlwaysStoppedAnimation(
+                                                        CustomColors.blue),
+                                                strokeWidth: 2.0),
+                                          ),
                                         ),
                                         errorWidget: (context, url, error) =>
                                             Icon(

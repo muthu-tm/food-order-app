@@ -80,6 +80,26 @@ class Store extends Model {
     }
   }
 
+  List<String> getStoreOriginalImages() {
+    if (this.storeImages.isEmpty) {
+      return [
+        no_image_placeholder.replaceFirst(firebase_storage_path, image_kit_path)
+      ];
+    } else {
+      if (this.storeImages.first != null && this.storeImages.first != "") {
+        List<String> images = [];
+        for (var img in this.storeImages) {
+          images.add(img.replaceFirst(firebase_storage_path, image_kit_path));
+        }
+        return images;
+      } else
+        return [
+          no_image_placeholder.replaceFirst(
+              firebase_storage_path, image_kit_path)
+        ];
+    }
+  }
+
   factory Store.fromJson(Map<String, dynamic> json) => _$StoreFromJson(json);
   Map<String, dynamic> toJson() => _$StoreToJson(this);
 

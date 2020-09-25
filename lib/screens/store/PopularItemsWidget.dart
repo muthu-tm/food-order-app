@@ -57,7 +57,7 @@ class PopularMenu extends StatelessWidget {
                 ),
               ),
               Text(
-                "Flash Sell",
+                "Flash Sale",
                 style: TextStyle(
                     color: CustomColors.grey,
                     fontFamily: defaultFontFamily,
@@ -76,13 +76,13 @@ class PopularMenu extends StatelessWidget {
                   onPressed: () {},
                   shape: CircleBorder(),
                   child: Icon(
-                    FontAwesomeIcons.truck,
+                    FontAwesomeIcons.angellist,
                     color: Color(0xFF5EB699),
                   ),
                 ),
               ),
               Text(
-                "Evaly Store",
+                "Must Buy",
                 style: TextStyle(
                     color: CustomColors.grey,
                     fontFamily: defaultFontFamily,

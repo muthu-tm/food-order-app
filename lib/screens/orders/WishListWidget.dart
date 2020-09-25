@@ -71,13 +71,15 @@ class _EmptyWishListScreenState extends State<EmptyWishListScreen> {
                   image: imageProvider,
                 ),
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    SizedBox(
-                  height: 50.0,
-                  width: 50.0,
-                  child: CircularProgressIndicator(
-                      value: downloadProgress.progress,
-                      valueColor: AlwaysStoppedAnimation(CustomColors.blue),
-                      strokeWidth: 2.0),
+                    Center(
+                  child: SizedBox(
+                    height: 50.0,
+                    width: 50.0,
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        valueColor: AlwaysStoppedAnimation(CustomColors.blue),
+                        strokeWidth: 2.0),
+                  ),
                 ),
                 errorWidget: (context, url, error) => Icon(
                   Icons.error,

@@ -13,6 +13,7 @@ class ViewStoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
         backgroundColor: CustomColors.green,
         title: Text(store.name),
@@ -20,7 +21,6 @@ class ViewStoreScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            StoreSearchBar(),
             Padding(
               padding: EdgeInsets.only(left: 10, right: 10),
               child: Container(
@@ -40,6 +40,7 @@ class ViewStoreScreen extends StatelessWidget {
               ),
             ),
             PopularMenu(),
+            StoreSearchBar(),
           ],
         ),
       ),
@@ -58,8 +59,16 @@ class ViewStoreScreen extends StatelessWidget {
           fit: BoxFit.contain,
           image: imageProvider,
         ),
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            CircularProgressIndicator(value: downloadProgress.progress),
+        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+          child: SizedBox(
+            height: 50.0,
+            width: 50.0,
+            child: CircularProgressIndicator(
+                value: downloadProgress.progress,
+                valueColor: AlwaysStoppedAnimation(CustomColors.blue),
+                strokeWidth: 2.0),
+          ),
+        ),
         errorWidget: (context, url, error) => Icon(
           Icons.error,
           size: 35,
