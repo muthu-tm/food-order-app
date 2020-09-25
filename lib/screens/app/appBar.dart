@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -27,13 +28,13 @@ Widget appBar(BuildContext context) {
           color: CustomColors.white,
         ),
         onPressed: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => SearchAppBar(),
-          //     settings: RouteSettings(name: '/Search'),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ShoppingCartScreen(),
+              settings: RouteSettings(name: '/cart'),
+            ),
+          );
         },
       ),
       // PushNotification(),
