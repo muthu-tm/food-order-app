@@ -28,6 +28,10 @@ class _WishListWidgetState extends State<WishListWidget> {
               ),
             ),
           ),
+          Divider(
+            indent: 50,
+            color: CustomColors.blue,
+          ),
           EmptyWishListScreen()
         ],
       ),
@@ -67,7 +71,14 @@ class _EmptyWishListScreenState extends State<EmptyWishListScreen> {
                   image: imageProvider,
                 ),
                 progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(value: downloadProgress.progress),
+                    SizedBox(
+                  height: 50.0,
+                  width: 50.0,
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress,
+                      valueColor: AlwaysStoppedAnimation(CustomColors.blue),
+                      strokeWidth: 2.0),
+                ),
                 errorWidget: (context, url, error) => Icon(
                   Icons.error,
                   size: 35,

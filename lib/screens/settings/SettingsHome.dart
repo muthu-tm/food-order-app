@@ -34,8 +34,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.blue
-                                    .withOpacity(0.3),
+                                color: CustomColors.green,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(40),
@@ -49,8 +48,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               height: 60,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color:
-                                      CustomColors.blue.withOpacity(0.3),
+                                  color: CustomColors.blue.withOpacity(0.4),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -91,10 +89,9 @@ class _SettingsHomeState extends State<SettingsHome> {
                 },
               ),
               Divider(
-                indent: 45,
-                color: CustomColors.blue,
+                color: CustomColors.green,
                 thickness: 2.0,
-                height: 0,
+                height: 1,
               ),
               InkWell(
                 child: Row(
@@ -108,8 +105,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.blue
-                                    .withOpacity(0.3),
+                                color: CustomColors.green,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(40),
@@ -123,8 +119,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               height: 60,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color:
-                                      CustomColors.blue.withOpacity(0.3),
+                                  color: CustomColors.blue.withOpacity(0.4),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -165,10 +160,9 @@ class _SettingsHomeState extends State<SettingsHome> {
                 },
               ),
               Divider(
-                indent: 45,
-                color: CustomColors.blue,
+                color: CustomColors.green,
                 thickness: 2.0,
-                height: 0,
+                height: 1,
               ),
               InkWell(
                 child: Row(
@@ -182,8 +176,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.blue
-                                    .withOpacity(0.3),
+                                color: CustomColors.green,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(40),
@@ -197,8 +190,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               height: 60,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color:
-                                      CustomColors.blue.withOpacity(0.3),
+                                  color: CustomColors.blue.withOpacity(0.4),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -239,10 +231,9 @@ class _SettingsHomeState extends State<SettingsHome> {
                 },
               ),
               Divider(
-                indent: 45,
-                color: CustomColors.blue,
+                color: CustomColors.green,
                 thickness: 2.0,
-                height: 0,
+                height: 1,
               ),
               InkWell(
                 child: Row(
@@ -256,8 +247,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                             width: 85,
                             height: 80,
                             decoration: BoxDecoration(
-                                color: CustomColors.blue
-                                    .withOpacity(0.3),
+                                color: CustomColors.green,
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(40),
@@ -271,8 +261,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                               height: 60,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color:
-                                      CustomColors.blue.withOpacity(0.3),
+                                  color: CustomColors.blue.withOpacity(0.4),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Padding(
@@ -317,10 +306,9 @@ class _SettingsHomeState extends State<SettingsHome> {
                 },
               ),
               Divider(
-                indent: 45,
-                color: CustomColors.blue,
+                color: CustomColors.green,
                 thickness: 2.0,
-                height: 0,
+                height: 1,
               ),
             ],
           ),

@@ -5,13 +5,11 @@ import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
-import 'package:chipchop_buyer/screens/user/NearByStores.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../db/models/store.dart';
-import '../../services/controllers/user/user_service.dart';
 import '../../services/controllers/user/user_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -27,70 +25,69 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: sideDrawer(context),
       backgroundColor: CustomColors.white,
       body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    width: 150,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: CustomColors.black),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Icon(Icons.location_on,
-                              size: 20, color: CustomColors.positiveGreen),
-                        ),
-                        getLocation(),
-                      ],
-                    ),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  width: 150,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: CustomColors.black),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Icon(Icons.location_on,
+                            size: 20, color: CustomColors.positiveGreen),
+                      ),
+                      getLocation(),
+                    ],
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0, top: 10),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Orders",
-                    style: TextStyle(
-                        fontFamily: "Georgia",
-                        color: CustomColors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17),
-                  ),
-                ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.content_copy,
+                size: 35,
+                color: CustomColors.blue,
               ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: getOrdersCard(context),
+              title: Text(
+                "Orders",
+                style: TextStyle(
+                    fontFamily: "Georgia",
+                    color: CustomColors.blue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0, top: 10),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    "Top Stores",
-                    style: TextStyle(
-                        fontFamily: "Georgia",
-                        color: CustomColors.grey,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17),
-                  ),
-                ),
+            ),
+            Divider(indent: 50, color: CustomColors.blue,),
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: getOrdersCard(context),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.store,
+                size: 35,
+                color: CustomColors.blue,
               ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: getFavStores(context),
+              title: Text(
+                "Top Stores",
+                style: TextStyle(
+                    fontFamily: "Georgia",
+                    color: CustomColors.blue,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17),
               ),
-            ],
-          ),
+            ),
+            Divider(indent: 50, color: CustomColors.blue,),
+            getFavStores(context),
+          ],
         ),
       ),
       bottomNavigationBar: bottomBar(context),
@@ -158,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             } else {
               child = Container(
-                height: (snapshot.data.length * 120).toDouble(),
+                height: (snapshot.data.length * 150).toDouble(),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   primary: true,
@@ -182,30 +179,36 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                             child: Material(
                               color: CustomColors.white,
-                              elevation: 10.0,
+                              elevation: 2.0,
                               borderRadius: BorderRadius.circular(10.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Container(
-                                    width: 100,
-                                    height: 100,
+                                    width: 80,
+                                    height: 80,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: CachedNetworkImage(
-                                        imageUrl:
-                                            store.getStoreImages().first,
+                                        imageUrl: store.getStoreImages().first,
                                         imageBuilder:
                                             (context, imageProvider) => Image(
                                           fit: BoxFit.fill,
                                           image: imageProvider,
                                         ),
-                                        progressIndicatorBuilder: (context, url,
-                                                downloadProgress) =>
-                                            CircularProgressIndicator(
-                                                value:
-                                                    downloadProgress.progress),
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                SizedBox(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      CustomColors.blue),
+                                              strokeWidth: 2.0),
+                                        ),
                                         errorWidget: (context, url, error) =>
                                             Icon(
                                           Icons.error,
@@ -218,35 +221,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   Container(
                                     child: Padding(
-                                        padding: EdgeInsets.all(5.0),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 5.0),
-                                              child: Container(
-                                                  child: Text(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 5.0),
+                                            child: Container(
+                                              child: Text(
                                                 store.name,
                                                 style: TextStyle(
                                                     color: CustomColors.blue,
                                                     fontSize: 18.0,
                                                     fontWeight:
                                                         FontWeight.bold),
-                                              )),
+                                              ),
                                             ),
-                                            SizedBox(height: 5.0),
-                                            Container(
-                                                child: Text(
+                                          ),
+                                          SizedBox(height: 5.0),
+                                          Container(
+                                            child: Text(
                                               "Timings - ${store.activeFrom} : ${store.activeTill}",
                                               style: TextStyle(
                                                 color: CustomColors.black,
                                                 fontSize: 16.0,
                                               ),
-                                            )),
-                                          ],
-                                        )),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
