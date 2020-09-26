@@ -161,11 +161,12 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             } else {
               child = Container(
-                height: (snapshot.data.length * 150).toDouble(),
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   primary: true,
                   itemCount: snapshot.data.length,
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     Store store = snapshot.data[index];
 
@@ -178,7 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ViewStoreScreen(store),
+                                  builder: (context) =>
+                                      ViewStoreScreen(store),
                                   settings: RouteSettings(name: '/store'),
                                 ),
                               );
@@ -195,17 +197,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                     width: 80,
                                     height: 80,
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(10.0),
+                                      borderRadius:
+                                          BorderRadius.circular(10.0),
                                       child: CachedNetworkImage(
-                                        imageUrl: store.getStoreImages().first,
+                                        imageUrl:
+                                            store.getStoreImages().first,
                                         imageBuilder:
                                             (context, imageProvider) => Image(
                                           fit: BoxFit.fill,
                                           image: imageProvider,
                                         ),
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                Center(
+                                        progressIndicatorBuilder: (context,
+                                                url, downloadProgress) =>
+                                            Center(
                                           child: SizedBox(
                                             height: 50.0,
                                             width: 50.0,
@@ -236,7 +240,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           Padding(
-                                            padding: EdgeInsets.only(left: 5.0),
+                                            padding:
+                                                EdgeInsets.only(left: 5.0),
                                             child: Container(
                                               child: Text(
                                                 store.name,
@@ -293,195 +298,191 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget getCategoryCards(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      primary: true,
-      child: Column(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(5),
-            child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Groceries click");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Groceries")
-                          ],
-                        ),
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.all(5),
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Groceries click");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Groceries")
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Fruits & Vegetables");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Fruits & Vegetables")
-                          ],
-                        ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Fruits & Vegetables");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Fruits & Vegetables")
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Fish & Meat click");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Fish & Meat")
-                          ],
-                        ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Fish & Meat click");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Fish & Meat")
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Super Markets click");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Super Markets")
-                          ],
-                        ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Super Markets click");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Super Markets")
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Padding(
-            padding: EdgeInsets.all(5),
-            child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Groceries click");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Groceries")
-                          ],
-                        ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(5),
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Groceries click");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Groceries")
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Fruits & Vegetables");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Fruits & Vegetables")
-                          ],
-                        ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Fruits & Vegetables");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Fruits & Vegetables")
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Fish & Meat click");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Fish & Meat")
-                          ],
-                        ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Fish & Meat click");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Fish & Meat")
+                        ],
                       ),
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-                      print("Super Markets click");
-                    },
-                    child: Card(
-                      elevation: 5.0,
-                      child: Container(
-                        width: 100,
-                        height: 75,
-                        child: Column(
-                          children: <Widget>[
-                            Icon(Icons.local_grocery_store),
-                            Text("Super Markets")
-                          ],
-                        ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: InkWell(
+                  onTap: () {
+                    print("Super Markets click");
+                  },
+                  child: Card(
+                    elevation: 5.0,
+                    child: Container(
+                      width: 100,
+                      height: 75,
+                      child: Column(
+                        children: <Widget>[
+                          Icon(Icons.local_grocery_store),
+                          Text("Super Markets")
+                        ],
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
