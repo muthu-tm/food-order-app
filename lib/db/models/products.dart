@@ -51,7 +51,7 @@ class Products extends Model {
     if (this.unit == null) return "";
 
     if (this.unit == 0) {
-      return "Count";
+      return "Nos";
     } else if (this.unit == 1) {
       return "Kg";
     } else if (this.unit == 2) {
@@ -144,6 +144,19 @@ class Products extends Model {
           .where('store_uuid', isEqualTo: storeID)
           .where('loc_uuid', isEqualTo: locID)
           .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<Products> getByProductID(String uuid) async{
+    try {
+      DocumentSnapshot snap = await getCollectionRef().document(uuid).get();
+
+      if (snap.exists)
+        return Products.fromJson(snap.data);
+
+      return null;
     } catch (err) {
       throw err;
     }

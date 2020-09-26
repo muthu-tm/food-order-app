@@ -10,7 +10,7 @@ Widget bottomBar(BuildContext context) {
   Size size = Size(screenWidth(context, dividedBy: 4), 100);
 
   return Container(
-    height: 70,
+    height: 60,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
