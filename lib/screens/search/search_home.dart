@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/user_locations.dart';
+import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/stores_in_map.dart';
@@ -6,6 +7,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../app_localizations.dart';
 
@@ -21,27 +23,28 @@ class _SearchHomeState extends State<SearchHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: SearchBarWidget(
-          performSearch: null,
-        ),
-      ),
+      appBar: appBar(context),
       body: Container(
-        color: Colors.white,
+        color: CustomColors.lightGrey,
         alignment: Alignment.center,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "or",
-              style: TextStyle(color: Colors.black, fontSize: 20),
+            Padding(
+              padding: EdgeInsets.all(5.0),
+              child: SearchBarWidget(),
             ),
-            RaisedButton(
-              color: CustomColors.blue,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: CustomColors.green)),
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                "OR",
+                style: TextStyle(
+                    fontFamily: 'Georgia',
+                    color: CustomColors.grey,
+                    fontSize: 18),
+              ),
+            ),
+            FlatButton.icon(
               onPressed: () async {
                 List<UserLocations> userLocations =
                     await cachedLocalUser.getLocations();
@@ -63,9 +66,16 @@ class _SearchHomeState extends State<SearchHome> {
                   );
                 }
               },
-              child: Text(
-                "Nearby stores in map",
-                style: TextStyle(color: Colors.white),
+              icon: Icon(
+                FontAwesomeIcons.mapMarkerAlt,
+                color: CustomColors.blue,
+              ),
+              label: Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  "Nearby stores in map",
+                  style: TextStyle(color: CustomColors.black),
+                ),
               ),
             )
           ],

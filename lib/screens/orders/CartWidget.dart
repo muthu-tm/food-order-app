@@ -28,10 +28,6 @@ class _CartWidgetState extends State<CartWidget> {
               ),
             ),
           ),
-          Divider(
-            indent: 50,
-            color: CustomColors.blue,
-          ),
           EmptyShoppingCartScreen()
         ],
       ),

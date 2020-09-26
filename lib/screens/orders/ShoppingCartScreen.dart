@@ -24,10 +24,10 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
               padding: EdgeInsets.all(5.0),
               child: CartWidget(),
             ),
-            Padding(
-              padding: EdgeInsets.all(5.0),
-              child: WishListWidget(),
-            )
+            // Padding(
+            //   padding: EdgeInsets.all(5.0),
+            //   child: WishListWidget(),
+            // )
           ],
         ),
       ),
