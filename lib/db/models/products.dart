@@ -138,23 +138,21 @@ class Products extends Model {
     }
   }
 
-  Stream<QuerySnapshot> streamProducts(String storeID, String locID) {
+  Stream<QuerySnapshot> streamProducts(String storeID) {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .where('loc_uuid', isEqualTo: locID)
           .snapshots();
     } catch (err) {
       throw err;
     }
   }
 
-  Future<Products> getByProductID(String uuid) async{
+  Future<Products> getByProductID(String uuid) async {
     try {
       DocumentSnapshot snap = await getCollectionRef().document(uuid).get();
 
-      if (snap.exists)
-        return Products.fromJson(snap.data);
+      if (snap.exists) return Products.fromJson(snap.data);
 
       return null;
     } catch (err) {
@@ -162,11 +160,10 @@ class Products extends Model {
     }
   }
 
-  Stream<QuerySnapshot> streamAvailableProducts(String storeID, String locID) {
+  Stream<QuerySnapshot> streamAvailableProducts(String storeID) {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .where('loc_uuid', isEqualTo: locID)
           .where('is_available', isEqualTo: true)
           .snapshots();
     } catch (err) {
@@ -174,12 +171,10 @@ class Products extends Model {
     }
   }
 
-  Stream<QuerySnapshot> streamUnAvailableProducts(
-      String storeID, String locID) {
+  Stream<QuerySnapshot> streamUnAvailableProducts(String storeID) {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .where('loc_uuid', isEqualTo: locID)
           .where('is_available', isEqualTo: false)
           .snapshots();
     } catch (err) {

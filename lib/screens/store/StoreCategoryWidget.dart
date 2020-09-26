@@ -45,55 +45,75 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
             else
               return GridView.count(
                 crossAxisCount: 3,
+                crossAxisSpacing: 5,
+                shrinkWrap: true,
+                mainAxisSpacing: 10,
                 padding: EdgeInsets.all(1.0),
-                childAspectRatio: 8.0 / 9.0,
                 children: List<Widget>.generate(
                   snapshot.data.length,
                   (index) {
                     ProductCategories _c = snapshot.data[index];
-                    return GridTile(
-                      child: InkWell(
-                        onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => ProductsScreen()),
-                          // );
-                        },
-                        child: Card(
+                    return InkWell(
+                      onTap: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => ProductsScreen()),
+                        // );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
                           color: CustomColors.white,
-                          elevation: 0,
-                          child: Center(
-                            child: Column(
-                              children: <Widget>[
-                                CachedNetworkImage(
-                                  imageUrl: _c.getCategoryImage(),
-                                  imageBuilder: (context, imageProvider) =>
-                                      Image(
-                                    fit: BoxFit.fill,
-                                    image: imageProvider,
-                                  ),
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          Center(
-                                    child: SizedBox(
-                                      height: 50.0,
-                                      width: 50.0,
-                                      child: CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          valueColor: AlwaysStoppedAnimation(
-                                              CustomColors.blue),
-                                          strokeWidth: 2.0),
+                        ),
+                        alignment: Alignment.centerLeft,
+                        child: Center(
+                          child: Column(
+                            children: <Widget>[
+                              CachedNetworkImage(
+                                imageUrl: _c.getCategoryImage(),
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  width: 75,
+                                  height: 75,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
                                     ),
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill, image: imageProvider),
                                   ),
                                 ),
-                                Text(_c.name,
-                                    style: TextStyle(
-                                        color: CustomColors.black,
-                                        fontFamily: 'Roboto-Light.ttf',
-                                        fontSize: 12))
-                              ],
-                            ),
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Center(
+                                  child: SizedBox(
+                                    height: 50.0,
+                                    width: 50.0,
+                                    child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        valueColor: AlwaysStoppedAnimation(
+                                            CustomColors.blue),
+                                        strokeWidth: 2.0),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.all(5.0),
+                                child: Text(
+                                  _c.name,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      color: CustomColors.black,
+                                      fontFamily: 'Roboto-Light.ttf',
+                                      fontSize: 12),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
