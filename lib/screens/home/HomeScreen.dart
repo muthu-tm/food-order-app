@@ -140,8 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           } else {
             child = Container(
-              height: (snapshot.data.length * 112.5).toDouble(),
               child: ListView.separated(
+                shrinkWrap: true,
+                primary: false,
                 itemCount: snapshot.data.length,
                 separatorBuilder: (BuildContext context, int index) => Divider(
                   color: CustomColors.blue,

@@ -12,9 +12,9 @@ class ShoppingCart {
   @JsonKey(name: 'name', defaultValue: "")
   String name;
   @JsonKey(name: 'store_uuid', defaultValue: "")
-  String storeUUID;
-  @JsonKey(name: 'loc_uuid', defaultValue: "")
-  String locUUID;
+  String storeID;
+  @JsonKey(name: 'product_uuid', defaultValue: "")
+  String productID;
   @JsonKey(name: 'quantity')
   double quantity;
   @JsonKey(name: 'in_wishlist')

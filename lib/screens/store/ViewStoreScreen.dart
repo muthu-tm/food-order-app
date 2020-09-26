@@ -50,8 +50,31 @@ class ViewStoreScreen extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Container(
-                        width: 55,
-                        height: 55,
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle, color: CustomColors.white),
+                        child: RawMaterialButton(
+                          onPressed: () {},
+                          shape: CircleBorder(),
+                          child: Icon(
+                            FontAwesomeIcons.shoppingBasket,
+                            color: CustomColors.blue
+                          ),
+                        ),
+                      ),
+                      Text(
+                        "Products",
+                        style: TextStyle(
+                            color: CustomColors.grey, fontFamily: 'Georgia'),
+                      )
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: CustomColors.white),
                         child: RawMaterialButton(
@@ -73,8 +96,8 @@ class ViewStoreScreen extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Container(
-                        width: 55,
-                        height: 55,
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: CustomColors.white),
                         child: RawMaterialButton(
@@ -82,7 +105,7 @@ class ViewStoreScreen extends StatelessWidget {
                           shape: CircleBorder(),
                           child: Icon(
                             FontAwesomeIcons.angellist,
-                            color: Color(0xFF5EB699),
+                            color: CustomColors.green,
                           ),
                         ),
                       ),
@@ -96,8 +119,8 @@ class ViewStoreScreen extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Container(
-                        width: 55,
-                        height: 55,
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: CustomColors.white),
                         child: RawMaterialButton(
@@ -119,8 +142,8 @@ class ViewStoreScreen extends StatelessWidget {
                   Column(
                     children: <Widget>[
                       Container(
-                        width: 55,
-                        height: 55,
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle, color: CustomColors.white),
                         child: RawMaterialButton(
