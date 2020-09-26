@@ -6,6 +6,8 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'CartCounterWidget.dart';
+
 class StoreProductWidget extends StatelessWidget {
   StoreProductWidget(this.storeID);
 
@@ -46,8 +48,8 @@ class StoreProductWidget extends StatelessWidget {
                       ),
                       color: CustomColors.white,
                     ),
-                    height: 100,
-                    alignment: Alignment.centerLeft,
+                    //height: 100,
+                    //alignment: Alignment.centerLeft,
                     child: Column(
                       children: [
                         Hero(
@@ -56,7 +58,7 @@ class StoreProductWidget extends StatelessWidget {
                             imageUrl: product.getProductImage(),
                             imageBuilder: (context, imageProvider) => Container(
                               width: 125,
-                              height: 105,
+                              height: 70,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
@@ -102,6 +104,10 @@ class StoreProductWidget extends StatelessWidget {
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          height: 2,
+                        ),
+                        CartCounter()
                       ],
                     ),
                   ),

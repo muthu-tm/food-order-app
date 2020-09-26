@@ -8,41 +8,52 @@ class CartCounter extends StatefulWidget {
 }
 
 class _CartCounterState extends State<CartCounter> {
-  int numOfItems = 1;
+  int numOfItems = 0;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        buildOutlineButton(
-          icon: Icons.remove,
-          press: () {
-            if (numOfItems > 1) {
-              setState(() {
-                numOfItems--;
-              });
-            }
-          },
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25 / 2),
-          child: Text(
-            numOfItems.toString().padLeft(2, "0"),
-            style: TextStyle(
-              fontFamily: 'Georgia',
-              color: CustomColors.blue,
-              fontSize: 17
+    return numOfItems == 0
+        ? Container(
+            child: RaisedButton(
+              onPressed: () {
+                setState(() {
+                  numOfItems = 1;
+                });
+              },
+              child: Text("Add"),
             ),
-          ),
-        ),
-        buildOutlineButton(
-            icon: Icons.add,
-            press: () {
-              setState(() {
-                numOfItems++;
-              });
-            }),
-      ],
-    );
+          )
+        : Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                buildOutlineButton(
+                  icon: Icons.remove,
+                  press: () {
+                    setState(() {
+                      numOfItems--;
+                    });
+                  },
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25 / 2),
+                  child: Text(
+                    numOfItems.toString().padLeft(2, "0"),
+                    style: TextStyle(
+                        fontFamily: 'Georgia',
+                        color: CustomColors.blue,
+                        fontSize: 17),
+                  ),
+                ),
+                buildOutlineButton(
+                    icon: Icons.add,
+                    press: () {
+                      setState(() {
+                        numOfItems++;
+                      });
+                    }),
+              ],
+            ),
+          );
   }
 
   SizedBox buildOutlineButton({IconData icon, Function press}) {
