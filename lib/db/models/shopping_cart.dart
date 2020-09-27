@@ -8,8 +8,6 @@ part 'shopping_cart.g.dart';
 class ShoppingCart {
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
-  @JsonKey(name: 'name', defaultValue: "")
-  String name;
   @JsonKey(name: 'store_uuid', defaultValue: "")
   String storeID;
   @JsonKey(name: 'product_uuid', defaultValue: "")
@@ -55,6 +53,20 @@ class ShoppingCart {
       this.uuid = docRef.documentID;
 
       await docRef.setData(this.toJson());
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<void> removeItem(bool isWL, String storeId, String productID) async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('in_wishlist', isEqualTo: isWL)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .getDocuments();
+
+      if (snap.documents.isNotEmpty) await snap.documents.first.reference.delete();
     } catch (err) {
       throw err;
     }

@@ -1,5 +1,5 @@
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
-import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
+import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:flutter/material.dart';
 
 class ProductWishlistWidget extends StatefulWidget {
@@ -41,37 +41,40 @@ class _ProductWishlistWidgetState extends State<ProductWishlistWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: ShoppingCart().checkWishlist(widget.storeID, widget.productID),
-      builder: (BuildContext context, AsyncSnapshot<ShoppingCart> snapshot) {
-        Widget child;
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data != null) {
-            child = Container(
-              child: IconButton(icon: Icon(Icons.favorite), onPressed: () {}),
-            );
-          } else {
-            child = Container(
-              child: IconButton(
-                  icon: Icon(Icons.favorite_border), onPressed: () {}),
-            );
-          }
-        } else if (snapshot.hasError) {
-          child = Center(
-            child: Column(
-              children: AsyncWidgets.asyncError(),
+    return _cartMap.containsKey(widget.productID)
+        ? Container(
+            child: IconButton(
+              icon: Icon(Icons.favorite),
+              onPressed: () async {
+                try {
+                  CustomDialogs.actionWaiting(context);
+                  await ShoppingCart()
+                      .removeItem(true, widget.storeID, widget.productID);
+                  Navigator.pop(context);
+                } catch (err) {
+                  print(err);
+                }
+              },
+            ),
+          )
+        : Container(
+            child: IconButton(
+              icon: Icon(Icons.favorite_border),
+              onPressed: () async {
+                try {
+                  CustomDialogs.actionWaiting(context);
+                  ShoppingCart wl = ShoppingCart();
+                  wl.storeID = widget.storeID;
+                  wl.productID = widget.productID;
+                  wl.inWishlist = true;
+                  wl.quantity = 1.0;
+                  wl.create();
+                  Navigator.pop(context);
+                } catch (err) {
+                  print(err);
+                }
+              },
             ),
           );
-        } else {
-          child = Center(
-            child: Column(
-              children: AsyncWidgets.asyncWaiting(),
-            ),
-          );
-        }
-        return child;
-      },
-    );
   }
 }
