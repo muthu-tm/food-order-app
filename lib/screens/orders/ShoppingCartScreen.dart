@@ -55,13 +55,9 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                  child: ListView.separated(
+                  child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: snapshot.data.documents.length,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(
-                      color: CustomColors.blue,
-                    ),
                     itemBuilder: (BuildContext context, int index) {
                       ShoppingCart _sc = ShoppingCart.fromJson(
                           snapshot.data.documents[index].data);
@@ -202,10 +198,13 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
         if (snapshot.hasData) {
           Products _p = snapshot.data;
-          child = Container(
-            padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-            height: 220,
-            child: Card(
+          child = Card(
+            child: Container(
+              padding: EdgeInsets.all(5),
+              height: 220,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
