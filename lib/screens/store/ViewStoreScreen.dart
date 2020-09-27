@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreItemWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreSearchBar.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -56,7 +57,10 @@ class ViewStoreScreen extends StatelessWidget {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(right: 5.0),
-                    child: Icon(FontAwesomeIcons.smile, color: CustomColors.positiveGreen,),
+                    child: Icon(
+                      FontAwesomeIcons.smile,
+                      color: CustomColors.positiveGreen,
+                    ),
                   ),
                   Text(
                     "Order NOW!",
@@ -75,7 +79,15 @@ class ViewStoreScreen extends StatelessWidget {
                     padding: EdgeInsets.only(right: 5.0),
                     child: RaisedButton(
                         color: CustomColors.lightGreen,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShoppingCartScreen(),
+                              settings: RouteSettings(name: '/cart'),
+                            ),
+                          );
+                        },
                         child: Text("From Cart")),
                   ),
                   Padding(
