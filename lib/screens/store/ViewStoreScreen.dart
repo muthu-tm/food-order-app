@@ -78,31 +78,34 @@ class ViewStoreScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(right: 5.0),
                     child: RaisedButton(
-                        color: CustomColors.lightGreen,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ShoppingCartScreen(),
-                              settings: RouteSettings(name: '/cart'),
-                            ),
-                          );
-                        },
-                        child: Text("From Cart")),
+                      color: CustomColors.lightGreen,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ShoppingCartScreen(),
+                            settings: RouteSettings(name: '/cart'),
+                          ),
+                        );
+                      },
+                      child: Text("From Cart"),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 5.0),
                     child: RaisedButton(
-                        color: CustomColors.lightBlue,
-                        onPressed: () {},
-                        child: Text("Type Order")),
+                      color: CustomColors.lightBlue,
+                      onPressed: () {},
+                      child: Text("Type Order"),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(right: 5.0),
                     child: RaisedButton(
-                        color: CustomColors.lightGreen,
-                        onPressed: () {},
-                        child: Text("Capture Order")),
+                      color: CustomColors.lightGreen,
+                      onPressed: () {},
+                      child: Text("Capture Order"),
+                    ),
                   ),
                 ],
               ),
