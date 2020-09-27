@@ -2,6 +2,7 @@ import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/db/models/user_preferences.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -131,6 +132,15 @@ class User extends Model {
     loc.uuid = docRef.documentID;
     loc.userNumber = getIntID();
     await docRef.setData(loc.toJson());
+
+    return loc;
+  }
+
+  Future updatePrimaryLocation(UserLocations loc) async {
+    DocumentReference docRef =
+        cachedLocalUser.getDocumentReference(cachedLocalUser.getID());
+    await docRef.updateData(
+        {'primary_location': loc.toJson(), 'updated_at': DateTime.now()});
   }
 
   Future updateLocations(String uuid, Map<String, dynamic> loc) async {

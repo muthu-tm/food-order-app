@@ -59,8 +59,8 @@ class LocationPickerState extends State<LocationPicker> {
           }
           widget.loc.geoPoint = geoData;
           try {
-            // await cachedLocalUser.updateLocations("Ei50FS5lOMSTI43QbEUQ", {'geo_point': geoPointData});
-            await cachedLocalUser.addLocations(widget.loc);
+            UserLocations _loc = await cachedLocalUser.addLocations(widget.loc);
+            await cachedLocalUser.updatePrimaryLocation(_loc);
             cachedLocalUser.primaryLocation = widget.loc;
             Navigator.of(context).push(
               MaterialPageRoute(
@@ -69,6 +69,7 @@ class LocationPickerState extends State<LocationPicker> {
               ),
             );
           } catch (err) {
+            print(err);
             _scaffoldKey.currentState.showSnackBar(
               CustomSnackBar.errorSnackBar(
                   "Sorry, Unable to add your location now. Please try again later!",
