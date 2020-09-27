@@ -139,18 +139,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           } else {
-            child = Container(
-              child: ListView.separated(
-                shrinkWrap: true,
-                primary: false,
-                itemCount: snapshot.data.length,
-                separatorBuilder: (BuildContext context, int index) => Divider(
-                  color: CustomColors.blue,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  Store store = snapshot.data[index];
+            child = ListView.builder(
+              shrinkWrap: true,
+              primary: false,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                Store store = snapshot.data[index];
 
-                  return Container(
+                return Container(
+                  height: 100,
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    elevation: 5,
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
@@ -161,44 +163,39 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                            width: 100,
-                            height: 100,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: CachedNetworkImage(
-                                imageUrl: store.getStoreImages().first,
-                                imageBuilder: (context, imageProvider) =>
-                                    Image(
-                                  fit: BoxFit.fill,
-                                  image: imageProvider,
-                                ),
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        Center(
-                                  child: SizedBox(
-                                    height: 50.0,
-                                    width: 50.0,
-                                    child: CircularProgressIndicator(
-                                        value: downloadProgress.progress,
-                                        valueColor: AlwaysStoppedAnimation(
-                                            CustomColors.blue),
-                                        strokeWidth: 2.0),
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) => Icon(
-                                  Icons.error,
-                                  size: 35,
-                                ),
-                                fadeOutDuration: Duration(seconds: 1),
-                                fadeInDuration: Duration(seconds: 2),
+                        ListTile(
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: CachedNetworkImage(
+                              imageUrl: store.getStoreImages().first,
+                              imageBuilder: (context, imageProvider) => Image(
+                                fit: BoxFit.fill,
+                                image: imageProvider,
                               ),
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => Center(
+                                child: SizedBox(
+                                  height: 50.0,
+                                  width: 50.0,
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress,
+                                      valueColor: AlwaysStoppedAnimation(
+                                          CustomColors.blue),
+                                      strokeWidth: 2.0),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Icon(
+                                Icons.error,
+                                size: 35,
+                              ),
+                              fadeOutDuration: Duration(seconds: 1),
+                              fadeInDuration: Duration(seconds: 2),
                             ),
                           ),
-                          Container(
+                          title: Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,12 +220,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ]),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             );
           }
         } else if (snapshot.hasError) {
