@@ -6,7 +6,6 @@ part 'shopping_cart.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ShoppingCart {
-
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
   @JsonKey(name: 'name', defaultValue: "")
@@ -26,13 +25,14 @@ class ShoppingCart {
 
   ShoppingCart();
 
-
   factory ShoppingCart.fromJson(Map<String, dynamic> json) =>
       _$ShoppingCartFromJson(json);
   Map<String, dynamic> toJson() => _$ShoppingCartToJson(this);
 
   CollectionReference getCollectionRef() {
-    return User().getDocumentReference(cachedLocalUser.getID()).collection("shopping_cart");
+    return User()
+        .getDocumentReference(cachedLocalUser.getID())
+        .collection("shopping_cart");
   }
 
   DocumentReference getDocumentReference(String uuid) {
@@ -65,6 +65,41 @@ class ShoppingCart {
       return getCollectionRef()
           .where('in_wishlist', isEqualTo: true)
           .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<ShoppingCart>> fetchForStore(String storeID) async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .getDocuments();
+
+      List<ShoppingCart> cart = [];
+
+      for (var item in snap.documents) {
+        cart.add(ShoppingCart.fromJson(item.data));
+      }
+
+      return cart;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<ShoppingCart> checkWishlist(String storeID, String productID) async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('in_wishlist', isEqualTo: true)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .getDocuments();
+
+      if (snap.documents.isEmpty)
+        return null;
+      else
+        return ShoppingCart.fromJson(snap.documents.first.data);
     } catch (err) {
       throw err;
     }

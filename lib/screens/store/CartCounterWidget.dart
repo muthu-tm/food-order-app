@@ -45,12 +45,15 @@ class _CartCounterState extends State<CartCounter> {
                   ),
                 ),
                 buildOutlineButton(
-                    icon: Icons.add,
-                    press: () {
-                      setState(() {
+                  icon: Icons.add,
+                  press: () {
+                    setState(
+                      () {
                         numOfItems++;
-                      });
-                    }),
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           );
