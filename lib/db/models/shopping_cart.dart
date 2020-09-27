@@ -81,6 +81,24 @@ class ShoppingCart {
     }
   }
 
+  Future<void> updateCartQuantityByID(bool isAdd, String id) async {
+    try {
+      DocumentSnapshot snap = await getCollectionRef().document(id).get();
+
+      if (snap.exists) {
+        ShoppingCart _sc = ShoppingCart.fromJson(snap.data);
+        if (isAdd)
+          await snap.reference.updateData(
+              {'quantity': _sc.quantity + 1.0, 'updated_at': DateTime.now()});
+        else
+          await snap.reference.updateData(
+              {'quantity': _sc.quantity - 1.0, 'updated_at': DateTime.now()});
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future<void> removeItem(bool isWL, String storeId, String productID) async {
     try {
       QuerySnapshot snap = await getCollectionRef()
