@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/db/models/delivery_details.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class StoreProfileWidget extends StatelessWidget {
   final Store store;
   @override
   Widget build(BuildContext context) {
+    Map<int, DeliveryDetails> deliveryOption = store.deliveryDetails.asMap();
+
     return SingleChildScrollView(
       primary: true,
       child: Column(
@@ -120,12 +123,14 @@ class StoreProfileWidget extends StatelessWidget {
                           Text(
                             store.contacts[index].contactName,
                             style: TextStyle(
-                                color: CustomColors.black, fontFamily: 'Georgia'),
+                                color: CustomColors.black,
+                                fontFamily: 'Georgia'),
                           ),
                           Text(
                             store.contacts[index].contactNumber.toString(),
                             style: TextStyle(
-                                color: CustomColors.black, fontFamily: 'Georgia'),
+                                color: CustomColors.black,
+                                fontFamily: 'Georgia'),
                           )
                         ],
                       ),
@@ -201,6 +206,70 @@ class StoreProfileWidget extends StatelessWidget {
                   color: CustomColors.black,
                   fontSize: 14.0,
                   fontFamily: "Georgia"),
+            ),
+          ),
+          ListTile(
+            leading: Icon(
+              FontAwesomeIcons.truck,
+              color: CustomColors.green,
+            ),
+            title: Text(
+              "Delivery Details",
+              style: TextStyle(
+                  color: CustomColors.grey,
+                  fontSize: 16.0,
+                  fontFamily: "Georgia",
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 60.0),
+            child: Column(
+              children: List.generate(
+                store.deliveryDetails.length,
+                (index) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: Text(
+                          "Delivery From:",
+                          style: TextStyle(
+                              color: CustomColors.black, fontFamily: 'Georgia'),
+                        ),
+                        trailing: Text(
+                          store.deliveryDetails[index].deliveryFrom,
+                          style: TextStyle(
+                              color: CustomColors.black, fontFamily: 'Georgia'),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Text(
+                          "Delivery Till:",
+                          style: TextStyle(
+                              color: CustomColors.black, fontFamily: 'Georgia'),
+                        ),
+                        trailing: Text(
+                          store.deliveryDetails[index].deliveryTill,
+                          style: TextStyle(
+                              color: CustomColors.black, fontFamily: 'Georgia'),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Text(
+                          "Max Distance:",
+                          style: TextStyle(
+                              color: CustomColors.black, fontFamily: 'Georgia'),
+                        ),
+                        trailing: Text(
+                          '${store.deliveryDetails[index].maxDistance.toString()} km',
+                          style: TextStyle(
+                              color: CustomColors.black, fontFamily: 'Georgia'),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ],
