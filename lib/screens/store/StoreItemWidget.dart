@@ -34,7 +34,11 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: CustomColors.white),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          color: CustomColors.white),
                       child: RawMaterialButton(
                         onPressed: () {
                           setState(() {
@@ -49,7 +53,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Products",
                       style: TextStyle(
-                          color: CustomColors.grey, fontFamily: 'Georgia'),
+                          color: CustomColors.black, fontFamily: 'Georgia'),
                     )
                   ],
                 ),
@@ -59,7 +63,11 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: CustomColors.white),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          color: CustomColors.white),
                       child: RawMaterialButton(
                         onPressed: () {
                           setState(() {
@@ -76,7 +84,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Categories",
                       style: TextStyle(
-                          color: CustomColors.grey, fontFamily: 'Georgia'),
+                          color: CustomColors.black, fontFamily: 'Georgia'),
                     )
                   ],
                 ),
@@ -86,7 +94,11 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: CustomColors.white),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          color: CustomColors.white),
                       child: RawMaterialButton(
                         onPressed: () {
                           setState(() {
@@ -103,7 +115,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Popular",
                       style: TextStyle(
-                          color: CustomColors.grey, fontFamily: 'Georgia'),
+                          color: CustomColors.black, fontFamily: 'Georgia'),
                     )
                   ],
                 ),
@@ -113,7 +125,11 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: CustomColors.white),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          color: CustomColors.white),
                       child: RawMaterialButton(
                         onPressed: () {},
                         shape: CircleBorder(),
@@ -126,7 +142,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Flash Sale",
                       style: TextStyle(
-                          color: CustomColors.grey, fontFamily: 'Georgia'),
+                          color: CustomColors.black, fontFamily: 'Georgia'),
                     )
                   ],
                 ),
@@ -136,7 +152,11 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       width: 50,
                       height: 50,
                       decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: CustomColors.white),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                          color: CustomColors.white),
                       child: RawMaterialButton(
                         onPressed: () {},
                         shape: CircleBorder(),
@@ -149,7 +169,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                     Text(
                       "Offers",
                       style: TextStyle(
-                          color: CustomColors.grey, fontFamily: 'Georgia'),
+                          color: CustomColors.black, fontFamily: 'Georgia'),
                     )
                   ],
                 )
