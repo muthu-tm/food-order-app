@@ -391,31 +391,37 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
             );
           } else {
             children = Container(
-              height: 90,
+              padding: EdgeInsets.all(10),
+              color: CustomColors.white,
+              width: MediaQuery.of(context).size.width * 0.9,
               child: Column(
-                children: <Widget>[
-                  Spacer(),
+                children: [
                   Text(
-                    "No Product Available",
+                    "No Products added By Store",
                     style: TextStyle(
+                      fontFamily: 'Georgia',
                       color: CustomColors.alertRed,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0,
                     ),
                   ),
-                  Spacer(
-                    flex: 2,
-                  ),
+                  SizedBox(height: 20),
                   Text(
-                    "Sorry. Please Try Again Later!",
+                    "No Worries!",
                     style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Georgia',
+                      color: CustomColors.grey,
+                      fontSize: 14.0,
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  Spacer(),
+                  SizedBox(height: 20),
+                  Text(
+                    "You could still place Written/Captured ORDER here.",
+                    style: TextStyle(
+                      fontFamily: 'Georgia',
+                      color: CustomColors.blue,
+                      fontSize: 16.0,
+                    ),
+                  )
                 ],
               ),
             );
