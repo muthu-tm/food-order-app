@@ -58,6 +58,29 @@ class ShoppingCart {
     }
   }
 
+  Future<void> updateCartQuantity(
+      bool isAdd, String storeId, String productID) async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('in_wishlist', isEqualTo: false)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .getDocuments();
+
+      if (snap.documents.isNotEmpty) {
+        ShoppingCart _sc = ShoppingCart.fromJson(snap.documents.first.data);
+        if (isAdd)
+          await snap.documents.first.reference.updateData(
+              {'quantity': _sc.quantity + 1.0, 'updated_at': DateTime.now()});
+        else
+          await snap.documents.first.reference.updateData(
+              {'quantity': _sc.quantity - 1.0, 'updated_at': DateTime.now()});
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future<void> removeItem(bool isWL, String storeId, String productID) async {
     try {
       QuerySnapshot snap = await getCollectionRef()
@@ -66,7 +89,8 @@ class ShoppingCart {
           .where('product_uuid', isEqualTo: productID)
           .getDocuments();
 
-      if (snap.documents.isNotEmpty) await snap.documents.first.reference.delete();
+      if (snap.documents.isNotEmpty)
+        await snap.documents.first.reference.delete();
     } catch (err) {
       throw err;
     }

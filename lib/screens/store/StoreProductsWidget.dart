@@ -7,6 +7,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StoreProductWidget extends StatefulWidget {
   StoreProductWidget(this.storeID);
@@ -166,31 +167,85 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: <Widget>[
-                                          SizedBox(
-                                            width: 30,
-                                            height: 30,
-                                            child: OutlineButton(
-                                              padding: EdgeInsets.zero,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _cartMap[product.uuid] =
-                                                      _cartMap[product.uuid] -
-                                                          1.0;
-                                                });
-                                              },
-                                              child: Icon(Icons.remove),
-                                            ),
-                                          ),
+                                          _cartMap[product.uuid] == 1.0
+                                              ? SizedBox(
+                                                  width: 35,
+                                                  height: 35,
+                                                  child: OutlineButton(
+                                                    padding: EdgeInsets.zero,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    onPressed: () async {
+                                                      try {
+                                                        CustomDialogs
+                                                            .actionWaiting(
+                                                                context);
+                                                        await ShoppingCart()
+                                                            .removeItem(
+                                                                false,
+                                                                widget.storeID,
+                                                                product.uuid);
+                                                        setState(() {
+                                                          _cartMap.remove(
+                                                              product.uuid);
+                                                        });
+                                                        Navigator.pop(context);
+                                                      } catch (err) {
+                                                        print(err);
+                                                      }
+                                                    },
+                                                    child: Icon(
+                                                      Icons.delete_forever,
+                                                      size: 20,
+                                                    ),
+                                                  ),
+                                                )
+                                              : SizedBox(
+                                                  width: 35,
+                                                  height: 35,
+                                                  child: OutlineButton(
+                                                    padding: EdgeInsets.zero,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    onPressed: () async {
+                                                      try {
+                                                        CustomDialogs
+                                                            .actionWaiting(
+                                                                context);
+                                                        await ShoppingCart()
+                                                            .updateCartQuantity(
+                                                                false,
+                                                                widget.storeID,
+                                                                product.uuid);
+                                                        setState(() {
+                                                          _cartMap[product
+                                                              .uuid] = _cartMap[
+                                                                  product
+                                                                      .uuid] -
+                                                              1.0;
+                                                        });
+                                                        Navigator.pop(context);
+                                                      } catch (err) {
+                                                        print(err);
+                                                      }
+                                                    },
+                                                    child: Icon(Icons.remove),
+                                                  ),
+                                                ),
                                           Padding(
-                                            padding: EdgeInsets.all(5),
+                                            padding: EdgeInsets.all(8),
                                             child: Text(
                                               _cartMap[product.uuid]
-                                                  .toString()
-                                                  .padLeft(2, "0"),
+                                                  .round()
+                                                  .toString(),
                                               style: TextStyle(
                                                   fontFamily: 'Georgia',
                                                   color: CustomColors.blue,
@@ -198,20 +253,32 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                             ),
                                           ),
                                           SizedBox(
-                                            width: 30,
-                                            height: 30,
+                                            width: 35,
+                                            height: 35,
                                             child: OutlineButton(
                                               padding: EdgeInsets.zero,
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(5),
                                               ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  _cartMap[product.uuid] =
-                                                      _cartMap[product.uuid] +
-                                                          1.0;
-                                                });
+                                              onPressed: () async {
+                                                try {
+                                                  CustomDialogs.actionWaiting(
+                                                      context);
+                                                  await ShoppingCart()
+                                                      .updateCartQuantity(
+                                                          true,
+                                                          widget.storeID,
+                                                          product.uuid);
+                                                  setState(() {
+                                                    _cartMap[product.uuid] =
+                                                        _cartMap[product.uuid] +
+                                                            1.0;
+                                                  });
+                                                  Navigator.pop(context);
+                                                } catch (err) {
+                                                  print(err);
+                                                }
                                               },
                                               child: Icon(Icons.add),
                                             ),
@@ -228,7 +295,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                         child: IconButton(
                                           iconSize: 20,
                                           alignment: Alignment.center,
-                                          icon: Icon(Icons.add_shopping_cart),
+                                          icon: Icon(FontAwesomeIcons.cartPlus),
                                           onPressed: () async {
                                             try {
                                               CustomDialogs.actionWaiting(
