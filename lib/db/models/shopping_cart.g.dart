@@ -3,7 +3,6 @@ part of 'shopping_cart.dart';
 ShoppingCart _$ShoppingCartFromJson(Map<String, dynamic> json) {
   return ShoppingCart()
     ..uuid = json['uuid'] as String
-    ..name = json['name'] as String ?? ''
     ..storeID = json['store_uuid'] as String ?? ''
     ..productID = json['product_uuid'] as String ?? ''
     ..quantity = (json['quantity'] as num)?.toDouble() ?? 1.00
@@ -25,7 +24,6 @@ int _getMillisecondsSinceEpoch(Timestamp ts) {
 Map<String, dynamic> _$ShoppingCartToJson(ShoppingCart instance) =>
     <String, dynamic>{
       'uuid': instance.uuid,
-      'name': instance.name,
       'store_uuid': instance.storeID ?? "",
       'product_uuid': instance.productID ?? "",
       'quantity': instance.quantity ?? 1.00,

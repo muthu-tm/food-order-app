@@ -4,7 +4,9 @@ import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/orders/EmptyCartWidget.dart';
+import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +36,6 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
       body: SingleChildScrollView(
         child: getBody(context),
       ),
-      bottomNavigationBar: bottomBar(context),
     );
   }
 
@@ -55,13 +56,9 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                  child: ListView.separated(
+                  child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: snapshot.data.documents.length,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(
-                      color: CustomColors.blue,
-                    ),
                     itemBuilder: (BuildContext context, int index) {
                       ShoppingCart _sc = ShoppingCart.fromJson(
                           snapshot.data.documents[index].data);
@@ -202,161 +199,238 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
         if (snapshot.hasData) {
           Products _p = snapshot.data;
-          child = Container(
-            padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-            height: 220,
-            child: Card(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: <Widget>[
-                  Container(
-                    width: 125,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: 125,
-                          height: 125,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: CachedNetworkImage(
-                              imageUrl: _p.getProductImage(),
-                              imageBuilder: (context, imageProvider) => Image(
-                                fit: BoxFit.fill,
-                                image: imageProvider,
-                              ),
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                child: SizedBox(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress,
-                                      valueColor: AlwaysStoppedAnimation(
-                                          CustomColors.blue),
-                                      strokeWidth: 2.0),
+          child = Card(
+            child: Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Container(
+                        width: 125,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width: 125,
+                              height: 125,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: CachedNetworkImage(
+                                  imageUrl: _p.getProductImage(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Image(
+                                    fit: BoxFit.fill,
+                                    image: imageProvider,
+                                  ),
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          Center(
+                                    child: SizedBox(
+                                      height: 50.0,
+                                      width: 50.0,
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          valueColor: AlwaysStoppedAnimation(
+                                              CustomColors.blue),
+                                          strokeWidth: 2.0),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    size: 35,
+                                  ),
+                                  fadeOutDuration: Duration(seconds: 1),
+                                  fadeInDuration: Duration(seconds: 2),
                                 ),
                               ),
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.error,
-                                size: 35,
-                              ),
-                              fadeOutDuration: Duration(seconds: 1),
-                              fadeInDuration: Duration(seconds: 2),
                             ),
-                          ),
+                          ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        width: MediaQuery.of(context).size.width - 150,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.remove_circle_outline),
-                              onPressed: () {
-                                setState(() {
-                                  shoppingCartCount--;
-                                });
-                              },
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '${_p.name}',
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 3,
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
-                            Text(
-                              '${sc.quantity}',
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Weight: ',
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: CustomColors.positiveGreen,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Text(
+                                  '${_p.weight}',
+                                  textAlign: TextAlign.start,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(color: CustomColors.black),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.all(5.0),
+                                  child: Text(
+                                    _p.getUnit(),
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: CustomColors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: FlatButton(
+                                  child: Text(
+                                    "Show Details",
+                                    style: TextStyle(color: CustomColors.blue),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductDetailsScreen(_p),
+                                        settings: RouteSettings(
+                                            name: '/store/products'),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            sc.quantity == 1.0
+                                ? SizedBox(
+                                    width: 35,
+                                    height: 35,
+                                    child: OutlineButton(
+                                      padding: EdgeInsets.zero,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Icon(Icons.delete_forever),
+                                      onPressed: () async {
+                                        try {
+                                          CustomDialogs.actionWaiting(context);
+                                          await ShoppingCart().removeItem(
+                                              false, sc.storeID, sc.productID);
+                                          Navigator.pop(context);
+                                        } catch (err) {
+                                          print(err);
+                                        }
+                                      },
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: 35,
+                                    height: 35,
+                                    child: OutlineButton(
+                                      padding: EdgeInsets.zero,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Icon(Icons.remove),
+                                      onPressed: () async {
+                                        try {
+                                          CustomDialogs.actionWaiting(context);
+                                          await ShoppingCart()
+                                              .updateCartQuantityByID(
+                                                  false, sc.uuid);
+                                          Navigator.pop(context);
+                                        } catch (err) {
+                                          print(err);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(right: 10.0, left: 10.0),
+                              child: Text(
+                                sc.quantity.round().toString(),
+                                style: TextStyle(
+                                    fontSize: 14,
+                                    color: CustomColors.blue,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 35,
+                              height: 35,
+                              child: OutlineButton(
+                                padding: EdgeInsets.zero,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: Icon(Icons.add),
+                                onPressed: () async {
+                                  try {
+                                    CustomDialogs.actionWaiting(context);
+                                    await ShoppingCart()
+                                        .updateCartQuantityByID(true, sc.uuid);
+                                    Navigator.pop(context);
+                                  } catch (err) {
+                                    print(err);
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Text(
+                              'Rs. ${_p.currentPrice}',
+                              textAlign: TextAlign.end,
                               style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 16,
                                   color: CustomColors.black,
                                   fontWeight: FontWeight.bold),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.add_circle_outline),
-                              onPressed: () {
-                                setState(() {
-                                  shoppingCartCount++;
-                                });
-                              },
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 150,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          '${_p.name}',
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
-                          style: TextStyle(
-                              color: CustomColors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                'Weight: ',
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                '${_p.weight}',
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                _p.getUnit(),
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  '${_p.currentPrice}',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: CustomColors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Text(
-                                  "Show Details",
-                                  style: TextStyle(color: Colors.blue),
-                                ),
-                              ),
-                            ],
                           ),
-                        )
+                        ),
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
