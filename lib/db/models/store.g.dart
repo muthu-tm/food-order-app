@@ -48,11 +48,9 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
             ? null
             : StoreUserAccess.fromJson(e as Map<String, dynamic>))
         ?.toList()
-    ..deliveryDetails = (json['delivery'] as List)
-        ?.map((e) => e == null
+    ..deliveryDetails = json['delivery'] == null
             ? new DeliveryDetails()
-            : DeliveryDetails.fromJson(e as Map<String, dynamic>))
-        ?.toList()
+            : DeliveryDetails.fromJson(json['delivery'] as Map<String, dynamic>)
     ..createdAt = json['created_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
@@ -84,7 +82,7 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'contacts': instance.contacts?.map((e) => e?.toJson())?.toList(),
       'users': instance.users == null ? [] : instance.users,
       'users_access': instance.usersAccess?.map((e) => e?.toJson())?.toList(),
-      'delivery': instance.deliveryDetails?.map((e) => e?.toJson())?.toList(),
+      'delivery': instance.deliveryDetails?.toJson(),
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

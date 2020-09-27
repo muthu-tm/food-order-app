@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/db/models/delivery_details.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +19,6 @@ class StoreProfileWidget extends StatelessWidget {
   final Store store;
   @override
   Widget build(BuildContext context) {
-    Map<int, DeliveryDetails> deliveryOption = store.deliveryDetails.asMap();
-
     return SingleChildScrollView(
       primary: true,
       child: Column(
@@ -225,51 +222,44 @@ class StoreProfileWidget extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 60.0),
             child: Column(
-              children: List.generate(
-                store.deliveryDetails.length,
-                (index) {
-                  return Column(
-                    children: [
-                      ListTile(
-                        leading: Text(
-                          "Delivery From:",
-                          style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
-                        ),
-                        trailing: Text(
-                          store.deliveryDetails[index].deliveryFrom,
-                          style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
-                        ),
-                      ),
-                      ListTile(
-                        leading: Text(
-                          "Delivery Till:",
-                          style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
-                        ),
-                        trailing: Text(
-                          store.deliveryDetails[index].deliveryTill,
-                          style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
-                        ),
-                      ),
-                      ListTile(
-                        leading: Text(
-                          "Max Distance:",
-                          style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
-                        ),
-                        trailing: Text(
-                          '${store.deliveryDetails[index].maxDistance.toString()} km',
-                          style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+              children: [
+                ListTile(
+                  leading: Text(
+                    "Delivery From:",
+                    style: TextStyle(
+                        color: CustomColors.black, fontFamily: 'Georgia'),
+                  ),
+                  trailing: Text(
+                    store.deliveryDetails.deliveryFrom,
+                    style: TextStyle(
+                        color: CustomColors.black, fontFamily: 'Georgia'),
+                  ),
+                ),
+                ListTile(
+                  leading: Text(
+                    "Delivery Till:",
+                    style: TextStyle(
+                        color: CustomColors.black, fontFamily: 'Georgia'),
+                  ),
+                  trailing: Text(
+                    store.deliveryDetails.deliveryTill,
+                    style: TextStyle(
+                        color: CustomColors.black, fontFamily: 'Georgia'),
+                  ),
+                ),
+                ListTile(
+                  leading: Text(
+                    "Max Distance:",
+                    style: TextStyle(
+                        color: CustomColors.black, fontFamily: 'Georgia'),
+                  ),
+                  trailing: Text(
+                    '${store.deliveryDetails.maxDistance.toString()} km',
+                    style: TextStyle(
+                        color: CustomColors.black, fontFamily: 'Georgia'),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

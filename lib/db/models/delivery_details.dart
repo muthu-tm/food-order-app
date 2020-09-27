@@ -13,11 +13,13 @@ class DeliveryDetails {
   @JsonKey(name: 'delivery_options', defaultValue: [1, 2])
   List<int> availableOptions;
   @JsonKey(name: 'delivery_charges_02')
-  int deliveryCharges02;
-  @JsonKey(name: 'delivery_charges_25')
-  int deliveryCharges25;
-  @JsonKey(name: 'delivery_charges_km')
-  int deliveryChargesPerKM;
+  double deliveryCharges02;
+  @JsonKey(name: 'delivery_charges_05')
+  double deliveryCharges05;
+  @JsonKey(name: 'delivery_charges_10')
+  double deliveryCharges10;
+  @JsonKey(name: 'delivery_charges_max')
+  double deliveryChargesMax;
 
   DeliveryDetails();
 

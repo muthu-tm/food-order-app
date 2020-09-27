@@ -1,4 +1,5 @@
 import 'package:geoflutterfire/geoflutterfire.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
@@ -50,7 +51,7 @@ class Store extends Model {
   @JsonKey(name: 'contacts')
   List<StoreContacts> contacts;
   @JsonKey(name: 'delivery')
-  List<DeliveryDetails> deliveryDetails;
+  DeliveryDetails deliveryDetails;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
@@ -170,6 +171,47 @@ class Store extends Model {
       }
 
       return stores;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<double> getUserDistance() async {
+    try {
+      double _distanceInMeters = await Geolocator().distanceBetween(
+        this.geoPoint.geoPoint.latitude,
+        this.geoPoint.geoPoint.longitude,
+        cachedLocalUser.primaryLocation.geoPoint.geoPoint.latitude,
+        cachedLocalUser.primaryLocation.geoPoint.geoPoint.longitude,
+      );
+
+      return _distanceInMeters / 1000;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<double> getShippingCharge(String storeID) async {
+    try {
+      DocumentSnapshot snap = await getCollectionRef().document(storeID).get();
+
+      double val = 0.00;
+
+      if (snap.exists) {
+        Store _s = Store.fromJson(snap.data);
+        double dis = await _s.getUserDistance();
+        if (dis < 2.0)
+          val = _s.deliveryDetails.deliveryCharges02;
+        else if (dis < 5.0)
+          val = _s.deliveryDetails.deliveryCharges05;
+        else if (dis < 10.0)
+          val = _s.deliveryDetails.deliveryCharges10;
+        else
+          val = _s.deliveryDetails.deliveryChargesMax;
+      }
+
+      return val;
     } catch (err) {
       print(err);
       throw err;

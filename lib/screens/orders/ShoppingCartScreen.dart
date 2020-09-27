@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
-import 'package:chipchop_buyer/screens/app/bottomBar.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/orders/CheckOutScreen.dart';
 import 'package:chipchop_buyer/screens/orders/EmptyCartWidget.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
+import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,8 +18,6 @@ class ShoppingCartScreen extends StatefulWidget {
 }
 
 class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
-  int shoppingCartCount = 1;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,80 +58,18 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                 Container(
                   child: ListView.builder(
                     shrinkWrap: true,
+                    primary: false,
                     itemCount: snapshot.data.documents.length,
                     itemBuilder: (BuildContext context, int index) {
                       ShoppingCart _sc = ShoppingCart.fromJson(
                           snapshot.data.documents[index].data);
 
-                      return buildShoppingCartItem(context, _sc);
+                      if (index == snapshot.data.documents.length - 1) {
+                        return buildShoppingCartItem(context, _sc);
+                      } else {
+                        return buildShoppingCartItem(context, _sc);
+                      }
                     },
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
-                  height: 120,
-                  child: Card(
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Subtotal",
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "\$278.78",
-                                style: TextStyle(color: CustomColors.black),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Shipping cost",
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "\$20.00",
-                                style: TextStyle(
-                                    color: CustomColors.black, fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                "Total",
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                "\$308.78",
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
                 Padding(
@@ -141,26 +79,45 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4.0),
                     ),
-                    color: Colors.blueGrey,
-                    onPressed: () => {},
+                    color: Colors.blueAccent,
+                    onPressed: () async {
+                      if (snapshot.data.documents.isEmpty) {
+                        return;
+                      }
+                      CustomDialogs.actionWaiting(context);
+
+                      double cPrice = 0.00;
+                      double oPrice = 0.00;
+                      for (var item in snapshot.data.documents) {
+                        ShoppingCart _sc = ShoppingCart.fromJson(item.data);
+                        Products p =
+                            await Products().getByProductID(_sc.productID);
+                        cPrice += _sc.quantity * p.currentPrice;
+                        oPrice += _sc.quantity * p.offer;
+                      }
+
+                      double sCharge = await Store().getShippingCharge(
+                          snapshot.data.documents.first.data['store_uuid']);
+
+                      List<double> _priceDetails = [cPrice, oPrice, sCharge];
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CheckOutScreen(_priceDetails),
+                          settings: RouteSettings(name: '/cart/checkout'),
+                        ),
+                      );
+                    },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                         vertical: 15.0,
                         horizontal: 10.0,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              "Checkout",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        "Checkout",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -169,23 +126,18 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
             );
           }
         } else if (snapshot.hasError) {
-          child = Container(
-            child: Row(
-              children: [
-                Text("Error..."),
-              ],
+          child = Center(
+            child: Column(
+              children: AsyncWidgets.asyncError(),
             ),
           );
         } else {
-          child = Container(
-            child: Row(
-              children: [
-                Text("Loading..."),
-              ],
+          child = Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
             ),
           );
         }
-
         return child;
       },
     );
@@ -279,7 +231,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        color: CustomColors.positiveGreen,
+                                        fontFamily: "Georgia",
+                                        color: CustomColors.lightBlue,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),
@@ -287,7 +240,10 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                   '${_p.weight}',
                                   textAlign: TextAlign.start,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: CustomColors.black),
+                                  style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: "Georgia",
+                                  ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.all(5.0),
@@ -296,7 +252,40 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
+                                      fontFamily: "Georgia",
                                       color: CustomColors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'Price: ',
+                                    textAlign: TextAlign.start,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        fontFamily: "Georgia",
+                                        color: CustomColors.lightBlue,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'Rs. ${_p.currentPrice}',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontFamily: "Georgia",
+                                        fontSize: 16,
+                                        color: CustomColors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -335,6 +324,32 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
+                        Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: RaisedButton(
+                              color: CustomColors.lightGrey,
+                              onPressed: () async {
+                                try {
+                                  CustomDialogs.actionWaiting(context);
+                                  await ShoppingCart().removeItem(
+                                      false, sc.storeID, sc.productID);
+                                  Navigator.pop(context);
+                                } catch (err) {
+                                  print(err);
+                                }
+                              },
+                              child: Text(
+                                "Delete",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: CustomColors.alertRed,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                         Row(
                           children: <Widget>[
                             sc.quantity == 1.0
@@ -419,9 +434,10 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                           child: Padding(
                             padding: EdgeInsets.all(5.0),
                             child: Text(
-                              'Rs. ${_p.currentPrice}',
+                              'Rs. ${_p.currentPrice * sc.quantity}',
                               textAlign: TextAlign.end,
                               style: TextStyle(
+                                  fontFamily: "Georgia",
                                   fontSize: 16,
                                   color: CustomColors.black,
                                   fontWeight: FontWeight.bold),
@@ -436,17 +452,21 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
             ),
           );
         } else if (snapshot.hasError) {
-          child = Container(
-            child: Text(
-              "Error...",
-              style: TextStyle(color: CustomColors.black),
+          child = Center(
+            child: Container(
+              height: 100,
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
             ),
           );
         } else {
-          child = Container(
-            child: Text(
-              "Loading...",
-              style: TextStyle(color: CustomColors.black),
+          child = Center(
+            child: Container(
+              height: 100,
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
+              ),
             ),
           );
         }

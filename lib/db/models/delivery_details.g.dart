@@ -14,9 +14,14 @@ DeliveryDetails _$DeliveryDetailsFromJson(Map<String, dynamic> json) {
     ..availableOptions =
         (json['delivery_options'] as List)?.map((e) => e as int)?.toList() ??
             [1, 2]
-    ..deliveryCharges02 = json['delivery_charges_02'] as int ?? 0
-    ..deliveryCharges25 = json['delivery_charges_25'] as int ?? 0
-    ..deliveryChargesPerKM = json['delivery_charges_km'] as int ?? 0;
+    ..deliveryCharges02 =
+        (json['delivery_charges_02'] as num)?.toDouble() ?? 0.00
+    ..deliveryCharges05 =
+        (json['delivery_charges_05'] as num)?.toDouble() ?? 0.00
+    ..deliveryCharges10 =
+        (json['delivery_charges_10'] as num)?.toDouble() ?? 0.00
+    ..deliveryChargesMax =
+        (json['delivery_charges_max'] as num)?.toDouble() ?? 0.00;
 }
 
 Map<String, dynamic> _$DeliveryDetailsToJson(DeliveryDetails instance) =>
@@ -25,7 +30,8 @@ Map<String, dynamic> _$DeliveryDetailsToJson(DeliveryDetails instance) =>
       'delivery_from': instance.deliveryFrom ?? '9:00',
       'delivery_till': instance.deliveryTill ?? '17:00',
       'delivery_options': instance.availableOptions ?? [1, 2],
-      'delivery_charges_02': instance.deliveryCharges02 ?? 0,
-      'delivery_charges_25': instance.deliveryCharges25 ?? 0,
-      'delivery_charges_km': instance.deliveryChargesPerKM ?? 0,
+      'delivery_charges_02': instance.deliveryCharges02 ?? 0.00,
+      'delivery_charges_05': instance.deliveryCharges05 ?? 0.00,
+      'delivery_charges_10': instance.deliveryCharges10 ?? 0.00,
+      'delivery_charges_max': instance.deliveryChargesMax ?? 0.00,
     };
