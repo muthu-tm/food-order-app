@@ -163,46 +163,56 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                        ListTile(
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: CachedNetworkImage(
-                              imageUrl: store.getStoreImages().first,
-                              imageBuilder: (context, imageProvider) => Image(
-                                fit: BoxFit.fill,
-                                image: imageProvider,
-                              ),
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => Center(
-                                child: SizedBox(
-                                  height: 50.0,
-                                  width: 50.0,
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress,
-                                      valueColor: AlwaysStoppedAnimation(
-                                          CustomColors.blue),
-                                      strokeWidth: 2.0),
+                          Padding(
+                            padding: EdgeInsets.only(left: 10, right: 10),
+                            child: Container(
+                              height: 75,
+                              width: 75,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: CachedNetworkImage(
+                                  imageUrl: store.getStoreImages().first,
+                                  imageBuilder: (context, imageProvider) =>
+                                      Image(
+                                    fit: BoxFit.fill,
+                                    image: imageProvider,
+                                  ),
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          Center(
+                                    child: SizedBox(
+                                      height: 50.0,
+                                      width: 50.0,
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress,
+                                          valueColor: AlwaysStoppedAnimation(
+                                              CustomColors.blue),
+                                          strokeWidth: 2.0),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    size: 35,
+                                  ),
+                                  fadeOutDuration: Duration(seconds: 1),
+                                  fadeInDuration: Duration(seconds: 2),
                                 ),
                               ),
-                              errorWidget: (context, url, error) => Icon(
-                                Icons.error,
-                                size: 35,
-                              ),
-                              fadeOutDuration: Duration(seconds: 1),
-                              fadeInDuration: Duration(seconds: 2),
                             ),
                           ),
-                          title: Container(
+                          Container(
                             padding: EdgeInsets.all(5),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
                                   store.name,
                                   style: TextStyle(
+                                    fontFamily: 'Georgia',
                                     color: CustomColors.blue,
                                     fontSize: 14.0,
                                   ),
@@ -212,6 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Text(
                                     "Timings - ${store.activeFrom} : ${store.activeTill}",
                                     style: TextStyle(
+                                      fontFamily: 'Georgia',
                                       color: CustomColors.black,
                                       fontSize: 14.0,
                                     ),
@@ -220,8 +231,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                        ),
-                      ]),
+                        ],
+                      ),
                     ),
                   ),
                 );
