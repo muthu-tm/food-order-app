@@ -49,7 +49,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
     );
   }
 
-  checkoutBottomSheet(BuildContext context, List<double> _priceDetails) {
+  checkoutBottomSheet(List<double> _priceDetails) {
     return _scaffoldKey.currentState.showBottomSheet((context) {
       return Builder(builder: (BuildContext childContext) {
         return Container(
@@ -101,8 +101,9 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                       InkWell(
                         onTap: () async {
                           try {
+                            CustomDialogs.actionWaiting(childContext);
                             Navigator.pop(childContext);
-                            CustomDialogs.actionWaiting(context);
+                            Navigator.pop(childContext);
                             Order _o = Order();
                             OrderAmount _oa = OrderAmount();
                             OrderDelivery _od = OrderDelivery();
@@ -130,11 +131,11 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                             _o.isReturnable = false;
 
                             await _o.create();
-                            // Navigator.pop(context);
-                            await showDialog(
-                              context: context,
-                              child: OrderSuccessWidget(),
-                            );
+                            showDialog(
+                                context: _scaffoldKey.currentContext,
+                                builder: (context) {
+                                  return OrderSuccessWidget();
+                                });
                           } catch (err) {
                             print(err);
                           }
@@ -493,7 +494,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
                       List<double> _priceDetails = [cPrice, oPrice, sCharge];
                       Navigator.pop(context);
-                      checkoutBottomSheet(context, _priceDetails);
+                      checkoutBottomSheet(_priceDetails);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
