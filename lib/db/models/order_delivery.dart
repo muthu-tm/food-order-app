@@ -6,6 +6,8 @@ part 'order_delivery.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class OrderDelivery extends Model {
+  @JsonKey(name: 'delivery_contact', nullable: false)
+  int deliveryContact;
   @JsonKey(name: 'delivered_at', nullable: true)
   int deliveredAt;
   @JsonKey(name: 'delivered_by', nullable: true)

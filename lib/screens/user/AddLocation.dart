@@ -5,6 +5,7 @@ import 'package:chipchop_buyer/screens/user/LocationPicker.dart';
 import 'package:chipchop_buyer/screens/utils/AddressWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 class AddLocation extends StatefulWidget {
@@ -17,6 +18,7 @@ class _AddLocationState extends State<AddLocation> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Address sAddress = Address();
   String locName = '';
+  int uNumber = cachedLocalUser.mobileNumber;
 
   @override
   void initState() {
@@ -31,7 +33,7 @@ class _AddLocationState extends State<AddLocation> {
         title: Text(
           AppLocalizations.of(context).translate('title_add_location'),
         ),
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -48,6 +50,7 @@ class _AddLocationState extends State<AddLocation> {
             }
             UserLocations loc = UserLocations();
             loc.locationName = locName;
+            loc.userNumber = uNumber;
             loc.address = sAddress;
 
             Navigator.push(
@@ -99,14 +102,52 @@ class _AddLocationState extends State<AddLocation> {
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
                       border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: CustomColors.grey)),
+                          borderSide: BorderSide(color: CustomColors.grey)),
                     ),
                     validator: (name) {
                       if (name.isEmpty) {
                         return "Enter Location Name";
                       } else {
                         this.locName = name.trim();
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "Contact Number",
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10, top: 10, right: 10),
+                  child: TextFormField(
+                    autofocus: false,
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.start,
+                    initialValue: uNumber.toString(),
+                    decoration: InputDecoration(
+                      fillColor: CustomColors.white,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.grey)),
+                    ),
+                    validator: (number) {
+                      if (number.isEmpty) {
+                        return "Enter Contact Number";
+                      } else {
+                        this.uNumber = int.parse(number.trim());
                       }
                       return null;
                     },

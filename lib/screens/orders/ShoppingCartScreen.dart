@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_buyer/db/models/order.dart';
+import 'package:chipchop_buyer/db/models/order_amount.dart';
+import 'package:chipchop_buyer/db/models/order_delivery.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/orders/EmptyCartWidget.dart';
+import 'package:chipchop_buyer/screens/orders/OrderSuccessWidget.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
@@ -45,87 +49,126 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
     );
   }
 
-  showThankYouBottomSheet(BuildContext context, List<double> _priceDetails) {
+  checkoutBottomSheet(BuildContext context, List<double> _priceDetails) {
     return _scaffoldKey.currentState.showBottomSheet((context) {
-      return Container(
-        height: 450,
-        decoration: BoxDecoration(
-          color: Colors.greenAccent,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(10),
-            topLeft: Radius.circular(10),
-          ),
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: ListView(
-                  primary: false,
-                  children: <Widget>[
-                    selectedAddressSection(),
-                    priceSection(_priceDetails)
-                  ],
-                ),
-              ),
-              flex: 85,
+      return Builder(builder: (BuildContext childContext) {
+        return Container(
+          height: 450,
+          decoration: BoxDecoration(
+            color: Colors.greenAccent,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(10),
+              topLeft: Radius.circular(10),
             ),
-            Expanded(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: CustomColors.alertRed,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        height: 40,
-                        width: 50,
-                        child: Icon(Icons.keyboard_arrow_down,
-                            size: 30, color: CustomColors.white),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: CustomColors.blue,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        height: 40,
-                        width: MediaQuery.of(context).size.width - 150,
-                        child: Center(
-                          child: Text(
-                            "Place Order",
-                            style: TextStyle(
-                                fontFamily: "Georgia",
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+          ),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: ListView(
+                    primary: false,
+                    children: <Widget>[
+                      selectedAddressSection(),
+                      priceSection(_priceDetails)
+                    ],
+                  ),
                 ),
+                flex: 85,
               ),
-              flex: 15,
-            )
-          ],
-        ),
-      );
+              Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(childContext);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: CustomColors.alertRed,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          height: 40,
+                          width: 50,
+                          child: Icon(Icons.keyboard_arrow_down,
+                              size: 30, color: CustomColors.white),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          try {
+                            Navigator.pop(childContext);
+                            CustomDialogs.actionWaiting(context);
+                            Order _o = Order();
+                            OrderAmount _oa = OrderAmount();
+                            OrderDelivery _od = OrderDelivery();
+
+                            _oa.deliveryCharge = _priceDetails[2];
+                            _oa.offerAmount = 0.00;
+                            _oa.orderAmount = _priceDetails[0];
+                            _o.amount = _oa;
+
+                            _od.address =
+                                cachedLocalUser.primaryLocation.address;
+                            _od.geoPoint =
+                                cachedLocalUser.primaryLocation.geoPoint;
+                            _o.delivery = _od;
+
+                            _o.customerNotes = "";
+                            _o.isReturnable = false;
+                            _o.status = 0;
+                            _o.userNumber =
+                                cachedLocalUser.primaryLocation.userNumber;
+                            _o.storeID = "";
+                            _o.totalProducts = 1;
+                            _o.writtenOrders = "";
+                            _o.orderImages = [""];
+                            _o.isReturnable = false;
+
+                            await _o.create();
+                            // Navigator.pop(context);
+                            await showDialog(
+                              context: context,
+                              child: OrderSuccessWidget(),
+                            );
+                          } catch (err) {
+                            print(err);
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: CustomColors.blue,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          height: 40,
+                          width: MediaQuery.of(context).size.width - 150,
+                          child: Center(
+                            child: Text(
+                              "Place Order",
+                              style: TextStyle(
+                                  fontFamily: "Georgia",
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                flex: 15,
+              )
+            ],
+          ),
+        );
+      });
     },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -450,7 +493,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
                       List<double> _priceDetails = [cPrice, oPrice, sCharge];
                       Navigator.pop(context);
-                      showThankYouBottomSheet(context, _priceDetails);
+                      checkoutBottomSheet(context, _priceDetails);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(

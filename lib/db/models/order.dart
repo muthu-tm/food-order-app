@@ -25,8 +25,6 @@ class Order extends Model {
   List<String> orderImages;
   @JsonKey(name: 'written_orders', defaultValue: "")
   String writtenOrders;
-  @JsonKey(name: 'delivery_contact', nullable: false)
-  int deliveryContact;
   @JsonKey(name: 'customer_notes', defaultValue: "")
   String customerNotes;
   @JsonKey(name: 'status', defaultValue: 0)
@@ -90,7 +88,6 @@ class Order extends Model {
     this.uuid = docRef.documentID;
 
     await super.add(this.toJson());
-
     return this;
   }
 }
