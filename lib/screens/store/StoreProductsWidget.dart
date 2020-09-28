@@ -156,11 +156,8 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
-                            height: 5,
-                          ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               _cartMap.containsKey(product.uuid)
                                   ? Container(
@@ -318,69 +315,69 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                         ),
                                       ),
                                     ),
-                              _wlMap.contains(product.uuid)
-                                  ? Card(
-                                      elevation: 2.0,
-                                      color: CustomColors.lightGreen,
-                                      child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        child: IconButton(
-                                          iconSize: 20,
-                                          alignment: Alignment.center,
-                                          icon: Icon(
-                                            Icons.favorite,
-                                          ),
-                                          onPressed: () async {
-                                            try {
-                                              CustomDialogs.actionWaiting(
-                                                  context);
-                                              await ShoppingCart().removeItem(
-                                                  true,
-                                                  widget.storeID,
-                                                  product.uuid);
-                                              setState(() {
-                                                _wlMap.remove(product.uuid);
-                                              });
-                                              Navigator.pop(context);
-                                            } catch (err) {
-                                              print(err);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    )
-                                  : Card(
-                                      elevation: 2.0,
-                                      color: CustomColors.lightGrey,
-                                      child: Container(
-                                        height: 40,
-                                        width: 40,
-                                        child: IconButton(
-                                          iconSize: 20,
-                                          alignment: Alignment.center,
-                                          icon: Icon(Icons.favorite_border),
-                                          onPressed: () async {
-                                            try {
-                                              CustomDialogs.actionWaiting(
-                                                  context);
-                                              ShoppingCart wl = ShoppingCart();
-                                              wl.storeID = widget.storeID;
-                                              wl.productID = product.uuid;
-                                              wl.inWishlist = true;
-                                              wl.quantity = 1.0;
-                                              wl.create();
-                                              setState(() {
-                                                _wlMap.add(product.uuid);
-                                              });
-                                              Navigator.pop(context);
-                                            } catch (err) {
-                                              print(err);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    )
+                              // _wlMap.contains(product.uuid)
+                              //     ? Card(
+                              //         elevation: 2.0,
+                              //         color: CustomColors.lightGreen,
+                              //         child: Container(
+                              //           height: 40,
+                              //           width: 40,
+                              //           child: IconButton(
+                              //             iconSize: 20,
+                              //             alignment: Alignment.center,
+                              //             icon: Icon(
+                              //               Icons.favorite,
+                              //             ),
+                              //             onPressed: () async {
+                              //               try {
+                              //                 CustomDialogs.actionWaiting(
+                              //                     context);
+                              //                 await ShoppingCart().removeItem(
+                              //                     true,
+                              //                     widget.storeID,
+                              //                     product.uuid);
+                              //                 setState(() {
+                              //                   _wlMap.remove(product.uuid);
+                              //                 });
+                              //                 Navigator.pop(context);
+                              //               } catch (err) {
+                              //                 print(err);
+                              //               }
+                              //             },
+                              //           ),
+                              //         ),
+                              //       )
+                              //     : Card(
+                              //         elevation: 2.0,
+                              //         color: CustomColors.lightGrey,
+                              //         child: Container(
+                              //           height: 40,
+                              //           width: 40,
+                              //           child: IconButton(
+                              //             iconSize: 20,
+                              //             alignment: Alignment.center,
+                              //             icon: Icon(Icons.favorite_border),
+                              //             onPressed: () async {
+                              //               try {
+                              //                 CustomDialogs.actionWaiting(
+                              //                     context);
+                              //                 ShoppingCart wl = ShoppingCart();
+                              //                 wl.storeID = widget.storeID;
+                              //                 wl.productID = product.uuid;
+                              //                 wl.inWishlist = true;
+                              //                 wl.quantity = 1.0;
+                              //                 wl.create();
+                              //                 setState(() {
+                              //                   _wlMap.add(product.uuid);
+                              //                 });
+                              //                 Navigator.pop(context);
+                              //               } catch (err) {
+                              //                 print(err);
+                              //               }
+                              //             },
+                              //           ),
+                              //         ),
+                              //       )
                             ],
                           )
                         ],

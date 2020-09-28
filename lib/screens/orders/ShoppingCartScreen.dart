@@ -3,12 +3,13 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
-import 'package:chipchop_buyer/screens/orders/CheckOutScreen.dart';
 import 'package:chipchop_buyer/screens/orders/EmptyCartWidget.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
+import 'package:chipchop_buyer/screens/user/AddLocation.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +19,14 @@ class ShoppingCartScreen extends StatefulWidget {
 }
 
 class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
+  bool isLoading = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(
           "Shopping Cart",
@@ -35,6 +41,350 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
       drawer: sideDrawer(context),
       body: SingleChildScrollView(
         child: getBody(context),
+      ),
+    );
+  }
+
+  showThankYouBottomSheet(BuildContext context, List<double> _priceDetails) {
+    return _scaffoldKey.currentState.showBottomSheet((context) {
+      return Container(
+        height: 450,
+        decoration: BoxDecoration(
+          color: Colors.greenAccent,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(10),
+            topLeft: Radius.circular(10),
+          ),
+        ),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: ListView(
+                  primary: false,
+                  children: <Widget>[
+                    selectedAddressSection(),
+                    priceSection(_priceDetails)
+                  ],
+                ),
+              ),
+              flex: 85,
+            ),
+            Expanded(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: CustomColors.alertRed,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        height: 40,
+                        width: 50,
+                        child: Icon(Icons.keyboard_arrow_down,
+                            size: 30, color: CustomColors.white),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: CustomColors.blue,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        height: 40,
+                        width: MediaQuery.of(context).size.width - 150,
+                        child: Center(
+                          child: Text(
+                            "Place Order",
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              flex: 15,
+            )
+          ],
+        ),
+      );
+    },
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
+        ),
+        elevation: 5);
+  }
+
+  selectedAddressSection() {
+    return Container(
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+      ),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(5))),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              border: Border.all(color: Colors.grey.shade200)),
+          padding: EdgeInsets.only(left: 12, top: 8, right: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 6,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    cachedLocalUser.firstName + " " + cachedLocalUser.lastName,
+                    style: TextStyle(
+                        fontFamily: "Georgia",
+                        color: CustomColors.blue,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Container(
+                    padding:
+                        EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5),
+                      ),
+                    ),
+                    child: Text(
+                      cachedLocalUser.primaryLocation.locationName,
+                      style: TextStyle(color: CustomColors.blue, fontSize: 10),
+                    ),
+                  )
+                ],
+              ),
+              createAddressText(
+                  cachedLocalUser.primaryLocation.address.street, 16),
+              createAddressText(
+                  cachedLocalUser.primaryLocation.address.city, 6),
+              createAddressText(
+                  cachedLocalUser.primaryLocation.address.pincode, 6),
+              SizedBox(
+                height: 6,
+              ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Mobile : ",
+                      style: TextStyle(fontSize: 12, color: CustomColors.blue),
+                    ),
+                    TextSpan(
+                      text: cachedLocalUser.mobileNumber.toString(),
+                      style: TextStyle(color: Colors.black, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                color: Colors.grey.shade300,
+                height: 1,
+                width: double.infinity,
+              ),
+              addressAction()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  createAddressText(String strAddress, double topMargin) {
+    return Container(
+      margin: EdgeInsets.only(top: topMargin),
+      child: Text(
+        strAddress,
+        style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
+      ),
+    );
+  }
+
+  addressAction() {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Spacer(
+            flex: 2,
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddLocation(),
+                  settings: RouteSettings(name: '/location'),
+                ),
+              );
+            },
+            child: Text(
+              "Edit / Change",
+              style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
+            ),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          Spacer(
+            flex: 3,
+          ),
+          Container(
+            height: 20,
+            width: 1,
+            color: Colors.grey,
+          ),
+          Spacer(
+            flex: 3,
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddLocation(),
+                  settings: RouteSettings(name: '/location/add'),
+                ),
+              );
+            },
+            child: Text("Add New Address",
+                style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          Spacer(
+            flex: 2,
+          ),
+        ],
+      ),
+    );
+  }
+
+  priceSection(List<double> priceDetails) {
+    return Container(
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(4)),
+      ),
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4))),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(4)),
+              border: Border.all(color: Colors.grey.shade200)),
+          padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                "PRICE DETAILS",
+                style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Container(
+                width: double.infinity,
+                height: 0.5,
+                margin: EdgeInsets.symmetric(vertical: 4),
+                color: Colors.grey.shade400,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              createPriceItem("Order Total", '₹ ' + priceDetails[0].toString(),
+                  CustomColors.black),
+              createPriceItem("Your Savings", '₹ ' + priceDetails[1].toString(),
+                  CustomColors.green),
+              createPriceItem("Delievery Charges",
+                  '₹ ' + priceDetails[2].toString(), CustomColors.black),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                width: double.infinity,
+                height: 0.5,
+                margin: EdgeInsets.symmetric(vertical: 4),
+                color: Colors.grey.shade400,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Total",
+                    style: TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                  Text(
+                    "₹ ${priceDetails[0] + priceDetails[2]}",
+                    style: TextStyle(color: Colors.black, fontSize: 12),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  createPriceItem(String key, String value, Color color) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            key,
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 12),
+          ),
+          Text(
+            value,
+            style: TextStyle(color: color, fontSize: 12),
+          )
+        ],
       ),
     );
   }
@@ -73,13 +423,12 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      top: 8.0, left: 8.0, right: 8.0, bottom: 16.0),
+                  padding: EdgeInsets.all(5),
                   child: FlatButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4.0),
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    color: Colors.blueAccent,
+                    color: CustomColors.blue,
                     onPressed: () async {
                       if (snapshot.data.documents.isEmpty) {
                         return;
@@ -100,24 +449,22 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                           snapshot.data.documents.first.data['store_uuid']);
 
                       List<double> _priceDetails = [cPrice, oPrice, sCharge];
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CheckOutScreen(_priceDetails),
-                          settings: RouteSettings(name: '/cart/checkout'),
-                        ),
-                      );
+                      Navigator.pop(context);
+                      showThankYouBottomSheet(context, _priceDetails);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                         vertical: 15.0,
-                        horizontal: 10.0,
+                        horizontal: 20.0,
                       ),
                       child: Text(
                         "Checkout",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
+                            fontFamily: "Georgia",
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -150,6 +497,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
         Widget child;
 
         if (snapshot.hasData) {
+          isLoading = false;
+
           Products _p = snapshot.data;
           child = Card(
             child: Container(

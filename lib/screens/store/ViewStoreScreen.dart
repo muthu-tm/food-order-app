@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreItemWidget.dart';
@@ -22,25 +23,25 @@ class ViewStoreScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // Padding(
-            //   padding: EdgeInsets.only(left: 10, right: 10),
-            //   child: Container(
-            //     height: 150.0,
-            //     width: double.infinity,
-            //     child: Carousel(
-            //       images: getImages(),
-            //       dotSize: 5.0,
-            //       dotSpacing: 20.0,
-            //       dotColor: CustomColors.blue,
-            //       indicatorBgPadding: 5.0,
-            //       dotBgColor: CustomColors.black.withOpacity(0.2),
-            //       borderRadius: true,
-            //       radius: Radius.circular(20),
-            //       noRadiusForIndicator: true,
-            //     ),
-            //   ),
-            // ),
             StoreSearchBar(),
+            Padding(
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Container(
+                height: 150.0,
+                width: double.infinity,
+                child: Carousel(
+                  images: getImages(),
+                  dotSize: 5.0,
+                  dotSpacing: 20.0,
+                  dotColor: CustomColors.blue,
+                  indicatorBgPadding: 5.0,
+                  dotBgColor: CustomColors.black.withOpacity(0.2),
+                  borderRadius: true,
+                  radius: Radius.circular(20),
+                  noRadiusForIndicator: true,
+                ),
+              ),
+            ),
             Expanded(
               child: StoreItemWidget(store),
             ),
