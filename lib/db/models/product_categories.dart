@@ -59,6 +59,9 @@ class ProductCategories extends Model {
 
   Future<List<ProductCategories>> getCategoriesForTypes(
       List<String> types) async {
+    // handle empty params
+    if (types.isEmpty) return [];
+
     List<ProductCategories> categories = [];
 
     QuerySnapshot snap = await getCollectionRef()
@@ -72,6 +75,9 @@ class ProductCategories extends Model {
   }
 
   Future<List<ProductCategories>> getCategoriesForIDs(List<String> ids) async {
+    // handle empty params
+    if (ids.isEmpty) return [];
+
     List<ProductCategories> categories = [];
 
     QuerySnapshot snap =

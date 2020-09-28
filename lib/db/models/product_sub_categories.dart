@@ -53,6 +53,9 @@ class ProductSubCategories extends Model {
 
   Future<List<ProductSubCategories>> getSubCategories(
       List<ProductCategories> categories) async {
+    // handle empty params
+    if (categories.isEmpty) return [];
+
     List<ProductSubCategories> subCategories = [];
 
     for (var i = 0; i < categories.length; i++) {
@@ -75,6 +78,9 @@ class ProductSubCategories extends Model {
 
   Future<List<ProductSubCategories>> getSubCategoriesForIDs(
       List<String> ids) async {
+    // handle empty params
+    if (ids.isEmpty) return [];
+
     List<ProductSubCategories> categories = [];
 
     QuerySnapshot snap =
