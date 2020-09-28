@@ -36,41 +36,32 @@ class OrderSuccessWidget extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
             ),
-            FlatButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4.0),
-              ),
-              color: CustomColors.blue,
-              onPressed: () => {},
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 10.0,
+            Container(
+              decoration: BoxDecoration(
+                color: CustomColors.blue,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.0),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomeScreen(),
-                              settings: RouteSettings(name: '/'),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Track Order",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: CustomColors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 50.0,
+              ),
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomeScreen(),
+                      settings: RouteSettings(name: '/'),
                     ),
-                  ],
+                  );
+                },
+                child: Text(
+                  "Track Order",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: CustomColors.white, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
