@@ -1,5 +1,7 @@
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/store/StoreCategoryWidget.dart';
+import 'package:chipchop_buyer/screens/store/StoreFlashSaleWidget.dart';
+import 'package:chipchop_buyer/screens/store/StorePopularWidet.dart';
 import 'package:chipchop_buyer/screens/store/StoreProductsWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -71,7 +73,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       child: RawMaterialButton(
                         onPressed: () {
                           setState(() {
-                            selectedItem = 3;
+                            selectedItem = 2;
                           });
                         },
                         child: Icon(
@@ -99,7 +101,11 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                           ),
                           color: CustomColors.white),
                       child: RawMaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            selectedItem = 3;
+                          });
+                        },
                         child: Icon(
                           FontAwesomeIcons.clock,
                           color: Color(0xFFC1A17C),
@@ -127,7 +133,7 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
                       child: RawMaterialButton(
                         onPressed: () {
                           setState(() {
-                            selectedItem = 2;
+                            selectedItem = 4;
                           });
                         },
                         child: Icon(
@@ -191,20 +197,26 @@ class _StoreItemWidgetState extends State<StoreItemWidget> {
               : selectedItem == 2
                   ? Expanded(
                       child: Container(
-                        child: StoreCategoryWidget(widget.store),
+                        child: StorePopulartWidget(widget.store.uuid),
                       ),
                     )
-                  : selectedItem == 5
+                  : selectedItem == 3
                       ? Expanded(
                           child: Container(
-                            child: StoreProfileWidget(widget.store),
+                            child: StoreFlashSaleWidget(widget.store.uuid),
                           ),
                         )
-                      : Expanded(
-                          child: Container(
-                            child: StoreCategoryWidget(widget.store),
-                          ),
-                        )
+                      : selectedItem == 4
+                          ? Expanded(
+                              child: Container(
+                                child: StoreCategoryWidget(widget.store),
+                              ),
+                            )
+                          : Expanded(
+                              child: Container(
+                                child: StoreProfileWidget(widget.store),
+                              ),
+                            )
         ],
       ),
     );

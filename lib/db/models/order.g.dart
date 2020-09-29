@@ -4,7 +4,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
   return Order()
     ..uuid = json['uuid'] as String ?? ''
     ..storeID = json['store_uuid'] as String
-    ..userNumber = json['user_number'] as int
+    ..userNumber = json['user_number'] as String
     ..totalProducts = json['total_products'] as int
     ..products = (json['products'] as List)
         ?.map((e) =>

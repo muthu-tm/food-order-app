@@ -9,6 +9,7 @@ part of 'user_locations.dart';
 UserLocations _$UserLocationsFromJson(Map<String, dynamic> json) {
   return UserLocations()
     ..uuid = json['uuid'] as String ?? ''
+    ..userNumber = json['user_number'] as String
     ..locationName = json['loc_name'] as String ?? ''
     ..address = json['address'] == null
         ? new Address()
@@ -21,6 +22,7 @@ UserLocations _$UserLocationsFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$UserLocationsToJson(UserLocations instance) =>
     <String, dynamic>{
       'uuid': instance.uuid,
+      'user_number': instance.userNumber,
       'loc_name': instance.locationName,
       'address': instance.address?.toJson(),
       'geo_point': instance.geoPoint?.toJson()

@@ -262,6 +262,9 @@ class StoreProfileWidget extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(
+            height: 50
+          ),
         ],
       ),
     );

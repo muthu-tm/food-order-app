@@ -80,13 +80,19 @@ class ProductCategories extends Model {
 
     List<ProductCategories> categories = [];
 
-    QuerySnapshot snap =
-        await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
-    for (var j = 0; j < snap.documents.length; j++) {
-      ProductCategories _c = ProductCategories.fromJson(snap.documents[j].data);
-      categories.add(_c);
-    }
+    try {
+      QuerySnapshot snap =
+          await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
+      for (var j = 0; j < snap.documents.length; j++) {
+        ProductCategories _c =
+            ProductCategories.fromJson(snap.documents[j].data);
+        categories.add(_c);
+      }
 
-    return categories;
+      return categories;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 }

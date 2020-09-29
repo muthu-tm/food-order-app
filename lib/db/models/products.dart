@@ -38,6 +38,8 @@ class Products extends Model {
   bool isAvailable;
   @JsonKey(name: 'is_deliverable')
   bool isDeliverable;
+  @JsonKey(name: 'is_popular')
+  bool isPopular;
   @JsonKey(name: 'keywords', defaultValue: [""])
   List<String> keywords;
   @JsonKey(name: 'created_at', nullable: true)
@@ -176,6 +178,17 @@ class Products extends Model {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
           .where('is_available', isEqualTo: false)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Stream<QuerySnapshot> streamPopularProducts(String storeID) {
+    try {
+      return getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('is_popular', isEqualTo: true)
           .snapshots();
     } catch (err) {
       throw err;

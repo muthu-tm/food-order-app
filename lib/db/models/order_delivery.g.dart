@@ -2,7 +2,8 @@ part of 'order_delivery.dart';
 
 OrderDelivery _$OrderDeliveryFromJson(Map<String, dynamic> json) {
   return OrderDelivery()
-    ..deliveryContact = json['delivery_contact'] as int
+    ..deliveryContact = json['delivery_contact'] as String
+    ..userNumber = json['user_number'] as String
     ..deliveredAt = json['delivered_at'] as int
     ..deliveredBy = json['delivered_by'] as String
     ..deliveredTo = json['delivered_to'] as String
@@ -18,6 +19,7 @@ OrderDelivery _$OrderDeliveryFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$OrderDeliveryToJson(OrderDelivery instance) =>
     <String, dynamic>{
       'delivery_contact': instance.deliveryContact,
+      'user_number': instance.userNumber,
       'delivered_at': instance.deliveredAt,
       'delivered_by': instance.deliveredBy,
       'delivered_to': instance.deliveredTo,

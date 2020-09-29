@@ -16,7 +16,7 @@ class Order extends Model {
   @JsonKey(name: 'store_uuid', nullable: false)
   String storeID;
   @JsonKey(name: 'user_number', nullable: false)
-  int userNumber;
+  String userNumber;
   @JsonKey(name: 'total_products', nullable: false)
   int totalProducts;
   @JsonKey(name: 'products', nullable: false)

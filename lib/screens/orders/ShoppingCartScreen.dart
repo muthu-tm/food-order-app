@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/order.dart';
 import 'package:chipchop_buyer/db/models/order_amount.dart';
 import 'package:chipchop_buyer/db/models/order_delivery.dart';
+import 'package:chipchop_buyer/db/models/order_product.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
@@ -49,7 +50,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
     );
   }
 
-  checkoutBottomSheet(List<double> _priceDetails) {
+  checkoutBottomSheet(List<double> _priceDetails, List<OrderProduct> op) {
     return _scaffoldKey.currentState.showBottomSheet((context) {
       return Builder(builder: (BuildContext childContext) {
         return Container(
@@ -117,18 +118,19 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                 cachedLocalUser.primaryLocation.address;
                             _od.geoPoint =
                                 cachedLocalUser.primaryLocation.geoPoint;
+                            _od.userNumber =
+                                cachedLocalUser.primaryLocation.userNumber;
                             _o.delivery = _od;
 
                             _o.customerNotes = "";
-                            _o.isReturnable = false;
                             _o.status = 0;
-                            _o.userNumber =
-                                cachedLocalUser.primaryLocation.userNumber;
+                            _o.userNumber = cachedLocalUser.getID();
                             _o.storeID = "";
-                            _o.totalProducts = 1;
                             _o.writtenOrders = "";
                             _o.orderImages = [""];
                             _o.isReturnable = false;
+                            _o.products = op;
+                            _o.totalProducts = op.length;
 
                             await _o.create();
                             showDialog(
@@ -481,12 +483,18 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
                       double cPrice = 0.00;
                       double oPrice = 0.00;
+                      List<OrderProduct> op = [];
                       for (var item in snapshot.data.documents) {
+                        OrderProduct _op = OrderProduct();
                         ShoppingCart _sc = ShoppingCart.fromJson(item.data);
                         Products p =
                             await Products().getByProductID(_sc.productID);
                         cPrice += _sc.quantity * p.currentPrice;
                         oPrice += _sc.quantity * p.offer;
+
+                        _op.productID = p.uuid;
+                        _op.quantity = _sc.quantity;
+                        _op.amount = _sc.quantity * p.currentPrice;
                       }
 
                       double sCharge = await Store().getShippingCharge(
@@ -494,7 +502,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
                       List<double> _priceDetails = [cPrice, oPrice, sCharge];
                       Navigator.pop(context);
-                      checkoutBottomSheet(_priceDetails);
+                      checkoutBottomSheet(_priceDetails, op);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(

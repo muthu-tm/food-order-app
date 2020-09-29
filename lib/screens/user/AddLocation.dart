@@ -50,7 +50,7 @@ class _AddLocationState extends State<AddLocation> {
             }
             UserLocations loc = UserLocations();
             loc.locationName = locName;
-            loc.userNumber = uNumber;
+            loc.userNumber = '91' + uNumber.toString();
             loc.address = sAddress;
 
             Navigator.push(

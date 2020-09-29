@@ -8,17 +8,120 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../utils/CustomColors.dart';
+
 class ViewStoreScreen extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   ViewStoreScreen(this.store);
 
   final Store store;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
         backgroundColor: CustomColors.green,
         title: Text(store.name),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: CustomColors.blue,
+        onPressed: () {
+          return _scaffoldKey.currentState.showBottomSheet((context) {
+            return Builder(builder: (BuildContext childContext) {
+              return Container(
+                height: 175,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: CustomColors.blueGreen,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    topLeft: Radius.circular(10),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 120,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: CustomColors.lightGreen,
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ShoppingCartScreen(),
+                                settings: RouteSettings(name: '/cart'),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "From Cart",
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                color: CustomColors.black,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 120,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: CustomColors.lightGreen,
+                        ),
+                        child: InkWell(
+                          child: Text(
+                            "Type Order",
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                color: CustomColors.black,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 120,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          color: CustomColors.lightGreen,
+                        ),
+                        child: InkWell(
+                          child: Text(
+                            "Capture Order",
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                color: CustomColors.lightGrey,
+                                fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            });
+          });
+        },
+        label: Text("Order NOW"),
+        icon: Icon(FontAwesomeIcons.solidSmile),
       ),
       body: SafeArea(
         child: Column(
@@ -48,72 +151,6 @@ class ViewStoreScreen extends StatelessWidget {
           ],
         ),
       ),
-      persistentFooterButtons: [
-        Container(
-          height: 80,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: Icon(
-                      FontAwesomeIcons.smile,
-                      color: CustomColors.positiveGreen,
-                    ),
-                  ),
-                  Text(
-                    "Order NOW!",
-                    style: TextStyle(
-                      fontFamily: 'Georgia',
-                      color: CustomColors.blue,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: RaisedButton(
-                      color: CustomColors.lightGreen,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ShoppingCartScreen(),
-                            settings: RouteSettings(name: '/cart'),
-                          ),
-                        );
-                      },
-                      child: Text("From Cart"),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: RaisedButton(
-                      color: CustomColors.lightBlue,
-                      onPressed: () {},
-                      child: Text("Type Order"),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(right: 5.0),
-                    child: RaisedButton(
-                      color: CustomColors.lightGreen,
-                      onPressed: () {},
-                      child: Text("Capture Order"),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        )
-      ],
     );
   }
 

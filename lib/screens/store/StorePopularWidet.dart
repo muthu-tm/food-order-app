@@ -9,15 +9,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class StoreProductWidget extends StatefulWidget {
-  StoreProductWidget(this.storeID);
+class StorePopulartWidget extends StatefulWidget {
+  StorePopulartWidget(this.storeID);
 
   final String storeID;
   @override
-  _StoreProductWidgetState createState() => _StoreProductWidgetState();
+  _StorePopulartWidgetState createState() => _StorePopulartWidgetState();
 }
 
-class _StoreProductWidgetState extends State<StoreProductWidget> {
+class _StorePopulartWidgetState extends State<StorePopulartWidget> {
   Map<String, double> _cartMap = {};
   List<String> _wlMap = [];
 
@@ -49,7 +49,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Products().streamProducts(widget.storeID),
+      stream: Products().streamPopularProducts(widget.storeID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 
@@ -315,69 +315,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                         ),
                                       ),
                                     ),
-                              // _wlMap.contains(product.uuid)
-                              //     ? Card(
-                              //         elevation: 2.0,
-                              //         color: CustomColors.lightGreen,
-                              //         child: Container(
-                              //           height: 40,
-                              //           width: 40,
-                              //           child: IconButton(
-                              //             iconSize: 20,
-                              //             alignment: Alignment.center,
-                              //             icon: Icon(
-                              //               Icons.favorite,
-                              //             ),
-                              //             onPressed: () async {
-                              //               try {
-                              //                 CustomDialogs.actionWaiting(
-                              //                     context);
-                              //                 await ShoppingCart().removeItem(
-                              //                     true,
-                              //                     widget.storeID,
-                              //                     product.uuid);
-                              //                 setState(() {
-                              //                   _wlMap.remove(product.uuid);
-                              //                 });
-                              //                 Navigator.pop(context);
-                              //               } catch (err) {
-                              //                 print(err);
-                              //               }
-                              //             },
-                              //           ),
-                              //         ),
-                              //       )
-                              //     : Card(
-                              //         elevation: 2.0,
-                              //         color: CustomColors.lightGrey,
-                              //         child: Container(
-                              //           height: 40,
-                              //           width: 40,
-                              //           child: IconButton(
-                              //             iconSize: 20,
-                              //             alignment: Alignment.center,
-                              //             icon: Icon(Icons.favorite_border),
-                              //             onPressed: () async {
-                              //               try {
-                              //                 CustomDialogs.actionWaiting(
-                              //                     context);
-                              //                 ShoppingCart wl = ShoppingCart();
-                              //                 wl.storeID = widget.storeID;
-                              //                 wl.productID = product.uuid;
-                              //                 wl.inWishlist = true;
-                              //                 wl.quantity = 1.0;
-                              //                 wl.create();
-                              //                 setState(() {
-                              //                   _wlMap.add(product.uuid);
-                              //                 });
-                              //                 Navigator.pop(context);
-                              //               } catch (err) {
-                              //                 print(err);
-                              //               }
-                              //             },
-                              //           ),
-                              //         ),
-                              //       )
                             ],
                           )
                         ],
@@ -395,7 +332,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
               child: Column(
                 children: [
                   Text(
-                    "No Products added By Store",
+                    "No Popular Products added By Store",
                     style: TextStyle(
                       fontFamily: 'Georgia',
                       color: CustomColors.alertRed,
@@ -413,7 +350,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    "You could still place Written/Captured ORDER here.",
+                    "You could still order your favourite item with Written/Capture ORDER option!",
                     style: TextStyle(
                       fontFamily: 'Georgia',
                       color: CustomColors.blue,
