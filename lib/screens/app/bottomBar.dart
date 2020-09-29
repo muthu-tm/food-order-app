@@ -34,7 +34,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.home,
                     size: 30.0,
-                    color: CustomColors.black,
+                    color: CustomColors.lightGrey,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('home'),
@@ -72,7 +72,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.search,
                     size: 30.0,
-                    color: CustomColors.black,
+                    color: CustomColors.lightGrey,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('search'),
@@ -110,7 +110,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.content_copy,
                     size: 30.0,
-                    color: CustomColors.black,
+                    color: CustomColors.lightGrey,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('orders'),
@@ -146,7 +146,7 @@ Widget bottomBar(BuildContext context) {
                   Icon(
                     Icons.settings,
                     size: 30.0,
-                    color: CustomColors.black,
+                    color: CustomColors.lightGrey,
                   ),
                   Text(
                     AppLocalizations.of(context).translate('settings'),

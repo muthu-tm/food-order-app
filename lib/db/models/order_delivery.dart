@@ -1,6 +1,5 @@
 import 'package:chipchop_buyer/db/models/model.dart';
-import 'package:chipchop_buyer/db/models/address.dart';
-import 'package:chipchop_buyer/db/models/geopoint_data.dart';
+import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'order_delivery.g.dart';
 
@@ -8,8 +7,6 @@ part 'order_delivery.g.dart';
 class OrderDelivery extends Model {
   @JsonKey(name: 'delivery_contact', nullable: false)
   String deliveryContact;
-  @JsonKey(name: 'user_number', nullable: false)
-  String userNumber;
   @JsonKey(name: 'delivered_at', nullable: true)
   int deliveredAt;
   @JsonKey(name: 'delivered_by', nullable: true)
@@ -18,10 +15,8 @@ class OrderDelivery extends Model {
   String deliveredTo;
   @JsonKey(name: 'notes', nullable: true)
   String notes;
-  @JsonKey(name: 'geo_point')
-  GeoPointData geoPoint;
-  @JsonKey(name: 'address')
-  Address address;
+  @JsonKey(name: 'user_location')
+  UserLocations userLocation;
 
   OrderDelivery();
 

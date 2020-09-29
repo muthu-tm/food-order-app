@@ -114,12 +114,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                             _oa.orderAmount = _priceDetails[0];
                             _o.amount = _oa;
 
-                            _od.address =
-                                cachedLocalUser.primaryLocation.address;
-                            _od.geoPoint =
-                                cachedLocalUser.primaryLocation.geoPoint;
-                            _od.userNumber =
-                                cachedLocalUser.primaryLocation.userNumber;
+                            _od.userLocation =
+                                cachedLocalUser.primaryLocation;
                             _o.delivery = _od;
 
                             _o.customerNotes = "";
@@ -495,6 +491,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         _op.productID = p.uuid;
                         _op.quantity = _sc.quantity;
                         _op.amount = _sc.quantity * p.currentPrice;
+                        op.add(_op);
                       }
 
                       double sCharge = await Store().getShippingCharge(

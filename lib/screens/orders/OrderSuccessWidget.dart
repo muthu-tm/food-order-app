@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -52,8 +53,8 @@ class OrderSuccessWidget extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                      settings: RouteSettings(name: '/'),
+                      builder: (context) => OrdersHomeScreen(),
+                      settings: RouteSettings(name: '/orders'),
                     ),
                   );
                 },
