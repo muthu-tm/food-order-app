@@ -1,16 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import './model.dart';
+import '../../services/controllers/user/user_service.dart';
 import './order_amount.dart';
 import './order_delivery.dart';
 import './order_product.dart';
+import 'model.dart';
+import 'user.dart';
 part 'order.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class Order extends Model {
-  static CollectionReference _orderCollRef = Model.db.collection("orders");
-
+class Order {
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
   @JsonKey(name: 'store_uuid', nullable: false)
@@ -52,11 +52,15 @@ class Order extends Model {
   Map<String, dynamic> toJson() => _$OrderToJson(this);
 
   CollectionReference getCollectionRef() {
-    return _orderCollRef;
+    return User().getDocumentRef(cachedLocalUser.getID()).collection("orders");
+  }
+
+  Query getGroupQuery() {
+    return Model.db.collectionGroup('orders');
   }
 
   DocumentReference getDocumentReference() {
-    return _orderCollRef.document(getID());
+    return getCollectionRef().document(getID());
   }
 
   String getID() {
@@ -87,7 +91,13 @@ class Order extends Model {
     DocumentReference docRef = this.getCollectionRef().document();
     this.uuid = docRef.documentID;
 
-    await super.add(this.toJson());
+    await docRef.setData(this.toJson());
     return this;
+  }
+
+  Stream<QuerySnapshot> streamOrders() {
+    return getCollectionRef()
+        .orderBy('created_at', descending: true)
+        .snapshots();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -94,14 +95,14 @@ Widget bottomBar(BuildContext context) {
             color: CustomColors.green,
             child: InkWell(
               onTap: () {
-                // Navigator.pushAndRemoveUntil(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => TransactionScreen(),
-                //     settings: RouteSettings(name: '/orders'),
-                //   ),
-                //   (Route<dynamic> route) => false,
-                // );
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrdersHomeScreen(),
+                    settings: RouteSettings(name: '/orders'),
+                  ),
+                  (Route<dynamic> route) => false,
+                );
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
