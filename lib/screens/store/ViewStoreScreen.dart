@@ -27,98 +27,13 @@ class ViewStoreScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blue,
         onPressed: () {
-          return _scaffoldKey.currentState.showBottomSheet((context) {
-            return Builder(builder: (BuildContext childContext) {
-              return Container(
-                height: 175,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: CustomColors.blueGreen,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 120,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: CustomColors.lightGreen,
-                        ),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ShoppingCartScreen(),
-                                settings: RouteSettings(name: '/cart'),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "From Cart",
-                            style: TextStyle(
-                                fontFamily: "Georgia",
-                                color: CustomColors.black,
-                                fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 120,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: CustomColors.lightGreen,
-                        ),
-                        child: InkWell(
-                          child: Text(
-                            "Type Order",
-                            style: TextStyle(
-                                fontFamily: "Georgia",
-                                color: CustomColors.black,
-                                fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Container(
-                        alignment: Alignment.center,
-                        width: 120,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          color: CustomColors.lightGreen,
-                        ),
-                        child: InkWell(
-                          child: Text(
-                            "Capture Order",
-                            style: TextStyle(
-                                fontFamily: "Georgia",
-                                color: CustomColors.lightGrey,
-                                fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            });
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ShoppingCartScreen(),
+              settings: RouteSettings(name: '/cart'),
+            ),
+          );
         },
         label: Text("Order NOW"),
         icon: Icon(FontAwesomeIcons.solidSmile),
