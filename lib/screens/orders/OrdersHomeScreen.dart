@@ -1,13 +1,12 @@
+import 'package:chipchop_buyer/screens/orders/OrderDetailsScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../db/models/order.dart';
-import '../../services/utils/DateUtils.dart';
 import '../app/appBar.dart';
 import '../app/bottomBar.dart';
 import '../app/sideDrawer.dart';
 import '../utils/AsyncWidgets.dart';
-import '../utils/CustomColors.dart';
 import '../utils/CustomColors.dart';
 
 class OrdersHomeScreen extends StatefulWidget {
@@ -16,19 +15,74 @@ class OrdersHomeScreen extends StatefulWidget {
 }
 
 class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
+  String filterBy = "0";
+
+  Map<String, String> _selectedFilter = {
+    "0": "All",
+    "1": "Cancelled",
+    "2": "Deliverred",
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context),
       drawer: sideDrawer(context),
-      body: getBody(context),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  width: 150,
+                  height: 40,
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      labelText: "Filter",
+                      labelStyle: TextStyle(
+                        color: CustomColors.blue,
+                      ),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      fillColor: CustomColors.white,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors.white),
+                      ),
+                    ),
+                    items: _selectedFilter.entries.map(
+                      (f) {
+                        return DropdownMenuItem<String>(
+                          value: f.key,
+                          child: Text(f.value),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (newVal) {
+                      setState(() {
+                        filterBy = newVal;
+                      });
+                    },
+                    value: filterBy,
+                  ),
+                ),
+              ),
+            ),
+            getBody(context),
+          ],
+        ),
+      ),
       bottomNavigationBar: bottomBar(context),
     );
   }
 
   Widget getBody(BuildContext context) {
     return StreamBuilder(
-      stream: Order().streamOrders(),
+      stream: Order()
+          .streamOrdersByStatus(filterBy == "0" ? [] : [int.parse(filterBy)]),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 
@@ -36,7 +90,6 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
           if (snapshot.data.documents.length == 0) {
             child = Container(
               child: Center(
-                // alignment: Alignment.center,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,18 +120,27 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
               ),
             );
           } else {
-            child = SingleChildScrollView(
-              child: Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Order order =
-                        Order.fromJson(snapshot.data.documents[index].data);
+            child = Container(
+              child: ListView.builder(
+                shrinkWrap: true,
+                primary: false,
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Order order =
+                      Order.fromJson(snapshot.data.documents[index].data);
 
-                    return Card(
-                      elevation: 2,
+                  return Card(
+                    elevation: 2,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OrderDetailsScreen(order),
+                            settings: RouteSettings(name: '/orders/details'),
+                          ),
+                        );
+                      },
                       child: Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,19 +157,19 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                             ),
                             ListTile(
                               leading: Icon(
-                                Icons.access_time,
+                                Icons.confirmation_number,
                                 size: 35,
                                 color: CustomColors.blueGreen,
                               ),
                               title: Text(
-                                "Ordered At",
+                                "Order ID",
                                 style: TextStyle(
                                     color: CustomColors.blue,
                                     fontSize: 14,
                                     fontFamily: "Georgia"),
                               ),
                               trailing: Text(
-                                DateUtils.formatDateTime(order.createdAt),
+                                order.orderID,
                                 style: TextStyle(
                                     color: CustomColors.black,
                                     fontSize: 12,
@@ -206,9 +268,9 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                           ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             );
           }

@@ -18,6 +18,8 @@ import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/CustomColors.dart';
+
 class ShoppingCartScreen extends StatefulWidget {
   @override
   _ShoppingCartScreenState createState() => _ShoppingCartScreenState();
@@ -56,7 +58,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
         return Container(
           height: 450,
           decoration: BoxDecoration(
-            color: Colors.greenAccent,
+            color: CustomColors.lightGreen,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(10),
               topLeft: Radius.circular(10),

@@ -3,6 +3,7 @@ part of 'order.dart';
 Order _$OrderFromJson(Map<String, dynamic> json) {
   return Order()
     ..uuid = json['uuid'] as String ?? ''
+    ..orderID = json['order_id'] as String ?? ''
     ..storeID = json['store_uuid'] as String
     ..userNumber = json['user_number'] as String
     ..totalProducts = json['total_products'] as int
@@ -43,6 +44,7 @@ int _getMillisecondsSinceEpoch(Timestamp ts) {
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'uuid': instance.uuid,
+      'order_id': instance.orderID,
       'store_uuid': instance.storeID,
       'user_number': instance.userNumber,
       'total_products': instance.totalProducts,

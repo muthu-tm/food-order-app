@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,6 +16,8 @@ part 'order.g.dart';
 class Order {
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
+  @JsonKey(name: 'order_id', nullable: false)
+  String orderID;
   @JsonKey(name: 'store_uuid', nullable: false)
   String storeID;
   @JsonKey(name: 'user_number', nullable: false)
@@ -67,6 +72,13 @@ class Order {
     return this.uuid;
   }
 
+  String generateOrderID() {
+    return DateFormat('ddMMyy').format(this.createdAt) +
+        "-" +
+        Random(100).nextInt(1000).toString() +
+        this.totalProducts.toString();
+  }
+
   String getStatus() {
     if (this.status == 0) {
       return "Ordered";
@@ -87,6 +99,7 @@ class Order {
     this.createdAt = DateTime.now();
     this.updatedAt = DateTime.now();
     this.status = 0;
+    this.orderID = generateOrderID();
 
     DocumentReference docRef = this.getCollectionRef().document();
     this.uuid = docRef.documentID;
@@ -99,5 +112,18 @@ class Order {
     return getCollectionRef()
         .orderBy('created_at', descending: true)
         .snapshots();
+  }
+
+  Stream<QuerySnapshot> streamOrdersByStatus(List<int> status) {
+    if (status.isEmpty) {
+      return getCollectionRef()
+          .orderBy('created_at', descending: true)
+          .snapshots();
+    } else {
+      return getCollectionRef()
+          .where('status', whereIn: status)
+          .orderBy('created_at', descending: true)
+          .snapshots();
+    }
   }
 }
