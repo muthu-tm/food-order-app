@@ -64,8 +64,8 @@ class Order {
     return Model.db.collectionGroup('orders');
   }
 
-  DocumentReference getDocumentReference() {
-    return getCollectionRef().document(getID());
+  DocumentReference getDocumentReference(String id) {
+    return getCollectionRef().document(id);
   }
 
   String getID() {
@@ -112,6 +112,10 @@ class Order {
     return getCollectionRef()
         .orderBy('created_at', descending: true)
         .snapshots();
+  }
+
+  Stream<DocumentSnapshot> streamOrderByID(String id) {
+    return getCollectionRef().document(id).snapshots();
   }
 
   Stream<QuerySnapshot> streamOrdersByStatus(List<int> status) {

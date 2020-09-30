@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/screens/Home/AuthPage.dart';
 import 'package:chipchop_buyer/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_buyer/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
@@ -30,7 +31,7 @@ Widget sideDrawer(BuildContext context) {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: CustomColors.blue,
+                            color: CustomColors.blueGreen,
                             style: BorderStyle.solid,
                             width: 2.0,
                           ),
@@ -65,7 +66,7 @@ Widget sideDrawer(BuildContext context) {
                                 child: Icon(
                                   Icons.person,
                                   size: 45.0,
-                                  color: CustomColors.lightGrey,
+                                  color: CustomColors.blueGreen,
                                 ),
                               ),
                               Text(
@@ -135,11 +136,11 @@ Widget sideDrawer(BuildContext context) {
                                   );
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: CustomColors.blue,
+                                  backgroundColor: CustomColors.blueGreen,
                                   radius: 15,
                                   child: Icon(
                                     Icons.edit,
-                                    color: CustomColors.green,
+                                    color: CustomColors.lightGrey,
                                     size: 20.0,
                                   ),
                                 ),
@@ -169,7 +170,7 @@ Widget sideDrawer(BuildContext context) {
           ),
         ),
         ListTile(
-            leading: Icon(Icons.home, color: CustomColors.green),
+            leading: Icon(Icons.home, color: CustomColors.blueGreen),
             title: Text(
               "Home",
             ),
@@ -184,36 +185,32 @@ Widget sideDrawer(BuildContext context) {
               );
             }),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
-        ExpansionTile(
+        ListTile(
+          leading: Icon(Icons.content_copy, color: CustomColors.blueGreen),
           title: Text(
             "Orders",
           ),
-          leading: Icon(Icons.content_copy, color: CustomColors.green),
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                "Active Orders",
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OrdersHomeScreen(),
+                settings: RouteSettings(name: '/orders'),
               ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-            ListTile(
-              title: Text(
-                "History",
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-          ],
+            );
+          },
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.notifications_active, color: CustomColors.green),
+          leading:
+              Icon(Icons.notifications_active, color: CustomColors.blueGreen),
           title: Text(
             "Notifications",
           ),
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.settings, color: CustomColors.green),
+          leading: Icon(Icons.settings, color: CustomColors.blueGreen),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
@@ -229,7 +226,7 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.headset_mic, color: CustomColors.green),
+          leading: Icon(Icons.headset_mic, color: CustomColors.blueGreen),
           title: Text(
             AppLocalizations.of(context).translate('help_and_support'),
           ),

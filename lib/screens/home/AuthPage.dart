@@ -37,6 +37,7 @@ class _AuthPageState extends State<AuthPage> {
       backgroundColor: CustomColors.lightGrey,
       body: Center(
         child: SingleChildScrollView(
+          primary: true,
           child: FutureBuilder<String>(
             future: _prefs.then(
               (SharedPreferences prefs) {
@@ -56,6 +57,7 @@ class _AuthPageState extends State<AuthPage> {
                           return LoginPage(false, _scaffoldKey);
                         } else {
                           User _user = User.fromJson(userSnapshot.data);
+                          // return UniquesSignUp(_user, _scaffoldKey);
                           return SecretKeyAuth(_user, _scaffoldKey);
                         }
                       } else if (userSnapshot.hasError) {

@@ -136,7 +136,8 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => OrderDetailsScreen(order),
+                            builder: (context) =>
+                                OrderDetailsScreen(order.uuid),
                             settings: RouteSettings(name: '/orders/details'),
                           ),
                         );
@@ -178,7 +179,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                             ),
                             ListTile(
                               leading: Icon(
-                                Icons.person_pin_circle,
+                                Icons.local_shipping,
                                 size: 35,
                                 color: CustomColors.blueGreen,
                               ),
@@ -211,59 +212,58 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                             Padding(
                               padding: EdgeInsets.only(left: 70.0, bottom: 10),
                               child: Container(
-                                  width:
-                                      MediaQuery.of(context).size.width - 100,
-                                  padding: EdgeInsets.only(right: 10, left: 10),
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.lightGrey,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
+                                width: MediaQuery.of(context).size.width - 100,
+                                padding: EdgeInsets.only(right: 10, left: 10),
+                                decoration: BoxDecoration(
+                                  color: CustomColors.lightGrey,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
                                   ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      createAddressText(
-                                          order.delivery.userLocation.address
-                                              .street,
-                                          16),
-                                      createAddressText(
-                                          order.delivery.userLocation.address
-                                              .city,
-                                          6),
-                                      createAddressText(
-                                          order.delivery.userLocation.address
-                                              .pincode,
-                                          6),
-                                      SizedBox(
-                                        height: 6,
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    createAddressText(
+                                        order.delivery.userLocation.address
+                                            .street,
+                                        16),
+                                    createAddressText(
+                                        order
+                                            .delivery.userLocation.address.city,
+                                        6),
+                                    createAddressText(
+                                        order.delivery.userLocation.address
+                                            .pincode,
+                                        6),
+                                    SizedBox(
+                                      height: 6,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "Mobile : ",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: CustomColors.blue),
+                                          ),
+                                          TextSpan(
+                                            text: order.delivery.userLocation
+                                                .userNumber,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12),
+                                          ),
+                                        ],
                                       ),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "Mobile : ",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: CustomColors.blue),
-                                            ),
-                                            TextSpan(
-                                              text: order.delivery.userLocation
-                                                  .userNumber,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 16,
-                                      ),
-                                    ],
-                                  )),
+                                    ),
+                                    SizedBox(
+                                      height: 16,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             )
                           ],
                         ),

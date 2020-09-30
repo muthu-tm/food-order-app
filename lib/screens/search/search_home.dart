@@ -54,7 +54,7 @@ class _SearchHomeState extends State<SearchHome> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => StoresInMap(userLocations.first),
-                      settings: RouteSettings(name: '/settings/user/edit'),
+                      settings: RouteSettings(name: '/search/map'),
                     ),
                   );
                 } else {
@@ -68,7 +68,7 @@ class _SearchHomeState extends State<SearchHome> {
               },
               icon: Icon(
                 FontAwesomeIcons.mapMarkerAlt,
-                color: CustomColors.blue,
+                color: CustomColors.blueGreen,
               ),
               label: Padding(
                 padding: EdgeInsets.all(5.0),

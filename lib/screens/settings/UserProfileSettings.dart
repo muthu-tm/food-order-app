@@ -27,7 +27,7 @@ class _UserSettingState extends State<UserSetting> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(AppLocalizations.of(context).translate('profile_settings')),
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
