@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../services/controllers/user/user_service.dart';
-import '../../services/controllers/user/user_service.dart';
 import 'model.dart';
-import 'order.dart';
 
 part 'order_chat_temp.g.dart';
 
@@ -16,8 +14,10 @@ class OrderChatTemplate {
   String from;
   @JsonKey(name: 'content', nullable: false)
   String content;
-  @JsonKey(name: 'type', nullable: false)
-  int type;
+  @JsonKey(name: 'msg_type', nullable: false)
+  int messageType;
+  @JsonKey(name: 'sender_type', nullable: false)
+  int senderType;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)

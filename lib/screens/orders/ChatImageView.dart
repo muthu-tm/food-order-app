@@ -13,11 +13,19 @@ class ChatImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: CustomColors.green,
         title: Text(
-          'FULL PHOTO',
-          style: TextStyle(color: CustomColors.green, fontWeight: FontWeight.bold),
+          'Image View',
+          style: TextStyle(
+              color: CustomColors.lightGrey, fontWeight: FontWeight.bold),
         ),
-        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.lightGrey,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: FullPhotoScreen(url: url),
     );

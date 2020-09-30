@@ -5,7 +5,8 @@ OrderChatTemplate _$OrderChatTemplateFromJson(Map<String, dynamic> json) {
     ..orderUUID = json['order_uuid'] as String
     ..from = json['from'] as String
     ..content = json['content'] as String
-    ..type = json['type'] as int
+    ..messageType = json['msg_type'] as int
+    ..senderType = json['sender_type'] as int
     ..createdAt = json['created_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
@@ -25,7 +26,8 @@ Map<String, dynamic> _$OrderChatTemplateToJson(OrderChatTemplate instance) =>
       'order_uuid': instance.orderUUID,
       'from': instance.from,
       'content': instance.content,
-      'type': instance.type,
+      'msg_type': instance.messageType,
+      'sender_type': instance.senderType,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

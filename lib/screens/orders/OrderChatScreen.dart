@@ -112,7 +112,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
 
       OrderChatTemplate oc = OrderChatTemplate();
       oc.content = content;
-      oc.type = type;
+      oc.messageType = type;
+      oc.senderType= 0; // Customer
       oc.orderUUID = widget.orderUUID;
       oc.create();
 

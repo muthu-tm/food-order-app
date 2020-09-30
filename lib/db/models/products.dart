@@ -113,19 +113,6 @@ class Products extends Model {
     return getDocumentReference(getID()).snapshots();
   }
 
-  Future<void> create() async {
-    try {
-      DocumentReference docRef = getCollectionRef().document();
-      this.createdAt = DateTime.now();
-      this.updatedAt = DateTime.now();
-      this.uuid = docRef.documentID;
-
-      await docRef.setData(this.toJson());
-    } catch (err) {
-      throw err;
-    }
-  }
-
   String getProductImage() {
     if (this.productImages.isEmpty) {
       return no_image_placeholder.replaceFirst(
