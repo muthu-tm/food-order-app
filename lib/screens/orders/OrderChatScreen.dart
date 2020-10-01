@@ -102,7 +102,6 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       });
       Fluttertoast.showToast(msg: 'This file is not an image');
     }
-    ;
   }
 
   Future<void> onSendMessage(String content, int type) async {
