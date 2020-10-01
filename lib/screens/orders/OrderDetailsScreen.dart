@@ -16,9 +16,11 @@ class OrderDetailsScreen extends StatefulWidget {
 }
 
 class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
           "Order Details",
@@ -30,32 +32,36 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         ),
         backgroundColor: CustomColors.green,
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: CustomColors.blueGreen,
+        onPressed: () {
+          return _scaffoldKey.currentState.showBottomSheet((context) {
+            return Builder(builder: (BuildContext childContext) {
+              return Container(
+                height: 400,
+                decoration: BoxDecoration(
+                  color: CustomColors.lightGrey,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    topLeft: Radius.circular(10),
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: OrderChatScreen(
+                    orderUUID: widget.orderID,
+                  ),
+                ),
+              );
+            });
+          });
+        },
+        label: Text("Chat"),
+        icon: Icon(Icons.chat),
+      ),
       body: SingleChildScrollView(
         child: Container(
-          child: Column(
-            children: [
-              Container(
-                child: getBody(context),
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Icon(
-                        Icons.chat,
-                        color: CustomColors.blueGreen,
-                      ),
-                      title: Text("Chat"),
-                    ),
-                    Divider(color: CustomColors.blue),
-                    OrderChatScreen(
-                      orderUUID: widget.orderID,
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+          child: getBody(context),
         ),
       ),
     );

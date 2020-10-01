@@ -72,6 +72,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
     PickedFile pickedFile;
 
     pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
+    if (pickedFile == null) return;
+
     imageFile = File(pickedFile.path);
 
     if (imageFile != null) {
@@ -83,25 +85,27 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   }
 
   Future uploadFile() async {
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    StorageReference reference = FirebaseStorage.instance.ref().child(fileName);
-    StorageUploadTask uploadTask = reference.putFile(imageFile);
-    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-    storageTaskSnapshot.ref.getDownloadURL().then((downloadUrl) {
-      imageUrl = downloadUrl;
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      StorageReference reference =
+          FirebaseStorage.instance.ref().child(fileName);
+      StorageUploadTask uploadTask = reference.putFile(imageFile);
+      StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+      String imageUrl = await storageTaskSnapshot.ref.getDownloadURL();
+      await onSendMessage(imageUrl, 1);
       setState(() {
         isLoading = false;
-        onSendMessage(imageUrl, 1);
       });
-    }, onError: (err) {
+    } catch (err) {
       setState(() {
         isLoading = false;
       });
       Fluttertoast.showToast(msg: 'This file is not an image');
-    });
+    }
+    ;
   }
 
-  void onSendMessage(String content, int type) {
+  Future<void> onSendMessage(String content, int type) async {
     // type: 0 = text, 1 = image
     if (content.trim() != '') {
       textEditingController.clear();
@@ -111,7 +115,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       oc.messageType = type;
       oc.senderType = 0; // Customer
       oc.orderUUID = widget.orderUUID;
-      oc.create();
+      await oc.create();
 
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -126,81 +130,101 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   Widget buildItem(int index, DocumentSnapshot document) {
     if (document.data['from'] == cachedLocalUser.getID()) {
       // Right (my message)
-      return Row(
-        children: <Widget>[
-          document.data['type'] == 0
-              // Text
-              ? Container(
-                  child: Text(
-                    document.data['content'],
-                    style: TextStyle(color: CustomColors.green),
-                  ),
-                  padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                  width: 200.0,
-                  decoration: BoxDecoration(
-                      color: CustomColors.lightGrey,
-                      borderRadius: BorderRadius.circular(8.0)),
-                  margin: EdgeInsets.only(
-                      bottom: isLastMessageRight(index) ? 20.0 : 10.0,
-                      right: 10.0),
-                )
-              : Container(
-                  child: FlatButton(
-                    child: Material(
-                      child: CachedNetworkImage(
-                        placeholder: (context, url) => Container(
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                CustomColors.lightGrey),
-                          ),
-                          width: 200.0,
-                          height: 200.0,
-                          padding: EdgeInsets.all(70.0),
-                          decoration: BoxDecoration(
-                            color: CustomColors.grey,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(8.0),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Row(
+            children: <Widget>[
+              document.data['msg_type'] == 0
+                  // Text
+                  ? Container(
+                      child: Text(
+                        document.data['content'],
+                        style: TextStyle(color: CustomColors.white),
+                      ),
+                      padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                      width: 200.0,
+                      decoration: BoxDecoration(
+                          color: CustomColors.grey,
+                          borderRadius: BorderRadius.circular(8.0)),
+                      margin: EdgeInsets.only(bottom: 5.0, right: 10.0),
+                    )
+                  : Container(
+                      child: FlatButton(
+                        child: Material(
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => Container(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CustomColors.grey),
+                              ),
+                              width: 200.0,
+                              height: 200.0,
+                              padding: EdgeInsets.all(70.0),
+                              decoration: BoxDecoration(
+                                color: CustomColors.grey,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Material(
-                          child: Image.asset(
-                            'images/img_not_available.jpeg',
+                            errorWidget: (context, url, error) => Material(
+                              child: Image.asset(
+                                'images/img_not_available.jpeg',
+                                width: 200.0,
+                                height: 200.0,
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                              clipBehavior: Clip.hardEdge,
+                            ),
+                            imageUrl: document.data['content'],
                             width: 200.0,
                             height: 200.0,
                             fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
                           clipBehavior: Clip.hardEdge,
                         ),
-                        imageUrl: document.data['content'],
-                        width: 200.0,
-                        height: 200.0,
-                        fit: BoxFit.cover,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatImageView(
+                                url: document.data['content'],
+                              ),
+                            ),
+                          );
+                        },
+                        padding: EdgeInsets.all(0),
                       ),
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      clipBehavior: Clip.hardEdge,
+                      margin: EdgeInsets.only(bottom: 5.0, right: 10.0),
+                    )
+            ],
+            mainAxisAlignment: MainAxisAlignment.end,
+          ),
+
+          // Time
+          isLastMessageRight(index)
+              ? Container(
+                  child: Text(
+                    DateFormat('dd MMM kk:mm').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                        (document.data['created_at'] as Timestamp)
+                            .millisecondsSinceEpoch,
+                      ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatImageView(
-                            url: document.data['content'],
-                          ),
-                        ),
-                      );
-                    },
-                    padding: EdgeInsets.all(0),
+                    style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 12.0,
+                        fontStyle: FontStyle.italic),
                   ),
-                  margin: EdgeInsets.only(
-                      bottom: isLastMessageRight(index) ? 20.0 : 10.0,
-                      right: 10.0),
+                  margin: EdgeInsets.only(right: 20),
                 )
+              : Container()
         ],
-        mainAxisAlignment: MainAxisAlignment.end,
       );
     } else {
       // Left (peer message)
@@ -209,31 +233,18 @@ class OrderChatScreenState extends State<OrderChatScreen> {
           children: <Widget>[
             Row(
               children: <Widget>[
-                isLastMessageLeft(index)
-                    ? Material(
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) => Container(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 1.0,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                  CustomColors.lightGrey),
-                            ),
-                            width: 35.0,
-                            height: 35.0,
-                            padding: EdgeInsets.all(10.0),
-                          ),
-                          imageUrl: cachedLocalUser.getMediumProfilePicPath(),
-                          width: 35.0,
-                          height: 35.0,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(18.0),
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                      )
-                    : Container(width: 35.0),
-                document.data['type'] == 0
+                Material(
+                  child: Icon(
+                    Icons.headset_mic,
+                    size: 35,
+                    color: CustomColors.grey,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(18.0),
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                ),
+                document.data['msg_type'] == 0
                     ? Container(
                         child: Text(
                           document.data['content'],
@@ -253,7 +264,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                               placeholder: (context, url) => Container(
                                 child: CircularProgressIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                      CustomColors.lightGrey),
+                                      CustomColors.grey),
                                 ),
                                 width: 200.0,
                                 height: 200.0,
@@ -309,11 +320,12 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                     child: Text(
                       DateFormat('dd MMM kk:mm').format(
                         DateTime.fromMillisecondsSinceEpoch(
-                          int.parse(document.data['created_at']),
+                          (document.data['created_at'] as Timestamp)
+                              .millisecondsSinceEpoch,
                         ),
                       ),
                       style: TextStyle(
-                          color: CustomColors.grey,
+                          color: CustomColors.blue,
                           fontSize: 12.0,
                           fontStyle: FontStyle.italic),
                     ),
@@ -358,39 +370,37 @@ class OrderChatScreenState extends State<OrderChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            child: Column(
-              children: <Widget>[
-                // List of messages
-                buildListMessage(),
-                // Input content
-                buildInput(),
-              ],
-            ),
+    return Stack(
+      children: <Widget>[
+        Container(
+          child: Column(
+            children: <Widget>[
+              // List of messages
+              buildListMessage(),
+              // Input content
+              buildInput(),
+            ],
           ),
+        ),
 
-          // Loading
-          buildLoading()
-        ],
-      ),
-      onWillPop: onBackPress,
+        // Loading
+        buildLoading()
+      ],
     );
   }
 
   Widget buildLoading() {
-    return Positioned(
+    return Center(
       child: isLoading
           ? Container(
+              height: 100,
+              width: 100,
               child: Center(
                 child: CircularProgressIndicator(
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(CustomColors.lightGrey),
+                  valueColor: AlwaysStoppedAnimation<Color>(CustomColors.grey),
                 ),
               ),
-              color: Colors.white.withOpacity(0.8),
+              color: CustomColors.blueGreen.withOpacity(0.8),
             )
           : Container(),
     );
@@ -460,8 +470,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(CustomColors.lightGrey),
+                valueColor: AlwaysStoppedAnimation<Color>(CustomColors.grey),
               ),
             );
           } else {

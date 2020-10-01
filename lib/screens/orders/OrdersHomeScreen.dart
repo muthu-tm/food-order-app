@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/screens/orders/OrderDetailsScreen.dart';
+import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -179,92 +180,25 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                             ),
                             ListTile(
                               leading: Icon(
-                                Icons.local_shipping,
+                                Icons.access_time,
                                 size: 35,
                                 color: CustomColors.blueGreen,
                               ),
                               title: Text(
-                                "Delivery Address",
+                                "Ordered At",
                                 style: TextStyle(
                                     color: CustomColors.blue,
                                     fontSize: 14,
                                     fontFamily: "Georgia"),
                               ),
-                              trailing: Container(
-                                padding: EdgeInsets.only(
-                                    left: 8, right: 8, top: 4, bottom: 4),
-                                decoration: BoxDecoration(
-                                  color:
-                                      CustomColors.lightPurple.withOpacity(0.5),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                ),
-                                child: Text(
-                                  order.delivery.userLocation.locationName,
-                                  style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12,
-                                      fontFamily: "Georgia"),
-                                ),
+                              trailing: Text(
+                                DateUtils.formatDateTime(order.createdAt),
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontSize: 12,
+                                    fontFamily: "Georgia"),
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 70.0, bottom: 10),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width - 100,
-                                padding: EdgeInsets.only(right: 10, left: 10),
-                                decoration: BoxDecoration(
-                                  color: CustomColors.lightGrey,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    createAddressText(
-                                        order.delivery.userLocation.address
-                                            .street,
-                                        16),
-                                    createAddressText(
-                                        order
-                                            .delivery.userLocation.address.city,
-                                        6),
-                                    createAddressText(
-                                        order.delivery.userLocation.address
-                                            .pincode,
-                                        6),
-                                    SizedBox(
-                                      height: 6,
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: "Mobile : ",
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: CustomColors.blue),
-                                          ),
-                                          TextSpan(
-                                            text: order.delivery.userLocation
-                                                .userNumber,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 12),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 16,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
                           ],
                         ),
                       ),
@@ -289,16 +223,6 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
         }
         return child;
       },
-    );
-  }
-
-  createAddressText(String strAddress, double topMargin) {
-    return Container(
-      margin: EdgeInsets.only(top: topMargin),
-      child: Text(
-        strAddress,
-        style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
-      ),
     );
   }
 }
