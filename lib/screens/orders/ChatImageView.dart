@@ -17,7 +17,9 @@ class ChatImageView extends StatelessWidget {
         title: Text(
           'Image View',
           style: TextStyle(
-              color: CustomColors.lightGrey, fontWeight: FontWeight.bold),
+            color: CustomColors.lightGrey,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: IconButton(
           icon: Icon(
@@ -54,6 +56,9 @@ class FullPhotoScreenState extends State<FullPhotoScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: PhotoView(imageProvider: CachedNetworkImageProvider(url)));
+      child: PhotoView(
+        imageProvider: CachedNetworkImageProvider(url),
+      ),
+    );
   }
 }
