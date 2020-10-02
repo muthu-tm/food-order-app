@@ -1,6 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/screens/orders/OrderChatScreen.dart';
+import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/order.dart';
 import '../../services/utils/DateUtils.dart';
@@ -193,6 +197,269 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ),
                 ),
               ),
+              ListTile(
+                leading: Icon(
+                  FontAwesomeIcons.shoppingBasket,
+                  color: CustomColors.blueGreen,
+                ),
+                title: Text("Products"),
+              ),
+              Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemCount: order.products.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return FutureBuilder(
+                      future: Products()
+                          .getByProductID(order.products[index].productID),
+                      builder: (context, AsyncSnapshot<Products> snapshot) {
+                        Widget child;
+                        if (snapshot.hasData) {
+                          Products _p = snapshot.data;
+                          child = Card(
+                              child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Container(
+                                      width: 125,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Container(
+                                            width: 125,
+                                            height: 125,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              child: CachedNetworkImage(
+                                                imageUrl: _p.getProductImage(),
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Image(
+                                                  fit: BoxFit.fill,
+                                                  image: imageProvider,
+                                                ),
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        Center(
+                                                  child: SizedBox(
+                                                    height: 50.0,
+                                                    width: 50.0,
+                                                    child: CircularProgressIndicator(
+                                                        value: downloadProgress
+                                                            .progress,
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation(
+                                                                CustomColors
+                                                                    .blue),
+                                                        strokeWidth: 2.0),
+                                                  ),
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(
+                                                  Icons.error,
+                                                  size: 35,
+                                                ),
+                                                fadeOutDuration:
+                                                    Duration(seconds: 1),
+                                                fadeInDuration:
+                                                    Duration(seconds: 2),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      width: MediaQuery.of(context).size.width -
+                                          150,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                              '${_p.name}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 3,
+                                              style: TextStyle(
+                                                  color: CustomColors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'Weight: ',
+                                                  textAlign: TextAlign.start,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontFamily: "Georgia",
+                                                      color: CustomColors
+                                                          .lightBlue,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              Text(
+                                                '${_p.weight}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: CustomColors.black,
+                                                  fontFamily: "Georgia",
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(5.0),
+                                                child: Text(
+                                                  _p.getUnit(),
+                                                  textAlign: TextAlign.start,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                    fontFamily: "Georgia",
+                                                    color: CustomColors.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'Price: ',
+                                                  textAlign: TextAlign.start,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      fontFamily: "Georgia",
+                                                      color: CustomColors
+                                                          .lightBlue,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    Alignment.centerRight,
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(5.0),
+                                                  child: Text(
+                                                    'Rs. ${_p.currentPrice}',
+                                                    textAlign: TextAlign.end,
+                                                    style: TextStyle(
+                                                      fontFamily: "Georgia",
+                                                      fontSize: 16,
+                                                      color: CustomColors.black,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: FlatButton(
+                                                child: Text(
+                                                  "Show Details",
+                                                  style: TextStyle(
+                                                      color: CustomColors.blue),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProductDetailsScreen(
+                                                              _p),
+                                                      settings: RouteSettings(
+                                                          name:
+                                                              '/store/products'),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                ListTile(
+                                  leading: Text(
+                                    "Quantity: ",
+                                    style: TextStyle(
+                                        fontFamily: "Georgia",
+                                        fontSize: 16,
+                                        color: CustomColors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  title: Text(
+                                    '${order.products[index].quantity.round()}',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontFamily: "Georgia",
+                                        fontSize: 16,
+                                        color: CustomColors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  trailing: Text(
+                                    'Rs. ${order.products[index].amount}',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontFamily: "Georgia",
+                                        fontSize: 16,
+                                        color: CustomColors.black,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ));
+                        } else if (snapshot.hasError) {
+                          child = Center(
+                              child: Column(
+                            children: AsyncWidgets.asyncError(),
+                          ));
+                        } else {
+                          child = Center(
+                              child: Column(
+                            children: AsyncWidgets.asyncWaiting(),
+                          ));
+                        }
+
+                        return child;
+                      },
+                    );
+                  },
+                ),
+              )
             ],
           );
         } else if (snapshot.hasError) {

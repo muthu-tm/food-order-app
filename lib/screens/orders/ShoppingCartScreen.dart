@@ -52,7 +52,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
     );
   }
 
-  checkoutBottomSheet(List<double> _priceDetails, List<OrderProduct> op) {
+  checkoutBottomSheet(List<double> _priceDetails, List<OrderProduct> op, String storeID) {
     return _scaffoldKey.currentState.showBottomSheet((context) {
       return Builder(builder: (BuildContext childContext) {
         return Container(
@@ -123,7 +123,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                             _o.customerNotes = "";
                             _o.status = 0;
                             _o.userNumber = cachedLocalUser.getID();
-                            _o.storeID = "";
+                            _o.storeID = storeID;
                             _o.writtenOrders = "";
                             _o.orderImages = [""];
                             _o.isReturnable = false;
@@ -496,12 +496,12 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         op.add(_op);
                       }
 
-                      double sCharge = await Store().getShippingCharge(
-                          snapshot.data.documents.first.data['store_uuid']);
+                      String storeID = snapshot.data.documents.first.data['store_uuid'];
+                      double sCharge = await Store().getShippingCharge(storeID);
 
                       List<double> _priceDetails = [cPrice, oPrice, sCharge];
                       Navigator.pop(context);
-                      checkoutBottomSheet(_priceDetails, op);
+                      checkoutBottomSheet(_priceDetails, op, storeID);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
