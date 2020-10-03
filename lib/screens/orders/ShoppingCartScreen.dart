@@ -27,6 +27,7 @@ class ShoppingCartScreen extends StatefulWidget {
 
 class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   bool isLoading = true;
   @override
@@ -37,10 +38,14 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
       appBar: AppBar(
         title: Text(
           "Shopping Cart",
-          style: TextStyle(color: Colors.black, fontSize: 16),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
@@ -52,7 +57,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
     );
   }
 
-  checkoutBottomSheet(List<double> _priceDetails, List<OrderProduct> op, String storeID) {
+  checkoutBottomSheet(
+      List<double> _priceDetails, List<OrderProduct> op, String storeID) {
     return _scaffoldKey.currentState.showBottomSheet((context) {
       return Builder(builder: (BuildContext childContext) {
         return Container(
@@ -104,9 +110,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                       InkWell(
                         onTap: () async {
                           try {
-                            CustomDialogs.actionWaiting(childContext);
-                            Navigator.pop(childContext);
-                            Navigator.pop(childContext);
+                            CustomDialogs.showLoadingDialog(
+                                context, _keyLoader);
                             Order _o = Order();
                             OrderAmount _oa = OrderAmount();
                             OrderDelivery _od = OrderDelivery();
@@ -116,8 +121,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                             _oa.orderAmount = _priceDetails[0];
                             _o.amount = _oa;
 
-                            _od.userLocation =
-                                cachedLocalUser.primaryLocation;
+                            _od.userLocation = cachedLocalUser.primaryLocation;
                             _o.delivery = _od;
 
                             _o.customerNotes = "";
@@ -131,6 +135,9 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                             _o.totalProducts = op.length;
 
                             await _o.create();
+                            Navigator.of(_keyLoader.currentContext,
+                                    rootNavigator: true)
+                                .pop();
                             showDialog(
                                 context: _scaffoldKey.currentContext,
                                 builder: (context) {
@@ -259,7 +266,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                 height: 1,
                 width: double.infinity,
               ),
-              addressAction()
+              // addressAction()
             ],
           ),
         ),
@@ -436,7 +443,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   Widget getBody(BuildContext context) {
     return StreamBuilder(
       stream: ShoppingCart().streamCartItems(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 
         if (snapshot.hasData) {
@@ -477,7 +484,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                       if (snapshot.data.documents.isEmpty) {
                         return;
                       }
-                      CustomDialogs.actionWaiting(context);
+
+                      CustomDialogs.showLoadingDialog(context, _keyLoader);
 
                       double cPrice = 0.00;
                       double oPrice = 0.00;
@@ -496,11 +504,14 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         op.add(_op);
                       }
 
-                      String storeID = snapshot.data.documents.first.data['store_uuid'];
+                      String storeID =
+                          snapshot.data.documents.first.data['store_uuid'];
                       double sCharge = await Store().getShippingCharge(storeID);
 
                       List<double> _priceDetails = [cPrice, oPrice, sCharge];
-                      Navigator.pop(context);
+                      Navigator.of(_keyLoader.currentContext,
+                              rootNavigator: true)
+                          .pop();
                       checkoutBottomSheet(_priceDetails, op, storeID);
                     },
                     child: Container(
@@ -544,7 +555,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   Widget buildShoppingCartItem(BuildContext context, ShoppingCart sc) {
     return FutureBuilder<Products>(
       future: Products().getByProductID(sc.productID),
-      builder: (context, AsyncSnapshot<Products> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<Products> snapshot) {
         Widget child;
 
         if (snapshot.hasData) {
@@ -732,10 +743,13 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                               color: CustomColors.lightGrey,
                               onPressed: () async {
                                 try {
-                                  CustomDialogs.actionWaiting(context);
+                                  CustomDialogs.showLoadingDialog(
+                                      context, _keyLoader);
                                   await ShoppingCart().removeItem(
                                       false, sc.storeID, sc.productID);
-                                  Navigator.pop(context);
+                                  Navigator.of(_keyLoader.currentContext,
+                                          rootNavigator: true)
+                                      .pop();
                                 } catch (err) {
                                   print(err);
                                 }
@@ -764,10 +778,14 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                       child: Icon(Icons.delete_forever),
                                       onPressed: () async {
                                         try {
-                                          CustomDialogs.actionWaiting(context);
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
                                           await ShoppingCart().removeItem(
                                               false, sc.storeID, sc.productID);
-                                          Navigator.pop(context);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
                                         } catch (err) {
                                           print(err);
                                         }
@@ -785,11 +803,15 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                       child: Icon(Icons.remove),
                                       onPressed: () async {
                                         try {
-                                          CustomDialogs.actionWaiting(context);
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
                                           await ShoppingCart()
                                               .updateCartQuantityByID(
                                                   false, sc.uuid);
-                                          Navigator.pop(context);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
                                         } catch (err) {
                                           print(err);
                                         }
@@ -817,10 +839,13 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                 child: Icon(Icons.add),
                                 onPressed: () async {
                                   try {
-                                    CustomDialogs.actionWaiting(context);
+                                    CustomDialogs.showLoadingDialog(
+                                        context, _keyLoader);
                                     await ShoppingCart()
                                         .updateCartQuantityByID(true, sc.uuid);
-                                    Navigator.pop(context);
+                                    Navigator.of(_keyLoader.currentContext,
+                                            rootNavigator: true)
+                                        .pop();
                                   } catch (err) {
                                     print(err);
                                   }

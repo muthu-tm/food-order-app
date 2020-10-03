@@ -18,6 +18,8 @@ class EditUserProfile extends StatefulWidget {
 }
 
 class _EditUserProfileState extends State<EditUserProfile> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   final User user = cachedLocalUser;
   final Map<String, dynamic> updatedUser = new Map();
   final Address updatedAddress = new Address();
@@ -226,8 +228,8 @@ class _EditUserProfileState extends State<EditUserProfile> {
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 3.0, horizontal: 10.0),
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white)),
+                                  borderSide:
+                                      BorderSide(color: CustomColors.white)),
                               fillColor: CustomColors.white,
                               filled: true,
                               suffixIcon: Icon(
@@ -329,16 +331,17 @@ class _EditUserProfileState extends State<EditUserProfile> {
     final FormState form = _formKey.currentState;
 
     if (form.validate()) {
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
+
       updatedUser['address'] = updatedAddress.toJson();
       var result = await _userController.updateUser(updatedUser);
 
       if (!result['is_success']) {
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         _scaffoldKey.currentState
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         Navigator.pop(context);
         Navigator.pushReplacement(
           context,

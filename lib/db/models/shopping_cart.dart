@@ -124,9 +124,21 @@ class ShoppingCart {
     }
   }
 
+  Stream<QuerySnapshot> streamCartsForStore(String storeID) {
+    try {
+      return getCollectionRef()
+          .where('in_wishlist', isEqualTo: false)
+          .where('store_uuid', isEqualTo: storeID)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future<List<ShoppingCart>> fetchForStore(String storeID) async {
     try {
       QuerySnapshot snap = await getCollectionRef()
+          .where('in_wishlist', isEqualTo: false)
           .where('store_uuid', isEqualTo: storeID)
           .getDocuments();
 

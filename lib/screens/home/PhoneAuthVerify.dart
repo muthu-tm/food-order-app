@@ -26,6 +26,7 @@ class PhoneAuthVerify extends StatefulWidget {
 }
 
 class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final AuthController _authController = AuthController();
@@ -174,7 +175,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('invalid_otp'), 2));
     } else {
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
       verifyOTPAndLogin(code.join());
     }
   }
@@ -195,7 +196,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             "",
             authResult.user.uid);
         if (!result['is_success']) {
-          Navigator.pop(context);
+          Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
@@ -207,7 +208,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
         dynamic result =
             await _authController.signInWithMobileNumber(User.fromJson(_uJSON));
         if (!result['is_success']) {
-          Navigator.pop(context);
+          Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
@@ -221,7 +222,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
         }
       }
     }).catchError((error) {
-      Navigator.pop(context);
+      Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
       _scaffoldKey.currentState

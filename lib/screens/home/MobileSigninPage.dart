@@ -36,6 +36,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,6 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   }
 
   Widget _getColumnBody() => Column(
-        //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(top: 25),
@@ -305,7 +305,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           AppLocalizations.of(context).translate('secret_key_validation'), 2));
       return;
     } else {
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
       this.number = _phoneNumberController.text;
 
       var data = await User().getByID(countryCode.toString() + number);
@@ -316,7 +316,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           'name': _nameController.text,
           'error': "Found an existing user for this mobile number"
         }, 'sign_up');
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
             "Found an existing user for this mobile number", 2));
       } else {
@@ -354,7 +354,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           "",
           authResult.user.uid);
       if (!result['is_success']) {
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         _scaffoldKey.currentState
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
@@ -371,7 +371,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
         );
       }
     }).catchError((error) {
-      Navigator.pop(context);
+      Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
       _scaffoldKey.currentState
@@ -384,12 +384,12 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
         AppLocalizations.of(context).translate('otp_send'), 1));
 
     _smsVerificationCode = verificationId;
-    Navigator.pop(context);
-    CustomDialogs.actionWaiting(context);
+    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+    CustomDialogs.showLoadingDialog(context, _keyLoader);
   }
 
   _verificationFailed(AuthException authException, BuildContext context) {
-    Navigator.pop(context);
+    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
     _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
         "Verification Failed:" + authException.message.toString(), 2));
   }

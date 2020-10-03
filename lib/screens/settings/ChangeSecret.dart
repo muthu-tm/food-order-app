@@ -14,6 +14,8 @@ class ChangeSecret extends StatefulWidget {
 
 class _ChangeSecretState extends State<ChangeSecret> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String secretKey = "";
@@ -24,9 +26,19 @@ class _ChangeSecretState extends State<ChangeSecret> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title:
-            Text(AppLocalizations.of(context).translate('change_secret_key')),
-        backgroundColor: CustomColors.blue,
+        title: Text(
+          AppLocalizations.of(context).translate('change_secret_key'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
@@ -71,8 +83,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: CustomColors.white)),
+                            borderSide: BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {
@@ -99,8 +110,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                         contentPadding: EdgeInsets.symmetric(
                             vertical: 3.0, horizontal: 10.0),
                         border: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: CustomColors.white)),
+                            borderSide: BorderSide(color: CustomColors.white)),
                       ),
                       autofocus: false,
                       validator: (value) {
@@ -135,15 +145,15 @@ class _ChangeSecretState extends State<ChangeSecret> {
     final FormState form = _formKey.currentState;
 
     if (form.validate()) {
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
 
       var result = await UserController().updateSecretKey(secretKey);
       if (!result['is_success']) {
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         _scaffoldKey.currentState
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         _scaffoldKey.currentState.showSnackBar(CustomSnackBar.successSnackBar(
             AppLocalizations.of(context)
                 .translate('secret_key_updated_successfully'),

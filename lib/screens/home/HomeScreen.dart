@@ -32,12 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Align(
                 alignment: Alignment.topRight,
                 child: Container(
-                  width: 150,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CustomColors.black),
-                  ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.all(5.0),
@@ -45,6 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             size: 20, color: CustomColors.positiveGreen),
                       ),
                       getLocation(),
+                      Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                        ),
+                      ),
                     ],
                   ),
                 ),

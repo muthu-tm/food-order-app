@@ -25,12 +25,9 @@ class ProfilePictureUpload extends StatefulWidget {
 }
 
 class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
-  String selectedImagePath = "";
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  String selectedImagePath = "";
 
   @override
   Widget build(BuildContext context) {
@@ -253,7 +250,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
   Future _uploadImage(String path) async {
     if (path != null) {
       File imageFile = await fixExifRotation(path);
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
       await Uploader().uploadImage(
         widget.type,
         widget.type == 0
@@ -264,7 +261,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
         widget.id,
         () {
           if (widget.type == 0) {
-            Navigator.pop(context);
+            Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
             Navigator.pop(context);
           } else {
             Navigator.of(context).pushAndRemoveUntil(

@@ -163,6 +163,8 @@ class SecretKeyAuth extends StatefulWidget {
 }
 
 class _SecretKeyAuthState extends State<SecretKeyAuth> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   TextEditingController _pController = TextEditingController();
   final AuthController _authController = AuthController();
 
@@ -419,12 +421,12 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
   }
 
   login(User _user) async {
-    CustomDialogs.actionWaiting(context);
+    CustomDialogs.showLoadingDialog(context, _keyLoader);
 
     var result = await _authController.signInWithMobileNumber(_user);
 
     if (!result['is_success']) {
-      Navigator.pop(context);
+      Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       widget._scaffoldKey.currentState.showSnackBar(
           CustomSnackBar.errorSnackBar(
               AppLocalizations.of(context).translate('unable_to_login'), 2));

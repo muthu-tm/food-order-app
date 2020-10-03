@@ -2,7 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
-import 'package:chipchop_buyer/screens/store/StoreItemWidget.dart';
+import 'package:chipchop_buyer/screens/store/StoreCategoryWidget.dart';
+import 'package:chipchop_buyer/screens/store/StoreFlashSaleWidget.dart';
+import 'package:chipchop_buyer/screens/store/StorePopularWidet.dart';
+import 'package:chipchop_buyer/screens/store/StoreProductsWidget.dart';
+import 'package:chipchop_buyer/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreSearchBar.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
@@ -10,19 +14,35 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/CustomColors.dart';
 
-class ViewStoreScreen extends StatelessWidget {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+class ViewStoreScreen extends StatefulWidget {
   ViewStoreScreen(this.store);
 
   final Store store;
+  @override
+  _ViewStoreScreenState createState() => _ViewStoreScreenState();
+}
+
+class _ViewStoreScreenState extends State<ViewStoreScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+
+  int selectedItem = 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
+        title: Text(
+          widget.store.name,
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.white,),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: CustomColors.green,
-        title: Text(store.name),
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: CustomColors.blue,
@@ -33,7 +53,11 @@ class ViewStoreScreen extends StatelessWidget {
               builder: (context) => ShoppingCartScreen(),
               settings: RouteSettings(name: '/cart'),
             ),
-          );
+          ).then((value) {
+            setState(() {
+              selectedItem = 1;
+            });
+          });
         },
         label: Text("Order NOW"),
         icon: Icon(FontAwesomeIcons.solidSmile),
@@ -61,7 +85,212 @@ class ViewStoreScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: StoreItemWidget(store),
+              child: Container(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedItem = 1;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.category,
+                                    color: Color(0xFFAB436B),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Categories",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedItem = 2;
+                                    });
+                                  },
+                                  child: Icon(FontAwesomeIcons.shoppingBasket,
+                                      color: CustomColors.blue),
+                                ),
+                              ),
+                              Text(
+                                "Products",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedItem = 3;
+                                    });
+                                  },
+                                  child: Icon(
+                                    FontAwesomeIcons.angellist,
+                                    color: CustomColors.green,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Popular",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedItem = 4;
+                                    });
+                                  },
+                                  child: Icon(
+                                    FontAwesomeIcons.clock,
+                                    color: Color(0xFFC1A17C),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Flash Sale",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                    color: CustomColors.white),
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedItem = 5;
+                                    });
+                                  },
+                                  child: Icon(
+                                    FontAwesomeIcons.store,
+                                    color: Color(0xFF4D9DA7),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                "Info",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontFamily: 'Georgia'),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                      child: Container(
+                        color: CustomColors.lightGrey,
+                      ),
+                    ),
+                    selectedItem == 1
+                        ? Expanded(
+                            child: Container(
+                              child: StoreCategoryWidget(widget.store),
+                            ),
+                          )
+                        : selectedItem == 2
+                            ? Expanded(
+                                child: Container(
+                                  child: StoreProductWidget(widget.store.uuid),
+                                ),
+                              )
+                            : selectedItem == 3
+                                ? Expanded(
+                                    child: Container(
+                                      child: StorePopulartWidget(
+                                          widget.store.uuid),
+                                    ),
+                                  )
+                                : selectedItem == 4
+                                    ? Expanded(
+                                        child: Container(
+                                          child: StoreFlashSaleWidget(
+                                              widget.store.uuid),
+                                        ),
+                                      )
+                                    : Expanded(
+                                        child: Container(
+                                          child:
+                                              StoreProfileWidget(widget.store),
+                                        ),
+                                      )
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -72,7 +301,7 @@ class ViewStoreScreen extends StatelessWidget {
   List<Widget> getImages() {
     List<Widget> images = [];
 
-    for (var item in store.getStoreImages()) {
+    for (var item in widget.store.getStoreImages()) {
       images.add(
         CachedNetworkImage(
           imageUrl: item,

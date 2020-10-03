@@ -4,6 +4,7 @@ import 'package:chipchop_buyer/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_buyer/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
+import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
@@ -186,6 +187,23 @@ Widget sideDrawer(BuildContext context) {
             }),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
+          leading:
+              Icon(Icons.search, color: CustomColors.blueGreen),
+          title: Text(
+            "Search",
+          ),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SearchHome(),
+                settings: RouteSettings(name: '/search'),
+              ),
+            );
+          },
+        ),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        ListTile(
           leading: Icon(Icons.content_copy, color: CustomColors.blueGreen),
           title: Text(
             "Orders",
@@ -199,14 +217,6 @@ Widget sideDrawer(BuildContext context) {
               ),
             );
           },
-        ),
-        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
-        ListTile(
-          leading:
-              Icon(Icons.notifications_active, color: CustomColors.blueGreen),
-          title: Text(
-            "Notifications",
-          ),
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(

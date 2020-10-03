@@ -18,6 +18,8 @@ class StorePopulartWidget extends StatefulWidget {
 }
 
 class _StorePopulartWidgetState extends State<StorePopulartWidget> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   Map<String, double> _cartMap = {};
   List<String> _wlMap = [];
 
@@ -180,8 +182,9 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                     onPressed: () async {
                                                       try {
                                                         CustomDialogs
-                                                            .actionWaiting(
-                                                                context);
+                                                            .showLoadingDialog(
+                                                                context,
+                                                                _keyLoader);
                                                         await ShoppingCart()
                                                             .removeItem(
                                                                 false,
@@ -191,7 +194,12 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                           _cartMap.remove(
                                                               product.uuid);
                                                         });
-                                                        Navigator.pop(context);
+                                                        Navigator.of(
+                                                                _keyLoader
+                                                                    .currentContext,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
                                                       } catch (err) {
                                                         print(err);
                                                       }
@@ -216,8 +224,9 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                     onPressed: () async {
                                                       try {
                                                         CustomDialogs
-                                                            .actionWaiting(
-                                                                context);
+                                                            .showLoadingDialog(
+                                                                context,
+                                                                _keyLoader);
                                                         await ShoppingCart()
                                                             .updateCartQuantity(
                                                                 false,
@@ -230,7 +239,12 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                                       .uuid] -
                                                               1.0;
                                                         });
-                                                        Navigator.pop(context);
+                                                        Navigator.of(
+                                                                _keyLoader
+                                                                    .currentContext,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
                                                       } catch (err) {
                                                         print(err);
                                                       }
@@ -261,8 +275,9 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                               ),
                                               onPressed: () async {
                                                 try {
-                                                  CustomDialogs.actionWaiting(
-                                                      context);
+                                                  CustomDialogs
+                                                      .showLoadingDialog(
+                                                          context, _keyLoader);
                                                   await ShoppingCart()
                                                       .updateCartQuantity(
                                                           true,
@@ -273,7 +288,11 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                         _cartMap[product.uuid] +
                                                             1.0;
                                                   });
-                                                  Navigator.pop(context);
+                                                  Navigator.of(
+                                                          _keyLoader
+                                                              .currentContext,
+                                                          rootNavigator: true)
+                                                      .pop();
                                                 } catch (err) {
                                                   print(err);
                                                 }
@@ -296,8 +315,8 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                           icon: Icon(FontAwesomeIcons.cartPlus),
                                           onPressed: () async {
                                             try {
-                                              CustomDialogs.actionWaiting(
-                                                  context);
+                                              CustomDialogs.showLoadingDialog(
+                                                  context, _keyLoader);
                                               ShoppingCart wl = ShoppingCart();
                                               wl.storeID = widget.storeID;
                                               wl.productID = product.uuid;
@@ -307,7 +326,10 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                               setState(() {
                                                 _cartMap[product.uuid] = 1.0;
                                               });
-                                              Navigator.pop(context);
+                                              Navigator.of(
+                                                      _keyLoader.currentContext,
+                                                      rootNavigator: true)
+                                                  .pop();
                                             } catch (err) {
                                               print(err);
                                             }

@@ -25,6 +25,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   GlobalKey<ScaffoldState> _scaffoldKey;
   TextEditingController _nController = TextEditingController();
   AuthController _authController = AuthController();
@@ -270,14 +272,14 @@ class _LoginPageState extends State<LoginPage> {
           AppLocalizations.of(context).translate('enter_valid_phone'), 2));
       return;
     } else {
-      CustomDialogs.actionWaiting(context);
+      CustomDialogs.showLoadingDialog(context, _keyLoader);
 
       number = _nController.text;
       try {
         Map<String, dynamic> _uJSON =
             await User().getByID(countryCode.toString() + number);
         if (_uJSON == null) {
-          Navigator.pop(context);
+          Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
               AppLocalizations.of(context).translate('invalid_user_signup'),
               2));
@@ -287,15 +289,18 @@ class _LoginPageState extends State<LoginPage> {
           _verifyPhoneNumber();
         }
       } on PlatformException catch (err) {
-        Navigator.pop(context);
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-            "Error while Login: " + err.message, 2));
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+        _scaffoldKey.currentState.showSnackBar(
+          CustomSnackBar.errorSnackBar("Error while Login: " + err.message, 2),
+        );
       } on Exception catch (err) {
-        Navigator.pop(context);
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-            AppLocalizations.of(context).translate('login_error') +
-                err.toString(),
-            2));
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+        _scaffoldKey.currentState.showSnackBar(
+          CustomSnackBar.errorSnackBar(
+              AppLocalizations.of(context).translate('login_error') +
+                  err.toString(),
+              2),
+        );
       }
     }
   }
@@ -327,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
       var result = await _authController.signInWithMobileNumber(_user);
 
       if (!result['is_success']) {
-        Navigator.pop(context);
+        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
         _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
             AppLocalizations.of(context).translate('unable_to_login'), 2));
         _scaffoldKey.currentState
@@ -343,7 +348,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     }).catchError((error) {
-      Navigator.pop(context);
+      Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
       _scaffoldKey.currentState
@@ -356,12 +361,12 @@ class _LoginPageState extends State<LoginPage> {
         .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
 
     _smsVerificationCode = verificationId;
-    Navigator.pop(context);
-    CustomDialogs.actionWaiting(context);
+    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+    CustomDialogs.showLoadingDialog(context, _keyLoader);
   }
 
   _verificationFailed(AuthException authException, BuildContext context) {
-    Navigator.pop(context);
+    Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
     _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
         AppLocalizations.of(context).translate('verification_failed') +
             authException.message.toString(),

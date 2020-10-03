@@ -18,6 +18,8 @@ class StoreProductWidget extends StatefulWidget {
 }
 
 class _StoreProductWidgetState extends State<StoreProductWidget> {
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   Map<String, double> _cartMap = {};
   List<String> _wlMap = [];
 
@@ -134,7 +136,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                     ),
                                   ),
                                   Text(
-                                    "Rs. ${product.originalPrice.toString()}",
+                                    "Rs. ${product.currentPrice.toString()}",
                                     style: TextStyle(
                                       color: CustomColors.black,
                                       fontSize: 12.0,
@@ -180,8 +182,9 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                                     onPressed: () async {
                                                       try {
                                                         CustomDialogs
-                                                            .actionWaiting(
-                                                                context);
+                                                            .showLoadingDialog(
+                                                                context,
+                                                                _keyLoader);
                                                         await ShoppingCart()
                                                             .removeItem(
                                                                 false,
@@ -191,7 +194,12 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                                           _cartMap.remove(
                                                               product.uuid);
                                                         });
-                                                        Navigator.pop(context);
+                                                        Navigator.of(
+                                                                _keyLoader
+                                                                    .currentContext,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
                                                       } catch (err) {
                                                         print(err);
                                                       }
@@ -216,8 +224,9 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                                     onPressed: () async {
                                                       try {
                                                         CustomDialogs
-                                                            .actionWaiting(
-                                                                context);
+                                                            .showLoadingDialog(
+                                                                context,
+                                                                _keyLoader);
                                                         await ShoppingCart()
                                                             .updateCartQuantity(
                                                                 false,
@@ -230,7 +239,12 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                                                       .uuid] -
                                                               1.0;
                                                         });
-                                                        Navigator.pop(context);
+                                                        Navigator.of(
+                                                                _keyLoader
+                                                                    .currentContext,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
                                                       } catch (err) {
                                                         print(err);
                                                       }
@@ -261,8 +275,9 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                               ),
                                               onPressed: () async {
                                                 try {
-                                                  CustomDialogs.actionWaiting(
-                                                      context);
+                                                  CustomDialogs
+                                                      .showLoadingDialog(
+                                                          context, _keyLoader);
                                                   await ShoppingCart()
                                                       .updateCartQuantity(
                                                           true,
@@ -273,7 +288,11 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                                         _cartMap[product.uuid] +
                                                             1.0;
                                                   });
-                                                  Navigator.pop(context);
+                                                  Navigator.of(
+                                                          _keyLoader
+                                                              .currentContext,
+                                                          rootNavigator: true)
+                                                      .pop();
                                                 } catch (err) {
                                                   print(err);
                                                 }
@@ -296,18 +315,21 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                           icon: Icon(FontAwesomeIcons.cartPlus),
                                           onPressed: () async {
                                             try {
-                                              CustomDialogs.actionWaiting(
-                                                  context);
-                                              ShoppingCart wl = ShoppingCart();
-                                              wl.storeID = widget.storeID;
-                                              wl.productID = product.uuid;
-                                              wl.inWishlist = false;
-                                              wl.quantity = 1.0;
-                                              wl.create();
+                                              CustomDialogs.showLoadingDialog(
+                                                  context, _keyLoader);
+                                              ShoppingCart sc = ShoppingCart();
+                                              sc.storeID = widget.storeID;
+                                              sc.productID = product.uuid;
+                                              sc.inWishlist = false;
+                                              sc.quantity = 1.0;
+                                              await sc.create();
+                                              Navigator.of(
+                                                      _keyLoader.currentContext,
+                                                      rootNavigator: true)
+                                                  .pop();
                                               setState(() {
                                                 _cartMap[product.uuid] = 1.0;
                                               });
-                                              Navigator.pop(context);
                                             } catch (err) {
                                               print(err);
                                             }
