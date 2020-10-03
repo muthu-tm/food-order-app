@@ -134,7 +134,6 @@ class User extends Model {
   Future addLocations(UserLocations loc) async {
     DocumentReference docRef = getLocationCollectionRef().document();
     loc.uuid = docRef.documentID;
-    loc.userNumber = getID();
     await docRef.setData(loc.toJson());
 
     return loc;
