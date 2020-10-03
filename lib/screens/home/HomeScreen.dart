@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddLocation(),
-                  settings: RouteSettings(name: '/add/location'),
+                  settings: RouteSettings(name: '/location/add'),
                 ),
               );
             },
@@ -544,7 +544,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AddLocation(),
-                    settings: RouteSettings(name: '/add/location'),
+                    settings: RouteSettings(name: '/location/add'),
                   ),
                 );
               },

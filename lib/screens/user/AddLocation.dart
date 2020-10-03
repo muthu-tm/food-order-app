@@ -66,7 +66,7 @@ class _AddLocationState extends State<AddLocation> {
               context,
               MaterialPageRoute(
                 builder: (context) => LocationPicker(loc),
-                settings: RouteSettings(name: '/add/location/picker'),
+                settings: RouteSettings(name: '/location/add/picker'),
               ),
             );
           } else {

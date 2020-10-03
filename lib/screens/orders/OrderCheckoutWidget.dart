@@ -541,7 +541,7 @@ class _OrderCheckoutWidgetState extends State<OrderCheckoutWidget> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddLocation(),
-                  settings: RouteSettings(name: '/location'),
+                  settings: RouteSettings(name: '/location/add'),
                 ),
               );
             },

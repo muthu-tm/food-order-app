@@ -38,7 +38,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => AddLocation(),
-              settings: RouteSettings(name: '/location'),
+              settings: RouteSettings(name: '/location/add'),
             ),
           );
         },
