@@ -7,9 +7,7 @@ class StoreContacts {
   @JsonKey(name: 'contact_name', defaultValue: "")
   String contactName;
   @JsonKey(name: 'contact_number')
-  int contactNumber;
-  @JsonKey(name: 'country_code', defaultValue: 91)
-  int countryCode;
+  String contactNumber;
   @JsonKey(name: 'email', defaultValue: "")
   String emailId;
   @JsonKey(name: 'is_verified', defaultValue: false)

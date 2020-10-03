@@ -109,7 +109,7 @@ Widget contactAndSupportDialog(context) {
                 ),
                 elevation: 15.0,
                 onPressed: () {
-                  UrlLauncherUtils.makePhoneCall(9361808580);
+                  UrlLauncherUtils.makePhoneCall('919361808580');
                 },
                 label: Text(
                     AppLocalizations.of(context).translate('phone'),

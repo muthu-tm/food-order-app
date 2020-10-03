@@ -1,8 +1,8 @@
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class UrlLauncherUtils {
-  static Future<void> makePhoneCall(int mobileNumber) async {
-    String callURL = 'tel:+91$mobileNumber';
+  static Future<void> makePhoneCall(String mobileNumber) async {
+    String callURL = 'tel:+$mobileNumber';
     if (await UrlLauncher.canLaunch(callURL)) {
       await UrlLauncher.launch(callURL);
     } else {
@@ -10,8 +10,8 @@ class UrlLauncherUtils {
     }
   }
 
-  static Future<void> makeSMS(int mobileNumber) async {
-    String callURL = 'sms:+91$mobileNumber';
+  static Future<void> makeSMS(String mobileNumber) async {
+    String callURL = 'sms:+$mobileNumber';
     if (await UrlLauncher.canLaunch(callURL)) {
       await UrlLauncher.launch(callURL);
     } else {

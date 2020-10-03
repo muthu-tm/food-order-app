@@ -4,6 +4,10 @@ part 'delivery_details.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class DeliveryDetails {
+  @JsonKey(name: 'min_order_amount', defaultValue: 100)
+  double minOrderAmount;
+  @JsonKey(name: 'max_order_amount', defaultValue: 10000)
+  double maxOrderAmount;
   @JsonKey(name: 'max_distance', defaultValue: 5)
   int maxDistance;
   @JsonKey(name: 'delivery_from')
@@ -11,7 +15,7 @@ class DeliveryDetails {
   @JsonKey(name: 'delivery_till')
   String deliveryTill;
   @JsonKey(name: 'delivery_options', defaultValue: [1, 2])
-  List<int> availableOptions;
+  List<int> availableOptions; // 1 - delivery by store, 2 - pickup from store
   @JsonKey(name: 'delivery_charges_02')
   double deliveryCharges02;
   @JsonKey(name: 'delivery_charges_05')
@@ -20,6 +24,12 @@ class DeliveryDetails {
   double deliveryCharges10;
   @JsonKey(name: 'delivery_charges_max')
   double deliveryChargesMax;
+  @JsonKey(name: 'instant_delivery_fee')
+  int instantDelivery;
+  @JsonKey(name: 'same_day_delivery_fee')
+  int sameDayDelivery;
+  @JsonKey(name: 'scheduled_delivery_fee')
+  int scheduledDelivery;
 
   DeliveryDetails();
 
