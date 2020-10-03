@@ -14,6 +14,8 @@ class ViewLocationsScreen extends StatefulWidget {
 }
 
 class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
+  String primaryLocID = cachedLocalUser.primaryLocation.uuid;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -128,7 +130,9 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                                       padding: EdgeInsets.only(
                                           left: 8, right: 8, top: 4, bottom: 4),
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.shade300,
+                                        color: primaryLocID == loc.uuid
+                                            ? CustomColors.green
+                                            : Colors.grey.shade300,
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(5),
                                         ),
@@ -252,12 +256,19 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           ),
           FlatButton.icon(
             onPressed: () async {
+              if (primaryLocID == loc.uuid) {
+                return;
+              }
+
               try {
                 await cachedLocalUser.updatePrimaryLocation(loc);
                 Fluttertoast.showToast(
                     msg: 'Primary Location Updated',
                     backgroundColor: CustomColors.green,
                     textColor: Colors.white);
+                setState(() {
+                  primaryLocID = loc.uuid;
+                });
               } catch (err) {
                 Fluttertoast.showToast(
                     msg: 'Error, Unable to update Primary Location',
@@ -270,7 +281,10 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
               Icons.location_on,
               color: CustomColors.blueGreen,
             ),
-            label: Text("Set As Primary",
+            label: Text(
+                primaryLocID == loc.uuid
+                    ? "Primary Location"
+                    : "Set As Primary",
                 style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
@@ -285,6 +299,14 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           ),
           FlatButton.icon(
             onPressed: () async {
+              if (primaryLocID == loc.uuid) {
+                Fluttertoast.showToast(
+                    msg: 'Error, You Cannot Remove Primary Location!',
+                    backgroundColor: CustomColors.alertRed,
+                    textColor: Colors.white);
+                return;
+              }
+
               try {
                 await cachedLocalUser.removeLocation(loc);
                 Fluttertoast.showToast(
