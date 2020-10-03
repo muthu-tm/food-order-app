@@ -5,11 +5,9 @@ part 'order_delivery.g.dart';
 @JsonSerializable(explicitToJson: true)
 class OrderDelivery {
   @JsonKey(name: 'delivery_type', nullable: false)
-  int deliveryType;   // 0 - instant, 1 - Same day, 2 - Schedules 
-  @JsonKey(name: 'delivery_option', nullable: false)
-  int deliveryOption; // 0 - delivery y store, 1 - pickup from store
+  int deliveryType;   // 0 - Pickup from Store, 1 - Instant delivery, 2 -Same day, 3 - Schedules 
   @JsonKey(name: 'delivery_charge', nullable: false)
-  String deliveryCharge;
+  double deliveryCharge;
   @JsonKey(name: 'delivery_contact', nullable: false)
   String deliveryContact;
   @JsonKey(name: 'delivered_at', nullable: true)

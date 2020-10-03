@@ -15,7 +15,7 @@ class DeliveryDetails {
   @JsonKey(name: 'delivery_till')
   String deliveryTill;
   @JsonKey(name: 'delivery_options', defaultValue: [1, 2])
-  List<int> availableOptions; // 1 - delivery by store, 2 - pickup from store
+  List<int> availableOptions; // 0 - Pickup from Store, 1 - Instant delivery, 2 - Same-Day delivery, 3 - Scheduled delivery
   @JsonKey(name: 'delivery_charges_02')
   double deliveryCharges02;
   @JsonKey(name: 'delivery_charges_05')
