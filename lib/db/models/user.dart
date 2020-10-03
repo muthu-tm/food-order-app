@@ -127,6 +127,10 @@ class User extends Model {
     return locations;
   }
 
+  Stream<QuerySnapshot> streamLocations() {
+    return getLocationCollectionRef().snapshots();
+  }
+
   Future addLocations(UserLocations loc) async {
     DocumentReference docRef = getLocationCollectionRef().document();
     loc.uuid = docRef.documentID;
@@ -137,10 +141,15 @@ class User extends Model {
   }
 
   Future updatePrimaryLocation(UserLocations loc) async {
-    DocumentReference docRef =
-        cachedLocalUser.getDocumentReference(cachedLocalUser.getID());
-    await docRef.updateData(
-        {'primary_location': loc.toJson(), 'updated_at': DateTime.now()});
+    try {
+      DocumentReference docRef =
+          cachedLocalUser.getDocumentReference(cachedLocalUser.getID());
+      await docRef.updateData(
+          {'primary_location': loc.toJson(), 'updated_at': DateTime.now()});
+      cachedLocalUser.primaryLocation = loc;
+    } catch (err) {
+      throw err;
+    }
   }
 
   Future updateLocations(String uuid, Map<String, dynamic> loc) async {

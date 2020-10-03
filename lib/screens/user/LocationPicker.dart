@@ -43,8 +43,17 @@ class LocationPickerState extends State<LocationPicker> {
       appBar: AppBar(
         title: Text(
           AppLocalizations.of(context).translate('title_add_location'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
         ),
-        backgroundColor: CustomColors.blue,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(

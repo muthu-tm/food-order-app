@@ -6,6 +6,7 @@ import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/store/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
+import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
@@ -111,8 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddLocation(),
-                  settings: RouteSettings(name: '/add/location'),
+                  builder: (context) => ViewLocationsScreen(),
+                  settings: RouteSettings(name: '/location'),
                 ),
               );
             },
