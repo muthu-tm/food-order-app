@@ -151,6 +151,14 @@ class User extends Model {
     }
   }
 
+  Future removeLocation(UserLocations loc) async {
+    try {
+      await getLocationCollectionRef().document(loc.uuid).delete();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future updateLocations(String uuid, Map<String, dynamic> loc) async {
     DocumentReference docRef = getLocationCollectionRef().document(uuid);
     await docRef.updateData(loc);

@@ -44,9 +44,8 @@ class _AddLocationState extends State<AddLocation> {
         ),
         backgroundColor: CustomColors.green,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.blueGreen,
         onPressed: () {
           final FormState form = _formKey.currentState;
 
@@ -77,6 +76,7 @@ class _AddLocationState extends State<AddLocation> {
         label: Text(
           AppLocalizations.of(context).translate('button_next'),
         ),
+        icon: Icon(Icons.arrow_forward_ios),
       ),
       body: Form(
         key: _formKey,
