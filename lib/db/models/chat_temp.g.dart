@@ -1,8 +1,7 @@
-part of 'order_chat_temp.dart';
+part of 'chat_temp.dart';
 
-OrderChatTemplate _$OrderChatTemplateFromJson(Map<String, dynamic> json) {
-  return OrderChatTemplate()
-    ..orderUUID = json['order_uuid'] as String
+ChatTemplate _$ChatTemplateFromJson(Map<String, dynamic> json) {
+  return ChatTemplate()
     ..from = json['from'] as String
     ..content = json['content'] as String
     ..messageType = json['msg_type'] as int
@@ -21,9 +20,8 @@ int _getMillisecondsSinceEpoch(Timestamp ts) {
   return ts.millisecondsSinceEpoch;
 }
 
-Map<String, dynamic> _$OrderChatTemplateToJson(OrderChatTemplate instance) =>
+Map<String, dynamic> _$ChatTemplateToJson(ChatTemplate instance) =>
     <String, dynamic>{
-      'order_uuid': instance.orderUUID,
       'from': instance.from,
       'content': instance.content,
       'msg_type': instance.messageType,

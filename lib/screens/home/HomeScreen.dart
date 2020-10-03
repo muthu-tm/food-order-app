@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/store/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -285,14 +286,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               FlatButton.icon(
                                 onPressed: () {
-                                  // Navigator.pushReplacement(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => AddLocation(),
-                                  //     settings:
-                                  //         RouteSettings(name: '/location/add'),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => StoreChatScreen(
+                                        storeID: store.uuid,
+                                      ),
+                                      settings:
+                                          RouteSettings(name: '/store/chat'),
+                                    ),
+                                  );
                                 },
                                 label: Text(
                                   "Chat",

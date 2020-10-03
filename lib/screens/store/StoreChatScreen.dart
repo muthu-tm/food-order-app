@@ -15,19 +15,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/controllers/user/user_service.dart';
 import '../utils/CustomColors.dart';
 
-class OrderChatScreen extends StatefulWidget {
-  final String orderUUID;
+class StoreChatScreen extends StatefulWidget {
+  final String storeID;
 
-  OrderChatScreen({Key key, @required this.orderUUID}) : super(key: key);
+  StoreChatScreen({Key key, @required this.storeID}) : super(key: key);
 
   @override
-  State createState() => OrderChatScreenState(orderUUID: orderUUID);
+  State createState() => StoreChatScreenState(storeID: storeID);
 }
 
-class OrderChatScreenState extends State<OrderChatScreen> {
-  OrderChatScreenState({Key key, @required this.orderUUID});
+class StoreChatScreenState extends State<StoreChatScreen> {
+  StoreChatScreenState({Key key, @required this.storeID});
 
-  String orderUUID;
+  String storeID;
 
   List<DocumentSnapshot> listMessage = new List.from([]);
   int _limit = 20;
@@ -105,23 +105,33 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   }
 
   Future<void> onSendMessage(String content, int type) async {
-    // type: 0 = text, 1 = image
-    if (content.trim() != '') {
-      textEditingController.clear();
+    try {
+      if (listMessage.isEmpty) {
+        await ChatTemplate().storeCreateCustomer(storeID);
+      }
+      // type: 0 = text, 1 = image
+      if (content.trim() != '') {
+        textEditingController.clear();
 
-      ChatTemplate oc = ChatTemplate();
-      oc.content = content;
-      oc.messageType = type;
-      oc.senderType = 0; // Customer
-      await oc.orderChatCreate(orderUUID);
+        ChatTemplate oc = ChatTemplate();
+        oc.content = content;
+        oc.messageType = type;
+        oc.senderType = 0; // Customer
+        await oc.storeChatCreate(storeID);
 
-      listScrollController.animateTo(0.0,
-          duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-    } else {
+        listScrollController.animateTo(0.0,
+            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+      } else {
+        Fluttertoast.showToast(
+            msg: 'Nothing to send',
+            backgroundColor: Colors.grey,
+            textColor: Colors.white);
+      }
+    } catch (err) {
       Fluttertoast.showToast(
-          msg: 'Nothing to send',
-          backgroundColor: Colors.black,
-          textColor: Colors.red);
+          msg: 'Error, Unable to send!',
+          backgroundColor: Colors.grey,
+          textColor: Colors.white);
     }
   }
 
@@ -368,22 +378,41 @@ class OrderChatScreenState extends State<OrderChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Container(
-          child: Column(
-            children: <Widget>[
-              // List of messages
-              buildListMessage(),
-              // Input content
-              buildInput(),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Chat",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
         ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: CustomColors.green,
+      ),
+      body: Stack(
+        children: <Widget>[
+          SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  // List of messages
+                  buildListMessage(),
+                  // Input content
+                  buildInput(),
+                ],
+              ),
+            ),
+          ),
 
-        // Loading
-        buildLoading()
-      ],
+          // Loading
+          buildLoading()
+        ],
+      ),
     );
   }
 
@@ -463,7 +492,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   Widget buildListMessage() {
     return Container(
       child: StreamBuilder(
-        stream: ChatTemplate().streamOrderChats(widget.orderUUID, _limit),
+        stream: ChatTemplate().streamStoreChats(storeID, _limit),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
