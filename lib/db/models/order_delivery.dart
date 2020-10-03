@@ -5,7 +5,11 @@ part 'order_delivery.g.dart';
 @JsonSerializable(explicitToJson: true)
 class OrderDelivery {
   @JsonKey(name: 'delivery_type', nullable: false)
-  int deliveryType;   // 0 - Pickup from Store, 1 - Instant delivery, 2 -Same day, 3 - Schedules 
+  int deliveryType; // 0 - Pickup from Store, 1 - Instant delivery, 2 -Same day, 3 - Schedules
+  @JsonKey(name: 'scheduled_date', nullable: false)
+  int scheduledDate; // if the deliveryType = 3
+  @JsonKey(name: 'expected_at', nullable: false)
+  int expectedAt;
   @JsonKey(name: 'delivery_charge', nullable: false)
   double deliveryCharge;
   @JsonKey(name: 'delivery_contact', nullable: false)
@@ -23,7 +27,7 @@ class OrderDelivery {
 
   OrderDelivery();
 
-  factory OrderDelivery.fromJson(Map<String, dynamic> json) => _$OrderDeliveryFromJson(json);
+  factory OrderDelivery.fromJson(Map<String, dynamic> json) =>
+      _$OrderDeliveryFromJson(json);
   Map<String, dynamic> toJson() => _$OrderDeliveryToJson(this);
-
 }
