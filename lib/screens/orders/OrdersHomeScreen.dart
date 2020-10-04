@@ -42,7 +42,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: Container(
-                  width: 190,
+                  width: 210,
                   height: 40,
                   child: DropdownButtonFormField(
                     decoration: InputDecoration(
