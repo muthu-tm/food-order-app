@@ -62,7 +62,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
           child: Padding(
             padding: EdgeInsets.only(top: 10, left: 5, right: 5, bottom: 10),
             child: Card(
-              color: CustomColors.alertRed.withOpacity(0.7),
+              color: CustomColors.grey,
               elevation: 5.0,
               child: Column(
                 children: <Widget>[
