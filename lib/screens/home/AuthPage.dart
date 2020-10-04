@@ -13,6 +13,7 @@ import 'package:chipchop_buyer/services/controllers/auth/auth_controller.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:chipchop_buyer/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -178,14 +179,10 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: <Widget>[
-          Card(
-            color: CustomColors.blue,
-            elevation: 2.0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0)),
-            child: SizedBox(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.5,
               width: MediaQuery.of(context).size.width * 0.85,
               child: Column(
@@ -194,9 +191,8 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   Flexible(
                     child: widget._user.getProfilePicPath() == ""
                         ? Container(
-                            width: 80,
-                            height: 80,
-                            margin: EdgeInsets.only(bottom: 5),
+                            width: 90,
+                            height: 90,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
@@ -207,7 +203,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                             child: Icon(
                               Icons.person,
                               size: 45.0,
-                              color: CustomColors.lightGrey,
+                              color: CustomColors.blue,
                             ),
                           )
                         : SizedBox(
@@ -215,8 +211,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                             height: 100.0,
                             child: Center(
                               child: CachedNetworkImage(
-                                imageUrl:
-                                    widget._user.getMediumProfilePicPath(),
+                                imageUrl: widget._user.getMediumProfilePicPath(),
                                 imageBuilder: (context, imageProvider) =>
                                     CircleAvatar(
                                   radius: 45.0,
@@ -237,12 +232,13 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                             ),
                           ),
                   ),
+                  SizedBox(height: 15,),
                   Text(
                     widget._user.firstName,
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w500,
-                      color: CustomColors.lightGrey,
+                      color: CustomColors.blue,
                     ),
                   ),
                   Text(
@@ -250,23 +246,35 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: CustomColors.lightGrey,
+                      color: CustomColors.blue,
                     ),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 5, right: 5, bottom: 5),
-                    child: Card(
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        obscureText: true,
-                        autofocus: false,
-                        controller: _pController,
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)
-                              .translate('secret_key'),
-                          fillColor: CustomColors.white,
-                          filled: true,
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(4),
+                      ],
+                      obscureText: true,
+                      autofocus: false,
+                      controller: _pController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
                         ),
+                        hintText:
+                            AppLocalizations.of(context).translate('secret_key'),
+                        fillColor: CustomColors.white,
+                        filled: true,
+                        contentPadding: EdgeInsets.all(14),
                       ),
                     ),
                   ),
@@ -308,18 +316,17 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                       ),
                     ],
                   ),
-                  Padding(padding: EdgeInsets.all(20.0)),
-                  InkWell(
-                    onTap: () {
-                      _submit(widget._user);
-                    },
-                    child: Container(
-                      width: 150.0,
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        color: CustomColors.lightGreen,
-                        borderRadius: BorderRadius.circular(10.0),
+                  SizedBox(
+                    height: 40,
+                    width: 100,
+                    child: RaisedButton(
+                      color: CustomColors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
                       ),
+                      onPressed: () {
+                        _submit(widget._user);
+                      },
                       child: Center(
                         child: Text(
                           AppLocalizations.of(context).translate('login'),
@@ -337,43 +344,45 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                 ],
               ),
             ),
-          ),
-          Padding(padding: EdgeInsets.all(25.0)),
-          Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text(
-                  AppLocalizations.of(context).translate('no_account'),
-                  style: TextStyle(
-                    fontSize: 13.0,
-                    fontFamily: 'Georgia',
-                    fontWeight: FontWeight.bold,
-                    color: CustomColors.alertRed.withOpacity(0.7),
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => MobileSignInPage(),
-                        settings: RouteSettings(name: '/signup'),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).translate('sign_up'),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    AppLocalizations.of(context).translate('no_account'),
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 13.0,
+                      fontFamily: 'Georgia',
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.positiveGreen,
+                      color: CustomColors.alertRed.withOpacity(0.7),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => MobileSignInPage(),
+                          settings: RouteSettings(name: '/signup'),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(context).translate('sign_up'),
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColors.positiveGreen,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -128,6 +128,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 controller: _nameController,
                 textAlign: TextAlign.left,
                 keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.person_outline,
