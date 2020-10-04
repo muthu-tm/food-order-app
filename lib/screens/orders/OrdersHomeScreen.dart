@@ -20,8 +20,13 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
 
   Map<String, String> _selectedFilter = {
     "0": "All",
-    "1": "Cancelled",
-    "2": "Deliverred",
+    "1": "Ordered",
+    "2": "Confirmed",
+    "3": "Cancelled BY User",
+    "4": "Cancelled BY Store",
+    "5": "DisPatched",
+    "6": "Delivered",
+    "7": "Returned"
   };
 
   @override
@@ -37,7 +42,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: Container(
-                  width: 150,
+                  width: 190,
                   height: 40,
                   child: DropdownButtonFormField(
                     decoration: InputDecoration(
@@ -82,8 +87,7 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
 
   Widget getBody(BuildContext context) {
     return StreamBuilder(
-      stream: Order()
-          .streamOrdersByStatus(filterBy == "0" ? [] : [int.parse(filterBy)]),
+      stream: Order().streamOrdersByStatus(filterBy == "0" ? null : (int.parse(filterBy) - 1)),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 

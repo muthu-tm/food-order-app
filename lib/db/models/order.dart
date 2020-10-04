@@ -118,14 +118,14 @@ class Order {
     return getCollectionRef().document(id).snapshots();
   }
 
-  Stream<QuerySnapshot> streamOrdersByStatus(List<int> status) {
-    if (status.isEmpty) {
+  Stream<QuerySnapshot> streamOrdersByStatus(int status) {
+    if (status == null) {
       return getCollectionRef()
           .orderBy('created_at', descending: true)
           .snapshots();
     } else {
       return getCollectionRef()
-          .where('status', whereIn: status)
+          .where('status', isEqualTo: status)
           .orderBy('created_at', descending: true)
           .snapshots();
     }
