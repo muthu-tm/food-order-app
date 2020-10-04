@@ -87,8 +87,9 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   Future uploadFile() async {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      String filePath = 'order_chats/${cachedLocalUser.getID()}/$fileName.png';
       StorageReference reference =
-          FirebaseStorage.instance.ref().child(fileName);
+          FirebaseStorage.instance.ref().child(filePath);
       StorageUploadTask uploadTask = reference.putFile(imageFile);
       StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
       String imageUrl = await storageTaskSnapshot.ref.getDownloadURL();
