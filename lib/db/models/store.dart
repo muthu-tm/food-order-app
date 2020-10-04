@@ -139,29 +139,29 @@ class Store extends Model {
     List<Store> stores = [];
 
     try {
-      if (loc != null &&
-          (cachedLocalUser.favStores == null ||
-              cachedLocalUser.favStores.isEmpty)) {
-        await streamNearByStores(loc, 10).take(1).forEach((snap) {
-          for (var i = 0; i < snap.length; i++) {
-            Store _s = Store.fromJson(snap[i].data);
-            stores.add(_s);
-          }
-        });
-      } else if (cachedLocalUser.favStores != null) {
-        QuerySnapshot snap = await getCollectionRef()
-            .where('uuid', whereIn: cachedLocalUser.favStores)
-            .getDocuments();
-        if (snap.documents.isNotEmpty) {
-          for (var i = 0; i < snap.documents.length; i++) {
-            Store _s = Store.fromJson(snap.documents[i].data);
-            stores.add(_s);
-          }
-        }
-      }
+      // if (loc != null &&
+      //     (cachedLocalUser.favStores == null ||
+      //         cachedLocalUser.favStores.isEmpty)) {
+      //   await streamNearByStores(loc, 10).take(1).forEach((snap) {
+      //     for (var i = 0; i < snap.length; i++) {
+      //       Store _s = Store.fromJson(snap[i].data);
+      //       stores.add(_s);
+      //     }
+      //   });
+      // } else if (cachedLocalUser.favStores != null) {
+      //   QuerySnapshot snap = await getCollectionRef()
+      //       .where('uuid', whereIn: cachedLocalUser.favStores)
+      //       .getDocuments();
+      //   if (snap.documents.isNotEmpty) {
+      //     for (var i = 0; i < snap.documents.length; i++) {
+      //       Store _s = Store.fromJson(snap.documents[i].data);
+      //       stores.add(_s);
+      //     }
+      //   }
+      // }
 
       if (stores.isEmpty) {
-        QuerySnapshot snap = await getCollectionRef().limit(5).getDocuments();
+        QuerySnapshot snap = await getCollectionRef().getDocuments();
         if (snap.documents.isNotEmpty) {
           for (var i = 0; i < snap.documents.length; i++) {
             Store _s = Store.fromJson(snap.documents[i].data);

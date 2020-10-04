@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/screens/orders/OrderAmountWidget.dart';
 import 'package:chipchop_buyer/screens/orders/OrderChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/order.dart';
@@ -127,80 +129,147 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       fontFamily: "Georgia"),
                 ),
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.local_shipping,
-                  size: 35,
-                  color: CustomColors.blueGreen,
-                ),
-                title: Text(
-                  "Delivery Address",
-                ),
-                trailing: Container(
-                  padding:
-                      EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
-                  decoration: BoxDecoration(
-                    color: CustomColors.lightPurple.withOpacity(0.5),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
-                  child: Text(
-                    order.delivery.userLocation.locationName,
-                    style: TextStyle(
-                        color: CustomColors.black,
-                        fontSize: 12,
-                        fontFamily: "Georgia"),
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Text(""),
-                title: Container(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  padding: EdgeInsets.only(right: 10, left: 10),
-                  decoration: BoxDecoration(
-                    color: CustomColors.lightGrey,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5),
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  color: CustomColors.grey,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      createAddressText(
-                          order.delivery.userLocation.address.street, 16),
-                      createAddressText(
-                          order.delivery.userLocation.address.city, 6),
-                      createAddressText(
-                          order.delivery.userLocation.address.pincode, 6),
-                      SizedBox(
-                        height: 6,
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: "Mobile : ",
-                              style: TextStyle(
-                                  fontSize: 12, color: CustomColors.blue),
+                      ListTile(
+                        leading: Icon(
+                          Icons.local_shipping,
+                          size: 35,
+                          color: CustomColors.blueGreen,
+                        ),
+                        title: Text(
+                          "Delivery Address",
+                        ),
+                        trailing: Container(
+                          padding: EdgeInsets.only(
+                              left: 8, right: 8, top: 4, bottom: 4),
+                          decoration: BoxDecoration(
+                            color: CustomColors.lightPurple.withOpacity(0.5),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
                             ),
-                            TextSpan(
-                              text: order.delivery.userLocation.userNumber,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 12),
-                            ),
-                          ],
+                          ),
+                          child: Text(
+                            order.delivery.userLocation.locationName,
+                            style: TextStyle(
+                                color: CustomColors.black,
+                                fontSize: 12,
+                                fontFamily: "Georgia"),
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: 16,
+                      ListTile(
+                        leading: Text(""),
+                        title: Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          padding: EdgeInsets.only(right: 10, left: 10),
+                          decoration: BoxDecoration(
+                            color: CustomColors.lightGrey,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              createAddressText(
+                                  order.delivery.userLocation.address.street,
+                                  16),
+                              createAddressText(
+                                  order.delivery.userLocation.address.city, 6),
+                              createAddressText(
+                                  order.delivery.userLocation.address.pincode,
+                                  6),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Mobile : ",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: CustomColors.blue),
+                                    ),
+                                    TextSpan(
+                                      text: order
+                                          .delivery.userLocation.userNumber,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.shippingFast,
+                          color: CustomColors.blueGreen,
+                        ),
+                        title: TextFormField(
+                          initialValue: order.delivery.expectedAt == null
+                              ? ""
+                              : DateUtils.formatDateTime(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      order.delivery.expectedAt),
+                                ),
+                          textAlign: TextAlign.start,
+                          autofocus: false,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: CustomColors.lightGreen),
+                            ),
+                            labelText: "Expected Delivery Time",
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              color: CustomColors.blue,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.phone_android,
+                          size: 35,
+                          color: CustomColors.blueGreen,
+                        ),
+                        title: TextFormField(
+                          initialValue: order.delivery.deliveryContact ?? "",
+                          textAlign: TextAlign.start,
+                          autofocus: false,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: CustomColors.lightGreen),
+                            ),
+                            labelText: "Delivery - Contact Numer",
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              color: CustomColors.blue,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
+              OrderAmountWidget(order),
               ListTile(
                 leading: Icon(
                   FontAwesomeIcons.shoppingBasket,
@@ -442,20 +511,57 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         color: CustomColors.black,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                )
+                                ),
+                                order.status <= 1
+                                    ? RaisedButton.icon(
+                                        color: CustomColors.alertRed,
+                                        onPressed: () async {
+                                          try {
+                                            await order.cancelOrder(
+                                                order.uuid, "");
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'Order Cancelled Successfully',
+                                                backgroundColor:
+                                                    CustomColors.grey,
+                                                textColor: CustomColors.white);
+                                          } catch (err) {
+                                            print(err);
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    'Error, Unable to Cancel Order',
+                                                backgroundColor:
+                                                    CustomColors.alertRed,
+                                                textColor: CustomColors.white);
+                                          }
+                                        },
+                                        icon: Icon(
+                                          Icons.close,
+                                          color: CustomColors.lightGrey,
+                                        ),
+                                        label: Text(
+                                          "Cancel Order",
+                                          style: TextStyle(
+                                              color: CustomColors.lightGrey,
+                                              fontSize: 14),
+                                        ),
+                                      )
+                                    : Container(),
                               ],
                             ),
                           ));
                         } else if (snapshot.hasError) {
                           child = Center(
-                              child: Column(
-                            children: AsyncWidgets.asyncError(),
-                          ));
+                            child: Column(
+                              children: AsyncWidgets.asyncError(),
+                            ),
+                          );
                         } else {
                           child = Center(
-                              child: Column(
-                            children: AsyncWidgets.asyncWaiting(),
-                          ));
+                            child: Column(
+                              children: AsyncWidgets.asyncWaiting(),
+                            ),
+                          );
                         }
 
                         return child;

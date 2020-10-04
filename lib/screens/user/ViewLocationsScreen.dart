@@ -124,8 +124,21 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        loc.userName,
+                                        style: TextStyle(
+                                            color: CustomColors.blue,
+                                            fontSize: 14),
+                                      ),
+                                    ),
                                     Container(
                                       padding: EdgeInsets.only(
                                           left: 8, right: 8, top: 4, bottom: 4),
@@ -146,9 +159,29 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                                     )
                                   ],
                                 ),
-                                createAddressText(loc.address.street, 16),
+                                createAddressText(loc.address.street, 6),
                                 createAddressText(loc.address.city, 6),
                                 createAddressText(loc.address.pincode, 6),
+                                SizedBox(
+                                  height: 6,
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: "LandMark : ",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: CustomColors.blue),
+                                      ),
+                                      TextSpan(
+                                        text: loc.address.landmark,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 13),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 6,
                                 ),
@@ -164,7 +197,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                                       TextSpan(
                                         text: loc.userNumber,
                                         style: TextStyle(
-                                            color: Colors.black, fontSize: 12),
+                                            color: Colors.black, fontSize: 13),
                                       ),
                                     ],
                                   ),
@@ -210,7 +243,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
       margin: EdgeInsets.only(top: topMargin),
       child: Text(
         strAddress,
-        style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
+        style: TextStyle(fontSize: 13, color: Colors.grey.shade800),
       ),
     );
   }

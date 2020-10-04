@@ -18,6 +18,7 @@ class _AddLocationState extends State<AddLocation> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Address sAddress = Address();
   String locName = '';
+  String userName = '';
   int uNumber = cachedLocalUser.mobileNumber;
 
   @override
@@ -59,6 +60,7 @@ class _AddLocationState extends State<AddLocation> {
             UserLocations loc = UserLocations();
             loc.locationName = locName;
             loc.userNumber = '91' + uNumber.toString();
+            loc.userName = userName;
             loc.address = sAddress;
 
             Navigator.push(
@@ -106,6 +108,7 @@ class _AddLocationState extends State<AddLocation> {
                     textAlign: TextAlign.start,
                     initialValue: locName,
                     decoration: InputDecoration(
+                      hintText: "Ex, Home, Work",
                       fillColor: CustomColors.white,
                       filled: true,
                       contentPadding:
@@ -118,6 +121,45 @@ class _AddLocationState extends State<AddLocation> {
                         return "Enter Location Name";
                       } else {
                         this.locName = name.trim();
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0, top: 10),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      "User Name",
+                      style: TextStyle(
+                          fontFamily: "Georgia",
+                          color: CustomColors.grey,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 10, top: 10, right: 10),
+                  child: TextFormField(
+                    autofocus: false,
+                    keyboardType: TextInputType.text,
+                    textAlign: TextAlign.start,
+                    initialValue: locName,
+                    decoration: InputDecoration(
+                      fillColor: CustomColors.white,
+                      filled: true,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(color: CustomColors.grey)),
+                    ),
+                    validator: (name) {
+                      if (name.isEmpty) {
+                        return "Enter User Name";
+                      } else {
+                        this.userName = name.trim();
                       }
                       return null;
                     },
@@ -145,6 +187,7 @@ class _AddLocationState extends State<AddLocation> {
                     textAlign: TextAlign.start,
                     initialValue: uNumber.toString(),
                     decoration: InputDecoration(
+                      prefix: Text('+91'),
                       fillColor: CustomColors.white,
                       filled: true,
                       contentPadding:

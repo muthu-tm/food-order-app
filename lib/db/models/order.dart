@@ -108,6 +108,17 @@ class Order {
     return this;
   }
 
+  Future<void> cancelOrder(String orderUUID, String notes) async {
+    await this.getCollectionRef().document(orderUUID).updateData(
+      {
+        'status': 2,
+        'updated_at': DateTime.now(),
+        'cancelled_at': DateTime.now().millisecondsSinceEpoch,
+        'customer_notes': notes
+      },
+    );
+  }
+
   Stream<QuerySnapshot> streamOrders() {
     return getCollectionRef()
         .orderBy('created_at', descending: true)

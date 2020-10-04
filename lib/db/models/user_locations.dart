@@ -12,6 +12,8 @@ class UserLocations {
   String uuid;
   @JsonKey(name: 'user_number', defaultValue: "")
   String userNumber;
+  @JsonKey(name: 'user_name', defaultValue: "")
+  String userName;
   @JsonKey(name: 'loc_name', defaultValue: "")
   String locationName;
   @JsonKey(name: 'geo_point', defaultValue: "")

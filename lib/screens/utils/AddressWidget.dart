@@ -53,17 +53,17 @@ class _AddressWidgetState extends State<AddressWidget> {
                     maxLines: 3,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)
-                                    .translate('building_and_street'),
+                          .translate('building_and_street'),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
                         color: CustomColors.blue,
                       ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10.0),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: CustomColors.lightGreen)),
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
                       fillColor: CustomColors.white,
                       filled: true,
                     ),
@@ -84,11 +84,10 @@ class _AddressWidgetState extends State<AddressWidget> {
               children: <Widget>[
                 Flexible(
                   child: TextFormField(
-                    initialValue: widget.address.city,
+                    initialValue: widget.address.landmark,
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)
-                                    .translate('city'),
+                      labelText: "Landmark",
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
@@ -97,8 +96,42 @@ class _AddressWidgetState extends State<AddressWidget> {
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: CustomColors.lightGreen)),
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                    validator: (landmark) {
+                      if (landmark.trim() != "") {
+                        widget.updatedAddress.landmark = landmark.trim();
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Row(
+              children: <Widget>[
+                Flexible(
+                  child: TextFormField(
+                    initialValue: widget.address.city,
+                    textAlign: TextAlign.start,
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).translate('city'),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      labelStyle: TextStyle(
+                        fontSize: 10.0,
+                        color: CustomColors.blue,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
                       fillColor: CustomColors.white,
                       filled: true,
                     ),
@@ -116,8 +149,8 @@ class _AddressWidgetState extends State<AddressWidget> {
                     initialValue: widget.address.state,
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)
-                                    .translate('state'),
+                      labelText:
+                          AppLocalizations.of(context).translate('state'),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
@@ -126,8 +159,8 @@ class _AddressWidgetState extends State<AddressWidget> {
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: CustomColors.lightGreen)),
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
                       fillColor: CustomColors.white,
                       filled: true,
                     ),
@@ -151,8 +184,8 @@ class _AddressWidgetState extends State<AddressWidget> {
                     initialValue: widget.address.pincode,
                     textAlign: TextAlign.start,
                     decoration: InputDecoration(
-                      labelText: AppLocalizations.of(context)
-                                    .translate('pincode'),
+                      labelText:
+                          AppLocalizations.of(context).translate('pincode'),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       labelStyle: TextStyle(
                         fontSize: 10.0,
@@ -161,8 +194,8 @@ class _AddressWidgetState extends State<AddressWidget> {
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: CustomColors.lightGreen)),
+                          borderSide:
+                              BorderSide(color: CustomColors.lightGreen)),
                       fillColor: CustomColors.white,
                       filled: true,
                     ),
