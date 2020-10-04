@@ -34,6 +34,8 @@ class Products extends Model {
   double offer;
   @JsonKey(name: 'current_price')
   double currentPrice;
+  @JsonKey(name: 'is_returnable', defaultValue: false)
+  bool isReturnable;
   @JsonKey(name: 'is_available')
   bool isAvailable;
   @JsonKey(name: 'is_deliverable')
@@ -127,6 +129,28 @@ class Products extends Model {
     }
   }
 
+  List<String> getProductImages() {
+    if (this.productImages.isEmpty) {
+      return [
+        no_image_placeholder.replaceFirst(
+            firebase_storage_path, image_kit_path + ik_medium_size)
+      ];
+    } else {
+      if (this.productImages.first != null && this.productImages.first != "") {
+        List<String> images = [];
+        for (var img in this.productImages) {
+          images.add(img.replaceFirst(
+              firebase_storage_path, image_kit_path + ik_medium_size));
+        }
+        return images;
+      } else
+        return [
+          no_image_placeholder.replaceFirst(
+              firebase_storage_path, image_kit_path + ik_medium_size)
+        ];
+    }
+  }
+
   Stream<QuerySnapshot> streamProducts(String storeID) {
     try {
       return getCollectionRef()
@@ -137,7 +161,8 @@ class Products extends Model {
     }
   }
 
-  Stream<QuerySnapshot> streamProductsForCategory(String storeID, String categoryID) {
+  Stream<QuerySnapshot> streamProductsForCategory(
+      String storeID, String categoryID) {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)

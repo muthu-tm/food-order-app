@@ -24,7 +24,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   Map<String, double> _cartMap = {};
-  List<String> _wlMap = [];
+  List<String> _wlList = [];
 
   @override
   void initState() {
@@ -35,17 +35,23 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
 
   _loadCartDetails() async {
     try {
+      Map<String, double> _tempMap = {};
+      List<String> _tempList = [];
+
       List<ShoppingCart> cDetails =
           await ShoppingCart().fetchForStore(widget.storeID);
 
       for (var item in cDetails) {
         if (item.inWishlist)
-          _wlMap.add(item.productID);
+          _tempList.add(item.productID);
         else
-          _cartMap[item.productID] = item.quantity;
+          _tempMap[item.productID] = item.quantity;
       }
 
-      setState(() {});
+      setState(() {
+        _cartMap = _tempMap;
+        _wlList = _tempList;
+      });
     } catch (err) {
       print(err);
     }

@@ -187,6 +187,18 @@ class ShoppingCart {
     }
   }
 
+  Stream<QuerySnapshot> streamCartForProduct(String storeID, String productID) {
+    try {
+      return getCollectionRef()
+          .where('in_wishlist', isEqualTo: false)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Stream<QuerySnapshot> streamCartItems() {
     try {
       return getCollectionRef()

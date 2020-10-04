@@ -1,76 +1,174 @@
+import 'package:chipchop_buyer/db/models/shopping_cart.dart';
+import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
+import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/CustomColors.dart';
 
 class CartCounter extends StatefulWidget {
+  CartCounter(this.storeID, this.productID);
+
+  final String storeID;
+  final String productID;
   @override
   _CartCounterState createState() => _CartCounterState();
 }
 
 class _CartCounterState extends State<CartCounter> {
-  int numOfItems = 0;
+  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
   @override
   Widget build(BuildContext context) {
-    return numOfItems == 0
-        ? Container(
-            child: RaisedButton(
-              onPressed: () {
-                setState(() {
-                  numOfItems = 1;
-                });
-              },
-              child: Text("Add"),
-            ),
-          )
-        : Container(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                buildOutlineButton(
-                  icon: Icons.remove,
-                  press: () {
-                    setState(() {
-                      numOfItems--;
-                    });
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25 / 2),
-                  child: Text(
-                    numOfItems.toString().padLeft(2, "0"),
-                    style: TextStyle(
-                        fontFamily: 'Georgia',
-                        color: CustomColors.blue,
-                        fontSize: 17),
+    return StreamBuilder(
+        stream: ShoppingCart()
+            .streamCartForProduct(widget.storeID, widget.productID),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          Widget child;
+
+          if (snapshot.hasData) {
+            if (snapshot.data.documents.isEmpty) {
+              child = Card(
+                elevation: 2.0,
+                color: CustomColors.lightGreen,
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  child: IconButton(
+                    iconSize: 20,
+                    alignment: Alignment.center,
+                    icon: Icon(FontAwesomeIcons.cartPlus),
+                    onPressed: () async {
+                      try {
+                        CustomDialogs.showLoadingDialog(context, _keyLoader);
+                        ShoppingCart sc = ShoppingCart();
+                        sc.storeID = widget.storeID;
+                        sc.productID = widget.productID;
+                        sc.inWishlist = false;
+                        sc.quantity = 1.0;
+                        await sc.create();
+                        Navigator.of(_keyLoader.currentContext,
+                                rootNavigator: true)
+                            .pop();
+                      } catch (err) {
+                        print(err);
+                      }
+                    },
                   ),
                 ),
-                buildOutlineButton(
-                  icon: Icons.add,
-                  press: () {
-                    setState(
-                      () {
-                        numOfItems++;
-                      },
-                    );
-                  },
+              );
+            } else {
+              ShoppingCart sc =
+                  ShoppingCart.fromJson(snapshot.data.documents.first.data);
+              child = Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    sc.quantity == 1.0
+                        ? SizedBox(
+                            width: 35,
+                            height: 35,
+                            child: OutlineButton(
+                              padding: EdgeInsets.zero,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              onPressed: () async {
+                                try {
+                                  CustomDialogs.showLoadingDialog(
+                                      context, _keyLoader);
+                                  await ShoppingCart().removeItem(
+                                      false, widget.storeID, widget.productID);
+                                  Navigator.of(_keyLoader.currentContext,
+                                          rootNavigator: true)
+                                      .pop();
+                                } catch (err) {
+                                  print(err);
+                                }
+                              },
+                              child: Icon(
+                                Icons.delete_forever,
+                                size: 20,
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            width: 35,
+                            height: 35,
+                            child: OutlineButton(
+                              padding: EdgeInsets.zero,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              onPressed: () async {
+                                try {
+                                  CustomDialogs.showLoadingDialog(
+                                      context, _keyLoader);
+                                  await ShoppingCart().updateCartQuantity(
+                                      false, widget.storeID, widget.productID);
+                                  Navigator.of(_keyLoader.currentContext,
+                                          rootNavigator: true)
+                                      .pop();
+                                } catch (err) {
+                                  print(err);
+                                }
+                              },
+                              child: Icon(Icons.remove),
+                            ),
+                          ),
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        sc.quantity.round().toString(),
+                        style: TextStyle(
+                            fontFamily: 'Georgia',
+                            color: CustomColors.blue,
+                            fontSize: 17),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 35,
+                      height: 35,
+                      child: OutlineButton(
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        onPressed: () async {
+                          try {
+                            CustomDialogs.showLoadingDialog(
+                                context, _keyLoader);
+                            await ShoppingCart().updateCartQuantity(
+                                true, widget.storeID, widget.productID);
+                            Navigator.of(_keyLoader.currentContext,
+                                    rootNavigator: true)
+                                .pop();
+                          } catch (err) {
+                            print(err);
+                          }
+                        },
+                        child: Icon(Icons.add),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-  }
-
-  SizedBox buildOutlineButton({IconData icon, Function press}) {
-    return SizedBox(
-      width: 35,
-      height: 35,
-      child: OutlineButton(
-        padding: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        onPressed: press,
-        child: Icon(icon),
-      ),
-    );
+              );
+            }
+          } else if (snapshot.hasError) {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
+            );
+          } else {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
+              ),
+            );
+          }
+          return child;
+        });
   }
 }

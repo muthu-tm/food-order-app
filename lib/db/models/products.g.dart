@@ -18,6 +18,7 @@ Products _$ProductsFromJson(Map<String, dynamic> json) {
     ..originalPrice = (json['org_price'] as num)?.toDouble() ?? 0.00
     ..offer = (json['offer'] as num)?.toDouble() ?? 0.00
     ..currentPrice = (json['current_price'] as num)?.toDouble() ?? 0.00
+    ..isReturnable = json['is_returnable'] as bool ?? false
     ..isAvailable = json['is_available'] as bool ?? true
     ..isDeliverable = json['is_deliverable'] as bool ?? true
     ..isPopular = json['is_popular'] as bool ?? false
@@ -54,6 +55,7 @@ Map<String, dynamic> _$ProductsToJson(Products instance) => <String, dynamic>{
       'org_price': instance.originalPrice ?? 0.00,
       'offer': instance.offer ?? 0.00,
       'current_price': instance.currentPrice ?? 0.00,
+      'is_returnable': instance.isReturnable ?? false,
       'is_available': instance.isAvailable ?? true,
       'is_deliverable': instance.isDeliverable ?? true,
       'is_popular': instance.isPopular ?? false,
