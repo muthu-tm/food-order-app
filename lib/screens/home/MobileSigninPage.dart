@@ -274,6 +274,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 style: TextStyle(
                   color: CustomColors.blue,
                   fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

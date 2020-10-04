@@ -194,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         AppLocalizations.of(context).translate('get_otp'),
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 18.0,
                           color: CustomColors.blue,
                           fontWeight: FontWeight.bold,
                         ),
