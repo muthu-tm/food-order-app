@@ -1,29 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/product_categories.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/screens/store/StoreCategoriesScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
-class StoreCategoryWidget extends StatefulWidget {
+class StoreCategoryWidget extends StatelessWidget {
   StoreCategoryWidget(this.store);
 
   final Store store;
 
   @override
-  _StoreCategoryWidgetState createState() => _StoreCategoryWidgetState();
-}
-
-class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ProductCategories()
-          .getCategoriesForIDs(widget.store.availProductCategories),
+      future:
+          ProductCategories().getCategoriesForIDs(store.availProductCategories),
       builder: (context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -55,11 +46,13 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                     ProductCategories _c = snapshot.data[index];
                     return InkWell(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => ProductsScreen()),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StoreCategoriesScreen(
+                                store.uuid, _c.uuid, _c.name),
+                          ),
+                        );
                       },
                       child: Container(
                         padding: EdgeInsets.all(10),

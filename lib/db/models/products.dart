@@ -137,6 +137,17 @@ class Products extends Model {
     }
   }
 
+  Stream<QuerySnapshot> streamProductsForCategory(String storeID, String categoryID) {
+    try {
+      return getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_category', isEqualTo: categoryID)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future<Products> getByProductID(String uuid) async {
     try {
       DocumentSnapshot snap = await getCollectionRef().document(uuid).get();
