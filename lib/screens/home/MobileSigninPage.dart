@@ -27,12 +27,15 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _passKeyController = TextEditingController();
   final AuthController _authController = AuthController();
 
   @override
   void initState() {
     super.initState();
+
+    _lastNameController.text = "";
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -43,15 +46,14 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
-      body: SingleChildScrollView(
-        child: Center(
-          child: _getColumnBody(),
-        ),
+      body: Center(
+        child: SingleChildScrollView(child: _getColumnBody()),
       ),
     );
   }
 
   Widget _getColumnBody() => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(top: 25),
@@ -73,17 +75,9 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              "Register account",
-              style: TextStyle(fontSize: 16, color: Colors.black),
-            ),
-          ),
           Container(
             child: Padding(
-              padding:
-                  const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
+              padding: EdgeInsets.only(bottom: 5.0, left: 20.0, right: 20.0),
               child: TextField(
                 controller: _phoneNumberController,
                 textAlign: TextAlign.left,
@@ -92,6 +86,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   LengthLimitingTextInputFormatter(10),
                 ],
                 decoration: InputDecoration(
+                  prefix: Text('+91'),
                   prefixIcon: Icon(
                     Icons.phone,
                     color: CustomColors.lightGreen,
@@ -107,7 +102,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       fontFamily: 'Montserrat',
                       color: Colors.black54),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       width: 0,
                       style: BorderStyle.none,
@@ -120,48 +115,74 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             ),
           ),
           SizedBox(height: 5),
-          Container(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
-              child: TextField(
-                controller: _nameController,
-                textAlign: TextAlign.left,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.words,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.person_outline,
-                    color: CustomColors.lightGreen,
-                    size: 30.0,
-                  ),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 75,
-                  ),
-                  fillColor: CustomColors.white,
-                  hintText: "Name",
-                  hintStyle: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: 'Montserrat',
-                      color: Colors.black54),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
+          Row(
+            children: [
+              Container(
+                child: Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20, right: 5.0, bottom: 5),
+                    child: TextField(
+                      controller: _nameController,
+                      textAlign: TextAlign.left,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        fillColor: CustomColors.white,
+                        hintText: "First Name",
+                        hintStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: 'Montserrat',
+                            color: Colors.black54),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(14),
+                      ),
                     ),
                   ),
-                  filled: true,
-                  contentPadding: EdgeInsets.all(14),
                 ),
               ),
-            ),
+              Container(
+                child: Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 20, left: 5.0, bottom: 5),
+                    child: TextField(
+                      controller: _lastNameController,
+                      textAlign: TextAlign.left,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        fillColor: CustomColors.white,
+                        hintText: "Last Name",
+                        hintStyle: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: 'Montserrat',
+                            color: Colors.black54),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                        ),
+                        filled: true,
+                        contentPadding: EdgeInsets.all(14),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 5),
           Container(
             child: Padding(
-              padding:
-                  const EdgeInsets.only(bottom: 8.0, left: 24.0, right: 24.0),
+              padding: EdgeInsets.only(bottom: 5.0, left: 20.0, right: 20.0),
               child: TextField(
                 textAlign: TextAlign.left,
                 keyboardType: TextInputType.number,
@@ -196,7 +217,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       fontFamily: 'Montserrat',
                       color: Colors.black54),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       width: 0,
                       style: BorderStyle.none,
@@ -251,12 +272,12 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: Text(
                 AppLocalizations.of(context).translate('get_otp'),
                 style: TextStyle(
-                  color: CustomColors.green,
+                  color: CustomColors.blue,
                   fontSize: 18.0,
                 ),
               ),
             ),
-            color: CustomColors.blue,
+            color: CustomColors.green,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
@@ -352,7 +373,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           countryCode,
           _passKeyController.text,
           _nameController.text,
-          "",
+          _lastNameController.text,
           authResult.user.uid);
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
@@ -406,6 +427,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             countryCode,
             _passKeyController.text,
             _nameController.text,
+            _lastNameController.text,
             _smsVerificationCode),
       ),
     );

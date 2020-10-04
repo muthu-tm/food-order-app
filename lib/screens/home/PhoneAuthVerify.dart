@@ -12,13 +12,14 @@ import 'package:chipchop_buyer/app_localizations.dart';
 
 class PhoneAuthVerify extends StatefulWidget {
   PhoneAuthVerify(this.isRegister, this.number, this.countryCode, this.passKey,
-      this.name, this.verificationID);
+      this.name, this.lastName, this.verificationID);
 
   final bool isRegister;
   final String number;
   final int countryCode;
   final String passKey;
   final String name;
+  final String lastName;
   final String verificationID;
 
   @override
@@ -193,7 +194,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             widget.countryCode,
             widget.passKey,
             widget.name,
-            "",
+            widget.lastName,
             authResult.user.uid);
         if (!result['is_success']) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();

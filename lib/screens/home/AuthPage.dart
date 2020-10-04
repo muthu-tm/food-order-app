@@ -264,7 +264,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                       controller: _pController,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
                             width: 0,
                             style: BorderStyle.none,
@@ -322,7 +322,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     child: RaisedButton(
                       color: CustomColors.green,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                       onPressed: () {
                         _submit(widget._user);

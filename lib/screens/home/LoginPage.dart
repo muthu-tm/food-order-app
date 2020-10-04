@@ -101,8 +101,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10,
-                      bottom: 8.0, left: 24.0, right: 24.0),
+                  padding: EdgeInsets.only(top: 10,
+                      bottom: 15.0, left: 20.0, right: 20.0),
                   child: TextFormField(
                     textAlign: TextAlign.start,
                     controller: _nController,
@@ -113,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                       LengthLimitingTextInputFormatter(10)
                     ],
                     decoration: InputDecoration(
+                      prefix: Text('+91'),
                       prefixIcon: Icon(
                         Icons.phone,
                         color: CustomColors.lightGreen,
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       fillColor: CustomColors.white,
                       filled: true,
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
                           width: 0,
                           style: BorderStyle.none,
@@ -184,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: RaisedButton(
                     color: CustomColors.green,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                     onPressed: () {
                       _submit();
@@ -396,6 +397,7 @@ class _LoginPageState extends State<LoginPage> {
             _user.countryCode,
             _user.password,
             _user.firstName,
+            _user.lastName,
             _smsVerificationCode),
       ),
     );
