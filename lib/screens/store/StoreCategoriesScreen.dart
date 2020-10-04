@@ -57,7 +57,11 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
       appBar: AppBar(
         backgroundColor: CustomColors.green,
         elevation: 0,
-        title: Text(widget.categoryName),
+        title: Text(
+          widget.categoryName,
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
