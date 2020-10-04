@@ -76,13 +76,15 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ShoppingCartScreen(),
                   settings: RouteSettings(name: '/cart'),
                 ),
-              );
+              ).then((value) {
+                _loadCartDetails();
+              });
             },
           ),
         ],
