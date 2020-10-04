@@ -63,41 +63,43 @@ class _AuthPageState extends State<AuthPage> {
                       return LoginPage(false, _scaffoldKey);
                     } else if (userSnapshot.connectionState ==
                         ConnectionState.waiting) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.30,
-                            ),
-                            ClipRRect(
-                              child: Image.asset(
-                                "images/icons/logo.png",
-                                height: 80,
+                      return Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.30,
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(5),
-                              child: shadowGradientText(buyer_app_name, 16.0),
-                            ),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.35,
-                            ),
-                            Text(
-                              "Serving From",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                color: CustomColors.grey,
-                                fontSize: 12,
-                                fontFamily: "Georgia",
+                              ClipRRect(
+                                child: Image.asset(
+                                  "images/icons/logo.png",
+                                  height: 80,
+                                ),
                               ),
-                            ),
-                            shadowGradientText("Fourcup Inc.", 20.0),
-                          ],
+                              Padding(
+                                padding: EdgeInsets.all(5),
+                                child: shadowGradientText(buyer_app_name, 16.0),
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.35,
+                              ),
+                              Text(
+                                "Serving From",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: CustomColors.grey,
+                                  fontSize: 12,
+                                  fontFamily: "Georgia",
+                                ),
+                              ),
+                              shadowGradientText("Fourcup Inc.", 20.0),
+                            ],
+                          ),
                         ),
                       );
                     } else {
