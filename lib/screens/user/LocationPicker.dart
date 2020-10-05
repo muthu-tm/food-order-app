@@ -6,6 +6,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -34,6 +35,8 @@ class LocationPickerState extends State<LocationPicker> {
   void initState() {
     super.initState();
     this.searchKey = widget.loc.address.pincode;
+
+    _searchAndNavigate();
   }
 
   @override
@@ -165,6 +168,10 @@ class LocationPickerState extends State<LocationPicker> {
       );
     } catch (e) {
       print(e);
+      Fluttertoast.showToast(
+          msg: 'Error, Unable to find matching address',
+          backgroundColor: CustomColors.alertRed,
+          textColor: Colors.white);
     }
   }
 
