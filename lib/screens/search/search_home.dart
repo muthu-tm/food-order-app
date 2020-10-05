@@ -44,8 +44,8 @@ class _SearchHomeState extends State<SearchHome> {
                     fontSize: 18),
               ),
             ),
-            FlatButton.icon(
-              onPressed: () async {
+            InkWell(
+              onTap: () async {
                 List<UserLocations> userLocations =
                     await cachedLocalUser.getLocations();
 
@@ -66,18 +66,29 @@ class _SearchHomeState extends State<SearchHome> {
                   );
                 }
               },
-              icon: Icon(
-                FontAwesomeIcons.mapMarkerAlt,
-                color: CustomColors.blueGreen,
-              ),
-              label: Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Text(
-                  "Nearby stores in map",
-                  style: TextStyle(color: CustomColors.black),
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.pin_drop,
+                      size: 30,
+                      color: CustomColors.blueGreen,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Text(
+                        "NearBy Stores in Map",
+                        style: TextStyle(
+                            fontFamily: 'Georgia',
+                            color: CustomColors.black,
+                            fontSize: 14),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

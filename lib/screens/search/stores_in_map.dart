@@ -128,7 +128,7 @@ class _StoresInMapState extends State<StoresInMap> {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-          margin: EdgeInsets.symmetric(vertical: 20.0),
+          margin: EdgeInsets.symmetric(vertical: 15.0),
           height: 150.0,
           child: stores.length > 0
               ? ListView.builder(
