@@ -124,7 +124,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   "${cachedLocalUser.primaryLocation.locationName}",
                   style: TextStyle(color: CustomColors.black),
                 ),
-                // NearByStores(snapshot.data.first),
               ),
             ),
           );

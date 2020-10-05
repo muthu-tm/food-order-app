@@ -60,7 +60,7 @@ class LocationPickerState extends State<LocationPicker> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.blueGreen,
         onPressed: () async {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(
@@ -74,7 +74,7 @@ class LocationPickerState extends State<LocationPicker> {
             UserLocations _loc = await cachedLocalUser.addLocations(widget.loc);
             await cachedLocalUser.updatePrimaryLocation(_loc);
             cachedLocalUser.primaryLocation = widget.loc;
-            Navigator.of(context).push(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (BuildContext context) => HomeScreen(),
                 settings: RouteSettings(name: '/'),

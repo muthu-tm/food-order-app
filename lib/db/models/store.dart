@@ -126,13 +126,37 @@ class Store extends Model {
     GeoFirePoint usersAddressGeoFirePoint = geo.point(
         latitude: loc.geoPoint.geoPoint.latitude,
         longitude: loc.geoPoint.geoPoint.longitude);
-    double radius = 5;
 
     return geo.collection(collectionRef: getCollectionRef()).within(
         center: usersAddressGeoFirePoint,
         radius: radius,
         field: 'geo_point',
         strictMode: true);
+  }
+
+  Future<List<Store>> getNearByStores(
+      double latitude, double longitude, double radius) async {
+    Geoflutterfire geo = Geoflutterfire();
+    GeoFirePoint usersAddressGeoFirePoint =
+        geo.point(latitude: latitude, longitude: longitude);
+    List<Store> stores = [];
+
+    await geo
+        .collection(collectionRef: getCollectionRef())
+        .within(
+            center: usersAddressGeoFirePoint,
+            radius: radius,
+            field: 'geo_point',
+            strictMode: true)
+        .take(1)
+        .forEach((snap) {
+      for (var i = 0; i < snap.length; i++) {
+        Store _s = Store.fromJson(snap[i].data);
+        stores.add(_s);
+      }
+    });
+
+    return stores;
   }
 
   Future<List<Store>> streamFavStores(UserLocations loc) async {
