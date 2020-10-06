@@ -167,7 +167,6 @@ class LocationPickerState extends State<LocationPicker> {
         ),
       );
     } catch (e) {
-      print(e);
       Fluttertoast.showToast(
           msg: 'Error, Unable to find matching address',
           backgroundColor: CustomColors.alertRed,
