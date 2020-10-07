@@ -1,36 +1,36 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_buyer/db/models/product_categories.dart';
+import 'package:chipchop_buyer/db/models/product_sub_categories.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
-import 'package:chipchop_buyer/screens/store/StoreCategoriesScreen.dart';
+import 'package:chipchop_buyer/screens/store/SubCategoriesProductScreen.dart';
+import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
-class StoreCategoryWidget extends StatelessWidget {
-  StoreCategoryWidget(this.store);
+class SubCategoriesTab extends StatelessWidget {
+  SubCategoriesTab(this.categoryID, this.store);
 
+  final String categoryID;
   final Store store;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future:
-          ProductCategories().getCategoriesForIDs(store.availProductCategories),
+      future: ProductSubCategories()
+          .getSubCategoriesForIDs(categoryID, store.availProductSubCategories),
       builder: (context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Container(
-              child: Text(
-                "Loading...",
-                style: TextStyle(color: CustomColors.black),
+            return Center(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
               ),
             );
           default:
             if (snapshot.hasError)
-              return Container(
-                child: Text(
-                  "Error...",
-                  style: TextStyle(color: CustomColors.black),
+              return Center(
+                child: Column(
+                  children: AsyncWidgets.asyncError(),
                 ),
               );
             else
@@ -43,14 +43,14 @@ class StoreCategoryWidget extends StatelessWidget {
                 children: List<Widget>.generate(
                   snapshot.data.length,
                   (index) {
-                    ProductCategories _c = snapshot.data[index];
+                    ProductSubCategories _sc = snapshot.data[index];
                     return InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => StoreCategoriesScreen(
-                                store, _c.uuid, _c.name),
+                            builder: (context) => SubCategoriesProductsScreen(
+                                store.uuid, categoryID, _sc.uuid, _sc.name),
                           ),
                         );
                       },
@@ -67,7 +67,7 @@ class StoreCategoryWidget extends StatelessWidget {
                           child: Column(
                             children: <Widget>[
                               CachedNetworkImage(
-                                imageUrl: _c.getCategoryImage(),
+                                imageUrl: _sc.getSubCategoryImage(),
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   width: 75,
@@ -97,7 +97,7 @@ class StoreCategoryWidget extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
-                                  _c.name,
+                                  _sc.name,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
