@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/product_categories.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/store/StoreCategoriesScreen.dart';
+import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -19,18 +20,16 @@ class StoreCategoryWidget extends StatelessWidget {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
           case ConnectionState.waiting:
-            return Container(
-              child: Text(
-                "Loading...",
-                style: TextStyle(color: CustomColors.black),
+            return Center(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
               ),
             );
           default:
             if (snapshot.hasError)
-              return Container(
-                child: Text(
-                  "Error...",
-                  style: TextStyle(color: CustomColors.black),
+              return Center(
+                child: Column(
+                  children: AsyncWidgets.asyncError(),
                 ),
               );
             else
@@ -49,8 +48,8 @@ class StoreCategoryWidget extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => StoreCategoriesScreen(
-                                store, _c.uuid, _c.name),
+                            builder: (context) =>
+                                StoreCategoriesScreen(store, _c.uuid, _c.name),
                           ),
                         );
                       },
