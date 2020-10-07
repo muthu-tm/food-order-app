@@ -230,4 +230,20 @@ class Products extends Model {
       throw err;
     }
   }
+
+  Future<List<Map<String, dynamic>>> getByNameRange(String searchKey) async {
+    QuerySnapshot snap = await getCollectionRef()
+        // .where('store_uuid', isEqualTo: storeID)
+        .where('keywords', arrayContains: searchKey)
+        .getDocuments();
+
+    List<Map<String, dynamic>> pList = [];
+    if (snap.documents.isNotEmpty) {
+      snap.documents.forEach((p) {
+        pList.add(p.data);
+      });
+    }
+
+    return pList;
+  }
 }

@@ -141,4 +141,19 @@ class Order {
           .snapshots();
     }
   }
+
+  Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
+    QuerySnapshot snap = await getGroupQuery()
+        .where('order_id', isEqualTo: id)
+        .getDocuments();
+
+    List<Map<String, dynamic>> oList = [];
+    if (snap.documents.isNotEmpty) {
+      snap.documents.forEach((order) {
+        oList.add(order.data);
+      });
+    }
+
+    return oList;
+  }
 }
