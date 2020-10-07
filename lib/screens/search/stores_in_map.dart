@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
+import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,9 +13,6 @@ import '../../db/models/store.dart';
 import '../utils/CustomColors.dart';
 
 class StoresInMap extends StatefulWidget {
-  final UserLocations locations;
-  StoresInMap(this.locations);
-
   @override
   _StoresInMapState createState() => _StoresInMapState();
 }
@@ -29,8 +27,31 @@ class _StoresInMapState extends State<StoresInMap> {
   @override
   void initState() {
     super.initState();
-    latLngCamera = LatLng(widget.locations.geoPoint.geoPoint.latitude,
-        widget.locations.geoPoint.geoPoint.longitude);
+    latLngCamera = LatLng(
+        cachedLocalUser.primaryLocation.geoPoint.geoPoint.latitude,
+        cachedLocalUser.primaryLocation.geoPoint.geoPoint.longitude);
+
+    var _marker = Marker(
+      markerId: MarkerId(cachedLocalUser.getID()),
+      infoWindow: InfoWindow(
+          title: cachedLocalUser.primaryLocation.locationName,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewLocationsScreen(),
+                settings: RouteSettings(name: '/location'),
+              ),
+            );
+          }),
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+        BitmapDescriptor.hueGreen,
+      ),
+      position: LatLng(
+          cachedLocalUser.primaryLocation.geoPoint.geoPoint.latitude,
+          cachedLocalUser.primaryLocation.geoPoint.geoPoint.longitude),
+    );
+    markers.add(_marker);
   }
 
   @override
@@ -71,8 +92,9 @@ class _StoresInMapState extends State<StoresInMap> {
         mapToolbarEnabled: true,
         myLocationEnabled: true,
         initialCameraPosition: CameraPosition(
-            target: LatLng(widget.locations.geoPoint.geoPoint.latitude,
-                widget.locations.geoPoint.geoPoint.longitude),
+            target: LatLng(
+                cachedLocalUser.primaryLocation.geoPoint.geoPoint.latitude,
+                cachedLocalUser.primaryLocation.geoPoint.geoPoint.longitude),
             zoom: 13),
         onCameraMove: (val) {
           latLngCamera = val.target;
@@ -143,10 +165,10 @@ class _StoresInMapState extends State<StoresInMap> {
                     return Padding(
                       padding: EdgeInsets.all(5.0),
                       child: GestureDetector(
-                        onTap: () {
+                        onLongPress: () {
                           _gotoLocation(pos.latitude, pos.longitude);
                         },
-                        onDoubleTap: () {
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -266,8 +288,8 @@ class _StoresInMapState extends State<StoresInMap> {
   Widget getStoreDistance(BuildContext context, GeoPoint pos) {
     return FutureBuilder(
       future: getDistance(
-          widget.locations.geoPoint.geoPoint.latitude,
-          widget.locations.geoPoint.geoPoint.longitude,
+          cachedLocalUser.primaryLocation.geoPoint.geoPoint.latitude,
+          cachedLocalUser.primaryLocation.geoPoint.geoPoint.longitude,
           pos.latitude,
           pos.longitude),
       builder: (context, AsyncSnapshot<double> snapshot) {

@@ -7,7 +7,6 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../app_localizations.dart';
 
@@ -46,14 +45,11 @@ class _SearchHomeState extends State<SearchHome> {
             ),
             InkWell(
               onTap: () async {
-                List<UserLocations> userLocations =
-                    await cachedLocalUser.getLocations();
-
-                if (userLocations.isNotEmpty && userLocations != null) {
+                if (cachedLocalUser.primaryLocation != null) {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => StoresInMap(userLocations.first),
+                      builder: (context) => StoresInMap(),
                       settings: RouteSettings(name: '/search/map'),
                     ),
                   );
