@@ -178,6 +178,13 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
       height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

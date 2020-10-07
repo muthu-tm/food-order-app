@@ -46,8 +46,21 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
-      body: Center(
-        child: SingleChildScrollView(child: _getColumnBody()),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Center(
+          child: Stack(
+            children: [
+              SingleChildScrollView(child: _getColumnBody()),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -68,67 +81,178 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Text(
-              "Welcome",
+              "UNIQUES",
               style: TextStyle(
                   color: Colors.black,
+                  fontFamily: "Orbitron",
                   fontSize: 22.0,
                   fontWeight: FontWeight.bold),
             ),
           ),
-          Container(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 5.0, left: 20.0, right: 20.0),
-              child: TextField(
-                controller: _phoneNumberController,
-                textAlign: TextAlign.left,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(10),
-                ],
-                decoration: InputDecoration(
-                  prefix: Text('+91'),
-                  prefixIcon: Icon(
-                    Icons.phone,
-                    color: CustomColors.lightGreen,
-                    size: 30.0,
-                  ),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 75,
-                  ),
-                  fillColor: CustomColors.white,
-                  hintText: "Mobile Number",
-                  hintStyle: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: 'Montserrat',
-                      color: Colors.black54),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
-                    ),
-                  ),
-                  filled: true,
-                  contentPadding: EdgeInsets.all(14),
-                ),
+          Text(
+            "Buy Organic Vegetables & Groceries",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14.0,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Text(
+              "SIGNUP",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-          SizedBox(height: 5),
-          Row(
-            children: [
-              Container(
-                child: Flexible(
+          Card(
+            margin: EdgeInsets.all(10),
+            color: Color(0xffD8F2A7),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 5.0, top: 20, left: 20.0, right: 20.0),
+                  child: TextField(
+                    controller: _phoneNumberController,
+                    textAlign: TextAlign.left,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(10),
+                    ],
+                    decoration: InputDecoration(
+                      prefix: Text('+91'),
+                      prefixIcon: Icon(
+                        Icons.phone,
+                        color: CustomColors.lightGreen,
+                        size: 30.0,
+                      ),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 75,
+                      ),
+                      fillColor: CustomColors.white,
+                      hintText: "Mobile Number",
+                      hintStyle: TextStyle(
+                          fontSize: 16.0,
+                          fontFamily: 'Montserrat',
+                          color: Colors.black54),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                      ),
+                      filled: true,
+                      contentPadding: EdgeInsets.all(14),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Container(
+                      child: Flexible(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(left: 20, right: 5.0, bottom: 5),
+                          child: TextField(
+                            controller: _nameController,
+                            textAlign: TextAlign.left,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.words,
+                            decoration: InputDecoration(
+                              fillColor: CustomColors.white,
+                              hintText: "First Name",
+                              hintStyle: TextStyle(
+                                  fontSize: 16.0,
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.black54),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              filled: true,
+                              contentPadding: EdgeInsets.all(14),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        child: Padding(
+                          padding:
+                              EdgeInsets.only(right: 20, left: 5.0, bottom: 5),
+                          child: TextField(
+                            controller: _lastNameController,
+                            textAlign: TextAlign.left,
+                            keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.words,
+                            decoration: InputDecoration(
+                              fillColor: CustomColors.white,
+                              hintText: "Last Name",
+                              hintStyle: TextStyle(
+                                  fontSize: 16.0,
+                                  fontFamily: 'Montserrat',
+                                  color: Colors.black54),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              ),
+                              filled: true,
+                              contentPadding: EdgeInsets.all(14),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Container(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 20, right: 5.0, bottom: 5),
+                    padding:
+                        EdgeInsets.only(bottom: 5.0, left: 20.0, right: 20.0),
                     child: TextField(
-                      controller: _nameController,
                       textAlign: TextAlign.left,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(4),
+                      ],
+                      controller: _passKeyController,
+                      obscureText: _passwordVisible,
+                      maxLengthEnforced: true,
                       decoration: InputDecoration(
+                        prefixIcon: IconButton(
+                          icon: Icon(
+                            _passwordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            color: CustomColors.lightGreen,
+                            size: 30.0,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          },
+                        ),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 75,
+                        ),
                         fillColor: CustomColors.white,
-                        hintText: "First Name",
+                        hintText: "4-digit secret key",
                         hintStyle: TextStyle(
                             fontSize: 16.0,
                             fontFamily: 'Montserrat',
@@ -146,124 +270,46 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                     ),
                   ),
                 ),
-              ),
-              Container(
-                child: Flexible(
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 20, left: 5.0, bottom: 5),
-                    child: TextField(
-                      controller: _lastNameController,
-                      textAlign: TextAlign.left,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: InputDecoration(
-                        fillColor: CustomColors.white,
-                        hintText: "Last Name",
-                        hintStyle: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: 'Montserrat',
-                            color: Colors.black54),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                        filled: true,
-                        contentPadding: EdgeInsets.all(14),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 5),
-          Container(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 5.0, left: 20.0, right: 20.0),
-              child: TextField(
-                textAlign: TextAlign.left,
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  LengthLimitingTextInputFormatter(4),
-                ],
-                controller: _passKeyController,
-                obscureText: _passwordVisible,
-                maxLengthEnforced: true,
-                decoration: InputDecoration(
-                  prefixIcon: IconButton(
-                    icon: Icon(
-                      _passwordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                      color: CustomColors.lightGreen,
-                      size: 30.0,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _passwordVisible = !_passwordVisible;
-                      });
-                    },
-                  ),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 75,
-                  ),
-                  fillColor: CustomColors.white,
-                  hintText: "4-digit secret key",
-                  hintStyle: TextStyle(
-                      fontSize: 16.0,
-                      fontFamily: 'Montserrat',
-                      color: Colors.black54),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 0,
-                      style: BorderStyle.none,
-                    ),
-                  ),
-                  filled: true,
-                  contentPadding: EdgeInsets.all(14),
-                ),
-              ),
+                SizedBox(height: 10),
+              ],
             ),
           ),
-          SizedBox(height: 10),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SizedBox(width: 5),
               Icon(Icons.info, color: CustomColors.alertRed, size: 20.0),
               SizedBox(width: 10.0),
-              Expanded(
-                child: RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                      text: AppLocalizations.of(context)
-                          .translate('we_will_send'),
-                      style: TextStyle(
-                          color: CustomColors.blue,
-                          fontWeight: FontWeight.w400)),
-                  TextSpan(
-                      text: AppLocalizations.of(context)
-                          .translate('one_time_password'),
-                      style: TextStyle(
-                          color: CustomColors.alertRed,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.w700)),
-                  TextSpan(
-                      text: AppLocalizations.of(context)
-                          .translate('to_mobile_no'),
-                      style: TextStyle(
-                          color: CustomColors.blue,
-                          fontWeight: FontWeight.w400)),
-                ])),
+              Center(
+                child: Expanded(
+                  child: RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: AppLocalizations.of(context)
+                            .translate('we_will_send'),
+                        style: TextStyle(
+                            color: CustomColors.blue,
+                            fontWeight: FontWeight.w400)),
+                    TextSpan(
+                        text: AppLocalizations.of(context)
+                            .translate('one_time_password'),
+                        style: TextStyle(
+                            color: CustomColors.alertRed,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w700)),
+                    TextSpan(
+                        text: AppLocalizations.of(context)
+                            .translate('to_mobile_no'),
+                        style: TextStyle(
+                            color: CustomColors.blue,
+                            fontWeight: FontWeight.w400)),
+                  ])),
+                ),
               ),
               SizedBox(width: 5),
             ],
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 5),
           RaisedButton(
             elevation: 16.0,
             onPressed: startPhoneAuth,
@@ -272,18 +318,17 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               child: Text(
                 AppLocalizations.of(context).translate('get_otp'),
                 style: TextStyle(
-                  color: CustomColors.blue,
+                  color: CustomColors.white,
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            color: CustomColors.green,
+            color: CustomColors.alertRed,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          Padding(padding: EdgeInsets.only(bottom: 10)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
