@@ -97,7 +97,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed.withOpacity(0.7),
+        backgroundColor: CustomColors.alertRed,
         tooltip: "Clear Results",
         onPressed: () {
           setState(() {

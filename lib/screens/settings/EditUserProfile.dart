@@ -50,12 +50,23 @@ class _EditUserProfileState extends State<EditUserProfile> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).translate('edit_profile')),
-        backgroundColor: CustomColors.blue,
+        title: Text(
+          AppLocalizations.of(context).translate('edit_profile'),
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.white,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () {
           _submit();
         },

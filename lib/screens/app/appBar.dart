@@ -15,7 +15,7 @@ Widget appBar(BuildContext context) {
           child: Icon(
             Icons.menu,
             size: 30.0,
-            color: CustomColors.blueGreen,
+            color: CustomColors.white,
           ),
         ),
       ),
@@ -25,7 +25,7 @@ Widget appBar(BuildContext context) {
         icon: Icon(
           Icons.shopping_cart,
           size: 30.0,
-          color: CustomColors.blueGreen,
+          color: CustomColors.white,
         ),
         onPressed: () {
           Navigator.push(
