@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/screens/orders/OrderAmountWidget.dart';
-import 'package:chipchop_buyer/screens/orders/OrderChatScreen.dart';
+import 'package:chipchop_buyer/screens/chats/OrderChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

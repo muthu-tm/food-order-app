@@ -3,7 +3,7 @@ import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
-import 'package:chipchop_buyer/screens/store/StoreChatScreen.dart';
+import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
 import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';

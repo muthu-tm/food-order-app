@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -82,9 +83,10 @@ class ChatTemplate {
         .collection("customers")
         .document(cachedLocalUser.getID())
         .setData({
-      'contact_nunmber': cachedLocalUser.getID(),
+      'contact_number': cachedLocalUser.getID(),
       'first_name': cachedLocalUser.firstName,
       'last_name': cachedLocalUser.lastName,
+      'store_uuid': storeID,
       'created_at': DateTime.now()
     });
   }
@@ -102,5 +104,33 @@ class ChatTemplate {
       storeID,
       cachedLocalUser.getID(),
     ).orderBy('created_at', descending: true).limit(limit).snapshots();
+  }
+
+  Future<List<Store>> getStoreChatsList() async {
+    try {
+      QuerySnapshot snap = await Model.db
+          .collectionGroup('customers')
+          .where('contact_number', isEqualTo: cachedLocalUser.getID())
+          .orderBy('created_at', descending: true)
+          .getDocuments();
+
+      if (snap.documents.isEmpty) return [];
+
+      List<Store> _stores = [];
+
+      for (var i = 0; i < snap.documents.length; i++) {
+        DocumentSnapshot storeSnap =
+            await snap.documents[i].reference.parent().parent().get();
+
+        if (storeSnap.exists) {
+          Store _s = Store.fromJson(storeSnap.data);
+          _stores.add(_s);
+        }
+      }
+
+      return _stores;
+    } catch (err) {
+      print(err);
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/screens/app/chatBottomWidget.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
@@ -6,7 +7,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 Widget bottomBar(BuildContext context) {
-  Size size = Size(screenWidth(context, dividedBy: 4), 100);
+  Size size = Size(screenWidth(context, dividedBy: 5), 100);
 
   return Container(
     height: 60,
@@ -88,6 +89,7 @@ Widget bottomBar(BuildContext context) {
             ),
           ),
         ),
+        ChatBottomWidget(size),
         SizedBox.fromSize(
           size: size,
           child: InkWell(

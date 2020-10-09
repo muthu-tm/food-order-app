@@ -21,17 +21,19 @@ import '../utils/CustomColors.dart';
 
 class StoreChatScreen extends StatefulWidget {
   final String storeID;
+  final String storeName;
 
-  StoreChatScreen({Key key, @required this.storeID}) : super(key: key);
+  StoreChatScreen({Key key, @required this.storeID, @required this.storeName}) : super(key: key);
 
   @override
-  State createState() => StoreChatScreenState(storeID: storeID);
+  State createState() => StoreChatScreenState(storeID: storeID, storeName: storeName );
 }
 
 class StoreChatScreenState extends State<StoreChatScreen> {
-  StoreChatScreenState({Key key, @required this.storeID});
+  StoreChatScreenState({Key key, @required this.storeID, @required this.storeName});
 
   String storeID;
+  String storeName;
 
   List<DocumentSnapshot> listMessage = new List.from([]);
   int _limit = 20;
@@ -386,7 +388,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Chat",
+          storeName,
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
