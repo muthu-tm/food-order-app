@@ -23,12 +23,14 @@ class _TakePicturePageState extends State<TakePicturePage> {
     _cameraController =
         CameraController(widget.camera, ResolutionPreset.medium);
     _initializeCameraControllerFuture = _cameraController.initialize()
-      ..then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {});
-      });
+      ..then(
+        (_) {
+          if (!mounted) {
+            return;
+          }
+          setState(() {});
+        },
+      );
   }
 
   @override
@@ -43,12 +45,17 @@ class _TakePicturePageState extends State<TakePicturePage> {
       appBar: AppBar(
         title: Text(
           "Take Picture",
+          style: TextStyle(color: CustomColors.lightGrey, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.white),
+          onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed.withOpacity(0.7),
+        backgroundColor: CustomColors.green.withOpacity(0.7),
         onPressed: () async {
           await _takePicture(context);
         },
@@ -67,7 +74,9 @@ class _TakePicturePageState extends State<TakePicturePage> {
           if (snapshot.connectionState == ConnectionState.done) {
             return CameraPreview(_cameraController);
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),

@@ -192,9 +192,9 @@ class _LoginPageState extends State<LoginPage> {
               height: 35,
               width: 125,
               child: RaisedButton(
-                color: CustomColors.green,
+                color: CustomColors.alertRed,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
                 onPressed: () {
                   _submit();
@@ -204,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                     AppLocalizations.of(context).translate('get_otp'),
                     style: TextStyle(
                       fontSize: 18.0,
-                      color: CustomColors.blue,
+                      color: CustomColors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

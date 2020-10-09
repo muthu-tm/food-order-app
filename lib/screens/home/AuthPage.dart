@@ -323,9 +323,9 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             height: 40,
             width: 100,
             child: RaisedButton(
-              color: CustomColors.green,
+              color: CustomColors.alertRed,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+                borderRadius: BorderRadius.circular(5.0),
               ),
               onPressed: () {
                 _submit(widget._user);
@@ -337,7 +337,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   style: TextStyle(
                     fontSize: 18.0,
                     fontFamily: 'Georgia',
-                    color: CustomColors.blue,
+                    color: CustomColors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

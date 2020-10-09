@@ -269,6 +269,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                 ),
                           textAlign: TextAlign.start,
                           autofocus: false,
+                          readOnly: true,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
@@ -293,6 +294,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                           initialValue: order.delivery.deliveryContact ?? "",
                           textAlign: TextAlign.start,
                           autofocus: false,
+                          readOnly: true,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
