@@ -291,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     MaterialPageRoute(
                                       builder: (context) => StoreChatScreen(
                                         storeID: store.uuid,
+                                        storeName: store.name,
                                       ),
                                       settings:
                                           RouteSettings(name: '/store/chat'),
