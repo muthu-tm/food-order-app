@@ -134,7 +134,7 @@ class _AuthPageState extends State<AuthPage> {
       shaderCallback: (bounds) => LinearGradient(
         colors: [
           CustomColors.green,
-          CustomColors.blue,
+          CustomColors.alertRed,
         ],
       ).createShader(
         Rect.fromLTWH(0, 0, bounds.width, bounds.height),

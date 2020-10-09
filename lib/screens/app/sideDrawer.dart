@@ -32,7 +32,7 @@ Widget sideDrawer(BuildContext context) {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: CustomColors.blueGreen,
+                            color: CustomColors.alertRed,
                             style: BorderStyle.solid,
                             width: 2.0,
                           ),
@@ -137,7 +137,7 @@ Widget sideDrawer(BuildContext context) {
                                   );
                                 },
                                 child: CircleAvatar(
-                                  backgroundColor: CustomColors.blueGreen,
+                                  backgroundColor: CustomColors.alertRed,
                                   radius: 15,
                                   child: Icon(
                                     Icons.edit,
@@ -171,7 +171,7 @@ Widget sideDrawer(BuildContext context) {
           ),
         ),
         ListTile(
-            leading: Icon(Icons.home, color: CustomColors.blueGreen),
+            leading: Icon(Icons.home, color: CustomColors.green),
             title: Text(
               "Home",
             ),
@@ -188,7 +188,7 @@ Widget sideDrawer(BuildContext context) {
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
           leading:
-              Icon(Icons.search, color: CustomColors.blueGreen),
+              Icon(Icons.search, color: CustomColors.green),
           title: Text(
             "Search",
           ),
@@ -204,7 +204,7 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.content_copy, color: CustomColors.blueGreen),
+          leading: Icon(Icons.content_copy, color: CustomColors.green),
           title: Text(
             "Orders",
           ),
@@ -220,7 +220,7 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.settings, color: CustomColors.blueGreen),
+          leading: Icon(Icons.settings, color: CustomColors.green),
           title: Text(
             AppLocalizations.of(context).translate('profile_settings'),
           ),
@@ -236,7 +236,7 @@ Widget sideDrawer(BuildContext context) {
         ),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading: Icon(Icons.headset_mic, color: CustomColors.blueGreen),
+          leading: Icon(Icons.headset_mic, color: CustomColors.green),
           title: Text(
             AppLocalizations.of(context).translate('help_and_support'),
           ),

@@ -8,6 +8,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../app_localizations.dart';
 
@@ -32,7 +33,7 @@ class _SearchHomeState extends State<SearchHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.all(5.0),
+              padding: EdgeInsets.all(10.0),
               child: SearchBarWidget(),
             ),
             Align(
@@ -69,14 +70,15 @@ class _SearchHomeState extends State<SearchHome> {
                 child: Row(
                   children: [
                     Icon(
-                      Icons.pin_drop,
+                      FontAwesomeIcons.mapMarkedAlt,
                       size: 30,
-                      color: CustomColors.blueGreen,
+                      color: CustomColors.black,
                     ),
                     Padding(
-                      padding: EdgeInsets.all(5.0),
+                      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
                       child: Text(
                         "NearBy Stores in Map",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontFamily: 'Georgia',
                             color: CustomColors.black,
