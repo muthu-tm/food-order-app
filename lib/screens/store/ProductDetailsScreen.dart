@@ -28,12 +28,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         backgroundColor: CustomColors.green,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart, color: CustomColors.black),
             onPressed: () {
               Navigator.push(
                 context,

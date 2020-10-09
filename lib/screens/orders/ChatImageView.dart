@@ -17,14 +17,14 @@ class ChatImageView extends StatelessWidget {
         title: Text(
           'Image View',
           style: TextStyle(
-            color: CustomColors.lightGrey,
+            color: CustomColors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
-            color: CustomColors.lightGrey,
+            color: CustomColors.black,
           ),
           onPressed: () => Navigator.pop(context),
         ),

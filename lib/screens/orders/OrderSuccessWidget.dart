@@ -39,7 +39,7 @@ class OrderSuccessWidget extends StatelessWidget {
             ),
             Container(
               decoration: BoxDecoration(
-                color: CustomColors.blue,
+                color: CustomColors.green,
                 borderRadius: BorderRadius.all(
                   Radius.circular(5.0),
                 ),
@@ -62,7 +62,7 @@ class OrderSuccessWidget extends StatelessWidget {
                   "Track Order",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: CustomColors.white, fontWeight: FontWeight.bold),
+                      color: CustomColors.alertRed, fontWeight: FontWeight.bold),
                 ),
               ),
             ),

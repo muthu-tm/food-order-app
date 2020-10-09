@@ -1,6 +1,4 @@
-import 'package:chipchop_buyer/screens/orders/OrderDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrderWidget.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
