@@ -374,7 +374,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      color: CustomColors.positiveGreen,
+                      color: CustomColors.blue,
                     ),
                   ),
                 ),

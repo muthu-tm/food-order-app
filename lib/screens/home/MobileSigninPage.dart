@@ -96,16 +96,8 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               fontSize: 14.0,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Text(
-              "SIGNUP",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          SizedBox(
+            height: 20,
           ),
           Card(
             margin: EdgeInsets.all(10),
@@ -276,57 +268,63 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           ),
           Row(
             mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(width: 5),
               Icon(Icons.info, color: CustomColors.alertRed, size: 20.0),
               SizedBox(width: 10.0),
-              Center(
-                child: Expanded(
-                  child: RichText(
-                      text: TextSpan(children: [
-                    TextSpan(
-                        text: AppLocalizations.of(context)
-                            .translate('we_will_send'),
-                        style: TextStyle(
-                            color: CustomColors.blue,
-                            fontWeight: FontWeight.w400)),
-                    TextSpan(
-                        text: AppLocalizations.of(context)
-                            .translate('one_time_password'),
-                        style: TextStyle(
-                            color: CustomColors.alertRed,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700)),
-                    TextSpan(
-                        text: AppLocalizations.of(context)
-                            .translate('to_mobile_no'),
-                        style: TextStyle(
-                            color: CustomColors.blue,
-                            fontWeight: FontWeight.w400)),
-                  ])),
+              Flexible(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: AppLocalizations.of(context)
+                              .translate('we_will_send'),
+                          style: TextStyle(
+                              color: CustomColors.blue,
+                              fontWeight: FontWeight.w400)),
+                      TextSpan(
+                          text: AppLocalizations.of(context)
+                              .translate('one_time_password'),
+                          style: TextStyle(
+                              color: CustomColors.alertRed,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w700)),
+                      TextSpan(
+                          text: AppLocalizations.of(context)
+                              .translate('to_mobile_no'),
+                          style: TextStyle(
+                              color: CustomColors.blue,
+                              fontWeight: FontWeight.w400)),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(width: 5),
             ],
           ),
           SizedBox(height: 5),
-          RaisedButton(
-            elevation: 10.0,
-            onPressed: startPhoneAuth,
-            child: Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                AppLocalizations.of(context).translate('get_otp'),
-                style: TextStyle(
-                  color: CustomColors.white,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
+          SizedBox(
+            height: 40,
+            width: 125,
+            child: RaisedButton(
+              elevation: 10.0,
+              onPressed: startPhoneAuth,
+              child: Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Text(
+                  AppLocalizations.of(context).translate('get_otp'),
+                  style: TextStyle(
+                    color: CustomColors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            color: CustomColors.alertRed,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5.0),
+              color: CustomColors.alertRed,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0),
+              ),
             ),
           ),
           Row(
