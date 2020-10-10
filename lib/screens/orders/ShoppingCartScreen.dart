@@ -12,6 +12,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/CustomColors.dart';
 
@@ -98,13 +99,71 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                     },
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: FlatButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        color: CustomColors.grey,
+                        onPressed: () async {
+                        },
+                        label: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15.0,
+                          ),
+                          child: Text(
+                            "Capture Bill",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        icon: Icon(FontAwesomeIcons.cameraRetro),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: FlatButton.icon(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        color: CustomColors.blueGreen,
+                        onPressed: () async {
+
+                        },
+                        label: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15.0,
+                          ),
+                          child: Text(
+                            "Write ORDERS",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        icon: Icon(FontAwesomeIcons.solidEdit),
+                      ),
+                    ),
+                  ],
+                ),
                 Padding(
                   padding: EdgeInsets.all(5),
                   child: FlatButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
-                    color: CustomColors.blue,
+                    color: CustomColors.green,
                     onPressed: () async {
                       if (snapshot.data.documents.isEmpty) {
                         return;
@@ -145,7 +204,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         horizontal: 20.0,
                       ),
                       child: Text(
-                        "Checkout",
+                        "CHECKOUT",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontFamily: "Georgia",

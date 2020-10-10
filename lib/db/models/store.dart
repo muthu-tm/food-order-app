@@ -134,6 +134,29 @@ class Store extends Model {
         strictMode: true);
   }
 
+  Future<List<Store>> getStoresByTypes(List<String> typeIDs) async {
+    List<Store> stores = [];
+
+    try {
+      if (stores.isEmpty) {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('avail_products', arrayContainsAny: typeIDs)
+            .getDocuments();
+        if (snap.documents.isNotEmpty) {
+          for (var i = 0; i < snap.documents.length; i++) {
+            Store _s = Store.fromJson(snap.documents[i].data);
+            stores.add(_s);
+          }
+        }
+      }
+
+      return stores;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
   Future<List<Store>> getNearByStores(
       double latitude, double longitude, double radius) async {
     Geoflutterfire geo = Geoflutterfire();

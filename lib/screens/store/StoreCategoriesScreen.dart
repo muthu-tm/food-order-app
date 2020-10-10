@@ -46,7 +46,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart, color: CustomColors.black, ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -67,7 +67,7 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
           labelColor: CustomColors.white,
           indicatorWeight: 0,
           indicator: BoxDecoration(
-            color: CustomColors.blue,
+            color: CustomColors.alertRed,
             borderRadius: BorderRadius.circular(5),
           ),
           tabs: [

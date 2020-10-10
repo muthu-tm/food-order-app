@@ -84,7 +84,10 @@ class _SubCategoriesProductsScreenState
           ),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.shopping_cart),
+              icon: Icon(
+                Icons.shopping_cart,
+                color: CustomColors.black,
+              ),
               onPressed: () {
                 Navigator.push(
                   context,

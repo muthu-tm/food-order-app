@@ -3,7 +3,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
 
-import 'product_categories.dart';
 part 'product_types.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -15,6 +14,8 @@ class ProductTypes extends Model {
   String uuid;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
+  @JsonKey(name: 'show_in_dashboard', defaultValue: "")
+  bool showInDashboard;
   @JsonKey(name: 'short_details', defaultValue: "")
   String shortDetails;
   @JsonKey(name: 'product_images', defaultValue: [""])
@@ -76,20 +77,21 @@ class ProductTypes extends Model {
     }
   }
 
-  Future<List<ProductCategories>> getCategories(String uuid) async {
+  Future<List<ProductTypes>> getDashboardTypes() async {
     try {
-      QuerySnapshot snap = await getDocumentReference(uuid)
-              .collection("product_categories").getDocuments();
+      QuerySnapshot snap = await getCollectionRef()
+          .where('show_in_dashboard', isEqualTo: true)
+          .getDocuments();
 
-      List<ProductCategories> _c = [];
+      List<ProductTypes> types = [];
       if (snap.documents.isNotEmpty) {
         for (var i = 0; i < snap.documents.length; i++) {
-          ProductCategories _s = ProductCategories.fromJson(snap.documents[i].data);
-          _c.add(_s);
+          ProductTypes _s = ProductTypes.fromJson(snap.documents[i].data);
+          types.add(_s);
         }
       }
 
-      return _c;
+      return types;
     } catch (err) {
       throw err;
     }
