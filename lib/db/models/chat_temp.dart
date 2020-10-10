@@ -131,6 +131,7 @@ class ChatTemplate {
       return _stores;
     } catch (err) {
       print(err);
+      throw err;
     }
   }
 }
