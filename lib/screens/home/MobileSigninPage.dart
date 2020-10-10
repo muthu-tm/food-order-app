@@ -270,7 +270,6 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(width: 5),
               Icon(Icons.info, color: CustomColors.alertRed, size: 20.0),
               SizedBox(width: 10.0),
               Flexible(
@@ -300,7 +299,6 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   ),
                 ),
               ),
-              SizedBox(width: 5),
             ],
           ),
           SizedBox(height: 5),
