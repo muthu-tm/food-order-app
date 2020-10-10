@@ -23,14 +23,17 @@ class StoreChatScreen extends StatefulWidget {
   final String storeID;
   final String storeName;
 
-  StoreChatScreen({Key key, @required this.storeID, @required this.storeName}) : super(key: key);
+  StoreChatScreen({Key key, @required this.storeID, @required this.storeName})
+      : super(key: key);
 
   @override
-  State createState() => StoreChatScreenState(storeID: storeID, storeName: storeName );
+  State createState() =>
+      StoreChatScreenState(storeID: storeID, storeName: storeName);
 }
 
 class StoreChatScreenState extends State<StoreChatScreen> {
-  StoreChatScreenState({Key key, @required this.storeID, @required this.storeName});
+  StoreChatScreenState(
+      {Key key, @required this.storeID, @required this.storeName});
 
   String storeID;
   String storeName;
@@ -114,7 +117,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   Future<void> onSendMessage(String content, int type) async {
     try {
       if (listMessage.isEmpty) {
-        await ChatTemplate().storeCreateCustomer(storeID);
+        await ChatTemplate().storeCreateCustomer(storeID, storeName);
       }
       // type: 0 = text, 1 = image
       if (content.trim() != '') {

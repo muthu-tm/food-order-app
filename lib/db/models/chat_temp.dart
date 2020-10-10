@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -76,7 +75,7 @@ class ChatTemplate {
         .setData(this.toJson());
   }
 
-  Future<void> storeCreateCustomer(String storeID) async {
+  Future<void> storeCreateCustomer(String storeID, String storeName) async {
     await Model.db
         .collection("stores")
         .document(storeID)
@@ -86,9 +85,34 @@ class ChatTemplate {
       'contact_number': cachedLocalUser.getID(),
       'first_name': cachedLocalUser.firstName,
       'last_name': cachedLocalUser.lastName,
+      'store_name': storeName,
+      'has_store_unread': true,
+      'has_customer_unread': false,
       'store_uuid': storeID,
       'created_at': DateTime.now()
     });
+  }
+
+  Future<void> updateToRead(String storeID) async {
+    await Model.db
+        .collection("stores")
+        .document(storeID)
+        .collection("customers")
+        .document(cachedLocalUser.getID())
+        .updateData(
+      {'has_customer_unread': false, 'updated_at': DateTime.now()},
+    );
+  }
+
+  Future<void> updateToUnRead(String storeID) async {
+    await Model.db
+        .collection("stores")
+        .document(storeID)
+        .collection("customers")
+        .document(cachedLocalUser.getID())
+        .updateData(
+      {'has_customer_unread': true, 'updated_at': DateTime.now()},
+    );
   }
 
   Stream<QuerySnapshot> streamStoreCustomers(String storeID) {
@@ -106,29 +130,13 @@ class ChatTemplate {
     ).orderBy('created_at', descending: true).limit(limit).snapshots();
   }
 
-  Future<List<Store>> getStoreChatsList() async {
+  Stream<QuerySnapshot> streamStoreChatsList() {
     try {
-      QuerySnapshot snap = await Model.db
+      return Model.db
           .collectionGroup('customers')
           .where('contact_number', isEqualTo: cachedLocalUser.getID())
           .orderBy('created_at', descending: true)
-          .getDocuments();
-
-      if (snap.documents.isEmpty) return [];
-
-      List<Store> _stores = [];
-
-      for (var i = 0; i < snap.documents.length; i++) {
-        DocumentSnapshot storeSnap =
-            await snap.documents[i].reference.parent().parent().get();
-
-        if (storeSnap.exists) {
-          Store _s = Store.fromJson(storeSnap.data);
-          _stores.add(_s);
-        }
-      }
-
-      return _stores;
+          .snapshots();
     } catch (err) {
       print(err);
       throw err;

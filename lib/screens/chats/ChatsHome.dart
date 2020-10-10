@@ -1,13 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
-import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatsHome extends StatefulWidget {
-
   @override
   _ChatsHomeState createState() => _ChatsHomeState();
 }
@@ -44,13 +42,13 @@ class _ChatsHomeState extends State<ChatsHome>
   }
 
   Widget getBody(BuildContext context) {
-    return FutureBuilder(
-      future: ChatTemplate().getStoreChatsList(),
-      builder: (context, AsyncSnapshot<List<Store>> snapshot) {
+    return StreamBuilder(
+      stream: ChatTemplate().streamStoreChatsList(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 
         if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.data == null || snapshot.data.length == 0) {
+          if (snapshot.data == null || snapshot.data.documents.length == 0) {
             child = Center(
               child: Container(
                 child: Text(
@@ -65,9 +63,8 @@ class _ChatsHomeState extends State<ChatsHome>
                 scrollDirection: Axis.vertical,
                 primary: true,
                 shrinkWrap: true,
-                itemCount: snapshot.data.length,
+                itemCount: snapshot.data.documents.length,
                 itemBuilder: (BuildContext context, int index) {
-                  Store _s = snapshot.data[index];
                   return Padding(
                     padding: EdgeInsets.all(5),
                     child: ListTile(
@@ -75,41 +72,43 @@ class _ChatsHomeState extends State<ChatsHome>
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                StoreChatScreen(storeID: _s.uuid, storeName: _s.name,),
+                            builder: (context) => StoreChatScreen(
+                              storeID: snapshot
+                                  .data.documents[index].data['store_uuid'],
+                              storeName: snapshot
+                                  .data.documents[index].data['store_name'],
+                            ),
                             settings: RouteSettings(name: '/chats/store'),
                           ),
-                        );
+                        ).then((value) async {
+                          await ChatTemplate().updateToRead(snapshot
+                              .data.documents[index].data['store_uuid']);
+                        });
                       },
-                      leading: SizedBox(
-                        width: 50.0,
-                        height: 50.0,
-                        child: Center(
-                          child: CachedNetworkImage(
-                            imageUrl: _s.getStoreImages().first,
-                            imageBuilder: (context, imageProvider) =>
-                                CircleAvatar(
-                              radius: 45.0,
-                              backgroundImage: imageProvider,
-                              backgroundColor: Colors.transparent,
-                            ),
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
-                            errorWidget: (context, url, error) => Icon(
-                              Icons.error,
-                              size: 35,
-                            ),
-                            fadeOutDuration: Duration(seconds: 1),
-                            fadeInDuration: Duration(seconds: 2),
-                          ),
+                      leading: Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          color: CustomColors.grey,
+                          borderRadius: BorderRadius.circular(40.0),
+                        ),
+                        child: Icon(
+                          Icons.store,
+                          color: CustomColors.green,
                         ),
                       ),
+                      trailing: (snapshot.data.documents[index].data
+                                  .containsKey('has_customer_unread') &&
+                              snapshot.data.documents[index]
+                                  .data['has_customer_unread'])
+                          ? Icon(
+                              Icons.question_answer,
+                              color: CustomColors.alertRed,
+                            )
+                          : Text(""),
                       title: Text(
-                        _s.name,
+                        snapshot.data.documents[index].data['store_name'],
                       ),
-                      trailing: Icon(Icons.arrow_forward_ios),
                     ),
                   );
                 },
