@@ -47,7 +47,7 @@ class _ChatsHomeState extends State<ChatsHome>
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 
-        if (snapshot.connectionState == ConnectionState.done) {
+        if (snapshot.hasData) {
           if (snapshot.data == null || snapshot.data.documents.length == 0) {
             child = Center(
               child: Container(

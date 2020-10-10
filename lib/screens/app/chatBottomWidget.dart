@@ -4,7 +4,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
-bool _newStoreNotification = false;
+bool newStoreNotification = false;
 
 class ChatBottomWidget extends StatefulWidget {
   ChatBottomWidget(this.size);
@@ -18,9 +18,11 @@ class ChatBottomWidget extends StatefulWidget {
 class _ChatBottomWidgetState extends State<ChatBottomWidget> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
+  bool _newStoreNotification = false;
   @override
   void initState() {
     super.initState();
+    _newStoreNotification = newStoreNotification;
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
@@ -57,18 +59,29 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
           await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
           setState(() {
             _newStoreNotification = true;
+            newStoreNotification = true;
           });
         }
       },
       onLaunch: (Map<String, dynamic> message) async {
         if (message['data']['type'] == '1') {
           await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
         }
         print("onLaunch: $message");
       },
       onResume: (Map<String, dynamic> message) async {
         if (message['data']['type'] == '1') {
           await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
         }
         print("onResume: $message");
       },
@@ -93,7 +106,10 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                         builder: (context) => ChatsHome(),
                         settings: RouteSettings(name: '/chats'),
                       ),
-                    ).then((value) => _newStoreNotification = false);
+                    ).then((value) {
+                      _newStoreNotification = false;
+                      newStoreNotification = false;
+                    });
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +168,10 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                     builder: (context) => ChatsHome(),
                     settings: RouteSettings(name: '/chats'),
                   ),
-                ).then((value) => _newStoreNotification = false);
+                ).then((value) {
+                  _newStoreNotification = false;
+                  newStoreNotification = false;
+                });
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
