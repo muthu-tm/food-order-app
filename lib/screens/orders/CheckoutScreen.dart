@@ -14,20 +14,22 @@ import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class OrderCheckoutWidget extends StatefulWidget {
-  OrderCheckoutWidget(
-      this._scaffoldKey, this.op, this._priceDetails, this.storeID);
+class CheckoutScreen extends StatefulWidget {
+  CheckoutScreen(this.op, this._priceDetails, this.storeID, this.images,
+      this.writtenOrders);
 
-  final GlobalKey<ScaffoldState> _scaffoldKey;
   final List<double> _priceDetails;
+  final List<String> images;
+  final String writtenOrders;
   final List<OrderProduct> op;
   final String storeID;
 
   @override
-  _OrderCheckoutWidgetState createState() => _OrderCheckoutWidgetState();
+  _CheckoutScreenState createState() => _CheckoutScreenState();
 }
 
-class _OrderCheckoutWidgetState extends State<OrderCheckoutWidget> {
+class _CheckoutScreenState extends State<CheckoutScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   int deliveryOption = 0;
@@ -35,155 +37,144 @@ class _OrderCheckoutWidgetState extends State<OrderCheckoutWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, dynamic>>(
-      future: Store().getByID(widget.storeID),
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-        Widget child;
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text(
+          "Checkout",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: CustomColors.green,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: InkWell(
+        onTap: () async {
+          try {
+            CustomDialogs.showLoadingDialog(context, _keyLoader);
+            Order _o = Order();
+            OrderAmount _oa = OrderAmount();
+            OrderDelivery _od = OrderDelivery();
 
-        if (snapshot.hasData) {
-          Store store = Store.fromJson(snapshot.data);
+            _oa.deliveryCharge = shippingCharge;
+            _oa.offerAmount = 0.00;
+            _oa.orderAmount = widget._priceDetails[0];
+            _o.amount = _oa;
 
-          child = Container(
-            height: 450,
-            decoration: BoxDecoration(
-              color: CustomColors.lightGreen,
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(10),
-                topLeft: Radius.circular(10),
-              ),
+            _od.userLocation = cachedLocalUser.primaryLocation;
+            _od.deliveryType = deliveryOption;
+            _od.deliveryCharge = shippingCharge;
+            _od.notes = "";
+            _o.delivery = _od;
+
+            _o.customerNotes = "";
+            _o.status = 0;
+            _o.userNumber = cachedLocalUser.getID();
+            _o.storeID = widget.storeID;
+            _o.writtenOrders = widget.writtenOrders;
+            _o.orderImages = widget.images;
+            _o.isReturnable = false;
+            _o.products = widget.op;
+            _o.totalProducts = widget.op.length;
+
+            await _o.create();
+            await ShoppingCart().clearCart();
+            Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+            showDialog(
+                context: _scaffoldKey.currentContext,
+                builder: (context) {
+                  return OrderSuccessWidget();
+                });
+          } catch (err) {
+            print(err);
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: CustomColors.alertRed,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5),
             ),
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    child: ListView(
-                      primary: false,
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(FontAwesomeIcons.locationArrow),
-                          title: Text("Delivery Address"),
-                        ),
-                        selectedAddressSection(),
-                        ListTile(
-                          leading: Icon(FontAwesomeIcons.shippingFast),
-                          title: Text("Delivery Details"),
-                        ),
-                        deliveyOption(store),
-                      ],
-                    ),
+          ),
+          height: 40,
+          width: 170,
+          child: Center(
+            child: Text(
+              "PLACE ORDER",
+              style: TextStyle(
+                  fontFamily: "Georgia",
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: Store().getByID(widget.storeID),
+        builder: (BuildContext context,
+            AsyncSnapshot<Map<String, dynamic>> snapshot) {
+          Widget child;
+
+          if (snapshot.hasData) {
+            Store store = Store.fromJson(snapshot.data);
+
+            child = SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: CustomColors.lightGrey,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    topLeft: Radius.circular(10),
                   ),
-                  flex: 85,
                 ),
-                Expanded(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: CustomColors.alertRed,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            height: 40,
-                            width: 50,
-                            child: Icon(Icons.keyboard_arrow_down,
-                                size: 30, color: CustomColors.white),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            try {
-                              CustomDialogs.showLoadingDialog(
-                                  context, _keyLoader);
-                              Order _o = Order();
-                              OrderAmount _oa = OrderAmount();
-                              OrderDelivery _od = OrderDelivery();
-
-                              _oa.deliveryCharge = shippingCharge;
-                              _oa.offerAmount = 0.00;
-                              _oa.orderAmount = widget._priceDetails[0];
-                              _o.amount = _oa;
-
-                              _od.userLocation =
-                                  cachedLocalUser.primaryLocation;
-                              _od.deliveryType = deliveryOption;
-                              _od.deliveryCharge = shippingCharge;
-                              _od.notes = "";
-                              _o.delivery = _od;
-
-                              _o.customerNotes = "";
-                              _o.status = 0;
-                              _o.userNumber = cachedLocalUser.getID();
-                              _o.storeID = widget.storeID;
-                              _o.writtenOrders = "";
-                              _o.orderImages = [""];
-                              _o.isReturnable = false;
-                              _o.products = widget.op;
-                              _o.totalProducts = widget.op.length;
-
-                              await _o.create();
-                              await ShoppingCart().clearCart();
-                              Navigator.of(_keyLoader.currentContext,
-                                      rootNavigator: true)
-                                  .pop();
-                              showDialog(
-                                  context: widget._scaffoldKey.currentContext,
-                                  builder: (context) {
-                                    return OrderSuccessWidget();
-                                  });
-                            } catch (err) {
-                              print(err);
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: CustomColors.blue,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                            ),
-                            height: 40,
-                            width: MediaQuery.of(context).size.width - 150,
-                            child: Center(
-                              child: Text(
-                                "Place Order",
-                                style: TextStyle(
-                                    fontFamily: "Georgia",
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(
+                        FontAwesomeIcons.locationArrow,
+                        color: CustomColors.alertRed,
+                      ),
+                      title: Text("Delivery Address"),
                     ),
-                  ),
-                  flex: 15,
-                )
-              ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          child = Container(
-            child: Column(children: AsyncWidgets.asyncError()),
-          );
-        } else {
-          child = Container(
-            child: Column(children: AsyncWidgets.asyncWaiting()),
-          );
-        }
+                    selectedAddressSection(),
+                    ListTile(
+                      leading: Icon(FontAwesomeIcons.shippingFast,
+                          color: CustomColors.alertRed),
+                      title: Text("Delivery Options"),
+                    ),
+                    deliveyOption(store),
+                    Padding(
+                      padding: EdgeInsets.all(30),
+                    )
+                  ],
+                ),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            child = Container(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
+            );
+          } else {
+            child = Container(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
+              ),
+            );
+          }
 
-        return child;
-      },
+          return child;
+        },
+      ),
     );
   }
 
@@ -308,7 +299,10 @@ class _OrderCheckoutWidgetState extends State<OrderCheckoutWidget> {
           ),
         ),
         ListTile(
-          leading: Icon(FontAwesomeIcons.fileInvoiceDollar),
+          leading: Icon(
+            FontAwesomeIcons.fileInvoiceDollar,
+            color: CustomColors.alertRed,
+          ),
           title: Text("Price Details"),
         ),
         Container(
@@ -390,7 +384,53 @@ class _OrderCheckoutWidgetState extends State<OrderCheckoutWidget> {
               ),
             ),
           ),
-        )
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(width: 5.0),
+              Icon(
+                Icons.info,
+                color: CustomColors.alertRed,
+                size: 20.0,
+              ),
+              SizedBox(width: 5.0),
+              Flexible(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text:
+                            "While Confirming the ORDER, store may update the",
+                        style: TextStyle(
+                            color: CustomColors.blue,
+                            fontFamily: 'Georgia',
+                            fontWeight: FontWeight.w400),
+                      ),
+                      TextSpan(
+                        text: " Amount",
+                        style: TextStyle(
+                            color: CustomColors.alertRed,
+                            fontSize: 16.0,
+                            fontFamily: 'Georgia',
+                            fontWeight: FontWeight.w700),
+                      ),
+                      TextSpan(
+                        text:
+                            ", if you have added 'Written Orders/Captured List'",
+                        style: TextStyle(
+                            color: CustomColors.blue,
+                            fontFamily: 'Georgia',
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -448,7 +488,6 @@ class _OrderCheckoutWidgetState extends State<OrderCheckoutWidget> {
           borderRadius: BorderRadius.all(
             Radius.circular(5),
           ),
-          border: Border.all(color: Colors.grey.shade200),
         ),
         padding: EdgeInsets.only(left: 12, top: 8, right: 12),
         child: Column(
@@ -469,23 +508,40 @@ class _OrderCheckoutWidgetState extends State<OrderCheckoutWidget> {
                   padding:
                       EdgeInsets.only(left: 8, right: 8, top: 4, bottom: 4),
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
+                    color: CustomColors.alertRed,
                     borderRadius: BorderRadius.all(
                       Radius.circular(5),
                     ),
                   ),
                   child: Text(
                     cachedLocalUser.primaryLocation.locationName,
-                    style: TextStyle(color: CustomColors.blue, fontSize: 10),
+                    style: TextStyle(color: CustomColors.white, fontSize: 10),
                   ),
                 )
               ],
             ),
             createAddressText(
-                cachedLocalUser.primaryLocation.address.street, 16),
-            createAddressText(cachedLocalUser.primaryLocation.address.city, 6),
+                cachedLocalUser.primaryLocation.address.street, 5),
+            createAddressText(cachedLocalUser.primaryLocation.address.city, 5),
             createAddressText(
-                cachedLocalUser.primaryLocation.address.pincode, 6),
+                cachedLocalUser.primaryLocation.address.pincode, 5),
+            SizedBox(
+              height: 6,
+            ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "Landmark : ",
+                    style: TextStyle(fontSize: 12, color: CustomColors.blue),
+                  ),
+                  TextSpan(
+                    text: cachedLocalUser.primaryLocation.address.landmark,
+                    style: TextStyle(color: Colors.black, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
             SizedBox(
               height: 6,
             ),

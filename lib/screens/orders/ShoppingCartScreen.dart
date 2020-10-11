@@ -1,16 +1,25 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:camera/camera.dart';
 import 'package:chipchop_buyer/db/models/order_product.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/orders/EmptyCartWidget.dart';
-import 'package:chipchop_buyer/screens/orders/OrderCheckoutWidget.dart';
+import 'package:chipchop_buyer/screens/orders/CheckoutScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/storage/image_uploader.dart';
+import 'package:chipchop_buyer/services/storage/storage_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -24,6 +33,10 @@ class ShoppingCartScreen extends StatefulWidget {
 class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
+  List<String> imagePaths = [];
+  String writtenOrders = "";
+  bool textBoxEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,25 +58,10 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
         ),
         backgroundColor: CustomColors.green,
       ),
-      drawer: sideDrawer(context),
       body: SingleChildScrollView(
         child: getBody(context),
       ),
     );
-  }
-
-  checkoutBottomSheet(
-      List<double> _priceDetails, List<OrderProduct> op, String storeID) {
-    return _scaffoldKey.currentState.showBottomSheet((context) {
-      return OrderCheckoutWidget(_scaffoldKey, op, _priceDetails, storeID);
-    },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(10),
-            topRight: Radius.circular(10),
-          ),
-        ),
-        elevation: 5);
   }
 
   Widget getBody(BuildContext context) {
@@ -79,143 +77,388 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
               child: EmptyCartWidget(),
             );
           } else {
-            child = Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      ShoppingCart _sc = ShoppingCart.fromJson(
-                          snapshot.data.documents[index].data);
+            child = SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        ShoppingCart _sc = ShoppingCart.fromJson(
+                            snapshot.data.documents[index].data);
 
-                      if (index == snapshot.data.documents.length - 1) {
-                        return buildShoppingCartItem(context, _sc);
-                      } else {
-                        return buildShoppingCartItem(context, _sc);
-                      }
-                    },
+                        if (index == snapshot.data.documents.length - 1) {
+                          return buildShoppingCartItem(context, _sc);
+                        } else {
+                          return buildShoppingCartItem(context, _sc);
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(5),
-                      child: FlatButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        color: CustomColors.grey,
-                        onPressed: () async {
-                        },
-                        label: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 15.0,
-                          ),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(5),
                           child: Text(
-                            "Capture Bill",
-                            textAlign: TextAlign.center,
+                            "Already got the list READY?",
+                            textAlign: TextAlign.start,
                             style: TextStyle(
                                 fontFamily: "Georgia",
-                                fontSize: 16,
-                                color: Colors.white,
+                                fontSize: 14,
+                                color: CustomColors.alertRed,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        icon: Icon(FontAwesomeIcons.cameraRetro),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(5),
-                      child: FlatButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        color: CustomColors.blueGreen,
-                        onPressed: () async {
-
-                        },
-                        label: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 15.0,
+                        ListTile(
+                          title: Container(
+                            width: 75,
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              "You're GREAT!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "Georgia",
+                                  fontSize: 15,
+                                  color: CustomColors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
+                          trailing: Container(
+                            width: 175,
+                            child: FlatButton.icon(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: CustomColors.grey,
+                              onPressed: () async {
+                                String tempPath =
+                                    (await getTemporaryDirectory()).path;
+                                String filePath =
+                                    '$tempPath/order_image_${imagePaths.length}.png';
+                                if (File(filePath).existsSync())
+                                  await File(filePath).delete();
+
+                                List<CameraDescription> cameras =
+                                    await availableCameras();
+                                CameraDescription camera = cameras.first;
+
+                                var result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TakePicturePage(
+                                      camera: camera,
+                                      path: filePath,
+                                    ),
+                                  ),
+                                );
+                                if (result != null) {
+                                  String imageUrl = "";
+                                  try {
+                                    String fileName = DateTime.now()
+                                        .millisecondsSinceEpoch
+                                        .toString();
+                                    String fbFilePath =
+                                        'orders/${cachedLocalUser.getID()}/$fileName.png';
+                                    CustomDialogs.showLoadingDialog(
+                                        context, _keyLoader);
+                                    // Upload to storage
+                                    imageUrl = await Uploader().uploadImageFile(
+                                        true, result.toString(), fbFilePath);
+                                    Navigator.of(_keyLoader.currentContext,
+                                            rootNavigator: true)
+                                        .pop();
+                                  } catch (err) {
+                                    Fluttertoast.showToast(
+                                        msg: 'This file is not an image');
+                                  }
+                                  if (imageUrl != "")
+                                    setState(() {
+                                      imagePaths.add(imageUrl);
+                                    });
+                                }
+                              },
+                              label: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.0,
+                                ),
+                                child: Text(
+                                  "Capture IT!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "Georgia",
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              icon: Icon(FontAwesomeIcons.cameraRetro),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  imagePaths.length > 0
+                      ? GridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.95,
+                          shrinkWrap: true,
+                          primary: false,
+                          mainAxisSpacing: 10,
+                          children: List.generate(
+                            imagePaths.length,
+                            (index) {
+                              return Stack(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10, right: 10, top: 5),
+                                    child: Container(
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl: imagePaths[index],
+                                          imageBuilder:
+                                              (context, imageProvider) => Image(
+                                            fit: BoxFit.fill,
+                                            image: imageProvider,
+                                          ),
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Center(
+                                            child: SizedBox(
+                                              height: 50.0,
+                                              width: 50.0,
+                                              child: CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation(
+                                                          CustomColors.blue),
+                                                  strokeWidth: 2.0),
+                                            ),
+                                          ),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(
+                                            Icons.error,
+                                            size: 35,
+                                          ),
+                                          fadeOutDuration: Duration(seconds: 1),
+                                          fadeInDuration: Duration(seconds: 2),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 10,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.alertRed,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: InkWell(
+                                        child: Icon(
+                                          Icons.close,
+                                          size: 25,
+                                          color: CustomColors.white,
+                                        ),
+                                        onTap: () async {
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
+                                          bool res = await StorageUtils()
+                                              .removeFile(imagePaths[index]);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          if (res)
+                                            setState(() {
+                                              imagePaths
+                                                  .remove(imagePaths[index]);
+                                            });
+                                          else
+                                            Fluttertoast.showToast(
+                                                msg: 'Unable to remove image');
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(5),
                           child: Text(
-                            "Write ORDERS",
+                            "Missing Few Products?",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontFamily: "Georgia",
-                                fontSize: 16,
-                                color: Colors.white,
+                                fontSize: 14,
+                                color: CustomColors.alertRed,
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        icon: Icon(FontAwesomeIcons.solidEdit),
-                      ),
+                        ListTile(
+                          title: Container(
+                            width: 75,
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              "No Worries!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "Georgia",
+                                  fontSize: 15,
+                                  color: CustomColors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          trailing: Container(
+                            width: 175,
+                            child: FlatButton.icon(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: CustomColors.blueGreen,
+                              onPressed: () async {
+                                if (textBoxEnabled)
+                                  setState(() {
+                                    textBoxEnabled = false;
+                                  });
+                                else
+                                  setState(() {
+                                    textBoxEnabled = true;
+                                  });
+                              },
+                              label: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.0,
+                                ),
+                                child: Text(
+                                  "Write it OUT",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "Georgia",
+                                      fontSize: 16,
+                                      color: CustomColors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              icon: Icon(FontAwesomeIcons.solidEdit),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.all(5),
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    color: CustomColors.green,
-                    onPressed: () async {
-                      if (snapshot.data.documents.isEmpty) {
-                        return;
-                      }
-
-                      CustomDialogs.showLoadingDialog(context, _keyLoader);
-
-                      double cPrice = 0.00;
-                      double oPrice = 0.00;
-                      List<OrderProduct> op = [];
-                      for (var item in snapshot.data.documents) {
-                        OrderProduct _op = OrderProduct();
-                        ShoppingCart _sc = ShoppingCart.fromJson(item.data);
-                        Products p =
-                            await Products().getByProductID(_sc.productID);
-                        cPrice += _sc.quantity * p.currentPrice;
-                        oPrice += _sc.quantity * p.offer;
-
-                        _op.productID = p.uuid;
-                        _op.quantity = _sc.quantity;
-                        _op.amount = _sc.quantity * p.currentPrice;
-                        op.add(_op);
-                      }
-
-                      String storeID =
-                          snapshot.data.documents.first.data['store_uuid'];
-                      double sCharge = await Store().getShippingCharge(storeID);
-
-                      List<double> _priceDetails = [cPrice, oPrice, sCharge];
-                      Navigator.of(_keyLoader.currentContext,
-                              rootNavigator: true)
-                          .pop();
-                      checkoutBottomSheet(_priceDetails, op, storeID);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 15.0,
-                        horizontal: 20.0,
+                  ),
+                  textBoxEnabled
+                      ? Container(
+                          child: ListTile(
+                            title: TextFormField(
+                              initialValue: writtenOrders,
+                              maxLines: 10,
+                              keyboardType: TextInputType.multiline,
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: InputDecoration(
+                                hintText: "Write down your ORDER here!",
+                                fillColor: CustomColors.white,
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 3.0, horizontal: 3.0),
+                                border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: CustomColors.white),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                this.writtenOrders = value.trim();
+                              },
+                            ),
+                          ),
+                        )
+                      : Container(),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: FlatButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
                       ),
-                      child: Text(
-                        "CHECKOUT",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: "Georgia",
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                      color: CustomColors.green,
+                      onPressed: () async {
+                        if (snapshot.data.documents.isEmpty) {
+                          return;
+                        }
+
+                        CustomDialogs.showLoadingDialog(context, _keyLoader);
+
+                        double cPrice = 0.00;
+                        double oPrice = 0.00;
+                        List<OrderProduct> op = [];
+                        for (var item in snapshot.data.documents) {
+                          OrderProduct _op = OrderProduct();
+                          ShoppingCart _sc = ShoppingCart.fromJson(item.data);
+                          Products p =
+                              await Products().getByProductID(_sc.productID);
+                          cPrice += _sc.quantity * p.currentPrice;
+                          oPrice += _sc.quantity * p.offer;
+
+                          _op.productID = p.uuid;
+                          _op.quantity = _sc.quantity;
+                          _op.amount = _sc.quantity * p.currentPrice;
+                          op.add(_op);
+                        }
+
+                        String storeID =
+                            snapshot.data.documents.first.data['store_uuid'];
+                        double sCharge =
+                            await Store().getShippingCharge(storeID);
+
+                        List<double> _priceDetails = [cPrice, oPrice, sCharge];
+                        Navigator.of(_keyLoader.currentContext,
+                                rootNavigator: true)
+                            .pop();
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CheckoutScreen(op, _priceDetails, storeID, imagePaths, writtenOrders),
+                            settings: RouteSettings(name: '/orders'),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 15.0,
+                          horizontal: 20.0,
+                        ),
+                        child: Text(
+                          "CHECKOUT",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: "Georgia",
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           }
         } else if (snapshot.hasError) {

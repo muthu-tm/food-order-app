@@ -4,11 +4,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
-import 'package:chipchop_buyer/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
 import 'package:chipchop_buyer/screens/orders/ChatImageView.dart';
+import 'package:chipchop_buyer/services/storage/image_uploader.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -78,25 +77,15 @@ class OrderChatScreenState extends State<OrderChatScreen> {
     pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
     if (pickedFile == null) return;
 
-    imageFile = File(pickedFile.path);
+    setState(() {
+      isLoading = true;
+    });
 
-    if (imageFile != null) {
-      setState(() {
-        isLoading = true;
-      });
-      uploadFile();
-    }
-  }
-
-  Future uploadFile() async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String filePath = 'order_chats/${cachedLocalUser.getID()}/$fileName.png';
     try {
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      String filePath = 'order_chats/${cachedLocalUser.getID()}/$fileName.png';
-      StorageReference reference =
-          FirebaseStorage.instance.ref().child(filePath);
-      StorageUploadTask uploadTask = reference.putFile(imageFile);
-      StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-      String imageUrl = await storageTaskSnapshot.ref.getDownloadURL();
+      imageUrl =
+          await Uploader().uploadImageFile(false, pickedFile.path, filePath);
       await onSendMessage(imageUrl, 1);
       setState(() {
         isLoading = false;
@@ -499,8 +488,21 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       setState(() {
         isLoading = true;
       });
-      imageFile = await fixExifRotation(result.toString());
-      uploadFile();
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      String filePath = 'order_chats/${cachedLocalUser.getID()}/$fileName.png';
+      try {
+        imageUrl =
+            await Uploader().uploadImageFile(true, result.toString(), filePath);
+        await onSendMessage(imageUrl, 1);
+        setState(() {
+          isLoading = false;
+        });
+      } catch (err) {
+        setState(() {
+          isLoading = false;
+        });
+        Fluttertoast.showToast(msg: 'This file is not an image');
+      }
     }
   }
 

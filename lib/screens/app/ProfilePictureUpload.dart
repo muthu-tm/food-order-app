@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
-import 'package:exif/exif.dart';
-import 'package:image/image.dart' as img;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -247,7 +245,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
 
   Future _uploadImage(String path) async {
     if (path != null) {
-      File imageFile = await fixExifRotation(path);
+      File imageFile = await Uploader().fixExifRotation(path);
       CustomDialogs.showLoadingDialog(context, _keyLoader);
       await Uploader().uploadImage(
         widget.type,
@@ -273,38 +271,3 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
   }
 }
 
-Future<File> fixExifRotation(String imagePath) async {
-  final originalFile = File(imagePath);
-  try {
-    List<int> imageBytes = await originalFile.readAsBytes();
-    final originalImage = img.decodeImage(imageBytes);
-
-    final height = originalImage.height;
-    final width = originalImage.width;
-
-    if (height >= width) {
-      return originalFile;
-    }
-    final exifData = await readExifFromBytes(imageBytes);
-    img.Image fixedImage;
-
-    print('Rotating image necessary' + exifData['Image Orientation'].printable);
-    if (exifData['Image Orientation'].printable.contains('90 CW') ||
-        exifData['Image Orientation'].printable.contains('Horizontal')) {
-      fixedImage = img.copyRotate(originalImage, 90);
-    } else if (exifData['Image Orientation'].printable.contains('180')) {
-      fixedImage = img.copyRotate(originalImage, -90);
-    } else if (exifData['Image Orientation'].printable.contains('CCW')) {
-      fixedImage = img.copyRotate(originalImage, 180);
-    } else {
-      fixedImage = img.copyRotate(originalImage, 0);
-    }
-
-    final fixedFile =
-        await originalFile.writeAsBytes(img.encodePng(fixedImage));
-
-    return fixedFile;
-  } catch (err) {
-    return originalFile;
-  }
-}
