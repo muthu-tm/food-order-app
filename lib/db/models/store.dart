@@ -134,12 +134,12 @@ class Store extends Model {
         strictMode: true);
   }
 
-  Future<List<Store>> getStoresByTypes(List<String> typeIDs) async {
+  Future<List<Store>> getStoresByTypes(String typeID) async {
     List<Store> stores = [];
 
     try {
       QuerySnapshot snap = await getCollectionRef()
-          .where('avail_products', arrayContainsAny: typeIDs)
+          .where('avail_products', arrayContains: typeID)
           .getDocuments();
       if (snap.documents.isNotEmpty) {
         for (var i = 0; i < snap.documents.length; i++) {

@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/screens/orders/OrderAmountWidget.dart';
 import 'package:chipchop_buyer/screens/chats/OrderChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
+import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -335,265 +336,426 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         if (snapshot.hasData) {
                           Products _p = snapshot.data;
                           child = Card(
-                              child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: <Widget>[
-                                    Container(
-                                      width: 125,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Container(
-                                            width: 125,
-                                            height: 125,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: CachedNetworkImage(
-                                                imageUrl: _p.getProductImage(),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Image(
-                                                  fit: BoxFit.fill,
-                                                  image: imageProvider,
-                                                ),
-                                                progressIndicatorBuilder:
-                                                    (context, url,
-                                                            downloadProgress) =>
-                                                        Center(
-                                                  child: SizedBox(
-                                                    height: 50.0,
-                                                    width: 50.0,
-                                                    child: CircularProgressIndicator(
-                                                        value: downloadProgress
-                                                            .progress,
-                                                        valueColor:
-                                                            AlwaysStoppedAnimation(
-                                                                CustomColors
-                                                                    .blue),
-                                                        strokeWidth: 2.0),
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      Container(
+                                        width: 125,
+                                        child: Column(
+                                          children: <Widget>[
+                                            Container(
+                                              width: 125,
+                                              height: 125,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      _p.getProductImage(),
+                                                  imageBuilder: (context,
+                                                          imageProvider) =>
+                                                      Image(
+                                                    fit: BoxFit.fill,
+                                                    image: imageProvider,
                                                   ),
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              downloadProgress) =>
+                                                          Center(
+                                                    child: SizedBox(
+                                                      height: 50.0,
+                                                      width: 50.0,
+                                                      child: CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress,
+                                                          valueColor:
+                                                              AlwaysStoppedAnimation(
+                                                                  CustomColors
+                                                                      .blue),
+                                                          strokeWidth: 2.0),
+                                                    ),
+                                                  ),
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Icon(
+                                                    Icons.error,
+                                                    size: 35,
+                                                  ),
+                                                  fadeOutDuration:
+                                                      Duration(seconds: 1),
+                                                  fadeInDuration:
+                                                      Duration(seconds: 2),
                                                 ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(
-                                                  Icons.error,
-                                                  size: 35,
-                                                ),
-                                                fadeOutDuration:
-                                                    Duration(seconds: 1),
-                                                fadeInDuration:
-                                                    Duration(seconds: 2),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.all(5),
-                                      width: MediaQuery.of(context).size.width -
-                                          150,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              '${_p.name}',
-                                              textAlign: TextAlign.start,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 3,
-                                              style: TextStyle(
-                                                  color: CustomColors.black,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'Weight: ',
-                                                  textAlign: TextAlign.start,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      fontFamily: "Georgia",
-                                                      color: CustomColors
-                                                          .lightBlue,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                              ),
-                                              Text(
-                                                '${_p.weight}',
+                                      Container(
+                                        padding: EdgeInsets.all(5),
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                150,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                '${_p.name}',
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
+                                                maxLines: 3,
                                                 style: TextStyle(
-                                                  color: CustomColors.black,
-                                                  fontFamily: "Georgia",
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.all(5.0),
-                                                child: Text(
-                                                  _p.getUnit(),
-                                                  textAlign: TextAlign.start,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                    fontFamily: "Georgia",
                                                     color: CustomColors.black,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    'Weight: ',
+                                                    textAlign: TextAlign.start,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontFamily: "Georgia",
+                                                        color: CustomColors
+                                                            .lightBlue,
+                                                        fontWeight:
+                                                            FontWeight.bold),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'Price: ',
+                                                Text(
+                                                  '${_p.weight}',
                                                   textAlign: TextAlign.start,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style: TextStyle(
-                                                      fontFamily: "Georgia",
-                                                      color: CustomColors
-                                                          .lightBlue,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                    color: CustomColors.black,
+                                                    fontFamily: "Georgia",
+                                                  ),
                                                 ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.centerRight,
-                                                child: Padding(
+                                                Padding(
                                                   padding: EdgeInsets.all(5.0),
                                                   child: Text(
-                                                    'Rs. ${_p.currentPrice}',
-                                                    textAlign: TextAlign.end,
+                                                    _p.getUnit(),
+                                                    textAlign: TextAlign.start,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                       fontFamily: "Georgia",
-                                                      fontSize: 16,
                                                       color: CustomColors.black,
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.all(5.0),
-                                            child: Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: FlatButton(
-                                                child: Text(
-                                                  "Show Details",
-                                                  style: TextStyle(
-                                                      color: CustomColors.blue),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    'Price: ',
+                                                    textAlign: TextAlign.start,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontFamily: "Georgia",
+                                                        color: CustomColors
+                                                            .lightBlue,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
                                                 ),
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ProductDetailsScreen(
-                                                              _p),
-                                                      settings: RouteSettings(
-                                                          name:
-                                                              '/store/products'),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.all(5.0),
+                                                    child: Text(
+                                                      'Rs. ${_p.currentPrice}',
+                                                      textAlign: TextAlign.end,
+                                                      style: TextStyle(
+                                                        fontFamily: "Georgia",
+                                                        fontSize: 16,
+                                                        color:
+                                                            CustomColors.black,
+                                                      ),
                                                     ),
-                                                  );
-                                                },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Align(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                child: FlatButton(
+                                                  child: Text(
+                                                    "Show Details",
+                                                    style: TextStyle(
+                                                        color:
+                                                            CustomColors.blue),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProductDetailsScreen(
+                                                                _p),
+                                                        settings: RouteSettings(
+                                                            name:
+                                                                '/store/products'),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ListTile(
+                                    leading: Text(
+                                      "Quantity: ",
+                                      style: TextStyle(
+                                          fontFamily: "Georgia",
+                                          fontSize: 16,
+                                          color: CustomColors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    title: Text(
+                                      '${order.products[index].quantity.round()}',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontFamily: "Georgia",
+                                          fontSize: 16,
+                                          color: CustomColors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    trailing: Text(
+                                      'Rs. ${order.products[index].amount}',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                          fontFamily: "Georgia",
+                                          fontSize: 16,
+                                          color: CustomColors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  ListTile(
+                                    leading: Icon(
+                                      FontAwesomeIcons.images,
+                                      color: CustomColors.blueGreen,
+                                    ),
+                                    title: Text("Images"),
+                                  ),
+                                  order.orderImages.length > 0
+                                      ? GridView.count(
+                                          crossAxisCount: 2,
+                                          crossAxisSpacing: 10,
+                                          childAspectRatio: 0.95,
+                                          shrinkWrap: true,
+                                          primary: false,
+                                          mainAxisSpacing: 10,
+                                          children: List.generate(
+                                            order.orderImages.length,
+                                            (index) {
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 10,
+                                                    right: 10,
+                                                    top: 5),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ImageView(
+                                                          url:
+                                                              order.orderImages[
+                                                                  index],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl: order
+                                                            .orderImages[index],
+                                                        imageBuilder: (context,
+                                                                imageProvider) =>
+                                                            Image(
+                                                          fit: BoxFit.fill,
+                                                          image: imageProvider,
+                                                        ),
+                                                        progressIndicatorBuilder:
+                                                            (context, url,
+                                                                    downloadProgress) =>
+                                                                Center(
+                                                          child: SizedBox(
+                                                            height: 50.0,
+                                                            width: 50.0,
+                                                            child: CircularProgressIndicator(
+                                                                value:
+                                                                    downloadProgress
+                                                                        .progress,
+                                                                valueColor:
+                                                                    AlwaysStoppedAnimation(
+                                                                        CustomColors
+                                                                            .blue),
+                                                                strokeWidth:
+                                                                    2.0),
+                                                          ),
+                                                        ),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            Icon(
+                                                          Icons.error,
+                                                          size: 35,
+                                                        ),
+                                                        fadeOutDuration:
+                                                            Duration(
+                                                                seconds: 1),
+                                                        fadeInDuration:
+                                                            Duration(
+                                                                seconds: 2),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        )
+                                      : Container(
+                                          child: Text(
+                                            "No Images added",
+                                            style: TextStyle(
+                                                fontFamily: "Georgia",
+                                                fontSize: 16,
+                                                color: CustomColors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                  ListTile(
+                                    leading: Icon(
+                                      FontAwesomeIcons.solidEdit,
+                                      color: CustomColors.blueGreen,
+                                    ),
+                                    title: Text("Written Orders"),
+                                  ),
+                                  order.writtenOrders.trim().isNotEmpty
+                                      ? Container(
+                                          child: ListTile(
+                                            title: TextFormField(
+                                              initialValue: order.writtenOrders,
+                                              maxLines: 10,
+                                              keyboardType:
+                                                  TextInputType.multiline,
+                                              textCapitalization:
+                                                  TextCapitalization.sentences,
+                                              readOnly: true,
+                                              decoration: InputDecoration(
+                                                fillColor: CustomColors.white,
+                                                filled: true,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 3.0,
+                                                        horizontal: 3.0),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          CustomColors.white),
+                                                ),
                                               ),
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                ListTile(
-                                  leading: Text(
-                                    "Quantity: ",
-                                    style: TextStyle(
-                                        fontFamily: "Georgia",
-                                        fontSize: 16,
-                                        color: CustomColors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  title: Text(
-                                    '${order.products[index].quantity.round()}',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontFamily: "Georgia",
-                                        fontSize: 16,
-                                        color: CustomColors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  trailing: Text(
-                                    'Rs. ${order.products[index].amount}',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        fontFamily: "Georgia",
-                                        fontSize: 16,
-                                        color: CustomColors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                order.status <= 1
-                                    ? RaisedButton.icon(
-                                        color: CustomColors.alertRed,
-                                        onPressed: () async {
-                                          try {
-                                            await order.cancelOrder(
-                                                order.uuid, "");
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    'Order Cancelled Successfully',
-                                                backgroundColor:
-                                                    CustomColors.grey,
-                                                textColor: CustomColors.white);
-                                          } catch (err) {
-                                            print(err);
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    'Error, Unable to Cancel Order',
-                                                backgroundColor:
-                                                    CustomColors.alertRed,
-                                                textColor: CustomColors.white);
-                                          }
-                                        },
-                                        icon: Icon(
-                                          Icons.close,
-                                          color: CustomColors.lightGrey,
+                                          ),
+                                        )
+                                      : Container(
+                                          child: Text(
+                                            "No Orders Written",
+                                            style: TextStyle(
+                                                fontFamily: "Georgia",
+                                                fontSize: 16,
+                                                color: CustomColors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                         ),
-                                        label: Text(
-                                          "Cancel Order",
-                                          style: TextStyle(
-                                              color: CustomColors.lightGrey,
-                                              fontSize: 14),
-                                        ),
-                                      )
-                                    : Container(),
-                              ],
+                                  order.status <= 1
+                                      ? RaisedButton.icon(
+                                          color: CustomColors.alertRed,
+                                          onPressed: () async {
+                                            try {
+                                              await order.cancelOrder(
+                                                  order.uuid, "");
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'Order Cancelled Successfully',
+                                                  backgroundColor:
+                                                      CustomColors.grey,
+                                                  textColor:
+                                                      CustomColors.white);
+                                            } catch (err) {
+                                              print(err);
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'Error, Unable to Cancel Order',
+                                                  backgroundColor:
+                                                      CustomColors.alertRed,
+                                                  textColor:
+                                                      CustomColors.white);
+                                            }
+                                          },
+                                          icon: Icon(
+                                            Icons.close,
+                                            color: CustomColors.lightGrey,
+                                          ),
+                                          label: Text(
+                                            "Cancel Order",
+                                            style: TextStyle(
+                                                color: CustomColors.lightGrey,
+                                                fontSize: 14),
+                                          ),
+                                        )
+                                      : Container(),
+                                  Padding(
+                                    padding: EdgeInsets.all(30),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ));
+                          );
                         } else if (snapshot.hasError) {
                           child = Center(
                             child: Column(

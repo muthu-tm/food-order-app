@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
-import 'package:chipchop_buyer/screens/orders/ChatImageView.dart';
+import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +199,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ChatImageView(
+                              builder: (context) => ImageView(
                                 url: document.data['content'],
                               ),
                             ),
@@ -308,7 +308,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ChatImageView(
+                                builder: (context) => ImageView(
                                   url: document.data['content'],
                                 ),
                               ),

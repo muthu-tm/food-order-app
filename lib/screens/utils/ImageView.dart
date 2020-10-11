@@ -4,10 +4,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import '../utils/CustomColors.dart';
 
-class ChatImageView extends StatelessWidget {
+class ImageView extends StatelessWidget {
   final String url;
 
-  ChatImageView({Key key, @required this.url}) : super(key: key);
+  ImageView({Key key, @required this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

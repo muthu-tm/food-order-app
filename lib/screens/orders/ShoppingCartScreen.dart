@@ -13,6 +13,7 @@ import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
 import 'package:chipchop_buyer/services/storage/storage_utils.dart';
@@ -218,39 +219,54 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                   Padding(
                                     padding: EdgeInsets.only(
                                         left: 10, right: 10, top: 5),
-                                    child: Container(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl: imagePaths[index],
-                                          imageBuilder:
-                                              (context, imageProvider) => Image(
-                                            fit: BoxFit.fill,
-                                            image: imageProvider,
-                                          ),
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              Center(
-                                            child: SizedBox(
-                                              height: 50.0,
-                                              width: 50.0,
-                                              child: CircularProgressIndicator(
-                                                  value:
-                                                      downloadProgress.progress,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                          CustomColors.blue),
-                                                  strokeWidth: 2.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ImageView(
+                                              url: imagePaths[index],
                                             ),
                                           ),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(
-                                            Icons.error,
-                                            size: 35,
+                                        );
+                                      },
+                                      child: Container(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: imagePaths[index],
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Image(
+                                              fit: BoxFit.fill,
+                                              image: imageProvider,
+                                            ),
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                Center(
+                                              child: SizedBox(
+                                                height: 50.0,
+                                                width: 50.0,
+                                                child: CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            CustomColors.blue),
+                                                    strokeWidth: 2.0),
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) => Icon(
+                                              Icons.error,
+                                              size: 35,
+                                            ),
+                                            fadeOutDuration:
+                                                Duration(seconds: 1),
+                                            fadeInDuration:
+                                                Duration(seconds: 2),
                                           ),
-                                          fadeOutDuration: Duration(seconds: 1),
-                                          fadeInDuration: Duration(seconds: 2),
                                         ),
                                       ),
                                     ),
