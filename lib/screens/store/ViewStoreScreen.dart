@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
+import 'package:chipchop_buyer/screens/orders/StoreOrderScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreCategoryWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreFlashSaleWidget.dart';
 import 'package:chipchop_buyer/screens/store/StorePopularWidet.dart';
@@ -53,7 +54,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ShoppingCartScreen(),
+              builder: (context) => StoreOrderScreen(widget.store.uuid, widget.store.name),
               settings: RouteSettings(name: '/cart'),
             ),
           ).then((value) {

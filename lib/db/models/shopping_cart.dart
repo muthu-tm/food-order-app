@@ -130,6 +130,23 @@ class ShoppingCart {
     }
   }
 
+  Future<void> clearCartForStore(String storeID) async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('in_wishlist', isEqualTo: false)
+          .getDocuments();
+
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          await snap.documents[i].reference.delete();
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Stream<QuerySnapshot> streamWishlist() {
     try {
       return getCollectionRef()

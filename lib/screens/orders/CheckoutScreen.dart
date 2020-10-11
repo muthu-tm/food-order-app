@@ -15,9 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  CheckoutScreen(this.op, this._priceDetails, this.storeID, this.images,
-      this.writtenOrders);
+  CheckoutScreen(this.clearAll, this.op, this._priceDetails, this.storeID,
+      this.images, this.writtenOrders);
 
+  final bool clearAll;
   final List<double> _priceDetails;
   final List<String> images;
   final String writtenOrders;
@@ -85,7 +86,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             _o.totalProducts = widget.op.length;
 
             await _o.create();
-            await ShoppingCart().clearCart();
+            if (widget.clearAll)
+              await ShoppingCart().clearCart();
+            else
+              await ShoppingCart().clearCartForStore(widget.storeID);
             Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
             showDialog(
                 context: _scaffoldKey.currentContext,
