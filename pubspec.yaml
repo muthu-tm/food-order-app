@@ -52,6 +52,7 @@ dependencies:
   geolocator: ^5.3.2+2
   geoflutterfire: ^2.1.0
   cached_network_image: ^2.3.1
+  google_fonts: ^1.1.0
   carousel_pro: ^1.0.0
   font_awesome_flutter: ^8.8.1
   fluttertoast: ^7.1.1
@@ -81,7 +82,7 @@ flutter:
     - lang/en.json
     - lang/ta.json
     - lang/hi.json
-
+    
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -98,10 +99,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: OLED
+      fonts:
+        - asset: fonts/OLED.otf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

@@ -55,9 +55,19 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           ),
         ),
         child: Center(
-          child: Stack(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SingleChildScrollView(child: _getColumnBody()),
+              Spacer(),
+              Text(
+                "Powered by Fourcup Inc.",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              )
             ],
           ),
         ),
@@ -84,7 +94,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               "UNIQUES",
               style: TextStyle(
                   color: Colors.black,
-                  fontFamily: "Orbitron",
+                  fontFamily: "OLED",
                   fontSize: 22.0,
                   fontWeight: FontWeight.bold),
             ),

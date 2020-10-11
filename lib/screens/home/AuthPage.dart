@@ -51,8 +51,7 @@ class _AuthPageState extends State<AuthPage> {
                   future: User().getByID(snapshot.data),
                   builder: (BuildContext context,
                       AsyncSnapshot<Map<String, dynamic>> userSnapshot) {
-                    if (userSnapshot.connectionState ==
-                        ConnectionState.done) {
+                    if (userSnapshot.connectionState == ConnectionState.done) {
                       if (userSnapshot.data == null) {
                         return LoginPage(false, _scaffoldKey);
                       } else {
@@ -179,16 +178,52 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
+        gradient: LinearGradient(
+          colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+      ),
       height: MediaQuery.of(context).size.height,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                child: Image.asset(
+                  "images/icons/logo.png",
+                  height: 80,
+                ),
+              ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      "UNIQUES",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: "OLED",
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    "Buy Organic Vegetables & Groceries",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
           Container(
             child: Flexible(
               child: widget._user.getProfilePicPath() == ""
@@ -198,14 +233,14 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: CustomColors.lightGreen,
+                            color: CustomColors.alertRed,
                             style: BorderStyle.solid,
                             width: 2.0),
                       ),
                       child: Icon(
                         Icons.person,
                         size: 45.0,
-                        color: CustomColors.blue,
+                        color: CustomColors.lightGrey,
                       ),
                     )
                   : SizedBox(
@@ -235,7 +270,9 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     ),
             ),
           ),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
           Text(
             widget._user.firstName,
             style: TextStyle(
@@ -253,10 +290,13 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
           ),
           SizedBox(
-            height: 20,
+            height: 10,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, bottom: 5),
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
             child: TextFormField(
               textAlign: TextAlign.center,
               inputFormatters: [
@@ -273,8 +313,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     style: BorderStyle.none,
                   ),
                 ),
-                hintText:
-                    AppLocalizations.of(context).translate('secret_key'),
+                hintText: AppLocalizations.of(context).translate('secret_key'),
                 fillColor: CustomColors.white,
                 filled: true,
                 contentPadding: EdgeInsets.all(14),
@@ -380,6 +419,10 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                 ),
               ],
             ),
+          ),
+          Text(
+            "Powered by Fourcup Inc.",
+            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
           )
         ],
       ),

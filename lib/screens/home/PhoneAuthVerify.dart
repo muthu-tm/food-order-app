@@ -91,7 +91,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                   "UNIQUES",
                   style: TextStyle(
                       color: Colors.black,
-                      fontFamily: "Orbitron",
+                      fontFamily: "OLED",
                       fontSize: 22.0,
                       fontWeight: FontWeight.bold),
                 ),

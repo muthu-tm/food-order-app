@@ -56,7 +56,22 @@ class _LoginPageState extends State<LoginPage> {
         ? Scaffold(
             key: _scaffoldKey,
             backgroundColor: CustomColors.lightGrey,
-            body: Container(
+            body: SingleChildScrollView(
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: _getBody(),
+              ),
+            ),
+          )
+        : SingleChildScrollView(
+            child: Container(
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -65,21 +80,6 @@ class _LoginPageState extends State<LoginPage> {
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: SingleChildScrollView(
-                child: _getBody(),
-              ),
-            ),
-          )
-        : Container(
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: SingleChildScrollView(
               child: _getBody(),
             ),
           );
@@ -89,11 +89,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.150,
-        ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
               padding: EdgeInsets.all(5),
@@ -105,9 +101,22 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 5,
+            Text(
+              "UNIQUES",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: "OLED",
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold),
             ),
+            Text(
+              "Buy Organic Vegetables & Groceries",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14.0,
+              ),
+            ),
+            SizedBox(height: 10),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5),
               child: Text(
@@ -265,32 +274,29 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 20.0,
         ),
-        Align(
-          alignment: FractionalOffset.bottomCenter,
-          child: FlatButton.icon(
-            onPressed: () {
-              showDialog(
-                context: context,
-                routeSettings: RouteSettings(name: "/home/help"),
-                builder: (context) {
-                  return Center(
-                    child: contactAndSupportDialog(context),
-                  );
-                },
-              );
-            },
-            icon: Icon(
-              Icons.info,
+        FlatButton.icon(
+          onPressed: () {
+            showDialog(
+              context: context,
+              routeSettings: RouteSettings(name: "/home/help"),
+              builder: (context) {
+                return Center(
+                  child: contactAndSupportDialog(context),
+                );
+              },
+            );
+          },
+          icon: Icon(
+            Icons.info,
+            color: CustomColors.blue,
+          ),
+          label: Text(
+            AppLocalizations.of(context).translate('help_support'),
+            style: TextStyle(
+              fontFamily: 'Georgia',
+              fontWeight: FontWeight.bold,
               color: CustomColors.blue,
-            ),
-            label: Text(
-              AppLocalizations.of(context).translate('help_support'),
-              style: TextStyle(
-                fontFamily: 'Georgia',
-                fontWeight: FontWeight.bold,
-                color: CustomColors.blue,
-                fontSize: 16.0,
-              ),
+              fontSize: 16.0,
             ),
           ),
         ),
