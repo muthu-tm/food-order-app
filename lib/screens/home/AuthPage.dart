@@ -270,9 +270,6 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     ),
             ),
           ),
-          SizedBox(
-            height: 15,
-          ),
           Text(
             widget._user.firstName,
             style: TextStyle(
@@ -290,7 +287,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 5,
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -384,7 +381,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
           ),
           SizedBox(
-            height: 15,
+            height: 10,
           ),
           Container(
             child: Row(

@@ -55,59 +55,57 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           ),
         ),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SingleChildScrollView(child: _getColumnBody()),
-              Spacer(),
-              Text(
-                "Powered by Fourcup Inc.",
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 20,
-              )
-            ],
-          ),
+          child: SingleChildScrollView(child: _getColumnBody()),
         ),
       ),
     );
   }
 
   Widget _getColumnBody() => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 25),
-            child: ClipRRect(
-              child: Image.asset(
-                "images/icons/logo.png",
-                height: 80,
-                width: 80,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ClipRRect(
+                child: Image.asset(
+                  "images/icons/logo.png",
+                  height: 80,
+                ),
               ),
-            ),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      "UNIQUES",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontFamily: "OLED",
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    "Buy Organic Vegetables & Groceries",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Text(
-              "UNIQUES",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: "OLED",
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
+          SizedBox(height: 20),
           Text(
-            "Buy Organic Vegetables & Groceries",
+            "SIGNUP",
             style: TextStyle(
+              fontFamily: "OLED",
               color: Colors.black,
-              fontSize: 14.0,
+              fontWeight: FontWeight.bold,
+              fontSize: 15.0,
             ),
-          ),
-          SizedBox(
-            height: 20,
           ),
           Card(
             margin: EdgeInsets.all(10),
@@ -335,30 +333,39 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                child: Text(
-                  AppLocalizations.of(context).translate('already_account'),
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontFamily: 'Georgia',
-                    color: CustomColors.positiveGreen,
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Container(
+                    child: Text(
+                      AppLocalizations.of(context).translate('already_account'),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Georgia',
+                        color: CustomColors.positiveGreen,
+                      ),
+                    ),
                   ),
-                ),
+                  FlatButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      AppLocalizations.of(context).translate('login'),
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: CustomColors.blue,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              FlatButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(
-                  AppLocalizations.of(context).translate('login'),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: CustomColors.blue,
-                  ),
-                ),
+              Text(
+                "Powered by Fourcup Inc.",
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ],
           ),
