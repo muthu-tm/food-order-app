@@ -7,7 +7,6 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
-import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/orders/EmptyCartWidget.dart';
 import 'package:chipchop_buyer/screens/orders/CheckoutScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
