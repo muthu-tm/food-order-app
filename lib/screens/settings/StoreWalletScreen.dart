@@ -50,7 +50,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
             ),
             Padding(
               padding: EdgeInsets.all(5),
-              child: getReferralsWidget(),
+              child: getTransactionHistoryWidget(),
             ),
           ],
         ),
@@ -165,7 +165,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
     );
   }
 
-  Widget getReferralsWidget() {
+  Widget getTransactionHistoryWidget() {
     return StreamBuilder(
       stream: UserStoreWalletHstory().streamUsersStoreWallet(widget.storeID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
