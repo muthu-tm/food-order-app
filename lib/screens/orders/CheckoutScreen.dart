@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/db/models/delivery_details.dart';
 import 'package:chipchop_buyer/db/models/order.dart';
 import 'package:chipchop_buyer/db/models/order_amount.dart';
@@ -84,6 +85,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             _o.isReturnable = false;
             _o.products = widget.op;
             _o.totalProducts = widget.op.length;
+
+            await Customers().storeCreateCustomer(widget.storeID, "");
 
             await _o.create();
             if (widget.clearAll)

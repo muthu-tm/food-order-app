@@ -6,6 +6,7 @@ import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
+import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/hash_generator.dart';
@@ -228,8 +229,8 @@ Widget sideDrawer(BuildContext context) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => SettingsHome(),
-                settings: RouteSettings(name: '/settings'),
+                builder: (context) => UserSetting(),
+                settings: RouteSettings(name: '/settings/profile'),
               ),
             );
           },

@@ -75,24 +75,6 @@ class ChatTemplate {
         .setData(this.toJson());
   }
 
-  Future<void> storeCreateCustomer(String storeID, String storeName) async {
-    await Model.db
-        .collection("stores")
-        .document(storeID)
-        .collection("customers")
-        .document(cachedLocalUser.getID())
-        .setData({
-      'contact_number': cachedLocalUser.getID(),
-      'first_name': cachedLocalUser.firstName,
-      'last_name': cachedLocalUser.lastName,
-      'store_name': storeName,
-      'has_store_unread': true,
-      'has_customer_unread': false,
-      'store_uuid': storeID,
-      'created_at': DateTime.now()
-    });
-  }
-
   Future<void> updateToRead(String storeID) async {
     await Model.db
         .collection("stores")

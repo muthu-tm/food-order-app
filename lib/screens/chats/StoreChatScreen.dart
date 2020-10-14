@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
+import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
 import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
@@ -106,7 +107,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   Future<void> onSendMessage(String content, int type) async {
     try {
       if (listMessage.isEmpty) {
-        await ChatTemplate().storeCreateCustomer(storeID, storeName);
+        await Customers().storeCreateCustomer(storeID, storeName);
       }
       // type: 0 = text, 1 = image
       if (content.trim() != '') {

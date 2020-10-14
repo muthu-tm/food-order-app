@@ -52,6 +52,8 @@ class Store extends Model {
   List<StoreContacts> contacts;
   @JsonKey(name: 'delivery')
   DeliveryDetails deliveryDetails;
+  @JsonKey(name: 'keywords', defaultValue: [""])
+  List<String> keywords;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
@@ -176,6 +178,22 @@ class Store extends Model {
         stores.add(_s);
       }
     });
+
+    return stores;
+  }
+
+  Future<List<Store>> getStoreByName(String searchKey) async {
+    List<Store> stores = [];
+
+    QuerySnapshot snap = await getCollectionRef()
+        .where('keywords', arrayContainsAny: searchKey.split(' '))
+        .getDocuments();
+    if (snap.documents.isNotEmpty) {
+      for (var i = 0; i < snap.documents.length; i++) {
+        Store _s = Store.fromJson(snap.documents[i].data);
+        stores.add(_s);
+      }
+    }
 
     return stores;
   }
