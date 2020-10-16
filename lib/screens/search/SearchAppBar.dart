@@ -58,11 +58,11 @@ class _SearchAppBarState extends State<SearchAppBar> {
             hintText: searchMode == 0
                 ? "Type Store Name"
                 : searchMode == 1 ? "Type Product Name" : "Type Order ID",
-            hintStyle: TextStyle(color: CustomColors.white),
+            hintStyle: TextStyle(color: CustomColors.black),
           ),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: CustomColors.white),
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
         ),
         actions: <Widget>[
@@ -70,7 +70,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
             icon: Icon(
               Icons.search,
               size: 30.0,
-              color: CustomColors.white,
+              color: CustomColors.black,
             ),
             onPressed: () {
               if (_searchController.text.isEmpty ||

@@ -22,6 +22,8 @@ class _StoresInMapState extends State<StoresInMap> {
   Set<Marker> markers = Set();
   List<Store> stores = [];
 
+  double radius = 5.0;
+
   LatLng latLngCamera;
 
   @override
@@ -31,6 +33,10 @@ class _StoresInMapState extends State<StoresInMap> {
         cachedLocalUser.primaryLocation.geoPoint.geoPoint.latitude,
         cachedLocalUser.primaryLocation.geoPoint.geoPoint.longitude);
 
+    addUserMarker();
+  }
+
+  void addUserMarker() {
     var _marker = Marker(
       markerId: MarkerId(cachedLocalUser.getID()),
       infoWindow: InfoWindow(
@@ -75,6 +81,23 @@ class _StoresInMapState extends State<StoresInMap> {
       body: Stack(
         children: [
           _buildGoogleMap(context),
+          // Positioned(
+          //     top: 10,
+          //     left: 10,
+          //     child: Slider(
+          //       min: 0.0,
+          //       max: 20.0,
+          //       divisions: 4,
+          //       value: radius,
+          //       label: 'Radius ${radius}km',
+          //       activeColor: CustomColors.alertRed,
+          //       inactiveColor: CustomColors.alertRed.withOpacity(0.2),
+          //       onChanged: (rad) {
+          //         setState(() {
+          //           radius = rad;
+          //         });
+          //       },
+          //     )),
           _buildContainer(),
         ],
       ),
@@ -115,7 +138,7 @@ class _StoresInMapState extends State<StoresInMap> {
 
     Set<Marker> _markers = Set();
     List<Store> _stores = await Store()
-        .getNearByStores(latLngCamera.latitude, latLngCamera.longitude, 5);
+        .getNearByStores(latLngCamera.latitude, latLngCamera.longitude, radius);
 
     _stores.forEach((element) {
       GeoPoint pos = element.geoPoint.geoPoint;
@@ -141,7 +164,10 @@ class _StoresInMapState extends State<StoresInMap> {
       _markers.add(marker);
     });
     setState(() {
+      stores.clear();
       stores = _stores;
+      markers.clear();
+      addUserMarker();
       markers.addAll(_markers);
     });
   }
