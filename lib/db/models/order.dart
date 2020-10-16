@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -101,10 +102,36 @@ class Order {
     this.status = 0;
     this.orderID = generateOrderID();
 
-    DocumentReference docRef = this.getCollectionRef().document();
-    this.uuid = docRef.documentID;
+    try {
+      if (this.amount.walletAmount > 0.00) {
+        DocumentReference custDocRef = Model.db
+            .collection("stores")
+            .document(storeID)
+            .collection("customers")
+            .document(cachedLocalUser.getID());
+        await Model.db.runTransaction((tx) {
+          return tx.get(custDocRef).then((doc) async {
+            Customers cust = Customers.fromJson(doc.data);
 
-    await docRef.setData(this.toJson());
+            cust.availableBalance -= this.amount.walletAmount;
+
+            DocumentReference docRef = this.getCollectionRef().document();
+            this.uuid = docRef.documentID;
+            Model().txCreate(tx, docRef, this.toJson());
+
+            Model().txUpdate(tx, custDocRef, cust.toJson());
+          });
+        });
+      } else {
+        DocumentReference docRef = this.getCollectionRef().document();
+        this.uuid = docRef.documentID;
+
+        await docRef.setData(this.toJson());
+      }
+    } catch (err) {
+      throw err;
+    }
+
     return this;
   }
 
@@ -143,9 +170,8 @@ class Order {
   }
 
   Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
-    QuerySnapshot snap = await getGroupQuery()
-        .where('order_id', isEqualTo: id)
-        .getDocuments();
+    QuerySnapshot snap =
+        await getGroupQuery().where('order_id', isEqualTo: id).getDocuments();
 
     List<Map<String, dynamic>> oList = [];
     if (snap.documents.isNotEmpty) {
