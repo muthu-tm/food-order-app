@@ -182,16 +182,15 @@ class Store extends Model {
     return stores;
   }
 
-  Future<List<Store>> getStoreByName(String searchKey) async {
-    List<Store> stores = [];
+  Future<List<Map<String, dynamic>>> getStoreByName(String searchKey) async {
+    List<Map<String, dynamic>> stores = [];
 
     QuerySnapshot snap = await getCollectionRef()
         .where('keywords', arrayContainsAny: searchKey.split(' '))
         .getDocuments();
     if (snap.documents.isNotEmpty) {
       for (var i = 0; i < snap.documents.length; i++) {
-        Store _s = Store.fromJson(snap.documents[i].data);
-        stores.add(_s);
+        stores.add(snap.documents[i].data);
       }
     }
 

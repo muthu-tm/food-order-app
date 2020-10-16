@@ -1,8 +1,10 @@
 import 'package:chipchop_buyer/db/models/order.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/OrderWidget.dart';
 import 'package:chipchop_buyer/screens/search/SearchOptionsRadio.dart';
 import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
+import 'package:chipchop_buyer/screens/store/StoreWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
@@ -82,7 +84,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 setState(
                   () {
                     searchMode == 0
-                        ? snapshot = Products().getByNameRange(searchKey)
+                        ? snapshot = Store().getStoreByName(searchKey)
                         : searchMode == 1
                             ? snapshot = Products().getByNameRange(searchKey)
                             : snapshot = Order().getByOrderID(searchKey);
@@ -184,7 +186,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
                       primary: false,
                       itemCount: snapshot.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        if (inOutList[1].isSelected == true) {
+                        if (inOutList[0].isSelected == true) {
+                          return StoreWidget(
+                              Store.fromJson(snapshot.data[index]));
+                        } else if (inOutList[1].isSelected == true) {
                           return OrderWidget(
                               Order.fromJson(snapshot.data[index]));
                         } else {
@@ -200,8 +205,10 @@ class _SearchAppBarState extends State<SearchAppBar> {
                       children: <Widget>[
                         Text(
                           inOutList[0].isSelected == true
-                              ? "No Products Found"
-                              : "No Orders Found",
+                              ? "No Stores Found"
+                              : inOutList[1].isSelected == true
+                                  ? "No Products Found"
+                                  : "No Orders Found",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: CustomColors.alertRed,
