@@ -26,8 +26,9 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
       appBar: AppBar(
-        title: Text('${widget.storeName}',
-        textAlign: TextAlign.start,
+        title: Text(
+          '${widget.storeName}',
+          textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
         leading: IconButton(
@@ -197,16 +198,17 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                     elevation: 3.0,
                     borderRadius: BorderRadius.circular(10.0),
                     child: Container(
-                      height: MediaQuery.of(context).size.width / 5,
+                      height: 75,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
                         color: tileColor,
                       ),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.all(10.0),
+                            padding: EdgeInsets.all(5.0),
                             child: Icon(
                               Icons.local_offer,
                               size: 35.0,
@@ -214,14 +216,13 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.only(left: 5, top: 5.0),
-                            width: MediaQuery.of(context).size.width / 1.5,
+                            width: MediaQuery.of(context).size.width - 150,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  history.userNumber.toString(),
+                                  history.details,
                                   style: TextStyle(
                                       fontFamily: "Georgia",
                                       fontSize: 18.0,
@@ -230,7 +231,6 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                                 ),
                                 Text(
                                   'At: ${DateUtils.formatDate(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
-                                  textAlign: TextAlign.left,
                                   style: TextStyle(
                                       fontSize: 12.0,
                                       color: textColor,
@@ -254,7 +254,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.all(5.0),
+                            padding: EdgeInsets.only(right: 5.0),
                             child: Text(
                               '${history.amount}/-',
                               style: TextStyle(
@@ -292,14 +292,16 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
           }
         } else if (snapshot.hasError) {
           widget = Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: AsyncWidgets.asyncError());
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: AsyncWidgets.asyncError(),
+          );
         } else {
           widget = Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: AsyncWidgets.asyncWaiting());
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: AsyncWidgets.asyncWaiting(),
+          );
         }
 
         return Card(

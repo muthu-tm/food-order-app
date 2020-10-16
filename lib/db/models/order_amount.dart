@@ -14,6 +14,8 @@ class OrderAmount extends Model {
   double paidAmount;
   @JsonKey(name: 'offer_amount', nullable: true)
   double offerAmount;
+  @JsonKey(name: 'wallet_amount', nullable: true)
+  double walletAmount;
   @JsonKey(name: 'bal_amount', nullable: true)
   double balAmount;
 

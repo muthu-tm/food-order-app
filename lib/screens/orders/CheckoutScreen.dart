@@ -12,7 +12,9 @@ import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -36,6 +38,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   int deliveryOption = 0;
   double shippingCharge = 0.00;
+  double wAmount = 0.00;
+  bool isAmountUsed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +71,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             _oa.deliveryCharge = shippingCharge;
             _oa.offerAmount = 0.00;
+            _oa.walletAmount = wAmount;
             _oa.orderAmount = widget._priceDetails[0];
             _o.amount = _oa;
 
@@ -312,6 +317,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
           title: Text("Price Details"),
         ),
+        getWalletWidget(),
         Container(
           margin: EdgeInsets.all(4),
           decoration: BoxDecoration(
@@ -439,6 +445,157 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget getWalletWidget() {
+    return StreamBuilder(
+      stream: Customers().streamUsersData(widget.storeID),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        Widget child;
+
+        if (snapshot.hasData) {
+          if (snapshot.data.exists) {
+            Customers cust = Customers.fromJson(snapshot.data.data);
+
+            double walletAmount = cust.availableBalance;
+
+            child = Container(
+              height: 120,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CheckboxListTile(
+                    value: isAmountUsed,
+                    onChanged: (bool newValue) {
+                      if (walletAmount.isNegative) {
+                        Fluttertoast.showToast(
+                            msg: 'Cannot Use Wallet',
+                            backgroundColor: CustomColors.alertRed,
+                            textColor: CustomColors.white);
+                        return;
+                      }
+
+                      if (newValue) {
+                        if (walletAmount >
+                            widget._priceDetails[0] + shippingCharge)
+                          wAmount = widget._priceDetails[0] + shippingCharge;
+                        else
+                          wAmount = walletAmount;
+                      } else {
+                        wAmount = 0;
+                      }
+                      setState(() {
+                        isAmountUsed = newValue;
+                      });
+                    },
+                    title: Text(
+                      "Apply Balance",
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontFamily: "Georgia",
+                        color: CustomColors.blue,
+                      ),
+                    ),
+                    secondary: Text(
+                      "Rs.$walletAmount",
+                      style: TextStyle(
+                        fontFamily: "Georgia",
+                        color: walletAmount.isNegative
+                            ? CustomColors.alertRed
+                            : CustomColors.green,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    activeColor: CustomColors.alertRed,
+                  ),
+                  ListTile(
+                    leading: Text(""),
+                    title: Text(
+                      "Amount Applied",
+                      style: TextStyle(
+                        fontFamily: "Georgia",
+                        color: CustomColors.blue,
+                        fontSize: 14.0,
+                      ),
+                    ),
+                    trailing: Text(
+                      "Rs.$wAmount",
+                      style: TextStyle(
+                        fontFamily: "Georgia",
+                        color: CustomColors.green,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            child = Container(
+              padding: EdgeInsets.all(10),
+              height: 50,
+              child: Text(
+                "Rs.0.00",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: CustomColors.green,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          child = Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: AsyncWidgets.asyncError(),
+          );
+        } else {
+          child = Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: AsyncWidgets.asyncWaiting(),
+          );
+        }
+
+        return Padding(
+          padding: EdgeInsets.all(5.0),
+          child: Card(
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  leading: Icon(
+                    Icons.account_balance_wallet,
+                    size: 30.0,
+                    color: CustomColors.alertRed,
+                  ),
+                  title: Text(
+                    "Wallet Amount",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "Georgia",
+                      fontWeight: FontWeight.bold,
+                      color: CustomColors.positiveGreen,
+                      fontSize: 17.0,
+                    ),
+                  ),
+                ),
+                Divider(
+                  color: CustomColors.blue,
+                  height: 0,
+                ),
+                child,
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

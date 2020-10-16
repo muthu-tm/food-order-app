@@ -97,125 +97,126 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
               } else {
                 child = Container(
                   child: ListView.builder(
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: snapshot.data.documents.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        UserLocations loc = UserLocations.fromJson(
-                            snapshot.data.documents[index].data);
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      UserLocations loc = UserLocations.fromJson(
+                          snapshot.data.documents[index].data);
 
-                        return Card(
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
+                      return Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
+                            border: Border.all(color: Colors.grey.shade200),
                           ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(5),
-                              ),
-                              border: Border.all(color: Colors.grey.shade200),
-                            ),
-                            padding:
-                                EdgeInsets.only(left: 12, top: 8, right: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(5),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        loc.userName,
-                                        style: TextStyle(
-                                            color: CustomColors.blue,
-                                            fontSize: 14),
+                          padding: EdgeInsets.only(left: 12, top: 8, right: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
                                       ),
                                     ),
-                                    Container(
-                                      padding: EdgeInsets.only(
-                                          left: 8, right: 8, top: 4, bottom: 4),
-                                      decoration: BoxDecoration(
-                                        color: primaryLocID == loc.uuid
-                                            ? CustomColors.green
-                                            : Colors.grey.shade300,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(5),
-                                        ),
+                                    child: Text(
+                                      loc.userName,
+                                      style: TextStyle(
+                                          color: CustomColors.blue,
+                                          fontSize: 14),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        left: 8, right: 8, top: 4, bottom: 4),
+                                    decoration: BoxDecoration(
+                                      color: primaryLocID == loc.uuid
+                                          ? CustomColors.green
+                                          : Colors.grey.shade300,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5),
                                       ),
-                                      child: Text(
-                                        loc.locationName,
-                                        style: TextStyle(
-                                            color: CustomColors.blue,
-                                            fontSize: 10),
-                                      ),
-                                    )
+                                    ),
+                                    child: Text(
+                                      loc.locationName,
+                                      style: TextStyle(
+                                          color: CustomColors.blue,
+                                          fontSize: 10),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              createAddressText(loc.address.street, 6),
+                              createAddressText(loc.address.city, 6),
+                              createAddressText(loc.address.pincode, 6),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "LandMark : ",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: CustomColors.blue),
+                                    ),
+                                    TextSpan(
+                                      text: loc.address.landmark,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 13),
+                                    ),
                                   ],
                                 ),
-                                createAddressText(loc.address.street, 6),
-                                createAddressText(loc.address.city, 6),
-                                createAddressText(loc.address.pincode, 6),
-                                SizedBox(
-                                  height: 6,
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: "Mobile : ",
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: CustomColors.blue),
+                                    ),
+                                    TextSpan(
+                                      text: loc.userNumber,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 13),
+                                    ),
+                                  ],
                                 ),
-                                RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: "LandMark : ",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: CustomColors.blue),
-                                      ),
-                                      TextSpan(
-                                        text: loc.address.landmark,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 6,
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: "Mobile : ",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: CustomColors.blue),
-                                      ),
-                                      TextSpan(
-                                        text: loc.userNumber,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 13),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 16,
-                                ),
-                                Container(
-                                  color: Colors.grey.shade300,
-                                  height: 1,
-                                  width: double.infinity,
-                                ),
-                                addressAction(loc)
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                color: Colors.grey.shade300,
+                                height: 1,
+                                width: double.infinity,
+                              ),
+                              addressAction(loc)
+                            ],
                           ),
-                        );
-                      }),
+                        ),
+                      );
+                    },
+                  ),
                 );
               }
             } else if (snapshot.hasError) {
@@ -316,8 +317,8 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
             ),
             label: Text(
                 primaryLocID == loc.uuid
-                    ? "Primary Location"
-                    : "Set As Primary",
+                    ? "Primary"
+                    : "Set Primary",
                 style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
