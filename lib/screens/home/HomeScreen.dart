@@ -4,6 +4,7 @@ import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/store/ListOfTopCategoryStores.dart';
 import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
@@ -29,34 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-              child: TextFormField(
-                textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 14),
-                autofocus: false,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: CustomColors.black,
-                    size: 25.0,
-                  ),
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 50,
-                  ),
-                  hintText: "Search for stores, items and categories",
-                  hintMaxLines: 2,
-                  fillColor: CustomColors.white,
-                  filled: true,
-                  contentPadding: EdgeInsets.all(14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      width: 0,
-                      color: CustomColors.black,
-                      style: BorderStyle.solid,
-                    ),
-                  ),
-                ),
-              ),
+              child: SearchBarWidget(),
             ),
             //getBanners(),
             ListTile(

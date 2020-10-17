@@ -32,7 +32,7 @@ class _SearchHomeState extends State<SearchHome> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
               child: SearchBarWidget(),
             ),
             Align(
@@ -65,7 +65,7 @@ class _SearchHomeState extends State<SearchHome> {
                 }
               },
               child: Padding(
-                padding: EdgeInsets.all(10.0),
+                padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
                 child: Row(
                   children: [
                     Icon(

@@ -1,5 +1,4 @@
 import 'package:chipchop_buyer/screens/search/SearchAppBar.dart';
-import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class SearchBarWidget extends StatelessWidget {
@@ -10,8 +9,8 @@ class SearchBarWidget extends StatelessWidget {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[300]),
-        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+        border: Border.all(color: Colors.grey[800]),
+        borderRadius: BorderRadius.all(Radius.circular(10.0)),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -30,7 +29,7 @@ class SearchBarWidget extends StatelessWidget {
             children: <Widget>[
               Icon(
                 Icons.search,
-                color: CustomColors.blueGreen,
+                color: Colors.black87,
               ),
               SizedBox(
                 width: 10.0,
@@ -40,7 +39,7 @@ class SearchBarWidget extends StatelessWidget {
                 style: TextStyle(
                     fontFamily: "Georgia",
                     fontSize: 16,
-                    color: Colors.blueGrey[500]),
+                    color: Colors.black54),
               ),
             ],
           ),
