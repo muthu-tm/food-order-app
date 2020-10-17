@@ -1,8 +1,10 @@
+import 'package:chipchop_buyer/db/models/product_categories.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/stores_in_map.dart';
+import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
@@ -67,6 +69,7 @@ class _SearchHomeState extends State<SearchHome> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       FontAwesomeIcons.mapMarkedAlt,
@@ -74,7 +77,8 @@ class _SearchHomeState extends State<SearchHome> {
                       color: CustomColors.black,
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
                       child: Text(
                         "NearBy Stores in Map",
                         textAlign: TextAlign.center,
@@ -88,10 +92,56 @@ class _SearchHomeState extends State<SearchHome> {
                 ),
               ),
             ),
+            ListTile(
+              title: Text(
+                "Top daily needs",
+                style: TextStyle(
+                    fontFamily: "Georgia",
+                    color: CustomColors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17),
+              ),
+            ),
+            getDailyEssentials(context)
           ],
         ),
       ),
       bottomNavigationBar: bottomBar(context),
     );
+  }
+
+  Widget getDailyEssentials(BuildContext context) {
+    return FutureBuilder(
+        future: ProductCategories().getSearchables(),
+        builder: (context, AsyncSnapshot<List<ProductCategories>> snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data.isEmpty) {
+              return Container();
+            } else {
+              return Container(
+                height: 75,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    primary: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: snapshot.data.length,
+                    padding: EdgeInsets.all(5),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                          padding: EdgeInsets.all(5.0),
+                          child: ActionChip(
+                            backgroundColor: CustomColors.green,
+                              label: Text(
+                                snapshot.data[index].name,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              onPressed: () {}));
+                    }),
+              );
+            }
+          } else {
+            return Container();
+          }
+        });
   }
 }
