@@ -17,3 +17,4 @@ const empty_wishlist_placeholder = "https://firebasestorage.googleapis.com/v0/b/
 const empty_cart_placeholder = "https://firebasestorage.googleapis.com/v0/b/fc-chipchop-test.appspot.com/o/app_images%2Fempty_shopping_cart.png?alt=media&token=c011e875-f724-4bfb-a0a5-bba4a8ee7d76";
 
 const buyer_app_name = "Uniques";
+const app_version = '1.0.0';

@@ -5,10 +5,10 @@ import 'package:chipchop_buyer/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
-import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:chipchop_buyer/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
@@ -188,8 +188,7 @@ Widget sideDrawer(BuildContext context) {
             }),
         Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
         ListTile(
-          leading:
-              Icon(Icons.search, color: CustomColors.green),
+          leading: Icon(Icons.search, color: CustomColors.green),
           title: Text(
             "Search",
           ),
@@ -277,47 +276,43 @@ Widget sideDrawer(BuildContext context) {
         Divider(color: CustomColors.blue, thickness: 1.0),
         Container(
           child: AboutListTile(
-            dense: true,
-            applicationIcon: Container(
-              height: 80,
-              width: 50,
-              child: ClipRRect(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'images/icons/logo.png',
-                    height: 60,
-                    width: 60,
-                  ),
-                ),
+            applicationIcon: ClipRRect(
+              child: Image.asset(
+                'images/icons/logo.png',
+                height: 40,
+                width: 40,
               ),
             ),
-            applicationName: 'Uniques',
+            applicationName: buyer_app_name,
+            applicationVersion: app_version,
             applicationLegalese:
                 AppLocalizations.of(context).translate('copyright'),
-            child: ListTile(
-              leading: RichText(
-                textAlign: TextAlign.justify,
-                text: TextSpan(
-                  text: '',
-                  style: TextStyle(
-                    color: CustomColors.lightBlue,
-                    fontFamily: 'Georgia',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Uniques',
-                      style: TextStyle(
-                        color: CustomColors.green,
-                        fontFamily: 'Georgia',
-                        fontSize: 16.0,
-                      ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    buyer_app_name,
+                    style: TextStyle(
+                      color: CustomColors.alertRed,
+                      fontFamily: "OLED",
+                      fontSize: 16.0,
                     ),
-                  ],
+                  ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    app_version,
+                    style: TextStyle(
+                      color: CustomColors.green,
+                      fontFamily: "OLED",
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+              ],
             ),
             aboutBoxChildren: <Widget>[
               SizedBox(
@@ -325,8 +320,9 @@ Widget sideDrawer(BuildContext context) {
               ),
               Divider(),
               ListTile(
-                leading: Text(
-                  'Uniques',
+                leading: Text(""),
+                title: Text(
+                  buyer_app_name,
                   style: TextStyle(
                     color: CustomColors.blue,
                     fontFamily: 'Georgia',
@@ -336,7 +332,7 @@ Widget sideDrawer(BuildContext context) {
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               ListTile(
                 leading: Icon(
@@ -354,10 +350,9 @@ Widget sideDrawer(BuildContext context) {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20,
+              Divider(
+                height: 0,
               ),
-              Divider(),
             ],
           ),
         ),
