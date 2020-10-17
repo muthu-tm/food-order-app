@@ -52,7 +52,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
           keyboardType: TextInputType.text,
           textCapitalization: TextCapitalization.sentences,
           style: TextStyle(
-            color: CustomColors.white,
+            color: CustomColors.black,
           ),
           decoration: InputDecoration(
             hintText: searchMode == 0
@@ -190,11 +190,15 @@ class _SearchAppBarState extends State<SearchAppBar> {
                           return StoreWidget(
                               Store.fromJson(snapshot.data[index]));
                         } else if (inOutList[1].isSelected == true) {
+                          return Container(
+                            padding: EdgeInsets.all(5.0),
+                            width: 150,
+                            child: ProductWidget(
+                                Products.fromJson(snapshot.data[index])),
+                          );
+                        } else {
                           return OrderWidget(
                               Order.fromJson(snapshot.data[index]));
-                        } else {
-                          return ProductWidget(
-                              Products.fromJson(snapshot.data[index]));
                         }
                       },
                     );

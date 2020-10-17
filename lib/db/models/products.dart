@@ -231,6 +231,45 @@ class Products extends Model {
     }
   }
 
+  Future<List<Products>> getPopularProducts(List<String> ids) async {
+    try {
+      List<Products> products = [];
+
+      if (ids.length > 9) {
+        int end = 0;
+        for (int i = 0; i < ids.length; i = i + 9) {
+          if (end + 9 > ids.length)
+            end = ids.length;
+          else
+            end = end + 9;
+
+          QuerySnapshot snap = await getCollectionRef()
+              .where('store_uuid', whereIn: ids.sublist(i, end))
+              .where('is_popular', isEqualTo: true)
+              .getDocuments();
+          for (var j = 0; j < snap.documents.length; j++) {
+            Products _p = Products.fromJson(snap.documents[j].data);
+            products.add(_p);
+          }
+        }
+      } else {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('store_uuid', whereIn: ids)
+            .where('is_popular', isEqualTo: true)
+            .getDocuments();
+
+        for (var j = 0; j < snap.documents.length; j++) {
+          Products _p = Products.fromJson(snap.documents[j].data);
+          products.add(_p);
+        }
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getByNameRange(String searchKey) async {
     QuerySnapshot snap = await getCollectionRef()
         // .where('store_uuid', isEqualTo: storeID)

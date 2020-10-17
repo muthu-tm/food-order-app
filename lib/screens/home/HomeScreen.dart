@@ -1,10 +1,15 @@
 import 'package:chipchop_buyer/db/models/product_types.dart';
+import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/store/ListOfTopCategoryStores.dart';
+import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -28,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: TextFormField(
                 textAlign: TextAlign.start,
                 style: TextStyle(fontSize: 14),
-                //controller: _nController,
                 autofocus: false,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
@@ -72,13 +76,17 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ListTile(
               title: Text(
-                "Trending Products",
+                "Popular Products",
                 style: TextStyle(
                     fontFamily: "Georgia",
                     color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 17),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: getPopularProducts(context),
             ),
           ],
         ),
@@ -89,6 +97,79 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget getBanners() {
     return Container();
+  }
+
+  Widget getPopularProducts(BuildContext context) {
+    return FutureBuilder(
+        future: Store().streamFavStores(cachedLocalUser.primaryLocation),
+        builder: (context, AsyncSnapshot<List<Store>> snapshot) {
+          Widget child;
+          if (snapshot.hasData) {
+            if (snapshot.data.isNotEmpty) {
+              List<String> storeIDs = [];
+              for (var store in snapshot.data) {
+                storeIDs.add(store.uuid);
+              }
+              child = FutureBuilder(
+                  future: Products().getPopularProducts(storeIDs),
+                  builder: (context, AsyncSnapshot<List<Products>> snapshot) {
+                    if (snapshot.hasData) {
+                      if (snapshot.data.isEmpty) {
+                        return Container();
+                      } else {
+                        return Container(
+                          height: 175,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              primary: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: snapshot.data.length,
+                              padding: EdgeInsets.all(5),
+                              itemBuilder: (BuildContext context, int index) {
+                                return Container(
+                                  padding: EdgeInsets.all(5.0),
+                                  width: 150,
+                                  child: ProductWidget(
+                                    snapshot.data[index],
+                                  ),
+                                );
+                              }),
+                        );
+                      }
+                    } else {
+                      return Container();
+                    }
+                  });
+            } else {
+              child = Container(
+                padding: EdgeInsets.all(10),
+                color: CustomColors.white,
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Text(
+                  "Unable to load Top Categories",
+                  style: TextStyle(
+                    fontFamily: 'Georgia',
+                    color: CustomColors.alertRed,
+                    fontSize: 16.0,
+                  ),
+                ),
+              );
+            }
+          } else if (snapshot.hasError) {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
+            );
+          } else {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
+              ),
+            );
+          }
+          return child;
+        });
   }
 
   Widget getCategoryCards(BuildContext context) {
@@ -114,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         MaterialPageRoute(
                           builder: (context) =>
                               ListOfTopCategoryStores(types.uuid, types.name),
-                          settings: RouteSettings(name: '/topCategories'),
+                          settings: RouteSettings(name: '/home/categories'),
                         ),
                       );
                     },
@@ -138,12 +219,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                   color: CustomColors.black,
                                   fontFamily: 'Roboto-Light.ttf',
-                                  fontSize: 14),
+                                  fontSize: 15),
                             ),
                             Spacer(),
-                            Icon(
-                              FontAwesomeIcons.arrowAltCircleRight,
-                              size: 20,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.arrowAltCircleRight,
+                                  size: 25,
+                                ),
+                              ],
                             )
                           ],
                         ),

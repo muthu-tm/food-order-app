@@ -25,12 +25,14 @@ class ProductWidget extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(10.0),
           ),
+          border: Border.all(color: CustomColors.green),
           color: CustomColors.white,
         ),
         padding: EdgeInsets.only(top: 5),
         alignment: Alignment.centerLeft,
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Hero(
                 tag: "${product.uuid}",
@@ -38,7 +40,7 @@ class ProductWidget extends StatelessWidget {
                   imageUrl: product.getProductImage(),
                   imageBuilder: (context, imageProvider) => Container(
                     width: 125,
-                    height: 75,
+                    height: 90,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0),
@@ -69,7 +71,7 @@ class ProductWidget extends StatelessWidget {
                         product.name,
                         style: TextStyle(
                           fontFamily: 'Georgia',
-                          color: CustomColors.blue,
+                          color: CustomColors.black,
                           fontSize: 14.0,
                           fontWeight: FontWeight.bold,
                         ),

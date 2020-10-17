@@ -1,6 +1,7 @@
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
@@ -13,29 +14,37 @@ class ListOfTopCategoryStores extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
-      backgroundColor: CustomColors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
-            ),
-            Text(
-              "Top $categoryName stores",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            getListOfStores()
-          ],
+      appBar: AppBar(
+        backgroundColor: CustomColors.green,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
+          onPressed: () => Navigator.pop(context),
         ),
+        title: Text(
+          "$categoryName stores",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.shopping_cart, color: CustomColors.black),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ShoppingCartScreen(),
+                  settings: RouteSettings(name: '/cart'),
+                ),
+              );
+            },
+          ),
+        ],
       ),
+      backgroundColor: CustomColors.white,
+      body: SingleChildScrollView(child: getListOfStores()),
     );
   }
 

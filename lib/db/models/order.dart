@@ -171,7 +171,7 @@ class Order {
 
   Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
     QuerySnapshot snap =
-        await getGroupQuery().where('order_id', isEqualTo: id).getDocuments();
+        await getCollectionRef().where('order_id', isGreaterThanOrEqualTo: id).getDocuments();
 
     List<Map<String, dynamic>> oList = [];
     if (snap.documents.isNotEmpty) {
