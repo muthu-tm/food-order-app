@@ -13,6 +13,7 @@ ProductSubCategories _$ProductSubCategoriesFromJson(Map<String, dynamic> json) {
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
         []
+    ..showInSearch = json['show_in_search'] as bool ?? false
     ..createdAt = json['created_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
@@ -36,6 +37,7 @@ Map<String, dynamic> _$ProductSubCategoriesToJson(
       'short_details': instance.shortDetails,
       'product_images':
           instance.productImages == null ? [] : instance.productImages,
+      'show_in_search': instance.showInSearch ?? false,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

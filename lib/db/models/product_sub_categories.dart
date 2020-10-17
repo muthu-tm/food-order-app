@@ -20,6 +20,8 @@ class ProductSubCategories extends Model {
   String shortDetails;
   @JsonKey(name: 'product_images', defaultValue: [""])
   List<String> productImages;
+  @JsonKey(name: 'show_in_search', defaultValue: false)
+  bool showInSearch;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
@@ -126,5 +128,26 @@ class ProductSubCategories extends Model {
     }
 
     return categories;
+  }
+
+  Future<List<ProductSubCategories>> getSearchables() async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('show_in_search', isEqualTo: true)
+          .getDocuments();
+
+      List<ProductSubCategories> categories = [];
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          ProductSubCategories _c =
+              ProductSubCategories.fromJson(snap.documents[i].data);
+          categories.add(_c);
+        }
+      }
+
+      return categories;
+    } catch (err) {
+      throw err;
+    }
   }
 }
