@@ -6,8 +6,40 @@ import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 
 Widget appBar(BuildContext context) {
-  Widget getLocation() {
-    return cachedLocalUser.primaryLocation == null
+  return AppBar(
+    backgroundColor: CustomColors.green,
+    titleSpacing: 0.0,
+    automaticallyImplyLeading: false,
+    title: Row(
+      children: [
+        Builder(
+          builder: (context) => InkWell(
+            onTap: () => Scaffold.of(context).openDrawer(),
+            child: Container(
+              padding: EdgeInsets.only(left: 5.0),
+              child: Icon(
+                Icons.menu,
+                size: 22.0,
+                color: CustomColors.black,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        Text(
+          "Uniques",
+          style: TextStyle(
+              fontFamily: "OLED",
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black),
+        ),
+      ],
+    ),
+    actions: <Widget>[
+      cachedLocalUser.primaryLocation == null
         ? InkWell(
             onTap: () {
               Navigator.push(
@@ -59,43 +91,7 @@ Widget appBar(BuildContext context) {
                 ],
               ),
             ),
-          );
-  }
-
-  return AppBar(
-    backgroundColor: CustomColors.green,
-    titleSpacing: 0.0,
-    automaticallyImplyLeading: false,
-    title: Row(
-      children: [
-        Builder(
-          builder: (context) => InkWell(
-            onTap: () => Scaffold.of(context).openDrawer(),
-            child: Container(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Icon(
-                Icons.menu,
-                size: 30.0,
-                color: CustomColors.black,
-              ),
-            ),
           ),
-        ),
-        SizedBox(
-          width: 15,
-        ),
-        Text(
-          "Uniques",
-          style: TextStyle(
-              fontFamily: "OLED",
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.black),
-        ),
-      ],
-    ),
-    actions: <Widget>[
-      getLocation(),
       IconButton(
         icon: Icon(
           Icons.shopping_cart,

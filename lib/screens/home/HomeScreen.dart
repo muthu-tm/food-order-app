@@ -146,6 +146,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget getCategoryCards(BuildContext context) {
+    List<Color> colors = [
+      CustomColors.alertRed,
+      CustomColors.green,
+      CustomColors.blue,
+      CustomColors.purple,
+      CustomColors.orange,
+      CustomColors.blueGreen
+    ];
     return FutureBuilder(
       future: ProductTypes().getDashboardTypes(),
       builder: (context, AsyncSnapshot<List<ProductTypes>> snapshot) {
@@ -178,7 +186,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderRadius: BorderRadius.all(
                           Radius.circular(10.0),
                         ),
-                        color: CustomColors.green,
+                        gradient: LinearGradient(
+                            colors: [
+                              CustomColors.black.withOpacity(0.8),
+                              colors[index % colors.length]
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight),
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(5.0),
@@ -190,8 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  color: CustomColors.black,
-                                  fontFamily: 'Roboto-Light.ttf',
+                                  color: CustomColors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Georgia',
                                   fontSize: 15),
                             ),
                             Spacer(),
