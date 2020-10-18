@@ -56,6 +56,16 @@ class _LoginPageState extends State<LoginPage> {
         ? Scaffold(
             key: _scaffoldKey,
             backgroundColor: CustomColors.lightGrey,
+            bottomNavigationBar: Container(
+              color: Color(0xffA4D649),
+              child: Text(
+                "Powered by Fourcup Inc.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
             body: SingleChildScrollView(
               child: Container(
                 height: MediaQuery.of(context).size.height,
@@ -128,14 +138,15 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5),
                 child: Text(
-                "WELCOME BACK!",
-                style: TextStyle(
-                  fontFamily: "OLED",
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.0,
+                  "WELCOME BACK!",
+                  style: TextStyle(
+                    fontFamily: "OLED",
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0,
+                  ),
                 ),
-              ),),
+              ),
               Padding(
                 padding: EdgeInsets.only(
                     top: 10, bottom: 15.0, left: 20.0, right: 20.0),

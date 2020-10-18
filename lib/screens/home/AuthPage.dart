@@ -36,6 +36,16 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
+      bottomNavigationBar: Container(
+        color: Color(0xffA4D649),
+        child: Text(
+          "Powered by Fourcup Inc.",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         primary: true,
         child: FutureBuilder<String>(
@@ -417,10 +427,6 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
               ],
             ),
           ),
-          Text(
-            "Powered by Fourcup Inc.",
-            style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-          )
         ],
       ),
     );

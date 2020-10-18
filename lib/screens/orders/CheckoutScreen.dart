@@ -8,6 +8,7 @@ import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/OrderSuccessWidget.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
+import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
@@ -155,6 +156,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         color: CustomColors.alertRed,
                       ),
                       title: Text("Delivery Address"),
+                      trailing: Icon(
+                        Icons.edit,
+                        color: CustomColors.alertRed,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewLocationsScreen(),
+                            settings: RouteSettings(name: '/location'),
+                          ),
+                        );
+                      },
                     ),
                     selectedAddressSection(),
                     ListTile(

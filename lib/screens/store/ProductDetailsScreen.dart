@@ -91,7 +91,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   dotSize: 5.0,
                   dotSpacing: 20.0,
                   dotColor: CustomColors.blue,
-                  indicatorBgPadding: 5.0,
+                  indicatorBgPadding: 1.0,
                   dotBgColor: CustomColors.black.withOpacity(0.2),
                   borderRadius: true,
                   radius: Radius.circular(20),

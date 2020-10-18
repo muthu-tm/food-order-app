@@ -78,9 +78,10 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                 child: Carousel(
                   images: getImages(),
                   dotSize: 5.0,
+                  boxFit: BoxFit.cover,
                   dotSpacing: 20.0,
                   dotColor: CustomColors.blue,
-                  indicatorBgPadding: 5.0,
+                  indicatorBgPadding: 0,
                   dotBgColor: CustomColors.black.withOpacity(0.2),
                   borderRadius: true,
                   radius: Radius.circular(20),
