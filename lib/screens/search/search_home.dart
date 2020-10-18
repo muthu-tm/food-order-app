@@ -118,25 +118,22 @@ class _SearchHomeState extends State<SearchHome> {
             if (snapshot.data.isEmpty) {
               return Container();
             } else {
-              return Container(
-                height: 75,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    primary: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: snapshot.data.length,
-                    padding: EdgeInsets.all(5),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                          padding: EdgeInsets.all(5.0),
-                          child: ActionChip(
-                            backgroundColor: CustomColors.green,
-                              label: Text(
-                                snapshot.data[index].name,
-                                style: TextStyle(color: Colors.black),
-                              ),
-                              onPressed: () {}));
-                    }),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Wrap(
+                  spacing: 6.0,
+                  children:
+                      List<Widget>.generate(snapshot.data.length, (int index) {
+                    return ActionChip(
+                      elevation: 6.0,
+                        backgroundColor: CustomColors.green,
+                        label: Text(
+                          snapshot.data[index].name,
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        onPressed: () {});
+                  }),
+                ),
               );
             }
           } else {
