@@ -301,8 +301,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                             fontFamily: 'Georgia'),
                       ),
                     ),
-                    Text("Test 2", style: TextStyle(color: Colors.black),),
-                    Text("Test 3", style: TextStyle(color: Colors.black),)
+                    Container(),
+                    Container()
                   ]),
                 )
               ],
