@@ -1,10 +1,11 @@
 import 'package:chipchop_buyer/db/models/product_categories.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/search/ProductsListViewScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/stores_in_map.dart';
-import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
@@ -121,17 +122,40 @@ class _SearchHomeState extends State<SearchHome> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Wrap(
+                  alignment: WrapAlignment.start,
+                  runAlignment: WrapAlignment.spaceEvenly,
                   spacing: 6.0,
                   children:
                       List<Widget>.generate(snapshot.data.length, (int index) {
                     return ActionChip(
-                      elevation: 6.0,
+                        elevation: 6.0,
                         backgroundColor: CustomColors.green,
                         label: Text(
                           snapshot.data[index].name,
                           style: TextStyle(color: Colors.black),
                         ),
-                        onPressed: () {});
+                        onPressed: () async {
+                          List<Store> stores = await Store().getNearByStores(
+                              cachedLocalUser
+                                  .primaryLocation.geoPoint.geoPoint.latitude,
+                              cachedLocalUser
+                                  .primaryLocation.geoPoint.geoPoint.longitude,
+                              10);
+
+                          List<String> storeIDs = [];
+                          for (var i = 0; i < stores.length; i++) {
+                            storeIDs.add(stores[i].uuid);
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductsListViewScreen(
+                                  storeIDs, snapshot.data[index].uuid),
+                              settings: RouteSettings(name: '/search/categories'),
+                            ),
+                          );
+                        });
                   }),
                 ),
               );

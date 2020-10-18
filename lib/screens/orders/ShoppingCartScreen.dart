@@ -388,7 +388,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                               keyboardType: TextInputType.multiline,
                               textCapitalization: TextCapitalization.sentences,
                               decoration: InputDecoration(
-                                hintText: "Write down your ORDER here!",
+                                hintText: "Ex, Biriyani Rice - 5 Kg",
                                 fillColor: CustomColors.white,
                                 filled: true,
                                 contentPadding: EdgeInsets.symmetric(

@@ -173,6 +173,47 @@ class Products extends Model {
     }
   }
 
+  Future<List<Products>> getProductsForCategories(
+      List<String> ids, String categoryID) async {
+    try {
+      if (ids.isEmpty) return [];
+
+      List<Products> products = [];
+
+      if (ids.length > 9) {
+        int end = 0;
+        for (int i = 0; i < ids.length; i = i + 9) {
+          if (end + 9 > ids.length)
+            end = ids.length;
+          else
+            end = end + 9;
+
+          QuerySnapshot snap = await getCollectionRef()
+              .where('store_uuid', isEqualTo: storeID)
+              .where('product_category', isEqualTo: categoryID)
+              .getDocuments();
+          for (var j = 0; j < snap.documents.length; j++) {
+            Products _c = Products.fromJson(snap.documents[j].data);
+            products.add(_c);
+          }
+        }
+      } else {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('store_uuid', isEqualTo: storeID)
+            .where('product_category', isEqualTo: categoryID)
+            .getDocuments();
+        for (var j = 0; j < snap.documents.length; j++) {
+          Products _c = Products.fromJson(snap.documents[j].data);
+          products.add(_c);
+        }
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Stream<QuerySnapshot> streamProductsForSubCategory(
       String storeID, String categoryID, String subCategoryID) {
     try {
