@@ -207,7 +207,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                       ? GridView.count(
                           crossAxisCount: 2,
                           crossAxisSpacing: 10,
-                          childAspectRatio: 0.95,
+                          childAspectRatio: 0.85,
                           shrinkWrap: true,
                           primary: false,
                           mainAxisSpacing: 10,

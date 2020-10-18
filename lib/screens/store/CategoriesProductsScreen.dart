@@ -70,7 +70,7 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
               child: GridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
-                childAspectRatio: 0.95,
+                childAspectRatio: 0.85,
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 children: List.generate(

@@ -162,6 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return GridView.count(
               crossAxisCount: 3,
               crossAxisSpacing: 5,
+              childAspectRatio: 0.85,
               shrinkWrap: true,
               mainAxisSpacing: 10,
               padding: EdgeInsets.all(1.0),

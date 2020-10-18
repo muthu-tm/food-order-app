@@ -36,6 +36,7 @@ class StoreCategoryWidget extends StatelessWidget {
               return GridView.count(
                 crossAxisCount: 3,
                 crossAxisSpacing: 5,
+                childAspectRatio: 0.85,
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 padding: EdgeInsets.all(1.0),

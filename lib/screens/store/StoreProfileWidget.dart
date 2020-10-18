@@ -92,6 +92,7 @@ class StoreProfileWidget extends StatelessWidget {
             child: Container(
               child: GridView.count(
                 crossAxisCount: 3,
+                childAspectRatio: 0.85,
                 crossAxisSpacing: 10,
                 shrinkWrap: true,
                 primary: false,
