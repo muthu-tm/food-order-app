@@ -167,7 +167,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             builder: (context) => ViewLocationsScreen(),
                             settings: RouteSettings(name: '/location'),
                           ),
-                        );
+                        ).then((value) {
+                          setState(() {});
+                        });
                       },
                     ),
                     selectedAddressSection(),

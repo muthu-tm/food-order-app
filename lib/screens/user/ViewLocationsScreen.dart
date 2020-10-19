@@ -18,223 +18,207 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        return Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomeScreen(),
-            settings: RouteSettings(name: '/home'),
-          ),
-        );
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Locations",
-            textAlign: TextAlign.start,
-            style: TextStyle(color: CustomColors.black, fontSize: 16),
-          ),
-          leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: CustomColors.black,
-              ),
-              onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomeScreen(),
-                      settings: RouteSettings(name: '/home'),
-                    ),
-                  )),
-          backgroundColor: CustomColors.green,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Locations",
+          textAlign: TextAlign.start,
+          style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: CustomColors.blueGreen,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddLocation(),
-                settings: RouteSettings(name: '/location/add'),
-              ),
-            );
-          },
-          label: Text("Add Location"),
-          icon: Icon(Icons.add_location),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
-        body: StreamBuilder(
-          stream: cachedLocalUser.streamLocations(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            Widget child;
+        backgroundColor: CustomColors.green,
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: CustomColors.blueGreen,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddLocation(),
+              settings: RouteSettings(name: '/location/add'),
+            ),
+          );
+        },
+        label: Text("Add Location"),
+        icon: Icon(Icons.add_location),
+      ),
+      body: StreamBuilder(
+        stream: cachedLocalUser.streamLocations(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          Widget child;
 
-            if (snapshot.hasData) {
-              if (snapshot.data.documents.length == 0) {
-                child = Container(
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.not_listed_location,
-                          size: 40,
-                          color: CustomColors.purple,
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          "No Locations Found!",
-                          style: TextStyle(
-                              color: CustomColors.blueGreen,
-                              fontSize: 16,
-                              fontFamily: "Georgia"),
-                        ),
-                        SizedBox(height: 20),
-                      ],
-                    ),
+          if (snapshot.hasData) {
+            if (snapshot.data.documents.length == 0) {
+              child = Container(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.not_listed_location,
+                        size: 40,
+                        color: CustomColors.purple,
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        "No Locations Found!",
+                        style: TextStyle(
+                            color: CustomColors.blueGreen,
+                            fontSize: 16,
+                            fontFamily: "Georgia"),
+                      ),
+                      SizedBox(height: 20),
+                    ],
                   ),
-                );
-              } else {
-                child = Container(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      UserLocations loc = UserLocations.fromJson(
-                          snapshot.data.documents[index].data);
-
-                      return Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(5),
-                            ),
-                            border: Border.all(color: Colors.grey.shade200),
-                          ),
-                          padding: EdgeInsets.only(left: 12, top: 8, right: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      loc.userName,
-                                      style: TextStyle(
-                                          color: CustomColors.blue,
-                                          fontSize: 14),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(
-                                        left: 8, right: 8, top: 4, bottom: 4),
-                                    decoration: BoxDecoration(
-                                      color: primaryLocID == loc.uuid
-                                          ? CustomColors.green
-                                          : Colors.grey.shade300,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      loc.locationName,
-                                      style: TextStyle(
-                                          color: CustomColors.blue,
-                                          fontSize: 10),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              createAddressText(loc.address.street, 6),
-                              createAddressText(loc.address.city, 6),
-                              createAddressText(loc.address.pincode, 6),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "LandMark : ",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: CustomColors.blue),
-                                    ),
-                                    TextSpan(
-                                      text: loc.address.landmark,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 13),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 6,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "Mobile : ",
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          color: CustomColors.blue),
-                                    ),
-                                    TextSpan(
-                                      text: loc.userNumber,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 13),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                color: Colors.grey.shade300,
-                                height: 1,
-                                width: double.infinity,
-                              ),
-                              addressAction(loc)
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              }
-            } else if (snapshot.hasError) {
-              child = Center(
-                child: Column(
-                  children: AsyncWidgets.asyncError(),
                 ),
               );
             } else {
-              child = Center(
-                child: Column(
-                  children: AsyncWidgets.asyncWaiting(),
+              child = Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    UserLocations loc = UserLocations.fromJson(
+                        snapshot.data.documents[index].data);
+
+                    return Card(
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5),
+                          ),
+                          border: Border.all(color: Colors.grey.shade200),
+                        ),
+                        padding: EdgeInsets.only(left: 12, top: 8, right: 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    loc.userName,
+                                    style: TextStyle(
+                                        color: CustomColors.blue,
+                                        fontSize: 14),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: 8, right: 8, top: 4, bottom: 4),
+                                  decoration: BoxDecoration(
+                                    color: primaryLocID == loc.uuid
+                                        ? CustomColors.green
+                                        : Colors.grey.shade300,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    loc.locationName,
+                                    style: TextStyle(
+                                        color: CustomColors.blue,
+                                        fontSize: 10),
+                                  ),
+                                )
+                              ],
+                            ),
+                            createAddressText(loc.address.street, 6),
+                            createAddressText(loc.address.city, 6),
+                            createAddressText(loc.address.pincode, 6),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "LandMark : ",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: CustomColors.blue),
+                                  ),
+                                  TextSpan(
+                                    text: loc.address.landmark,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: "Mobile : ",
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: CustomColors.blue),
+                                  ),
+                                  TextSpan(
+                                    text: loc.userNumber,
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              color: Colors.grey.shade300,
+                              height: 1,
+                              width: double.infinity,
+                            ),
+                            addressAction(loc)
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             }
-            return child;
-          },
-        ),
+          } else if (snapshot.hasError) {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
+            );
+          } else {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
+              ),
+            );
+          }
+          return child;
+        },
       ),
     );
   }
@@ -315,10 +299,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
               Icons.location_on,
               color: CustomColors.blueGreen,
             ),
-            label: Text(
-                primaryLocID == loc.uuid
-                    ? "Primary"
-                    : "Set Primary",
+            label: Text(primaryLocID == loc.uuid ? "Primary" : "Set Primary",
                 style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
