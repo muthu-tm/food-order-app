@@ -30,12 +30,13 @@ class ShoppingCartScreen extends StatefulWidget {
   _ShoppingCartScreenState createState() => _ShoppingCartScreenState();
 }
 
+String _cartWrittenOrders = "";
+
 class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
-  List<String> imagePaths = [];
-  String writtenOrders = "";
+  List<String> _cartImagePaths = [];
   bool textBoxEnabled = false;
 
   @override
@@ -105,219 +106,6 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                         Padding(
                           padding: EdgeInsets.all(5),
                           child: Text(
-                            "Already got the list READY?",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                fontFamily: "Georgia",
-                                fontSize: 14,
-                                color: CustomColors.alertRed,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        ListTile(
-                          title: Container(
-                            width: 75,
-                            padding: EdgeInsets.all(5),
-                            child: Text(
-                              "You're GREAT!",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: "Georgia",
-                                  fontSize: 15,
-                                  color: CustomColors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          trailing: Container(
-                            width: 175,
-                            child: FlatButton.icon(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              color: CustomColors.grey,
-                              onPressed: () async {
-                                String tempPath =
-                                    (await getTemporaryDirectory()).path;
-                                String filePath =
-                                    '$tempPath/order_image_${imagePaths.length}.png';
-                                if (File(filePath).existsSync())
-                                  await File(filePath).delete();
-
-                                List<CameraDescription> cameras =
-                                    await availableCameras();
-                                CameraDescription camera = cameras.first;
-
-                                var result = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TakePicturePage(
-                                      camera: camera,
-                                      path: filePath,
-                                    ),
-                                  ),
-                                );
-                                if (result != null) {
-                                  String imageUrl = "";
-                                  try {
-                                    String fileName = DateTime.now()
-                                        .millisecondsSinceEpoch
-                                        .toString();
-                                    String fbFilePath =
-                                        'orders/${cachedLocalUser.getID()}/$fileName.png';
-                                    CustomDialogs.showLoadingDialog(
-                                        context, _keyLoader);
-                                    // Upload to storage
-                                    imageUrl = await Uploader().uploadImageFile(
-                                        true, result.toString(), fbFilePath);
-                                    Navigator.of(_keyLoader.currentContext,
-                                            rootNavigator: true)
-                                        .pop();
-                                  } catch (err) {
-                                    Fluttertoast.showToast(
-                                        msg: 'This file is not an image');
-                                  }
-                                  if (imageUrl != "")
-                                    setState(() {
-                                      imagePaths.add(imageUrl);
-                                    });
-                                }
-                              },
-                              label: Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 15.0,
-                                ),
-                                child: Text(
-                                  "Capture IT!",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontFamily: "Georgia",
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              icon: Icon(FontAwesomeIcons.cameraRetro),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  imagePaths.length > 0
-                      ? GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          childAspectRatio: 0.85,
-                          shrinkWrap: true,
-                          primary: false,
-                          mainAxisSpacing: 10,
-                          children: List.generate(
-                            imagePaths.length,
-                            (index) {
-                              return Stack(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 10, right: 10, top: 5),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ImageView(
-                                              url: imagePaths[index],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: CachedNetworkImage(
-                                            imageUrl: imagePaths[index],
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Image(
-                                              fit: BoxFit.fill,
-                                              image: imageProvider,
-                                            ),
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                Center(
-                                              child: SizedBox(
-                                                height: 50.0,
-                                                width: 50.0,
-                                                child: CircularProgressIndicator(
-                                                    value: downloadProgress
-                                                        .progress,
-                                                    valueColor:
-                                                        AlwaysStoppedAnimation(
-                                                            CustomColors.blue),
-                                                    strokeWidth: 2.0),
-                                              ),
-                                            ),
-                                            errorWidget:
-                                                (context, url, error) => Icon(
-                                              Icons.error,
-                                              size: 35,
-                                            ),
-                                            fadeOutDuration:
-                                                Duration(seconds: 1),
-                                            fadeInDuration:
-                                                Duration(seconds: 2),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 10,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: CustomColors.alertRed,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: InkWell(
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 25,
-                                          color: CustomColors.white,
-                                        ),
-                                        onTap: () async {
-                                          CustomDialogs.showLoadingDialog(
-                                              context, _keyLoader);
-                                          bool res = await StorageUtils()
-                                              .removeFile(imagePaths[index]);
-                                          Navigator.of(
-                                                  _keyLoader.currentContext,
-                                                  rootNavigator: true)
-                                              .pop();
-                                          if (res)
-                                            setState(() {
-                                              imagePaths
-                                                  .remove(imagePaths[index]);
-                                            });
-                                          else
-                                            Fluttertoast.showToast(
-                                                msg: 'Unable to remove image');
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        )
-                      : Container(),
-                  Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                          child: Text(
                             "Missing Few Products?",
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -379,11 +167,11 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                       ],
                     ),
                   ),
-                  textBoxEnabled
+                  textBoxEnabled || _cartWrittenOrders.isNotEmpty
                       ? Container(
                           child: ListTile(
                             title: TextFormField(
-                              initialValue: writtenOrders,
+                              initialValue: _cartWrittenOrders,
                               maxLines: 10,
                               keyboardType: TextInputType.multiline,
                               textCapitalization: TextCapitalization.sentences,
@@ -399,9 +187,223 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                 ),
                               ),
                               onChanged: (value) {
-                                this.writtenOrders = value.trim();
+                                _cartWrittenOrders = value.trim();
                               },
                             ),
+                          ),
+                        )
+                      : Container(),
+                  Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(5),
+                          child: Text(
+                            "Already got the list READY?",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontFamily: "Georgia",
+                                fontSize: 14,
+                                color: CustomColors.alertRed,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        ListTile(
+                          title: Container(
+                            width: 75,
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              "You're GREAT!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontFamily: "Georgia",
+                                  fontSize: 15,
+                                  color: CustomColors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          trailing: Container(
+                            width: 175,
+                            child: FlatButton.icon(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              color: CustomColors.grey,
+                              onPressed: () async {
+                                String tempPath =
+                                    (await getTemporaryDirectory()).path;
+                                String filePath =
+                                    '$tempPath/order_image_${_cartImagePaths.length}.png';
+                                if (File(filePath).existsSync())
+                                  await File(filePath).delete();
+
+                                List<CameraDescription> cameras =
+                                    await availableCameras();
+                                CameraDescription camera = cameras.first;
+
+                                var result = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TakePicturePage(
+                                      camera: camera,
+                                      path: filePath,
+                                    ),
+                                  ),
+                                );
+                                if (result != null) {
+                                  String imageUrl = "";
+                                  try {
+                                    String fileName = DateTime.now()
+                                        .millisecondsSinceEpoch
+                                        .toString();
+                                    String fbFilePath =
+                                        'orders/${cachedLocalUser.getID()}/$fileName.png';
+                                    CustomDialogs.showLoadingDialog(
+                                        context, _keyLoader);
+                                    // Upload to storage
+                                    imageUrl = await Uploader().uploadImageFile(
+                                        true, result.toString(), fbFilePath);
+                                    Navigator.of(_keyLoader.currentContext,
+                                            rootNavigator: true)
+                                        .pop();
+                                  } catch (err) {
+                                    Fluttertoast.showToast(
+                                        msg: 'This file is not an image');
+                                  }
+                                  if (imageUrl != "")
+                                    setState(() {
+                                      _cartImagePaths.add(imageUrl);
+                                    });
+                                }
+                              },
+                              label: Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.0,
+                                ),
+                                child: Text(
+                                  "Capture IT!",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontFamily: "Georgia",
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              icon: Icon(FontAwesomeIcons.cameraRetro),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _cartImagePaths.length > 0
+                      ? GridView.count(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 0.85,
+                          shrinkWrap: true,
+                          primary: false,
+                          mainAxisSpacing: 10,
+                          children: List.generate(
+                            _cartImagePaths.length,
+                            (index) {
+                              return Stack(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10, right: 10, top: 5),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ImageView(
+                                              url: _cartImagePaths[index],
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          child: CachedNetworkImage(
+                                            imageUrl: _cartImagePaths[index],
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Image(
+                                              fit: BoxFit.fill,
+                                              image: imageProvider,
+                                            ),
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                Center(
+                                              child: SizedBox(
+                                                height: 50.0,
+                                                width: 50.0,
+                                                child: CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation(
+                                                            CustomColors.blue),
+                                                    strokeWidth: 2.0),
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) => Icon(
+                                              Icons.error,
+                                              size: 35,
+                                            ),
+                                            fadeOutDuration:
+                                                Duration(seconds: 1),
+                                            fadeInDuration:
+                                                Duration(seconds: 2),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 10,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.alertRed,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: InkWell(
+                                        child: Icon(
+                                          Icons.close,
+                                          size: 25,
+                                          color: CustomColors.white,
+                                        ),
+                                        onTap: () async {
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
+                                          bool res = await StorageUtils()
+                                              .removeFile(
+                                                  _cartImagePaths[index]);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          if (res)
+                                            setState(() {
+                                              _cartImagePaths.remove(
+                                                  _cartImagePaths[index]);
+                                            });
+                                          else
+                                            Fluttertoast.showToast(
+                                                msg: 'Unable to remove image');
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
                           ),
                         )
                       : Container(),
@@ -454,8 +456,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                 op,
                                 _priceDetails,
                                 storeID,
-                                imagePaths,
-                                writtenOrders),
+                                _cartImagePaths,
+                                _cartWrittenOrders),
                             settings: RouteSettings(name: '/orders'),
                           ),
                         );

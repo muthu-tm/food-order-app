@@ -70,19 +70,18 @@ class _SearchHomeState extends State<SearchHome> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Icon(
                       FontAwesomeIcons.mapMarkedAlt,
                       size: 30,
-                      color: CustomColors.black,
+                      color: CustomColors.positiveGreen,
                     ),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
                       child: Text(
                         "NearBy Stores in Map",
-                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontFamily: 'Georgia',
                             color: CustomColors.black,
@@ -95,7 +94,7 @@ class _SearchHomeState extends State<SearchHome> {
             ),
             ListTile(
               title: Text(
-                "Top daily needs",
+                "Daily Essentials",
                 style: TextStyle(
                     fontFamily: "Georgia",
                     color: CustomColors.black,
@@ -152,7 +151,8 @@ class _SearchHomeState extends State<SearchHome> {
                             MaterialPageRoute(
                               builder: (context) => ProductsListViewScreen(
                                   storeIDs, snapshot.data[index].uuid),
-                              settings: RouteSettings(name: '/search/categories'),
+                              settings:
+                                  RouteSettings(name: '/search/categories'),
                             ),
                           );
                         });
