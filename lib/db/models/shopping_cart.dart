@@ -10,6 +10,8 @@ class ShoppingCart {
   String uuid;
   @JsonKey(name: 'store_uuid', defaultValue: "")
   String storeID;
+  @JsonKey(name: 'store_name', nullable: false)
+  String storeName;
   @JsonKey(name: 'product_uuid', defaultValue: "")
   String productID;
   @JsonKey(name: 'quantity')

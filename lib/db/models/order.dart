@@ -19,6 +19,8 @@ class Order {
   String uuid;
   @JsonKey(name: 'order_id', nullable: false)
   String orderID;
+  @JsonKey(name: 'store_name', nullable: false)
+  String storeName;
   @JsonKey(name: 'store_uuid', nullable: false)
   String storeID;
   @JsonKey(name: 'user_number', nullable: false)

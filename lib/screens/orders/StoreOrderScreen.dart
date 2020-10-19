@@ -449,6 +449,7 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                               op,
                               _priceDetails,
                               widget.storeID,
+                              widget.storeName,
                               imagePaths,
                               writtenOrders),
                           settings: RouteSettings(name: '/orders'),

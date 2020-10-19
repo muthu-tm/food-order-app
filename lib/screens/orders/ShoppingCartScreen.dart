@@ -440,6 +440,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
 
                         String storeID =
                             snapshot.data.documents.first.data['store_uuid'];
+                        String storeName =
+                            snapshot.data.documents.first.data['store_name'];
                         double sCharge =
                             await Store().getShippingCharge(storeID);
 
@@ -456,6 +458,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                 op,
                                 _priceDetails,
                                 storeID,
+                                storeName,
                                 _cartImagePaths,
                                 _cartWrittenOrders),
                             settings: RouteSettings(name: '/orders'),

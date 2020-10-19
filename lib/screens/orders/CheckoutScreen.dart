@@ -19,7 +19,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  CheckoutScreen(this.clearAll, this.op, this._priceDetails, this.storeID,
+  CheckoutScreen(this.clearAll, this.op, this._priceDetails, this.storeID, this.storeName,
       this.images, this.writtenOrders);
 
   final bool clearAll;
@@ -28,6 +28,7 @@ class CheckoutScreen extends StatefulWidget {
   final String writtenOrders;
   final List<OrderProduct> op;
   final String storeID;
+  final String storeName;
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();

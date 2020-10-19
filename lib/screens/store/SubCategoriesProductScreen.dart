@@ -12,9 +12,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SubCategoriesProductsScreen extends StatefulWidget {
   SubCategoriesProductsScreen(
-      this.storeID, this.categoryID, this.subCategoryID, this.subCategoryName);
+      this.storeID, this.storeName, this.categoryID, this.subCategoryID, this.subCategoryName);
 
   final String storeID;
+  final String storeName;
   final String categoryID;
   final String subCategoryID;
   final String subCategoryName;
@@ -404,6 +405,8 @@ class _SubCategoriesProductsScreenState
                                                             _keyLoader);
                                                     ShoppingCart sc =
                                                         ShoppingCart();
+                                                    sc.storeName =
+                                                        widget.storeName;
                                                     sc.storeID = widget.storeID;
                                                     sc.productID = product.uuid;
                                                     sc.inWishlist = false;
@@ -472,6 +475,7 @@ class _SubCategoriesProductsScreenState
                                     //                 CustomDialogs.actionWaiting(
                                     //                     context);
                                     //                 ShoppingCart wl = ShoppingCart();
+                                    // wl.storeName = widget.storeName;
                                     //                 wl.storeID = widget.storeID;
                                     //                 wl.productID = product.uuid;
                                     //                 wl.inWishlist = true;

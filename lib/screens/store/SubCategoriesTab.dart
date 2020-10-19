@@ -51,7 +51,7 @@ class SubCategoriesTab extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => SubCategoriesProductsScreen(
-                                store.uuid, categoryID, _sc.uuid, _sc.name),
+                                store.uuid, store.name, categoryID, _sc.uuid, _sc.name),
                           ),
                         );
                       },

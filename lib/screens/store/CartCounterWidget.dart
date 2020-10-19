@@ -8,9 +8,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../utils/CustomColors.dart';
 
 class CartCounter extends StatefulWidget {
-  CartCounter(this.storeID, this.productID);
+  CartCounter(this.storeID, this.storeName, this.productID);
 
   final String storeID;
+  final String storeName;
   final String productID;
   @override
   _CartCounterState createState() => _CartCounterState();
@@ -43,6 +44,7 @@ class _CartCounterState extends State<CartCounter> {
                       try {
                         CustomDialogs.showLoadingDialog(context, _keyLoader);
                         ShoppingCart sc = ShoppingCart();
+                        sc.storeName = widget.storeName;
                         sc.storeID = widget.storeID;
                         sc.productID = widget.productID;
                         sc.inWishlist = false;

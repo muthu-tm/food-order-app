@@ -11,9 +11,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CategoriesProductsScreen extends StatefulWidget {
   CategoriesProductsScreen(
-      this.storeID, this.categoryID, this._keyLoader);
+      this.storeID, this.storeName, this.categoryID, this._keyLoader);
 
   final String storeID;
+  final String storeName;
   final String categoryID;
   final GlobalKey<State> _keyLoader;
   @override
@@ -60,7 +61,7 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream: Products()
-              .streamProductsForCategory(widget.storeID, widget.categoryID),
+          .streamProductsForCategory(widget.storeID, widget.categoryID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 
@@ -340,6 +341,7 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                                                     context, widget._keyLoader);
                                                 ShoppingCart sc =
                                                     ShoppingCart();
+                                                sc.storeName = widget.storeName;
                                                 sc.storeID = widget.storeID;
                                                 sc.productID = product.uuid;
                                                 sc.inWishlist = false;
@@ -407,6 +409,7 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                                 //                 CustomDialogs.actionWaiting(
                                 //                     context);
                                 //                 ShoppingCart wl = ShoppingCart();
+                                //wl.storeName = widget.storeName;
                                 //                 wl.storeID = widget.storeID;
                                 //                 wl.productID = product.uuid;
                                 //                 wl.inWishlist = true;

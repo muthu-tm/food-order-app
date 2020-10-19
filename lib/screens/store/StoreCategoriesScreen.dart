@@ -46,7 +46,10 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.shopping_cart, color: CustomColors.black, ),
+            icon: Icon(
+              Icons.shopping_cart,
+              color: CustomColors.black,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -97,8 +100,8 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
             child: SubCategoriesTab(widget.categoryID, widget.store),
           ),
           SingleChildScrollView(
-            child: CategoriesProductsScreen(
-                widget.store.uuid, widget.categoryID, _keyLoader),
+            child: CategoriesProductsScreen(widget.store.uuid,
+                widget.store.name, widget.categoryID, _keyLoader),
           ),
         ],
       ),

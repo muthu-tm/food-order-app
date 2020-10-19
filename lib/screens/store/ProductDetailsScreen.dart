@@ -270,13 +270,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   Spacer(),
                   Column(
                     children: [
-                      CartCounter(widget.product.storeID, widget.product.uuid),
+                      CartCounter(
+                          widget.product.storeID, "", widget.product.uuid),
                     ],
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Column(
               children: [
                 Container(
