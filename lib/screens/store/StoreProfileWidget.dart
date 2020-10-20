@@ -29,17 +29,6 @@ class StoreProfileWidget extends StatelessWidget {
               color: CustomColors.green,
             ),
             title: Text(
-              "Name",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontFamily: "Georgia",
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          ListTile(
-            leading: Text(""),
-            title: Text(
               store.name,
               style: TextStyle(
                   color: CustomColors.black,
@@ -52,17 +41,6 @@ class StoreProfileWidget extends StatelessWidget {
               FontAwesomeIcons.addressCard,
               color: CustomColors.green,
             ),
-            title: Text(
-              "Address",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontFamily: "Georgia",
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          ListTile(
-            leading: Text(""),
             title: Text(
               store.address.toString(),
               maxLines: 5,
@@ -173,7 +151,7 @@ class StoreProfileWidget extends StatelessWidget {
             title: Text(
               "Active From: ",
               style: TextStyle(
-                  color: CustomColors.grey,
+                  color: CustomColors.black,
                   fontSize: 16.0,
                   fontFamily: "Georgia",
                   fontWeight: FontWeight.w500),
@@ -192,7 +170,7 @@ class StoreProfileWidget extends StatelessWidget {
             title: Text(
               "Active Till: ",
               style: TextStyle(
-                  color: CustomColors.grey,
+                  color: CustomColors.black,
                   fontSize: 16.0,
                   fontFamily: "Georgia",
                   fontWeight: FontWeight.w500),

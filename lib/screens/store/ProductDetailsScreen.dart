@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/CartCounterWidget.dart';
+import 'package:chipchop_buyer/screens/store/StoreProfileWidget.dart';
+import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,13 +26,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     with SingleTickerProviderStateMixin {
   TabController _controller;
 
+  Store store;
+
   List<Widget> list = [
     Tab(
       icon: Icon(
         Icons.card_travel,
         size: 20,
       ),
-      text: "Details",
+      text: "From Store",
     ),
     Tab(
       icon: Icon(
@@ -180,8 +185,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   Spacer(),
                   Column(
                     children: [
-                      CartCounter(
-                          widget.product.storeID, "", widget.product.uuid),
+                      CartCounter(widget.product.storeID,
+                          store != null ? store.name : "", widget.product.uuid),
                     ],
                   ),
                 ],
@@ -292,9 +297,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
             Container(
               child: TabBar(
                   indicatorColor: CustomColors.alertRed,
@@ -304,18 +306,61 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   tabs: list),
             ),
             Container(
-              height: 200,
-              child: TabBarView(controller: _controller, children: [
-                Container(
-                  child: Text("Details"),
-                ),
-                Container(),
-                Container()
-              ]),
+              height: 400,
+              child: TabBarView(
+                controller: _controller,
+                children: [
+                  Container(
+                    child: getStoreDetails(context),
+                  ),
+                  Container(),
+                  Container()
+                ],
+              ),
             )
           ],
         ),
       ),
+    );
+  }
+
+  Widget getStoreDetails(BuildContext context) {
+    return FutureBuilder(
+      future: Store().getByID(widget.product.storeID),
+      builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.isNotEmpty) {
+            store = Store.fromJson(snapshot.data);
+            return SingleChildScrollView(child: StoreProfileWidget(store));
+          } else {
+            return Container(
+              padding: EdgeInsets.all(10),
+              color: CustomColors.white,
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Text(
+                "Unable to load Store Details",
+                style: TextStyle(
+                  fontFamily: 'Georgia',
+                  color: CustomColors.alertRed,
+                  fontSize: 16.0,
+                ),
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Column(
+              children: AsyncWidgets.asyncError(),
+            ),
+          );
+        } else {
+          return Center(
+            child: Column(
+              children: AsyncWidgets.asyncWaiting(),
+            ),
+          );
+        }
+      },
     );
   }
 
