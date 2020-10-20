@@ -65,13 +65,14 @@ class StoreCategoryWidget extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Center(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               CachedNetworkImage(
                                 imageUrl: _c.getCategoryImage(),
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
-                                  width: 75,
-                                  height: 75,
+                                  width: 80,
+                                  height: 80,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(10.0),
@@ -98,6 +99,7 @@ class StoreCategoryWidget extends StatelessWidget {
                                 padding: EdgeInsets.all(5.0),
                                 child: Text(
                                   _c.name,
+                                  textAlign: TextAlign.center,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(

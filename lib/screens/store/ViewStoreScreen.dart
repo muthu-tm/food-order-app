@@ -98,7 +98,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                       padding: EdgeInsets.all(5),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
                           Column(
                             children: <Widget>[
@@ -209,37 +209,6 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                                     });
                                   },
                                   child: Icon(
-                                    FontAwesomeIcons.clock,
-                                    color: Color(0xFFC1A17C),
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                "Flash Sale",
-                                style: TextStyle(
-                                    color: CustomColors.black,
-                                    fontFamily: 'Georgia'),
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                width: 50,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10.0),
-                                    ),
-                                    color: CustomColors.white),
-                                child: RawMaterialButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      selectedItem = 5;
-                                    });
-                                  },
-                                  child: Icon(
                                     FontAwesomeIcons.store,
                                     color: Color(0xFF4D9DA7),
                                   ),
@@ -282,19 +251,11 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                                           widget.store.uuid, widget.store.name),
                                     ),
                                   )
-                                : selectedItem == 4
-                                    ? Expanded(
-                                        child: Container(
-                                          child: StoreFlashSaleWidget(
-                                              widget.store.uuid),
-                                        ),
-                                      )
-                                    : Expanded(
-                                        child: Container(
-                                          child:
-                                              StoreProfileWidget(widget.store),
-                                        ),
-                                      )
+                                : Expanded(
+                                    child: Container(
+                                      child: StoreProfileWidget(widget.store),
+                                    ),
+                                  )
                   ],
                 ),
               ),

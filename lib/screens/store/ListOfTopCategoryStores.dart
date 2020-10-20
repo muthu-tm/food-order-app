@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreWidget.dart';
+import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -23,10 +24,7 @@ class ListOfTopCategoryStores extends StatelessWidget {
         ),
         title: Text(
           "$categoryName stores",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16
-          ),
+          style: TextStyle(color: Colors.black, fontSize: 16),
         ),
         actions: <Widget>[
           IconButton(
@@ -77,17 +75,19 @@ class ListOfTopCategoryStores extends StatelessWidget {
             );
           }
         } else if (snapshot.hasError) {
-          child = Container(
-            child: Text(
-              "Error...",
-              style: TextStyle(color: CustomColors.black),
+          child = Center(
+            child: Container(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
             ),
           );
         } else {
-          child = Container(
-            child: Text(
-              "Loading...",
-              style: TextStyle(color: CustomColors.black),
+          child = Center(
+            child: Container(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
+              ),
             ),
           );
         }
