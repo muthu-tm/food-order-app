@@ -35,7 +35,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
         Icons.card_travel,
         size: 20,
       ),
-      text: "Orders",
+      text: "Details",
     ),
     Tab(
       icon: Icon(
@@ -122,6 +122,20 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
 
           child = Column(
             children: [
+              ListTile(
+                leading: Icon(
+                  Icons.store,
+                  color: CustomColors.blueGreen,
+                ),
+                title: Text("Store"),
+                trailing: Text(
+                  order.storeName,
+                  style: TextStyle(
+                      color: CustomColors.black,
+                      fontSize: 14,
+                      fontFamily: "Georgia"),
+                ),
+              ),
               ListTile(
                 leading: Icon(
                   Icons.shopping_basket,
