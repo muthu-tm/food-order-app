@@ -60,6 +60,14 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
     return Scaffold(
       key: _scaffoldKey,
+      bottomNavigationBar: Text(
+        "Powered by Fourcup Inc.",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      extendBody: true,
       body: Container(
         height: double.infinity,
         decoration: BoxDecoration(

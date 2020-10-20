@@ -46,16 +46,14 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: CustomColors.lightGrey,
-      bottomNavigationBar: Container(
-        color: Color(0xffA4D649),
-        child: Text(
-          "Powered by Fourcup Inc.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-          ),
+      bottomNavigationBar: Text(
+        "Powered by Fourcup Inc.",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
         ),
       ),
+      extendBody: true,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
