@@ -17,10 +17,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  CheckoutScreen(this.clearAll, this.op, this._priceDetails, this.storeID, this.storeName,
-      this.images, this.writtenOrders);
+  CheckoutScreen(this.clearAll, this.op, this._priceDetails, this.storeID,
+      this.storeName, this.images, this.writtenOrders);
 
   final bool clearAll;
   final List<double> _priceDetails;
@@ -42,6 +44,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   double shippingCharge = 0.00;
   double wAmount = 0.00;
   bool isAmountUsed = false;
+
+  DateTime selectedDate;
+  final format = DateFormat("dd-MMM-yyyy HH:mm");
+
+  @override
+  void initState() {
+    super.initState();
+    this.selectedDate = DateTime.now().add(Duration(days: 1));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +92,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             _od.deliveryType = deliveryOption;
             _od.deliveryCharge = shippingCharge;
             _od.notes = "";
+            _od.scheduledDate = deliveryOption == 3
+                ? selectedDate.millisecondsSinceEpoch
+                : DateTime.now().millisecondsSinceEpoch;
             _o.delivery = _od;
 
             _o.customerNotes = "";
@@ -138,6 +152,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           Widget child;
 
           if (snapshot.hasData) {
+            if (snapshot.data == null) {
+              return Container();
+            } else {
             Store store = Store.fromJson(snapshot.data);
 
             child = SingleChildScrollView(
@@ -187,6 +204,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
             );
+            }
           } else if (snapshot.hasError) {
             child = Container(
               child: Column(
@@ -230,103 +248,144 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   store.deliveryDetails);
 
               return Container(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: 12.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.0),
-                        ),
-                        color: Color(0xFFE7F9F5),
-                        border: Border.all(
-                          color: Color(0xFF4CD7A5),
-                        ),
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          int dFee = getDeliveryFee(
-                              store.deliveryDetails.availableOptions[index],
-                              store.deliveryDetails);
-                          double fee = 0.00;
+                margin: EdgeInsets.symmetric(vertical: 12.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8.0),
+                  ),
+                  color: Color(0xFFE7F9F5),
+                  border: Border.all(
+                    color: Color(0xFF4CD7A5),
+                  ),
+                ),
+                child: ListTile(
+                  onTap: () {
+                    int dFee = getDeliveryFee(
+                        store.deliveryDetails.availableOptions[index],
+                        store.deliveryDetails);
+                    double fee = 0.00;
 
-                          if (dFee == 0)
-                            fee = widget._priceDetails[2];
-                          else if (dFee.isNegative) {
-                            fee = widget._priceDetails[2] -
-                                widget._priceDetails[2] / 100 * dFee.abs();
-                            if (fee.isNegative) fee = 0.00;
-                          } else {
-                            fee = widget._priceDetails[2] +
-                                widget._priceDetails[2] / 100 * dFee.abs();
-                          }
+                    if (dFee == 0)
+                      fee = widget._priceDetails[2];
+                    else if (dFee.isNegative) {
+                      fee = widget._priceDetails[2] -
+                          widget._priceDetails[2] / 100 * dFee.abs();
+                      if (fee.isNegative) fee = 0.00;
+                    } else {
+                      fee = widget._priceDetails[2] +
+                          widget._priceDetails[2] / 100 * dFee.abs();
+                    }
 
-                          setState(() {
-                            shippingCharge = fee;
-                            deliveryOption =
-                                store.deliveryDetails.availableOptions[index];
-                          });
-                        },
-                        trailing: Icon(
-                          deliveryOption ==
-                                  store.deliveryDetails.availableOptions[index]
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
-                          color: Color(0xFF10CA88),
+                    setState(() {
+                      shippingCharge = fee;
+                      deliveryOption =
+                          store.deliveryDetails.availableOptions[index];
+                    });
+                  },
+                  trailing: Icon(
+                    deliveryOption ==
+                            store.deliveryDetails.availableOptions[index]
+                        ? Icons.check_box
+                        : Icons.check_box_outline_blank,
+                    color: Color(0xFF10CA88),
+                  ),
+                  title: Text(getDeliveryOption(
+                      store.deliveryDetails.availableOptions[index])),
+                  subtitle: RichText(
+                    text: TextSpan(
+                      text: 'Delivery: ',
+                      style: TextStyle(
+                          color: dFee == 0
+                              ? CustomColors.blue
+                              : dFee.isNegative
+                                  ? CustomColors.green
+                                  : CustomColors.alertRed),
+                      children: [
+                        TextSpan(
+                          text: dFee == -100
+                              ? 'FREE'
+                              : dFee == 0 || dFee == -100
+                                  ? ' Standard '
+                                  : dFee.isNegative
+                                      ? ' ${dFee.abs()}%'
+                                      : ' $dFee%',
+                          style: TextStyle(
+                              color: dFee == 0
+                                  ? CustomColors.blue
+                                  : dFee.isNegative
+                                      ? CustomColors.green
+                                      : CustomColors.alertRed),
                         ),
-                        title: Text(getDeliveryOption(
-                            store.deliveryDetails.availableOptions[index])),
-                        subtitle: RichText(
-                          text: TextSpan(
-                            text: 'Delivery: ',
-                            style: TextStyle(
-                                color: dFee == 0
-                                    ? CustomColors.blue
-                                    : dFee.isNegative
-                                        ? CustomColors.green
-                                        : CustomColors.alertRed),
-                            children: [
-                              TextSpan(
-                                text: dFee == -100
-                                    ? 'FREE'
-                                    : dFee == 0 || dFee == -100
-                                        ? ' Standard '
-                                        : dFee.isNegative
-                                            ? ' ${dFee.abs()}%'
-                                            : ' $dFee%',
-                                style: TextStyle(
-                                    color: dFee == 0
-                                        ? CustomColors.blue
-                                        : dFee.isNegative
-                                            ? CustomColors.green
-                                            : CustomColors.alertRed),
-                              ),
-                              TextSpan(
-                                text: dFee == -100
-                                    ? ''
-                                    : dFee == 0
-                                        ? 'Charge'
-                                        : dFee.isNegative
-                                            ? " OFFER"
-                                            : " Extra Fee",
-                                style: TextStyle(
-                                    color: dFee == 0
-                                        ? CustomColors.blue
-                                        : dFee.isNegative
-                                            ? CustomColors.green
-                                            : CustomColors.alertRed),
-                              ),
-                            ],
-                          ),
+                        TextSpan(
+                          text: dFee == -100
+                              ? ''
+                              : dFee == 0
+                                  ? 'Charge'
+                                  : dFee.isNegative ? " OFFER" : " Extra Fee",
+                          style: TextStyle(
+                              color: dFee == 0
+                                  ? CustomColors.blue
+                                  : dFee.isNegative
+                                      ? CustomColors.green
+                                      : CustomColors.alertRed),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               );
             },
           ),
         ),
+        this.deliveryOption == 3
+            ? ListTile(
+                leading: Icon(
+                  Icons.av_timer,
+                  color: CustomColors.alertRed,
+                ),
+                title: DateTimeField(
+                  decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                    suffixIcon: Icon(Icons.date_range,
+                        color: CustomColors.blue, size: 30),
+                    labelText: "DateTime",
+                    labelStyle: TextStyle(
+                      fontSize: 12,
+                      color: CustomColors.blue,
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: CustomColors.white),
+                    ),
+                  ),
+                  format: format,
+                  initialValue: selectedDate,
+                  onShowPicker: (context, currentValue) async {
+                    final date = await showDatePicker(
+                      context: context,
+                      firstDate: DateTime.now(),
+                      initialDate: currentValue ?? DateTime.now(),
+                      lastDate: DateTime.now().add(
+                        Duration(days: 30),
+                      ),
+                    );
+
+                    if (date != null) {
+                      final time = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.fromDateTime(
+                            currentValue ?? DateTime.now()),
+                      );
+                      selectedDate = DateTimeField.combine(date, time);
+                      return selectedDate;
+                    } else {
+                      return currentValue;
+                    }
+                  },
+                ),
+              )
+            : Container(),
         ListTile(
           leading: Icon(
             FontAwesomeIcons.fileInvoiceDollar,

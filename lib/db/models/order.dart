@@ -98,6 +98,20 @@ class Order {
     }
   }
 
+  String getDeliveryType() {
+    if (this.delivery.deliveryType == 0) {
+      return "Pickup from Store";
+    } else if (this.delivery.deliveryType == 1) {
+      return "Instant Delivery";
+    } else if (this.delivery.deliveryType == 2) {
+      return "Same-Day Delivery";
+    } else if (this.delivery.deliveryType == 3) {
+      return "Scheduled Delivery";
+    } else {
+      return "Pickup from Store";
+    }
+  }
+
   Future<Order> create() async {
     this.createdAt = DateTime.now();
     this.updatedAt = DateTime.now();
