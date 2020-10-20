@@ -17,7 +17,8 @@ class OrderWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => OrderDetailsScreen(order.uuid),
+              builder: (context) =>
+                  OrderDetailsScreen(order.orderID, order.uuid),
               settings: RouteSettings(name: '/orders/details'),
             ),
           );

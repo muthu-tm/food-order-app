@@ -27,15 +27,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     Tab(
       icon: Icon(
         Icons.card_travel,
+        size: 20,
       ),
       text: "Details",
     ),
     Tab(
-      icon: Icon(FontAwesomeIcons.comments),
+      icon: Icon(
+        FontAwesomeIcons.comments,
+        size: 20,
+      ),
       text: "Reviews",
     ),
     Tab(
-      icon: Icon(FontAwesomeIcons.bookReader),
+      icon: Icon(
+        FontAwesomeIcons.bookReader,
+        size: 20,
+      ),
       text: "FAQs",
     ),
   ];
@@ -288,23 +295,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
             SizedBox(
               height: 20,
             ),
-            Column(
-              children: [
+            Container(
+              child: TabBar(
+                  indicatorColor: CustomColors.alertRed,
+                  labelColor: CustomColors.blueGreen,
+                  unselectedLabelColor: CustomColors.black,
+                  controller: _controller,
+                  tabs: list),
+            ),
+            Container(
+              height: 200,
+              child: TabBarView(controller: _controller, children: [
                 Container(
-                  child: TabBar(
-                      indicatorColor: Colors.grey,
-                      labelColor: Colors.black,
-                      unselectedLabelColor: Colors.grey,
-                      controller: _controller,
-                      tabs: list),
+                  child: Text("Details"),
                 ),
-                Container(
-                  height: 200,
-                  child: TabBarView(
-                      controller: _controller,
-                      children: [Container(), Container(), Container()]),
-                )
-              ],
+                Container(),
+                Container()
+              ]),
             )
           ],
         ),

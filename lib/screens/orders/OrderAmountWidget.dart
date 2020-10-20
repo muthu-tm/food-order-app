@@ -33,6 +33,11 @@ class OrderAmountWidget extends StatelessWidget {
             ),
             ListTile(
               leading: Text(""),
+              title: Text("Wallet Amount"),
+              trailing: Text('₹ ${order.amount.walletAmount}'),
+            ),
+            ListTile(
+              leading: Text(""),
               title: Text("Delivery Charge"),
               trailing: Text('₹ ${order.amount.deliveryCharge}'),
             ),

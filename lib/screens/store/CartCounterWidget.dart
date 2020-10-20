@@ -32,14 +32,17 @@ class _CartCounterState extends State<CartCounter> {
             if (snapshot.data.documents.isEmpty) {
               child = Card(
                 elevation: 2.0,
-                color: CustomColors.lightGreen,
+                color: CustomColors.green,
                 child: Container(
                   height: 40,
                   width: 40,
                   child: IconButton(
                     iconSize: 20,
                     alignment: Alignment.center,
-                    icon: Icon(FontAwesomeIcons.cartPlus),
+                    icon: Icon(
+                      FontAwesomeIcons.cartPlus,
+                      color: CustomColors.black,
+                    ),
                     onPressed: () async {
                       try {
                         CustomDialogs.showLoadingDialog(context, _keyLoader);
