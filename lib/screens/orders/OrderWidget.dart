@@ -26,15 +26,60 @@ class OrderWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                title: Text(
-                  order.getStatus(),
-                  style: TextStyle(
-                      color: CustomColors.purple,
-                      fontSize: 18,
-                      fontFamily: "Georgia"),
-                ),
-                trailing: Icon(Icons.chevron_right, size: 35),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Store:",
+                          style: TextStyle(
+                              color: CustomColors.black,
+                              fontSize: 14,
+                              fontFamily: "Georgia"),
+                        ),
+                        Text(
+                          order.storeName,
+                          style: TextStyle(
+                              color: CustomColors.purple,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              fontFamily: "Georgia"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Status:",
+                          style: TextStyle(
+                              color: CustomColors.black,
+                              fontSize: 14,
+                              fontFamily: "Georgia"),
+                        ),
+                        Text(
+                          order.getStatus(),
+                          style: TextStyle(
+                              color: CustomColors.purple,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              fontFamily: "Georgia"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.chevron_right, size: 35),
+                  ),
+                ],
               ),
               ListTile(
                 leading: Icon(
