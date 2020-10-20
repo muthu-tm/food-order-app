@@ -80,7 +80,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     return SingleChildScrollView(
       child: Container(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                child: Text(
+                  widget.product.name,
+                  style: TextStyle(
+                      color: CustomColors.blue,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: EdgeInsets.all(10),
               child: Container(
@@ -100,15 +116,67 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                child: Text(
-                  widget.product.name,
-                  style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
-                ),
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                widget.product.shortDetails,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                    fontSize: 14,
+                    color: CustomColors.black,
+                    fontFamily: 'Georgia'),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        "${widget.product.weight} ${widget.product.getUnit()}",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: CustomColors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 10,
+                          ),
+                          widget.product.offer > 0
+                              ? Text(
+                                  '₹ ${widget.product.originalPrice.toString()}',
+                                  style: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 18,
+                                      decoration: TextDecoration.lineThrough),
+                                )
+                              : Container(),
+                          SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            '₹ ${widget.product.currentPrice.toString()}',
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                  Column(
+                    children: [
+                      CartCounter(
+                          widget.product.storeID, "", widget.product.uuid),
+                    ],
+                  ),
+                ],
               ),
             ),
             Padding(
@@ -216,67 +284,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        "Quantity",
-                        style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "${widget.product.weight} ${widget.product.getUnit()}",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 10,
-                          ),
-                          widget.product.offer > 0
-                              ? Text(
-                                  '₹ ${widget.product.originalPrice.toString()}',
-                                  style: TextStyle(
-                                      color: Colors.black54,
-                                      fontSize: 18,
-                                      decoration: TextDecoration.lineThrough),
-                                )
-                              : Container(),
-                          SizedBox(
-                            width: 6,
-                          ),
-                          Text(
-                            '₹ ${widget.product.currentPrice.toString()}',
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                  Spacer(),
-                  Column(
-                    children: [
-                      CartCounter(
-                          widget.product.storeID, "", widget.product.uuid),
-                    ],
-                  ),
-                ],
-              ),
-            ),
             SizedBox(
               height: 20,
             ),
@@ -292,21 +299,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ),
                 Container(
                   height: 200,
-                  child: TabBarView(controller: _controller, children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        widget.product.shortDetails,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: CustomColors.black,
-                            fontFamily: 'Georgia'),
-                      ),
-                    ),
-                    Container(),
-                    Container()
-                  ]),
+                  child: TabBarView(
+                      controller: _controller,
+                      children: [Container(), Container(), Container()]),
                 )
               ],
             )
