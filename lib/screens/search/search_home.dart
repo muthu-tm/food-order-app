@@ -134,12 +134,14 @@ class _SearchHomeState extends State<SearchHome> {
                           style: TextStyle(color: Colors.black),
                         ),
                         onPressed: () async {
-                          List<Store> stores = await Store().getNearByStores(
-                              cachedLocalUser
-                                  .primaryLocation.geoPoint.geoPoint.latitude,
-                              cachedLocalUser
-                                  .primaryLocation.geoPoint.geoPoint.longitude,
-                              10);
+                          // List<Store> stores = await Store().getNearByStores(
+                          //     cachedLocalUser
+                          //         .primaryLocation.geoPoint.geoPoint.latitude,
+                          //     cachedLocalUser
+                          //         .primaryLocation.geoPoint.geoPoint.longitude,
+                          //     10);
+                          List<Store> stores = await Store()
+                              .streamFavStores(cachedLocalUser.primaryLocation);
 
                           List<String> storeIDs = [];
                           for (var i = 0; i < stores.length; i++) {
