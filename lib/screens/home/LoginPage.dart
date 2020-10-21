@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _getBody() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

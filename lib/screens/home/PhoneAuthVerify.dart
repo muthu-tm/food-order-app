@@ -79,7 +79,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
         ),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 height: 20,
