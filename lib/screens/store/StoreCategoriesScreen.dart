@@ -99,10 +99,8 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen>
           SingleChildScrollView(
             child: SubCategoriesTab(widget.categoryID, widget.store),
           ),
-          SingleChildScrollView(
-            child: CategoriesProductsScreen(widget.store.uuid,
-                widget.store.name, widget.categoryID, _keyLoader),
-          ),
+          CategoriesProductsScreen(widget.store.uuid,
+              widget.store.name, widget.categoryID, _keyLoader),
         ],
       ),
     );
