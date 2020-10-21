@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: CustomColors.white,
                 width: MediaQuery.of(context).size.width * 0.9,
                 child: Text(
-                  "Unable to load Top Categories",
+                  "No Popular Products",
                   style: TextStyle(
                     fontFamily: 'Georgia',
                     color: CustomColors.alertRed,
@@ -163,6 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisCount: 3,
               crossAxisSpacing: 5,
               shrinkWrap: true,
+              primary: false,
               mainAxisSpacing: 10,
               padding: EdgeInsets.all(1.0),
               children: List<Widget>.generate(

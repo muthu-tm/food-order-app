@@ -7,6 +7,7 @@ import 'package:chipchop_buyer/screens/store/CartCounterWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -227,8 +228,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Returnable"
                               : "Not Returnable",
                           style: TextStyle(
-                              color: CustomColors.black,
-                              fontFamily: 'Georgia'),
+                              color: CustomColors.black, fontFamily: 'Georgia'),
                         )
                       ],
                     ),
@@ -255,8 +255,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Home Delivery"
                               : "Self Pickup",
                           style: TextStyle(
-                              color: CustomColors.black,
-                              fontFamily: 'Georgia'),
+                              color: CustomColors.black, fontFamily: 'Georgia'),
                         )
                       ],
                     ),
@@ -286,8 +285,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "In Stock"
                               : "Out Of Stock",
                           style: TextStyle(
-                              color: CustomColors.black,
-                              fontFamily: 'Georgia'),
+                              color: CustomColors.black, fontFamily: 'Georgia'),
                         )
                       ],
                     ),
@@ -366,30 +364,44 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
 
     for (var item in widget.product.getProductImages()) {
       images.add(
-        CachedNetworkImage(
-          imageUrl: item,
-          imageBuilder: (context, imageProvider) => Image(
-            height: 150,
-            width: double.infinity,
-            fit: BoxFit.contain,
-            image: imageProvider,
-          ),
-          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-            child: SizedBox(
-              height: 50.0,
-              width: 50.0,
-              child: CircularProgressIndicator(
-                  value: downloadProgress.progress,
-                  valueColor: AlwaysStoppedAnimation(CustomColors.blue),
-                  strokeWidth: 2.0),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ImageView(
+                  url: item,
+                ),
+                settings: RouteSettings(name: '/products/image'),
+              ),
+            );
+          },
+          child: CachedNetworkImage(
+            imageUrl: item,
+            imageBuilder: (context, imageProvider) => Image(
+              height: 150,
+              width: double.infinity,
+              fit: BoxFit.contain,
+              image: imageProvider,
             ),
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Center(
+              child: SizedBox(
+                height: 50.0,
+                width: 50.0,
+                child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                    valueColor: AlwaysStoppedAnimation(CustomColors.blue),
+                    strokeWidth: 2.0),
+              ),
+            ),
+            errorWidget: (context, url, error) => Icon(
+              Icons.error,
+              size: 35,
+            ),
+            fadeOutDuration: Duration(seconds: 1),
+            fadeInDuration: Duration(seconds: 2),
           ),
-          errorWidget: (context, url, error) => Icon(
-            Icons.error,
-            size: 35,
-          ),
-          fadeOutDuration: Duration(seconds: 1),
-          fadeInDuration: Duration(seconds: 2),
         ),
       );
     }
