@@ -1,5 +1,7 @@
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
+import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
+import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -24,19 +26,8 @@ class _ChatsHomeState extends State<ChatsHome>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text(
-          "Chats",
-          textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.black, fontSize: 16),
-        ),
-        backgroundColor: CustomColors.green,
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: appBar(context),
+      drawer: sideDrawer(context),
       body: SingleChildScrollView(
         child: getBody(context),
       ),
