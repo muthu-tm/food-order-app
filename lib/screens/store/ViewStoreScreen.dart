@@ -1,13 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/StoreOrderScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreCategoryWidget.dart';
-import 'package:chipchop_buyer/screens/store/StoreFlashSaleWidget.dart';
 import 'package:chipchop_buyer/screens/store/StorePopularWidet.dart';
 import 'package:chipchop_buyer/screens/store/StoreProductsWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreProfileWidget.dart';
-import 'package:chipchop_buyer/screens/store/StoreSearchBar.dart';
+import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -69,26 +66,10 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            StoreSearchBar(),
+            // StoreSearchBar(),
             Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 150.0,
-                width: double.infinity,
-                child: Carousel(
-                  images: getImages(),
-                  dotSize: 5.0,
-                  boxFit: BoxFit.cover,
-                  dotSpacing: 20.0,
-                  dotIncreasedColor: CustomColors.green,
-                  dotColor: CustomColors.alertRed,
-                  indicatorBgPadding: 0,
-                  dotBgColor: Colors.transparent,
-                  borderRadius: true,
-                  radius: Radius.circular(20),
-                  noRadiusForIndicator: true,
-                ),
-              ),
+              padding: EdgeInsets.all(10),
+              child: CarouselIndicatorSlider(widget.store.getStoreImages()),
             ),
             Expanded(
               child: Container(
@@ -264,41 +245,5 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
         ),
       ),
     );
-  }
-
-  List<Widget> getImages() {
-    List<Widget> images = [];
-
-    for (var item in widget.store.getStoreImages()) {
-      images.add(
-        CachedNetworkImage(
-          imageUrl: item,
-          imageBuilder: (context, imageProvider) => Image(
-            height: 150,
-            width: double.infinity,
-            fit: BoxFit.contain,
-            image: imageProvider,
-          ),
-          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-            child: SizedBox(
-              height: 50.0,
-              width: 50.0,
-              child: CircularProgressIndicator(
-                  value: downloadProgress.progress,
-                  valueColor: AlwaysStoppedAnimation(CustomColors.blue),
-                  strokeWidth: 2.0),
-            ),
-          ),
-          errorWidget: (context, url, error) => Icon(
-            Icons.error,
-            size: 35,
-          ),
-          fadeOutDuration: Duration(seconds: 1),
-          fadeInDuration: Duration(seconds: 2),
-        ),
-      );
-    }
-
-    return images;
   }
 }

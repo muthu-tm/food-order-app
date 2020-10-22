@@ -1,13 +1,11 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_pro/carousel_pro.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/CartCounterWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
+import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
-import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -111,22 +109,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           ),
           Padding(
             padding: EdgeInsets.all(10),
-            child: Container(
-              height: 150.0,
-              width: double.infinity,
-              child: Carousel(
-                images: getImages(),
-                dotSize: 5.0,
-                dotSpacing: 20.0,
-                dotIncreasedColor: CustomColors.green,
-                dotColor: CustomColors.alertRed,
-                indicatorBgPadding: 1.0,
-                dotBgColor: Colors.transparent,
-                borderRadius: true,
-                radius: Radius.circular(20),
-                noRadiusForIndicator: true,
-              ),
-            ),
+            child: CarouselIndicatorSlider(widget.product.getProductImages()),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -359,52 +342,4 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     );
   }
 
-  List<Widget> getImages() {
-    List<Widget> images = [];
-
-    for (var item in widget.product.getProductImages()) {
-      images.add(
-        InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ImageView(
-                  url: item,
-                ),
-                settings: RouteSettings(name: '/products/image'),
-              ),
-            );
-          },
-          child: CachedNetworkImage(
-            imageUrl: item,
-            imageBuilder: (context, imageProvider) => Image(
-              height: 150,
-              width: double.infinity,
-              fit: BoxFit.contain,
-              image: imageProvider,
-            ),
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Center(
-              child: SizedBox(
-                height: 50.0,
-                width: 50.0,
-                child: CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                    valueColor: AlwaysStoppedAnimation(CustomColors.blue),
-                    strokeWidth: 2.0),
-              ),
-            ),
-            errorWidget: (context, url, error) => Icon(
-              Icons.error,
-              size: 35,
-            ),
-            fadeOutDuration: Duration(seconds: 1),
-            fadeInDuration: Duration(seconds: 2),
-          ),
-        ),
-      );
-    }
-    return images;
-  }
 }
