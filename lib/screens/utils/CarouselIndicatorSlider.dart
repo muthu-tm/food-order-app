@@ -63,6 +63,7 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
         options: CarouselOptions(
             autoPlay: imgList.length > 1 ? true : false,
             enlargeCenterPage: imgList.length > 1 ? true : false,
+            enableInfiniteScroll: imgList.length <= 1 ? false : true,
             aspectRatio: 2.0,
             onPageChanged: (index, reason) {
               setState(() {
