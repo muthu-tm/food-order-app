@@ -69,7 +69,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       ),
       extendBody: true,
       body: Container(
-        height: double.infinity,
+        height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
@@ -77,75 +77,81 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: EdgeInsets.all(_fixedPadding),
-                child: ClipRRect(
-                  child: Image.asset(
-                    "images/icons/logo.png",
-                    height: 80,
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      child: Image.asset(
+                        "images/icons/logo.png",
+                        height: 80,
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            "UNIQUES",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: "OLED",
+                                fontSize: 22.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Text(
+                          "Buy Organic Vegetables & Groceries",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "My Pass Code",
+                  style: TextStyle(
+                    fontFamily: "Georgia",
+                    color: Colors.black,
+                    fontSize: 18.0,
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Text(
-                  "UNIQUES",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: "OLED",
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.bold),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Text(
-                "Buy Organic Vegetables & Groceries",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
+                _getBody(),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "My Pass Code",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              _getBody(),
-              SizedBox(
-                height: 10,
-              ),
-              RaisedButton(
-                elevation: 16.0,
-                onPressed: signIn,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    AppLocalizations.of(context).translate('verify'),
-                    style: TextStyle(
-                      color: CustomColors.white,
-                      fontSize: 18.0,
+                RaisedButton(
+                  elevation: 10.0,
+                  onPressed: signIn,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      AppLocalizations.of(context).translate('verify'),
+                      style: TextStyle(
+                        color: CustomColors.white,
+                        fontSize: 18.0,
+                      ),
                     ),
                   ),
-                ),
-                color: CustomColors.alertRed,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-              )
-            ],
+                  color: CustomColors.alertRed,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
