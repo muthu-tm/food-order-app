@@ -118,8 +118,10 @@ class ProductSubCategories extends Model {
         }
       }
     } else {
-      QuerySnapshot snap =
-          await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
+      QuerySnapshot snap = await getCollectionRef()
+          .where('category_uuid', arrayContains: categoryID)
+          .where('uuid', whereIn: ids)
+          .getDocuments();
       for (var j = 0; j < snap.documents.length; j++) {
         ProductSubCategories _c =
             ProductSubCategories.fromJson(snap.documents[j].data);

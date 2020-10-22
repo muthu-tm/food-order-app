@@ -23,10 +23,9 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
   List<Widget> getSliders() {
     return imgList
         .map((item) => Container(
-          child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              child: 
-                  CachedNetworkImage(
+              child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  child: CachedNetworkImage(
                     imageUrl: item,
                     imageBuilder: (context, imageProvider) => Image(
                       width: double.infinity,
@@ -40,8 +39,8 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
                         width: 50.0,
                         child: CircularProgressIndicator(
                             value: downloadProgress.progress,
-                            valueColor: AlwaysStoppedAnimation(
-                                CustomColors.green),
+                            valueColor:
+                                AlwaysStoppedAnimation(CustomColors.green),
                             strokeWidth: 2.0),
                       ),
                     ),
@@ -51,8 +50,8 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
                     ),
                     fadeOutDuration: Duration(seconds: 1),
                     fadeInDuration: Duration(seconds: 2),
-              )),
-        ))
+                  )),
+            ))
         .toList();
   }
 
@@ -62,8 +61,8 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
       CarouselSlider(
         items: getSliders(),
         options: CarouselOptions(
-            autoPlay: true,
-            enlargeCenterPage: true,
+            autoPlay: imgList.length > 1 ? true : false,
+            enlargeCenterPage: imgList.length > 1 ? true : false,
             aspectRatio: 2.0,
             onPageChanged: (index, reason) {
               setState(() {
