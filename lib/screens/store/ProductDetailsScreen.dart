@@ -83,7 +83,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
           ),
         ],
       ),
-      body: getBody(context),
+      body: SingleChildScrollView(child: getBody(context)),
     );
   }
 
@@ -285,7 +285,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 controller: _controller,
                 tabs: list),
           ),
-          Expanded(
+          SizedBox(
+            height: 300,
             child: TabBarView(
               controller: _controller,
               children: [
@@ -341,5 +342,4 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
       },
     );
   }
-
 }
