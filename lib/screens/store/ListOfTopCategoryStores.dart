@@ -1,6 +1,4 @@
 import 'package:chipchop_buyer/db/models/store.dart';
-import 'package:chipchop_buyer/screens/app/appBar.dart';
-import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
