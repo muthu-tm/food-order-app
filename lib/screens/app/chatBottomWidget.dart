@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/screens/chats/ChatsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 bool newStoreNotification = false;
 
@@ -36,7 +37,6 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
           //         style: TextStyle(
           //             color: CustomColors.green,
           //             fontSize: 16.0,
-          //             fontFamily: 'Georgia',
           //             fontWeight: FontWeight.bold),
           //         textAlign: TextAlign.start,
           //       ),
@@ -44,7 +44,6 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
           //         message['notification']['body'],
           //         style: TextStyle(
           //             fontSize: 14.0,
-          //             fontFamily: 'Georgia',
           //             fontWeight: FontWeight.bold),
           //       ),
           //     ),
@@ -124,7 +123,6 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontFamily: "Georgia",
                           fontSize: 11,
                           color: CustomColors.black,
                         ),
@@ -185,11 +183,7 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                     "CHATS",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontFamily: "Georgia",
-                      fontSize: 11,
-                      color: CustomColors.black,
-                    ),
+                    style: GoogleFonts.oswald()
                   ),
                 ],
               ),

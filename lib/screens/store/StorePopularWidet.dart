@@ -56,12 +56,16 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 
+        var size = MediaQuery.of(context).size;
+        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
+
         if (snapshot.hasData) {
           if (snapshot.data.documents.isNotEmpty) {
             children = GridView.count(
               crossAxisCount: 2,
               crossAxisSpacing: 10,
-              childAspectRatio: 0.85,
+              childAspectRatio: (itemWidth / itemHeight),
               shrinkWrap: true,
               mainAxisSpacing: 10,
               children: List.generate(
@@ -153,7 +157,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontFamily: 'Georgia',
                               color: CustomColors.blue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
@@ -260,7 +263,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                                                   .round()
                                                   .toString(),
                                               style: TextStyle(
-                                                  fontFamily: 'Georgia',
                                                   color: CustomColors.blue,
                                                   fontSize: 17),
                                             ),
@@ -358,7 +360,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "No Popular Products added By Store",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
                       color: CustomColors.alertRed,
                       fontSize: 16.0,
                     ),
@@ -367,7 +368,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "No Worries!",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
                       color: CustomColors.grey,
                       fontSize: 14.0,
                     ),
@@ -376,7 +376,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                   Text(
                     "You could still order your favourite item with Written/Capture ORDER option!",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
                       color: CustomColors.blue,
                       fontSize: 16.0,
                     ),

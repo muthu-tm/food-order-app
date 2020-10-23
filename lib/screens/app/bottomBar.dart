@@ -5,6 +5,7 @@ import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget bottomBar(BuildContext context) {
   Size size = Size(screenWidth(context, dividedBy: 5), 100);
@@ -44,11 +45,7 @@ Widget bottomBar(BuildContext context) {
                   "HOME",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
+                  style: GoogleFonts.oswald()
                 ),
               ],
             ),
@@ -79,11 +76,7 @@ Widget bottomBar(BuildContext context) {
                   "SEARCH",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
+                  style: GoogleFonts.oswald()
                 ),
               ],
             ),
@@ -115,11 +108,7 @@ Widget bottomBar(BuildContext context) {
                   "ORDERS",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
+                  style: GoogleFonts.oswald()
                 ),
               ],
             ),
@@ -148,11 +137,7 @@ Widget bottomBar(BuildContext context) {
                   "SETTINGS",
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontFamily: "Georgia",
-                    fontSize: 11,
-                    color: CustomColors.black,
-                  ),
+                  style: GoogleFonts.oswald(),
                 ),
               ],
             ),

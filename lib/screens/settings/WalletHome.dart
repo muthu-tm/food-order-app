@@ -83,7 +83,7 @@ class WalletHome extends StatelessWidget {
                             '${cust.availableBalance}',
                             style: TextStyle(
                               fontSize: 16.0,
-                              fontFamily: 'Georgia',
+                              
                               color: cust.availableBalance.isNegative
                                   ? CustomColors.alertRed
                                   : CustomColors.green,

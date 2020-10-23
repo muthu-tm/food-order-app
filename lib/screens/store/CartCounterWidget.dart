@@ -127,7 +127,7 @@ class _CartCounterState extends State<CartCounter> {
                       child: Text(
                         sc.quantity.round().toString(),
                         style: TextStyle(
-                            fontFamily: 'Georgia',
+                            
                             color: CustomColors.blue,
                             fontSize: 17),
                       ),

@@ -50,7 +50,7 @@ class _UserSettingState extends State<UserSetting> {
           "DeActivate Account",
           style: TextStyle(
             fontSize: 17,
-            fontFamily: "Georgia",
+            
             fontWeight: FontWeight.bold,
             color: CustomColors.white,
           ),

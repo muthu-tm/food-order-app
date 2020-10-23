@@ -13,6 +13,9 @@ class StoreCategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+ final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
     return FutureBuilder(
       future:
           ProductCategories().getCategoriesForIDs(store.availProductCategories),
@@ -36,7 +39,7 @@ class StoreCategoryWidget extends StatelessWidget {
               return GridView.count(
                 crossAxisCount: 3,
                 crossAxisSpacing: 5,
-                childAspectRatio: 0.85,
+                childAspectRatio:  (itemWidth / itemHeight),
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 padding: EdgeInsets.all(1.0),
@@ -104,7 +107,6 @@ class StoreCategoryWidget extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       color: CustomColors.black,
-                                      fontFamily: 'Roboto-Light.ttf',
                                       fontSize: 12),
                                 ),
                               )

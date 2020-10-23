@@ -120,7 +120,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                 Text(
                   "My Pass Code",
                   style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     color: Colors.black,
                     fontSize: 18.0,
                   ),

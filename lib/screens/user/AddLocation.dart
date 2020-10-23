@@ -93,7 +93,7 @@ class _AddLocationState extends State<AddLocation> {
                     child: Text(
                       AppLocalizations.of(context).translate('location_name'),
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -133,7 +133,7 @@ class _AddLocationState extends State<AddLocation> {
                     child: Text(
                       "User Name",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
@@ -172,7 +172,7 @@ class _AddLocationState extends State<AddLocation> {
                     child: Text(
                       "Contact Number",
                       style: TextStyle(
-                          fontFamily: "Georgia",
+                          
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
                           fontSize: 16),

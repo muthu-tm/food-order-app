@@ -23,7 +23,7 @@ class _StoreFlashSaleWidgetState extends State<StoreFlashSaleWidget> {
           Text(
             "Flash Sale not started YET!",
             style: TextStyle(
-              fontFamily: 'Georgia',
+              
               color: CustomColors.alertRed,
               fontSize: 16.0,
             ),
@@ -32,7 +32,7 @@ class _StoreFlashSaleWidgetState extends State<StoreFlashSaleWidget> {
           Text(
             "Coming SOON...",
             style: TextStyle(
-              fontFamily: 'Georgia',
+              
               color: CustomColors.grey,
               fontSize: 14.0,
             ),

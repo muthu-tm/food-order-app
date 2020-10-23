@@ -18,7 +18,7 @@ class SearchOptionsRadio extends StatelessWidget {
           child: Text(
             _item.buttonText,
             style: TextStyle(
-                fontFamily: "Georgia",
+                
                 color:
                     _item.isSelected ? CustomColors.white : CustomColors.blue,
                 fontWeight: FontWeight.bold,

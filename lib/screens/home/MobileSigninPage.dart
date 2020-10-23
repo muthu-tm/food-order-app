@@ -146,7 +146,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       hintText: "Mobile Number",
                       hintStyle: TextStyle(
                           fontSize: 16.0,
-                          fontFamily: 'Montserrat',
+                          
                           color: Colors.black54),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -178,7 +178,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                               hintText: "First Name",
                               hintStyle: TextStyle(
                                   fontSize: 16.0,
-                                  fontFamily: 'Montserrat',
+                                  
                                   color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -209,7 +209,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                               hintText: "Last Name",
                               hintStyle: TextStyle(
                                   fontSize: 16.0,
-                                  fontFamily: 'Montserrat',
+                                  
                                   color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -263,7 +263,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                         hintText: "4-digit secret key",
                         hintStyle: TextStyle(
                             fontSize: 16.0,
-                            fontFamily: 'Montserrat',
+                            
                             color: Colors.black54),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -351,7 +351,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       AppLocalizations.of(context).translate('already_account'),
                       style: TextStyle(
                         fontSize: 14,
-                        fontFamily: 'Georgia',
+                        
                         color: CustomColors.positiveGreen,
                       ),
                     ),

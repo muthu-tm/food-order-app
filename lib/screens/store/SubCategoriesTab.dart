@@ -14,6 +14,9 @@ class SubCategoriesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
     return FutureBuilder(
       future: ProductSubCategories()
           .getSubCategoriesForIDs(categoryID, store.availProductSubCategories),
@@ -36,7 +39,7 @@ class SubCategoriesTab extends StatelessWidget {
             else
               return GridView.count(
                 crossAxisCount: 3,
-                childAspectRatio: 0.85,
+                childAspectRatio: (itemWidth / itemHeight),
                 crossAxisSpacing: 5,
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
@@ -51,7 +54,11 @@ class SubCategoriesTab extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => SubCategoriesProductsScreen(
-                                store.uuid, store.name, categoryID, _sc.uuid, _sc.name),
+                                store.uuid,
+                                store.name,
+                                categoryID,
+                                _sc.uuid,
+                                _sc.name),
                           ),
                         );
                       },
@@ -102,9 +109,7 @@ class SubCategoriesTab extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontFamily: 'Roboto-Light.ttf',
-                                      fontSize: 12),
+                                      color: CustomColors.black, fontSize: 12),
                                 ),
                               )
                             ],

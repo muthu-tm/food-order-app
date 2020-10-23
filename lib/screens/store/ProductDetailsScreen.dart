@@ -119,7 +119,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               style: TextStyle(
                   fontSize: 14,
                   color: CustomColors.black,
-                  fontFamily: 'Georgia'),
+                  ),
             ),
           ),
           Padding(
@@ -211,7 +211,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Returnable"
                               : "Not Returnable",
                           style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
+                              color: CustomColors.black, ),
                         )
                       ],
                     ),
@@ -238,7 +238,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Home Delivery"
                               : "Self Pickup",
                           style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
+                              color: CustomColors.black, ),
                         )
                       ],
                     ),
@@ -268,7 +268,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "In Stock"
                               : "Out Of Stock",
                           style: TextStyle(
-                              color: CustomColors.black, fontFamily: 'Georgia'),
+                              color: CustomColors.black, ),
                         )
                       ],
                     ),
@@ -319,7 +319,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               child: Text(
                 "Unable to load Store Details",
                 style: TextStyle(
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.alertRed,
                   fontSize: 16.0,
                 ),

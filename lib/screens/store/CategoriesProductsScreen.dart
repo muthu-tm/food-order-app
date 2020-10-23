@@ -65,13 +65,17 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
 
+        var size = MediaQuery.of(context).size;
+        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
+        
         if (snapshot.hasData) {
           if (snapshot.data.documents.isNotEmpty) {
             children = Container(
               child: GridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
-                childAspectRatio: 0.85,
+                childAspectRatio: (itemWidth / itemHeight),
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 children: List.generate(
@@ -165,7 +169,6 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontFamily: 'Georgia',
                                 color: CustomColors.blue,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.bold,
@@ -278,7 +281,6 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                                                     .round()
                                                     .toString(),
                                                 style: TextStyle(
-                                                    fontFamily: 'Georgia',
                                                     color: CustomColors.blue,
                                                     fontSize: 17),
                                               ),
@@ -446,7 +448,6 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                   Text(
                     "No Products added By Store",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
                       color: CustomColors.alertRed,
                       fontSize: 16.0,
                     ),
@@ -455,7 +456,6 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                   Text(
                     "No Worries!",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
                       color: CustomColors.grey,
                       fontSize: 14.0,
                     ),
@@ -464,7 +464,6 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                   Text(
                     "You could still place Written/Captured ORDER here.",
                     style: TextStyle(
-                      fontFamily: 'Georgia',
                       color: CustomColors.blue,
                       fontSize: 16.0,
                     ),

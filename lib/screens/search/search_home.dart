@@ -43,7 +43,7 @@ class _SearchHomeState extends State<SearchHome> {
               child: Text(
                 "OR",
                 style: TextStyle(
-                    fontFamily: 'Georgia',
+                    
                     color: CustomColors.grey,
                     fontSize: 18),
               ),
@@ -83,7 +83,7 @@ class _SearchHomeState extends State<SearchHome> {
                       child: Text(
                         "NearBy Stores in Map",
                         style: TextStyle(
-                            fontFamily: 'Georgia',
+                            
                             color: CustomColors.black,
                             fontSize: 14),
                       ),
@@ -96,7 +96,7 @@ class _SearchHomeState extends State<SearchHome> {
               title: Text(
                 "Daily Essentials",
                 style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 17),
