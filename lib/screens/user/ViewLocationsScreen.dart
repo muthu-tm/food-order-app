@@ -72,7 +72,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                         style: TextStyle(
                             color: CustomColors.blueGreen,
                             fontSize: 16,
-                            fontFamily: "Georgia"),
+                            ),
                       ),
                       SizedBox(height: 20),
                     ],

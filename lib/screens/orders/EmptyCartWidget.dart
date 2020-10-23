@@ -66,7 +66,7 @@ class _EmptyCartWidgetState extends State<EmptyCartWidget> {
                 "Your cart is Empty!!",
                 style: TextStyle(
                   color: CustomColors.black,
-                  fontFamily: 'Georgia',
+                  
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,

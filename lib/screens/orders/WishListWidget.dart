@@ -101,7 +101,7 @@ class _EmptyWishListScreenState extends State<EmptyWishListScreen> {
                 "You haven't added anything to wish List",
                 style: TextStyle(
                   color: CustomColors.black,
-                  fontFamily: 'Georgia',
+                  
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,

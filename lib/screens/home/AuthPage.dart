@@ -101,7 +101,6 @@ class _AuthPageState extends State<AuthPage> {
                                 style: TextStyle(
                                   color: CustomColors.grey,
                                   fontSize: 12,
-                                  fontFamily: "Georgia",
                                 ),
                               ),
                               shadowGradientText("Fourcup Inc.", 20.0),
@@ -152,7 +151,7 @@ class _AuthPageState extends State<AuthPage> {
         style: TextStyle(
           color: CustomColors.white,
           fontSize: size,
-          fontFamily: "Georgia",
+          
         ),
       ),
     );
@@ -380,7 +379,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,
-                    fontFamily: 'Georgia',
+                    
                     color: CustomColors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -399,7 +398,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                   AppLocalizations.of(context).translate('no_account'),
                   style: TextStyle(
                     fontSize: 13.0,
-                    fontFamily: 'Georgia',
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.alertRed.withOpacity(0.7),
                   ),

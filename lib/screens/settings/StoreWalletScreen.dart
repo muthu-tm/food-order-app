@@ -148,7 +148,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                   "Wallet Amount",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.green,
                     fontSize: 17.0,
@@ -224,7 +224,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                                 Text(
                                   history.details,
                                   style: TextStyle(
-                                      fontFamily: "Georgia",
+                                      
                                       fontSize: 18.0,
                                       color: textColor,
                                       fontWeight: FontWeight.bold),
@@ -318,7 +318,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                   "Transaction History",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.green,
                     fontSize: 17.0,

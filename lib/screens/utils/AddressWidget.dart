@@ -33,7 +33,7 @@ class _AddressWidgetState extends State<AddressWidget> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
-                fontFamily: "Georgia",
+                
                 fontWeight: FontWeight.bold,
                 color: CustomColors.blue,
               ),

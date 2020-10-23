@@ -137,7 +137,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             child: Text(
               "PLACE ORDER",
               style: TextStyle(
-                  fontFamily: "Georgia",
+                  
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
@@ -494,7 +494,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             "While Confirming the ORDER, store may update the",
                         style: TextStyle(
                             color: CustomColors.blue,
-                            fontFamily: 'Georgia',
+                            
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
@@ -502,7 +502,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         style: TextStyle(
                             color: CustomColors.alertRed,
                             fontSize: 16.0,
-                            fontFamily: 'Georgia',
+                            
                             fontWeight: FontWeight.w700),
                       ),
                       TextSpan(
@@ -510,7 +510,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ", if you have added 'Written Orders/Captured List'",
                         style: TextStyle(
                             color: CustomColors.blue,
-                            fontFamily: 'Georgia',
+                            
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -570,14 +570,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       "Apply Balance",
                       style: TextStyle(
                         fontSize: 14.0,
-                        fontFamily: "Georgia",
+                        
                         color: CustomColors.blue,
                       ),
                     ),
                     secondary: Text(
                       "Rs.$walletAmount",
                       style: TextStyle(
-                        fontFamily: "Georgia",
+                        
                         color: walletAmount.isNegative
                             ? CustomColors.alertRed
                             : CustomColors.green,
@@ -593,7 +593,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     title: Text(
                       "Amount Applied",
                       style: TextStyle(
-                        fontFamily: "Georgia",
+                        
                         color: CustomColors.blue,
                         fontSize: 14.0,
                       ),
@@ -601,7 +601,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     trailing: Text(
                       "Rs.$wAmount",
                       style: TextStyle(
-                        fontFamily: "Georgia",
+                        
                         color: CustomColors.green,
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
@@ -655,7 +655,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     "Wallet Amount",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "Georgia",
+                      
                       fontWeight: FontWeight.bold,
                       color: CustomColors.positiveGreen,
                       fontSize: 17.0,
@@ -739,7 +739,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Text(
                   cachedLocalUser.firstName + " " + cachedLocalUser.lastName,
                   style: TextStyle(
-                      fontFamily: "Georgia",
+                      
                       color: CustomColors.blue,
                       fontSize: 15,
                       fontWeight: FontWeight.bold),

@@ -7,6 +7,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -53,16 +54,17 @@ class _MyAppState extends State<MyApp> {
       title: buyer_app_name,
       theme: ThemeData(
         brightness: Brightness.light,
-        fontFamily: 'Georgia',
-        textTheme: TextTheme(
-          headline5: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-          headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-          bodyText2: TextStyle(
-            fontSize: 14.0,
-            fontFamily: 'Hind',
-            color: CustomColors.white,
-          ),
-        ),
+        // textTheme: TextTheme(
+        //   headline5: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+        //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+        //   bodyText2: TextStyle(
+        //     fontSize: 14.0,
+        //     color: CustomColors.white,
+        //   ),
+        // ),
+        textTheme: GoogleFonts.poppinsTextTheme(
+            Theme.of(context).textTheme,
+          )
       ),
       supportedLocales: [
         Locale('en', 'US'),

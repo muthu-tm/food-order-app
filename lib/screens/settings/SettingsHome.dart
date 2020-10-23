@@ -72,7 +72,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                         "Profile Settings",
                         style: TextStyle(
                           fontSize: 16.0,
-                          fontFamily: 'Georgia',
+                          
                           color: CustomColors.black,
                         ),
                       ),
@@ -143,7 +143,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                         "User Wallet",
                         style: TextStyle(
                           fontSize: 16.0,
-                          fontFamily: 'Georgia',
+                          
                           color: CustomColors.black,
                         ),
                       ),
@@ -219,7 +219,7 @@ class _SettingsHomeState extends State<SettingsHome> {
                         buyer_app_name,
                         style: TextStyle(
                           fontSize: 16.0,
-                          fontFamily: 'Georgia',
+                          
                           color: CustomColors.black,
                         ),
                       ),

@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text(
                 "Top Categories",
                 style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 17),
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text(
                 "Popular Products",
                 style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 17),
@@ -121,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   "No Popular Products",
                   style: TextStyle(
-                    fontFamily: 'Georgia',
+                    
                     color: CustomColors.alertRed,
                     fontSize: 16.0,
                   ),
@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                   color: CustomColors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: 'Georgia',
+                                  
                                   fontSize: 15),
                             ),
                             Spacer(),
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text(
                 "Unable to load Top Categories",
                 style: TextStyle(
-                  fontFamily: 'Georgia',
+                  
                   color: CustomColors.alertRed,
                   fontSize: 16.0,
                 ),

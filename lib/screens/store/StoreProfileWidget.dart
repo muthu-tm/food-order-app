@@ -19,6 +19,9 @@ class StoreProfileWidget extends StatelessWidget {
   final Store store;
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
     return SingleChildScrollView(
       primary: true,
       child: Column(
@@ -31,9 +34,9 @@ class StoreProfileWidget extends StatelessWidget {
             title: Text(
               store.name,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 13.0,
-                  fontFamily: "Georgia"),
+                color: CustomColors.black,
+                fontSize: 13.0,
+              ),
             ),
           ),
           ListTile(
@@ -46,9 +49,9 @@ class StoreProfileWidget extends StatelessWidget {
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 13.0,
-                  fontFamily: "Georgia"),
+                color: CustomColors.black,
+                fontSize: 13.0,
+              ),
             ),
           ),
           ListTile(
@@ -61,7 +64,6 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.grey,
                   fontSize: 16.0,
-                  fontFamily: "Georgia",
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -70,7 +72,7 @@ class StoreProfileWidget extends StatelessWidget {
             child: Container(
               child: GridView.count(
                 crossAxisCount: 3,
-                childAspectRatio: 0.85,
+                childAspectRatio: (itemWidth / itemHeight),
                 crossAxisSpacing: 10,
                 shrinkWrap: true,
                 primary: false,
@@ -99,14 +101,14 @@ class StoreProfileWidget extends StatelessWidget {
                           Text(
                             store.contacts[index].contactName,
                             style: TextStyle(
-                                color: CustomColors.black,
-                                fontFamily: 'Georgia'),
+                              color: CustomColors.black,
+                            ),
                           ),
                           Text(
                             store.contacts[index].contactNumber.toString(),
                             style: TextStyle(
-                                color: CustomColors.black,
-                                fontFamily: 'Georgia'),
+                              color: CustomColors.black,
+                            ),
                           )
                         ],
                       ),
@@ -126,7 +128,6 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.grey,
                   fontSize: 16.0,
-                  fontFamily: "Georgia",
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -153,16 +154,15 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.black,
                   fontSize: 16.0,
-                  fontFamily: "Georgia",
                   fontWeight: FontWeight.w500),
             ),
             trailing: Text(
               store.activeFrom.padLeft(2, '0'),
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 14.0,
-                  fontFamily: "Georgia"),
+                color: CustomColors.black,
+                fontSize: 14.0,
+              ),
             ),
           ),
           ListTile(
@@ -172,16 +172,15 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.black,
                   fontSize: 16.0,
-                  fontFamily: "Georgia",
                   fontWeight: FontWeight.w500),
             ),
             trailing: Text(
               store.activeTill.padLeft(2, '0'),
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 14.0,
-                  fontFamily: "Georgia"),
+                color: CustomColors.black,
+                fontSize: 14.0,
+              ),
             ),
           ),
           ListTile(
@@ -194,7 +193,6 @@ class StoreProfileWidget extends StatelessWidget {
               style: TextStyle(
                   color: CustomColors.grey,
                   fontSize: 16.0,
-                  fontFamily: "Georgia",
                   fontWeight: FontWeight.w500),
             ),
           ),
@@ -206,44 +204,48 @@ class StoreProfileWidget extends StatelessWidget {
                   leading: Text(
                     "Delivery From:",
                     style: TextStyle(
-                        color: CustomColors.black, fontFamily: 'Georgia'),
+                      color: CustomColors.black,
+                    ),
                   ),
                   trailing: Text(
                     store.deliveryDetails.deliveryFrom,
                     style: TextStyle(
-                        color: CustomColors.black, fontFamily: 'Georgia'),
+                      color: CustomColors.black,
+                    ),
                   ),
                 ),
                 ListTile(
                   leading: Text(
                     "Delivery Till:",
                     style: TextStyle(
-                        color: CustomColors.black, fontFamily: 'Georgia'),
+                      color: CustomColors.black,
+                    ),
                   ),
                   trailing: Text(
                     store.deliveryDetails.deliveryTill,
                     style: TextStyle(
-                        color: CustomColors.black, fontFamily: 'Georgia'),
+                      color: CustomColors.black,
+                    ),
                   ),
                 ),
                 ListTile(
                   leading: Text(
                     "Max Distance:",
                     style: TextStyle(
-                        color: CustomColors.black, fontFamily: 'Georgia'),
+                      color: CustomColors.black,
+                    ),
                   ),
                   trailing: Text(
                     '${store.deliveryDetails.maxDistance.toString()} km',
                     style: TextStyle(
-                        color: CustomColors.black, fontFamily: 'Georgia'),
+                      color: CustomColors.black,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(
-            height: 50
-          ),
+          SizedBox(height: 50),
         ],
       ),
     );

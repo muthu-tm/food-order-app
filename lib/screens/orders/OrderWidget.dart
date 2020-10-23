@@ -40,7 +40,7 @@ class OrderWidget extends StatelessWidget {
                           style: TextStyle(
                               color: CustomColors.black,
                               fontSize: 14,
-                              fontFamily: "Georgia"),
+                              ),
                         ),
                         Text(
                           order.storeName,
@@ -48,7 +48,7 @@ class OrderWidget extends StatelessWidget {
                               color: CustomColors.purple,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              fontFamily: "Georgia"),
+                              ),
                         ),
                       ],
                     ),
@@ -63,7 +63,7 @@ class OrderWidget extends StatelessWidget {
                           style: TextStyle(
                               color: CustomColors.black,
                               fontSize: 14,
-                              fontFamily: "Georgia"),
+                              ),
                         ),
                         Text(
                           order.getStatus(),
@@ -71,7 +71,7 @@ class OrderWidget extends StatelessWidget {
                               color: CustomColors.purple,
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
-                              fontFamily: "Georgia"),
+                              ),
                         ),
                       ],
                     ),
@@ -93,14 +93,14 @@ class OrderWidget extends StatelessWidget {
                   style: TextStyle(
                       color: CustomColors.blue,
                       fontSize: 14,
-                      fontFamily: "Georgia"),
+                      ),
                 ),
                 trailing: Text(
                   order.orderID,
                   style: TextStyle(
                       color: CustomColors.black,
                       fontSize: 12,
-                      fontFamily: "Georgia"),
+                      ),
                 ),
               ),
               ListTile(
@@ -114,14 +114,14 @@ class OrderWidget extends StatelessWidget {
                   style: TextStyle(
                       color: CustomColors.blue,
                       fontSize: 14,
-                      fontFamily: "Georgia"),
+                      ),
                 ),
                 trailing: Text(
                   DateUtils.formatDateTime(order.createdAt),
                   style: TextStyle(
                       color: CustomColors.black,
                       fontSize: 12,
-                      fontFamily: "Georgia"),
+                      ),
                 ),
               ),
             ],

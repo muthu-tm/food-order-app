@@ -74,7 +74,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
           AppLocalizations.of(context).translate('save'),
           style: TextStyle(
             fontSize: 17,
-            fontFamily: "Georgia",
+            
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -98,7 +98,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('first_name'),
                           style: TextStyle(
-                              fontFamily: "Georgia",
+                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -137,7 +137,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('last_name'),
                           style: TextStyle(
-                              fontFamily: "Georgia",
+                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -177,7 +177,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('email'),
                           style: TextStyle(
-                              fontFamily: "Georgia",
+                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -216,7 +216,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('dob'),
                           style: TextStyle(
-                              fontFamily: "Georgia",
+                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -260,7 +260,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('gender'),
                           style: TextStyle(
-                              fontFamily: "Georgia",
+                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),

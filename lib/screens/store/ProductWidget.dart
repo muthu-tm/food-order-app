@@ -70,7 +70,7 @@ class ProductWidget extends StatelessWidget {
                       child: Text(
                         product.name,
                         style: TextStyle(
-                          fontFamily: 'Georgia',
+                          
                           color: CustomColors.black,
                           fontSize: 14.0,
                           fontWeight: FontWeight.bold,

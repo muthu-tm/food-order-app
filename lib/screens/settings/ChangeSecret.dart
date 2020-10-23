@@ -50,7 +50,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
           AppLocalizations.of(context).translate('save'),
           style: TextStyle(
             fontSize: 17,
-            fontFamily: "Georgia",
+            
             fontWeight: FontWeight.bold,
           ),
         ),

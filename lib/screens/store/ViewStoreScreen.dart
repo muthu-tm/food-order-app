@@ -108,7 +108,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                                 "Categories",
                                 style: TextStyle(
                                     color: CustomColors.black,
-                                    fontFamily: 'Georgia'),
+                                    ),
                               )
                             ],
                           ),
@@ -137,7 +137,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                                 "Products",
                                 style: TextStyle(
                                     color: CustomColors.black,
-                                    fontFamily: 'Georgia'),
+                                    ),
                               )
                             ],
                           ),
@@ -168,7 +168,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                                 "Popular",
                                 style: TextStyle(
                                     color: CustomColors.black,
-                                    fontFamily: 'Georgia'),
+                                    ),
                               )
                             ],
                           ),
@@ -199,7 +199,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                                 "Info",
                                 style: TextStyle(
                                     color: CustomColors.black,
-                                    fontFamily: 'Georgia'),
+                                    ),
                               )
                             ],
                           )

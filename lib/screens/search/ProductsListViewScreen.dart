@@ -107,7 +107,7 @@ class _ProductsListViewScreenState extends State<ProductsListViewScreen> {
                           title: Text(
                             product.name,
                             style: TextStyle(
-                              fontFamily: 'Georgia',
+                              
                               color: CustomColors.blue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,

@@ -73,6 +73,10 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 
+        var size = MediaQuery.of(context).size;
+        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
+    final double itemWidth = size.width / 2;
+
         if (snapshot.hasData) {
           child = SingleChildScrollView(
             child: Column(
@@ -103,7 +107,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                             "No items in CART!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: "Georgia",
                                 fontSize: 14,
                                 color: CustomColors.alertRed,
                                 fontWeight: FontWeight.bold),
@@ -120,7 +123,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                           "Already got the list READY?",
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                              fontFamily: "Georgia",
                               fontSize: 14,
                               color: CustomColors.alertRed,
                               fontWeight: FontWeight.bold),
@@ -134,7 +136,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                             "You're GREAT!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: "Georgia",
                                 fontSize: 15,
                                 color: CustomColors.black,
                                 fontWeight: FontWeight.bold),
@@ -202,7 +203,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                 "Capture IT!",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontFamily: "Georgia",
                                     fontSize: 16,
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold),
@@ -219,7 +219,7 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                     ? GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 10,
-                        childAspectRatio: 0.85,
+                        childAspectRatio:(itemWidth / itemHeight),
                         shrinkWrap: true,
                         primary: false,
                         mainAxisSpacing: 10,
@@ -316,7 +316,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                           "Missing Few Products?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontFamily: "Georgia",
                               fontSize: 14,
                               color: CustomColors.alertRed,
                               fontWeight: FontWeight.bold),
@@ -330,7 +329,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                             "No Worries!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: "Georgia",
                                 fontSize: 15,
                                 color: CustomColors.black,
                                 fontWeight: FontWeight.bold),
@@ -361,7 +359,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                 "Write it OUT",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                    fontFamily: "Georgia",
                                     fontSize: 16,
                                     color: CustomColors.white,
                                     fontWeight: FontWeight.bold),
@@ -465,7 +462,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                         "CHECKOUT",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontFamily: "Georgia",
                             fontSize: 16,
                             color: Colors.white,
                             fontWeight: FontWeight.bold),
@@ -582,7 +578,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontFamily: "Georgia",
                                         color: CustomColors.lightBlue,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -593,7 +588,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     color: CustomColors.black,
-                                    fontFamily: "Georgia",
                                   ),
                                 ),
                                 Padding(
@@ -603,7 +597,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                      fontFamily: "Georgia",
                                       color: CustomColors.black,
                                     ),
                                   ),
@@ -620,7 +613,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                     textAlign: TextAlign.start,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontFamily: "Georgia",
                                         color: CustomColors.lightBlue,
                                         fontWeight: FontWeight.bold),
                                   ),
@@ -633,7 +625,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                       'Rs. ${_p.currentPrice}',
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
-                                        fontFamily: "Georgia",
                                         fontSize: 16,
                                         color: CustomColors.black,
                                       ),
@@ -802,7 +793,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                               'Rs. ${_p.currentPrice * sc.quantity}',
                               textAlign: TextAlign.end,
                               style: TextStyle(
-                                  fontFamily: "Georgia",
                                   fontSize: 16,
                                   color: CustomColors.black,
                                   fontWeight: FontWeight.bold),

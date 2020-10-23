@@ -37,7 +37,7 @@ class SearchBarWidget extends StatelessWidget {
               Text(
                 "Search for an Item or Store",
                 style: TextStyle(
-                    fontFamily: "Georgia",
+                    
                     fontSize: 16,
                     color: Colors.black54),
               ),
