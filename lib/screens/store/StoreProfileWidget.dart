@@ -209,7 +209,7 @@ class StoreProfileWidget extends StatelessWidget {
                     ),
                   ),
                   trailing: Text(
-                    store.deliveryDetails.deliveryFrom,
+                    DateUtils.getFormattedTime(store.deliveryDetails.deliveryFrom),
                     style: TextStyle(
                       color: CustomColors.black,
                     ),
@@ -223,7 +223,7 @@ class StoreProfileWidget extends StatelessWidget {
                     ),
                   ),
                   trailing: Text(
-                    store.deliveryDetails.deliveryTill,
+                    DateUtils.getFormattedTime(store.deliveryDetails.deliveryTill),
                     style: TextStyle(
                       color: CustomColors.black,
                     ),
