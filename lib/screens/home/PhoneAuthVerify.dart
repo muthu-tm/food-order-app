@@ -208,7 +208,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
-                        text: 'Resend',
+                        text: 'RESEND',
                         style: TextStyle(
                             color: CustomColors.alertRed,
                             fontSize: 16.0,

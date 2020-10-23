@@ -27,8 +27,8 @@ Widget sideDrawer(BuildContext context) {
               Container(
                 child: cachedLocalUser.getProfilePicPath() == ""
                     ? Container(
-                        width: 90,
-                        height: 90,
+                        width: 80,
+                        height: 80,
                         margin: EdgeInsets.only(bottom: 5),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -67,7 +67,7 @@ Widget sideDrawer(BuildContext context) {
                                 padding: EdgeInsets.all(5),
                                 child: Icon(
                                   Icons.person,
-                                  size: 45.0,
+                                  size: 35.0,
                                   color: CustomColors.blueGreen,
                                 ),
                               ),
@@ -87,8 +87,8 @@ Widget sideDrawer(BuildContext context) {
                         child: Stack(
                           children: <Widget>[
                             SizedBox(
-                              width: 95.0,
-                              height: 95.0,
+                              width: 90.0,
+                              height: 90.0,
                               child: Center(
                                 child: CachedNetworkImage(
                                   imageUrl:
@@ -114,7 +114,7 @@ Widget sideDrawer(BuildContext context) {
                             ),
                             Positioned(
                               bottom: -8,
-                              left: 35,
+                              left: 30,
                               child: FlatButton(
                                 onPressed: () {
                                   showDialog(
