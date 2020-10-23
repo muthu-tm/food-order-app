@@ -43,7 +43,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   FocusNode focusNode4 = FocusNode();
   FocusNode focusNode5 = FocusNode();
   FocusNode focusNode6 = FocusNode();
-  List<String> code = [];
+  List<String> code = [null, null, null, null, null, null];
 
   @override
   void initState() {
@@ -172,7 +172,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   Widget _getColumnBody() => Column(
         children: <Widget>[
-          SizedBox(height: 20.0),
+          SizedBox(height: 30.0),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -191,7 +191,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             ],
           ),
           SizedBox(
-            height: 30,
+            height: 20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -218,16 +218,15 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                   ),
                 ),
               ),
-              SizedBox(width: 16.0),
+              SizedBox(width: 15.0),
             ],
           ),
-          SizedBox(height: 16.0),
-          SizedBox(height: 32.0),
+          SizedBox(height: 30.0),
         ],
       );
 
   signIn() {
-    if (code.length != 6) {
+    if (code.indexOf(null) != -1) {
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('invalid_otp'), 2));
     } else {
@@ -301,9 +300,13 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
     );
   }
 
-  Widget getPinField({String key, FocusNode focusNode}) => SizedBox(
-        height: 40.0,
+  Widget getPinField({String key, FocusNode focusNode}) => Container(
+        height: 35.0,
         width: 35.0,
+        decoration: BoxDecoration(
+          color: CustomColors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: TextField(
           key: Key(key),
           expands: false,
@@ -311,8 +314,11 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
           focusNode: focusNode,
           onChanged: (String value) {
             if (value.length == 1) {
-              code.insert(int.parse(key) - 1, value);
-              switch (code.length) {
+              if (code[int.parse(key) - 1] == null) {
+                code.removeAt(int.parse(key) - 1);
+                code.insert(int.parse(key) - 1, value);
+              }
+              switch (int.parse(key)) {
                 case 1:
                   FocusScope.of(context).requestFocus(focusNode2);
                   break;
@@ -332,10 +338,20 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                   FocusScope.of(context).requestFocus(FocusNode());
                   break;
               }
-            } else {
+            } else if (value.length == 0) {
               code.removeAt(int.parse(key) - 1);
+              code.insert(int.parse(key) - 1, null);
             }
           },
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(1),
+          ],
+          decoration: new InputDecoration(
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              errorBorder: InputBorder.none,
+              disabledBorder: InputBorder.none),
           maxLengthEnforced: false,
           textAlign: TextAlign.center,
           cursorColor: CustomColors.black,
