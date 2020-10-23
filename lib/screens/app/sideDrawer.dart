@@ -6,6 +6,7 @@ import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
+import 'package:chipchop_buyer/screens/settings/WalletHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
@@ -230,6 +231,23 @@ Widget sideDrawer(BuildContext context) {
               MaterialPageRoute(
                 builder: (context) => UserSetting(),
                 settings: RouteSettings(name: '/settings/profile'),
+              ),
+            );
+          },
+        ),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        ListTile(
+          leading:
+              Icon(Icons.account_balance_wallet, color: CustomColors.green),
+          title: Text(
+            "User Wallet",
+          ),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WalletHome(),
+                settings: RouteSettings(name: '/settings/wallet'),
               ),
             );
           },
