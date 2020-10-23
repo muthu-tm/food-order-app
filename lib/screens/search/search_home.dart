@@ -42,10 +42,7 @@ class _SearchHomeState extends State<SearchHome> {
               alignment: Alignment.center,
               child: Text(
                 "OR",
-                style: TextStyle(
-                    
-                    color: CustomColors.grey,
-                    fontSize: 18),
+                style: TextStyle(color: CustomColors.grey, fontSize: 18),
               ),
             ),
             InkWell(
@@ -68,7 +65,7 @@ class _SearchHomeState extends State<SearchHome> {
                 }
               },
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 2, 10, 10),
+                padding: const EdgeInsets.fromLTRB(10, 2, 10, 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -82,21 +79,23 @@ class _SearchHomeState extends State<SearchHome> {
                           EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
                       child: Text(
                         "NearBy Stores in Map",
-                        style: TextStyle(
-                            
-                            color: CustomColors.black,
-                            fontSize: 14),
+                        style:
+                            TextStyle(color: CustomColors.black, fontSize: 14),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
+            Divider(
+                indent: 10.0,
+                color: CustomColors.alertRed,
+                height: 0,
+                thickness: 1.0),
             ListTile(
               title: Text(
                 "Daily Essentials",
                 style: TextStyle(
-                    
                     color: CustomColors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 17),
