@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Container();
                       } else {
                         return Container(
-                          height: 175,
+                          height: 210,
                           child: ListView.builder(
                               shrinkWrap: true,
                               primary: true,

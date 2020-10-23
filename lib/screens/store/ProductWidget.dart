@@ -69,8 +69,9 @@ class ProductWidget extends StatelessWidget {
                     Center(
                       child: Text(
                         product.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          
                           color: CustomColors.black,
                           fontSize: 14.0,
                           fontWeight: FontWeight.bold,
@@ -80,6 +81,8 @@ class ProductWidget extends StatelessWidget {
                     Center(
                       child: Text(
                         "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: CustomColors.blue,
                           fontSize: 13.0,
