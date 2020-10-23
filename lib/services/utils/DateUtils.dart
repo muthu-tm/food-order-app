@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateUtils {
@@ -26,6 +27,25 @@ class DateUtils {
     return dateFormatter.format(dateTime);
   }
 
+  static getFormattedTime(String time) {
+    List<String> val = time.split(':');
+    TimeOfDay parsedTime = TimeOfDay(
+      hour: int.parse(val[0]),
+      minute: int.parse(val[1]),
+    );
+
+    if (parsedTime.period == DayPeriod.am)
+      return parsedTime.hourOfPeriod.toString() +
+          "." +
+          parsedTime.minute.toString().padLeft(2, '0') +
+          " AM";
+    else
+      return parsedTime.hourOfPeriod.toString() +
+          "." +
+          parsedTime.minute.toString().padLeft(2, '0') +
+          " PM";
+  }
+
   static String formatDateTime(DateTime dateTime) {
     if (dateTime == null) {
       return "";
@@ -44,8 +64,7 @@ class DateUtils {
     return DateTime(dateTime.year, dateTime.month, dateTime.day, 0, 0, 0, 0, 0);
   }
 
-  static List<int> getDaysInBeteween(
-      DateTime startDate, DateTime endDate) {
+  static List<int> getDaysInBeteween(DateTime startDate, DateTime endDate) {
     List<int> days = [];
 
     for (int index = 0;

@@ -1,5 +1,6 @@
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -157,7 +158,7 @@ class StoreProfileWidget extends StatelessWidget {
                   fontWeight: FontWeight.w500),
             ),
             trailing: Text(
-              store.activeFrom.padLeft(2, '0'),
+              DateUtils.getFormattedTime(store.activeFrom),
               textAlign: TextAlign.start,
               style: TextStyle(
                 color: CustomColors.black,
@@ -175,7 +176,7 @@ class StoreProfileWidget extends StatelessWidget {
                   fontWeight: FontWeight.w500),
             ),
             trailing: Text(
-              store.activeTill.padLeft(2, '0'),
+              DateUtils.getFormattedTime(store.activeTill),
               textAlign: TextAlign.start,
               style: TextStyle(
                 color: CustomColors.black,
@@ -208,7 +209,7 @@ class StoreProfileWidget extends StatelessWidget {
                     ),
                   ),
                   trailing: Text(
-                    store.deliveryDetails.deliveryFrom,
+                    DateUtils.getFormattedTime(store.deliveryDetails.deliveryFrom),
                     style: TextStyle(
                       color: CustomColors.black,
                     ),
@@ -222,7 +223,7 @@ class StoreProfileWidget extends StatelessWidget {
                     ),
                   ),
                   trailing: Text(
-                    store.deliveryDetails.deliveryTill,
+                    DateUtils.getFormattedTime(store.deliveryDetails.deliveryTill),
                     style: TextStyle(
                       color: CustomColors.black,
                     ),

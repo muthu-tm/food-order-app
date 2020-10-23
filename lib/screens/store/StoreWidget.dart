@@ -4,6 +4,7 @@ import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
+import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
 
 class StoreWidget extends StatelessWidget {
@@ -78,7 +79,6 @@ class StoreWidget extends StatelessWidget {
                         Text(
                           store.name,
                           style: TextStyle(
-                            
                             color: CustomColors.blue,
                             fontSize: 14.0,
                           ),
@@ -86,9 +86,8 @@ class StoreWidget extends StatelessWidget {
                         SizedBox(height: 5.0),
                         Container(
                           child: Text(
-                            "Timings - ${store.activeFrom} : ${store.activeTill}",
+                            "Timing - ${DateUtils.getFormattedTime(store.activeFrom)} : ${DateUtils.getFormattedTime(store.activeTill)}",
                             style: TextStyle(
-                              
                               color: CustomColors.black,
                               fontSize: 14.0,
                             ),

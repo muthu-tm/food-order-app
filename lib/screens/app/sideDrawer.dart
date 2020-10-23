@@ -6,6 +6,7 @@ import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
+import 'package:chipchop_buyer/screens/settings/WalletHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
@@ -27,8 +28,8 @@ Widget sideDrawer(BuildContext context) {
               Container(
                 child: cachedLocalUser.getProfilePicPath() == ""
                     ? Container(
-                        width: 90,
-                        height: 90,
+                        width: 80,
+                        height: 80,
                         margin: EdgeInsets.only(bottom: 5),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -67,7 +68,7 @@ Widget sideDrawer(BuildContext context) {
                                 padding: EdgeInsets.all(5),
                                 child: Icon(
                                   Icons.person,
-                                  size: 45.0,
+                                  size: 35.0,
                                   color: CustomColors.blueGreen,
                                 ),
                               ),
@@ -87,8 +88,8 @@ Widget sideDrawer(BuildContext context) {
                         child: Stack(
                           children: <Widget>[
                             SizedBox(
-                              width: 95.0,
-                              height: 95.0,
+                              width: 90.0,
+                              height: 90.0,
                               child: Center(
                                 child: CachedNetworkImage(
                                   imageUrl:
@@ -114,7 +115,7 @@ Widget sideDrawer(BuildContext context) {
                             ),
                             Positioned(
                               bottom: -8,
-                              left: 35,
+                              left: 30,
                               child: FlatButton(
                                 onPressed: () {
                                   showDialog(
@@ -230,6 +231,23 @@ Widget sideDrawer(BuildContext context) {
               MaterialPageRoute(
                 builder: (context) => UserSetting(),
                 settings: RouteSettings(name: '/settings/profile'),
+              ),
+            );
+          },
+        ),
+        Divider(indent: 65.0, color: CustomColors.blue, thickness: 1.0),
+        ListTile(
+          leading:
+              Icon(Icons.account_balance_wallet, color: CustomColors.green),
+          title: Text(
+            "User Wallet",
+          ),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WalletHome(),
+                settings: RouteSettings(name: '/settings/wallet'),
               ),
             );
           },

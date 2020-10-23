@@ -240,38 +240,38 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           Spacer(
             flex: 2,
           ),
-          FlatButton.icon(
-            onPressed: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => AddLocation(),
-              //     settings: RouteSettings(name: '/location'),
-              //   ),
-              // );
-            },
-            icon: Icon(
-              Icons.edit_location,
-              color: CustomColors.blue,
-            ),
-            label: Text(
-              "Edit",
-              style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
-            ),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          Spacer(
-            flex: 3,
-          ),
-          Container(
-            height: 20,
-            width: 1,
-            color: Colors.grey,
-          ),
-          Spacer(
-            flex: 3,
-          ),
+          // FlatButton.icon(
+          //   onPressed: () {
+          //     // Navigator.push(
+          //     //   context,
+          //     //   MaterialPageRoute(
+          //     //     builder: (context) => AddLocation(),
+          //     //     settings: RouteSettings(name: '/location'),
+          //     //   ),
+          //     // );
+          //   },
+          //   icon: Icon(
+          //     Icons.edit_location,
+          //     color: CustomColors.blue,
+          //   ),
+          //   label: Text(
+          //     "Edit",
+          //     style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
+          //   ),
+          //   splashColor: Colors.transparent,
+          //   highlightColor: Colors.transparent,
+          // ),
+          // Spacer(
+          //   flex: 3,
+          // ),
+          // Container(
+          //   height: 20,
+          //   width: 1,
+          //   color: Colors.grey,
+          // ),
+          // Spacer(
+          //   flex: 3,
+          // ),
           FlatButton.icon(
             onPressed: () async {
               if (primaryLocID == loc.uuid) {
@@ -303,6 +303,9 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                 style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
+          ),
+          Spacer(
+            flex: 3,
           ),
           Container(
             height: 20,
