@@ -737,7 +737,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  cachedLocalUser.firstName + " " + cachedLocalUser.lastName,
+                  cachedLocalUser.primaryLocation.userName ?? "",
                   style: TextStyle(
                       
                       color: CustomColors.blue,
