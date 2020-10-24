@@ -807,7 +807,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               height: 1,
               width: double.infinity,
             ),
-            // addressAction()
           ],
         ),
       ),
@@ -818,66 +817,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Container(
       margin: EdgeInsets.only(top: topMargin),
       child: Text(
-        strAddress,
+        strAddress ?? "",
         style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
-      ),
-    );
-  }
-
-  addressAction() {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Spacer(
-            flex: 2,
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddLocation(),
-                  settings: RouteSettings(name: '/location/add'),
-                ),
-              );
-            },
-            child: Text(
-              "Edit / Change",
-              style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
-            ),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          Spacer(
-            flex: 3,
-          ),
-          Container(
-            height: 20,
-            width: 1,
-            color: Colors.grey,
-          ),
-          Spacer(
-            flex: 3,
-          ),
-          FlatButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddLocation(),
-                  settings: RouteSettings(name: '/location/add'),
-                ),
-              );
-            },
-            child: Text("Add New Address",
-                style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          Spacer(
-            flex: 2,
-          ),
-        ],
       ),
     );
   }
