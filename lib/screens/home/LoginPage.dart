@@ -121,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Text(
-                  "Buy Organic Vegetables & Groceries",
+                  "Buy Food, Vegetables & Groceries",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 14.0,

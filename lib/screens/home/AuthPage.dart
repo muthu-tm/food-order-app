@@ -218,7 +218,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
                     ),
                   ),
                   Text(
-                    "Buy Organic Vegetables & Groceries",
+                     "Buy Food, Vegetables & Groceries",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 14.0,

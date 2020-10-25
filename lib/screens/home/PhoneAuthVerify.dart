@@ -104,7 +104,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                           ),
                         ),
                         Text(
-                          "Buy Organic Vegetables & Groceries",
+                          "Buy Food, Vegetables & Groceries",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14.0,
