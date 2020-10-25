@@ -45,7 +45,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
         backgroundColor: CustomColors.green,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blue,
+        backgroundColor: CustomColors.alertRed,
         onPressed: () {
           Navigator.push(
             context,

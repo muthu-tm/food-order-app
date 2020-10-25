@@ -7,7 +7,6 @@ import 'package:chipchop_buyer/db/models/order_product.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/OrderSuccessWidget.dart';
-import 'package:chipchop_buyer/screens/user/AddLocation.dart';
 import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
