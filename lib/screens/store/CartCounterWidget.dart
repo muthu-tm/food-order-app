@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,10 +9,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../utils/CustomColors.dart';
 
 class CartCounter extends StatefulWidget {
-  CartCounter(this.storeID, this.storeName, this.productID);
+  CartCounter(this.storeID, this.productID);
 
   final String storeID;
-  final String storeName;
   final String productID;
   @override
   _CartCounterState createState() => _CartCounterState();
@@ -19,6 +19,28 @@ class CartCounter extends StatefulWidget {
 
 class _CartCounterState extends State<CartCounter> {
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
+
+  String storeName = "";
+
+  @override
+  void initState() {
+    super.initState();
+    loadStoreName();
+  }
+
+  loadStoreName() async {
+    try {
+      Map<String, dynamic> storeData = await Store().getByID(widget.storeID);
+
+      if(storeData != null) {
+        this.storeName = storeData['store_name'];
+      }
+    } catch (err) {
+      this.storeName = "";
+      print("Unablt to Load Store Name for '${widget.storeID}'");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +69,7 @@ class _CartCounterState extends State<CartCounter> {
                       try {
                         CustomDialogs.showLoadingDialog(context, _keyLoader);
                         ShoppingCart sc = ShoppingCart();
-                        sc.storeName = widget.storeName;
+                        sc.storeName = storeName;
                         sc.storeID = widget.storeID;
                         sc.productID = widget.productID;
                         sc.inWishlist = false;

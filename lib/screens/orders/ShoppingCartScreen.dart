@@ -472,7 +472,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                                 storeName,
                                 _cartImagePaths,
                                 _cartWrittenOrders),
-                            settings: RouteSettings(name: '/orders'),
+                            settings: RouteSettings(name: '/cart/checkout'),
                           ),
                         );
                       },

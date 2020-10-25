@@ -73,7 +73,6 @@ class LocationPickerState extends State<LocationPicker> {
           try {
             UserLocations _loc = await cachedLocalUser.addLocations(widget.loc);
             await cachedLocalUser.updatePrimaryLocation(_loc);
-            cachedLocalUser.primaryLocation = widget.loc;
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (BuildContext context) => HomeScreen(),
