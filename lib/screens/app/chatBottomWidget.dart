@@ -181,9 +181,7 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                   ),
                   Text(
                     "CHATS",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.oswald()
+                    style: GoogleFonts.openSans()
                   ),
                 ],
               ),

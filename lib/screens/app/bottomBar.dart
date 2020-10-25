@@ -43,9 +43,7 @@ Widget bottomBar(BuildContext context) {
                 ),
                 Text(
                   "HOME",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.oswald()
+                  style: GoogleFonts.openSans()
                 ),
               ],
             ),
@@ -74,9 +72,7 @@ Widget bottomBar(BuildContext context) {
                 ),
                 Text(
                   "SEARCH",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.oswald()
+                  style: GoogleFonts.openSans()
                 ),
               ],
             ),
@@ -106,9 +102,7 @@ Widget bottomBar(BuildContext context) {
                 ),
                 Text(
                   "ORDERS",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.oswald()
+                  style: GoogleFonts.openSans()
                 ),
               ],
             ),
@@ -135,9 +129,7 @@ Widget bottomBar(BuildContext context) {
                 ),
                 Text(
                   "SETTINGS",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.oswald(),
+                  style: GoogleFonts.openSans(),
                 ),
               ],
             ),
