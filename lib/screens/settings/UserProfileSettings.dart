@@ -76,6 +76,8 @@ class _UserSettingState extends State<UserSetting> {
   }
 
   Future forceDeactivate(BuildContext context) async {
+    _pController.text = "";
+
     await showDialog<bool>(
       context: context,
       builder: (context) {
@@ -112,17 +114,19 @@ class _UserSettingState extends State<UserSetting> {
           ),
           actions: <Widget>[
             FlatButton(
-              color: CustomColors.green,
-              child: Text(
-                "NO",
-                style: TextStyle(
-                    color: CustomColors.black,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
+                color: CustomColors.green,
+                child: Text(
+                  "NO",
+                  style: TextStyle(
+                      color: CustomColors.black,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start,
+                ),
+                onPressed: () {
+                  _pController.text = "";
+                  Navigator.pop(context);
+                }),
             FlatButton(
               color: CustomColors.alertRed,
               child: Text(
@@ -153,6 +157,7 @@ class _UserSettingState extends State<UserSetting> {
                       (Route<dynamic> route) => false,
                     );
                   } catch (err) {
+                    _pController.text = "";
                     Navigator.pop(context);
                     _scaffoldKey.currentState.showSnackBar(
                       CustomSnackBar.errorSnackBar(
