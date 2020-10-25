@@ -98,6 +98,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             _o.customerNotes = "";
             _o.status = 0;
+            _o.storeName = widget.storeName;
             _o.userNumber = cachedLocalUser.getID();
             _o.storeID = widget.storeID;
             _o.writtenOrders = widget.writtenOrders;
