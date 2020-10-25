@@ -416,6 +416,15 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                         return;
                       }
 
+                      if (cachedLocalUser.primaryLocation == null) {
+                        Fluttertoast.showToast(
+                            msg:
+                                'Primary Location not found, Please add/set Location',
+                            backgroundColor: CustomColors.alertRed,
+                            textColor: CustomColors.white);
+                        return;
+                      }
+
                       CustomDialogs.showLoadingDialog(context, _keyLoader);
 
                       double cPrice = 0.00;
