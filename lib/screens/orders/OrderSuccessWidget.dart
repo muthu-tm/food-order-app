@@ -50,7 +50,7 @@ class OrderSuccessWidget extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => OrdersHomeScreen(),
@@ -69,7 +69,7 @@ class OrderSuccessWidget extends StatelessWidget {
             FlatButton(
               child: Text("Go to Home"),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => HomeScreen(),

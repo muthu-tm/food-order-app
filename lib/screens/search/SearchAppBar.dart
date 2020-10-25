@@ -74,9 +74,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
             ),
             onPressed: () {
               if (_searchController.text.isEmpty ||
-                  _searchController.text.trim().length < 3) {
+                  _searchController.text.trim().length < 2) {
                 _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar("Enter minimum 3 digits", 2));
+                    CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2));
                 return null;
               } else {
                 searchKey = _searchController.text.trim();

@@ -136,7 +136,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             child: Text(
               "PLACE ORDER",
               style: TextStyle(
-                  
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.bold),
@@ -154,55 +153,55 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             if (snapshot.data == null) {
               return Container();
             } else {
-            Store store = Store.fromJson(snapshot.data);
+              Store store = Store.fromJson(snapshot.data);
 
-            child = SingleChildScrollView(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: CustomColors.lightGrey,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
+              child = SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: CustomColors.lightGrey,
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      topLeft: Radius.circular(10),
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.locationArrow,
+                          color: CustomColors.alertRed,
+                        ),
+                        title: Text("Delivery Address"),
+                        trailing: Icon(
+                          Icons.edit,
+                          color: CustomColors.alertRed,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewLocationsScreen(),
+                              settings: RouteSettings(name: '/location'),
+                            ),
+                          ).then((value) {
+                            setState(() {});
+                          });
+                        },
+                      ),
+                      selectedAddressSection(),
+                      ListTile(
+                        leading: Icon(FontAwesomeIcons.shippingFast,
+                            color: CustomColors.alertRed),
+                        title: Text("Delivery Options"),
+                      ),
+                      deliveyOption(store),
+                      Padding(
+                        padding: EdgeInsets.all(30),
+                      )
+                    ],
                   ),
                 ),
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(
-                        FontAwesomeIcons.locationArrow,
-                        color: CustomColors.alertRed,
-                      ),
-                      title: Text("Delivery Address"),
-                      trailing: Icon(
-                        Icons.edit,
-                        color: CustomColors.alertRed,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewLocationsScreen(),
-                            settings: RouteSettings(name: '/location'),
-                          ),
-                        ).then((value) {
-                          setState(() {});
-                        });
-                      },
-                    ),
-                    selectedAddressSection(),
-                    ListTile(
-                      leading: Icon(FontAwesomeIcons.shippingFast,
-                          color: CustomColors.alertRed),
-                      title: Text("Delivery Options"),
-                    ),
-                    deliveyOption(store),
-                    Padding(
-                      padding: EdgeInsets.all(30),
-                    )
-                  ],
-                ),
-              ),
-            );
+              );
             }
           } else if (snapshot.hasError) {
             child = Container(
@@ -493,7 +492,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             "While Confirming the ORDER, store may update the",
                         style: TextStyle(
                             color: CustomColors.blue,
-                            
                             fontWeight: FontWeight.w400),
                       ),
                       TextSpan(
@@ -501,7 +499,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         style: TextStyle(
                             color: CustomColors.alertRed,
                             fontSize: 16.0,
-                            
                             fontWeight: FontWeight.w700),
                       ),
                       TextSpan(
@@ -509,7 +506,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ", if you have added 'Written Orders/Captured List'",
                         style: TextStyle(
                             color: CustomColors.blue,
-                            
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -536,90 +532,112 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             double walletAmount = cust.availableBalance;
 
-            child = Container(
-              height: 120,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  CheckboxListTile(
-                    value: isAmountUsed,
-                    onChanged: (bool newValue) {
-                      if (walletAmount.isNegative) {
-                        Fluttertoast.showToast(
-                            msg: 'Cannot Use Wallet',
-                            backgroundColor: CustomColors.alertRed,
-                            textColor: CustomColors.white);
-                        return;
-                      }
+            if (walletAmount != 0.00 && !walletAmount.isNegative) {
+              child = Container(
+                height: 120,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CheckboxListTile(
+                      value: isAmountUsed,
+                      onChanged: (bool newValue) {
+                        if (walletAmount.isNegative) {
+                          Fluttertoast.showToast(
+                              msg: 'Cannot Use Wallet',
+                              backgroundColor: CustomColors.alertRed,
+                              textColor: CustomColors.white);
+                          return;
+                        }
 
-                      if (newValue) {
-                        if (walletAmount >
-                            widget._priceDetails[0] + shippingCharge)
-                          wAmount = widget._priceDetails[0] + shippingCharge;
-                        else
-                          wAmount = walletAmount;
-                      } else {
-                        wAmount = 0;
-                      }
-                      setState(() {
-                        isAmountUsed = newValue;
-                      });
-                    },
-                    title: Text(
-                      "Apply Balance",
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        
-                        color: CustomColors.blue,
+                        if (newValue) {
+                          if (walletAmount >
+                              widget._priceDetails[0] + shippingCharge)
+                            wAmount = widget._priceDetails[0] + shippingCharge;
+                          else
+                            wAmount = walletAmount;
+                        } else {
+                          wAmount = 0;
+                        }
+                        setState(() {
+                          isAmountUsed = newValue;
+                        });
+                      },
+                      title: Text(
+                        "Apply Balance",
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          color: CustomColors.blue,
+                        ),
+                      ),
+                      secondary: Text(
+                        "₹ $walletAmount",
+                        style: TextStyle(
+                          color: walletAmount.isNegative
+                              ? CustomColors.alertRed
+                              : CustomColors.green,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      activeColor: CustomColors.alertRed,
+                    ),
+                    ListTile(
+                      leading: Text(""),
+                      title: Text(
+                        "Amount Applied",
+                        style: TextStyle(
+                          color: CustomColors.blue,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                      trailing: Text(
+                        "₹ $wAmount",
+                        style: TextStyle(
+                          color: CustomColors.green,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    secondary: Text(
-                      "Rs.$walletAmount",
-                      style: TextStyle(
-                        
-                        color: walletAmount.isNegative
-                            ? CustomColors.alertRed
-                            : CustomColors.green,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    controlAffinity: ListTileControlAffinity.leading,
-                    activeColor: CustomColors.alertRed,
+                  ],
+                ),
+              );
+            } else {
+              child = ListTile(
+                leading: Text(""),
+                title: Text(
+                  "Wallet Balance",
+                  style: TextStyle(
+                    color: CustomColors.blue,
+                    fontSize: 14.0,
                   ),
-                  ListTile(
-                    leading: Text(""),
-                    title: Text(
-                      "Amount Applied",
-                      style: TextStyle(
-                        
-                        color: CustomColors.blue,
-                        fontSize: 14.0,
-                      ),
-                    ),
-                    trailing: Text(
-                      "Rs.$wAmount",
-                      style: TextStyle(
-                        
-                        color: CustomColors.green,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                ),
+                trailing: Text(
+                  "₹ $walletAmount",
+                  style: TextStyle(
+                    color: CustomColors.green,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
-            );
+                ),
+              );
+            }
           } else {
-            child = Container(
-              padding: EdgeInsets.all(10),
-              height: 50,
-              child: Text(
-                "Rs.0.00",
-                textAlign: TextAlign.center,
+            child = ListTile(
+              leading: Text(""),
+              title: Text(
+                "Wallet Balance",
+                style: TextStyle(
+                  color: CustomColors.blue,
+                  fontSize: 14.0,
+                ),
+              ),
+              trailing: Text(
+                "₹ 0.00",
                 style: TextStyle(
                   color: CustomColors.green,
-                  fontSize: 18.0,
+                  fontSize: 15.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -651,10 +669,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     color: CustomColors.alertRed,
                   ),
                   title: Text(
-                    "Wallet Amount",
+                    "Store Wallet",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      
                       fontWeight: FontWeight.bold,
                       color: CustomColors.positiveGreen,
                       fontSize: 17.0,
@@ -738,7 +755,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 Text(
                   cachedLocalUser.primaryLocation.userName ?? "",
                   style: TextStyle(
-                      
                       color: CustomColors.blue,
                       fontSize: 15,
                       fontWeight: FontWeight.bold),

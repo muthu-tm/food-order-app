@@ -61,8 +61,17 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
         ),
         backgroundColor: CustomColors.green,
       ),
-      body: SingleChildScrollView(
-        child: getBody(context),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: SingleChildScrollView(
+          child: getBody(context),
+        ),
       ),
     );
   }
@@ -72,10 +81,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
       stream: ShoppingCart().streamCartsForStore(widget.storeID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
-
-        var size = MediaQuery.of(context).size;
-        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-    final double itemWidth = size.width / 2;
 
         if (snapshot.hasData) {
           child = SingleChildScrollView(
@@ -219,7 +224,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                     ? GridView.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 10,
-                        childAspectRatio:(itemWidth / itemHeight),
                         shrinkWrap: true,
                         primary: false,
                         mainAxisSpacing: 10,

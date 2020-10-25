@@ -314,7 +314,7 @@ class Products extends Model {
   Future<List<Map<String, dynamic>>> getByNameRange(String searchKey) async {
     QuerySnapshot snap = await getCollectionRef()
         // .where('store_uuid', isEqualTo: storeID)
-        .where('keywords', arrayContains: searchKey)
+        .where('keywords', arrayContainsAny: searchKey.split(" "))
         .getDocuments();
 
     List<Map<String, dynamic>> pList = [];

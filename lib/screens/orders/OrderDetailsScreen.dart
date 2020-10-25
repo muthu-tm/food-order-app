@@ -117,10 +117,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
         Widget child;
 
-        var size = MediaQuery.of(context).size;
-        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-        final double itemWidth = size.width / 2;
-
         if (snapshot.hasData) {
           Order order = Order.fromJson(snapshot.data.data);
 
@@ -552,7 +548,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                               ? GridView.count(
                                   crossAxisCount: 2,
                                   crossAxisSpacing: 10,
-                                  childAspectRatio: (itemWidth / itemHeight),
                                   shrinkWrap: true,
                                   primary: false,
                                   mainAxisSpacing: 10,
