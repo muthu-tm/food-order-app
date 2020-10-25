@@ -42,7 +42,7 @@ class _UserSettingState extends State<UserSetting> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed.withOpacity(0.7),
+        backgroundColor: CustomColors.alertRed,
         onPressed: () async {
           await forceDeactivate(context);
         },
@@ -50,7 +50,6 @@ class _UserSettingState extends State<UserSetting> {
           "DeActivate Account",
           style: TextStyle(
             fontSize: 17,
-            
             fontWeight: FontWeight.bold,
             color: CustomColors.white,
           ),
@@ -90,12 +89,12 @@ class _UserSettingState extends State<UserSetting> {
             textAlign: TextAlign.start,
           ),
           content: Container(
-            height: 225,
+            height: 180,
             child: Column(
               children: <Widget>[
                 Text(
-                    "Deactivating account won't remove your Finance Data.\n\nIf you wish to clean all, Deactivate your finance first, please!"),
-                Card(
+                    "Deactivating account won't remove your details immediatly.\n\nWe will notify you before cleaning your details!"),
+                Expanded(
                   child: TextFormField(
                     textAlign: TextAlign.center,
                     obscureText: true,
@@ -113,11 +112,11 @@ class _UserSettingState extends State<UserSetting> {
           ),
           actions: <Widget>[
             FlatButton(
-              color: CustomColors.blue,
+              color: CustomColors.green,
               child: Text(
                 "NO",
                 style: TextStyle(
-                    color: CustomColors.blue,
+                    color: CustomColors.black,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold),
                 textAlign: TextAlign.start,
@@ -139,11 +138,11 @@ class _UserSettingState extends State<UserSetting> {
 
                 if (isValid) {
                   try {
-                    await _user.updateByID({
+                    await cachedLocalUser.updateByID({
                       'is_active': false,
                       'deactivated_at':
                           DateUtils.getUTCDateEpoch(DateTime.now())
-                    }, _user.mobileNumber.toString());
+                    }, cachedLocalUser.getID());
                     await AuthController().signOut();
                     Navigator.pushAndRemoveUntil(
                       context,

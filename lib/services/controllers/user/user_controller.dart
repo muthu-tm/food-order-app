@@ -6,8 +6,7 @@ import 'package:chipchop_buyer/services/utils/response_utils.dart';
 
 class UserController {
   String getCurrentUserID() {
-    return cachedLocalUser.countryCode.toString() +
-        cachedLocalUser.mobileNumber.toString();
+    return cachedLocalUser.getID();
   }
 
   bool authCheck(String secretKey) {
