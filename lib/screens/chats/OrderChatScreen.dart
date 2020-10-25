@@ -13,7 +13,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../services/controllers/user/user_service.dart';
 import '../utils/CustomColors.dart';
@@ -35,7 +34,6 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   List<DocumentSnapshot> listMessage = new List.from([]);
   int _limit = 20;
   final int _limitIncrement = 20;
-  SharedPreferences prefs;
 
   File imageFile;
   bool isLoading;
