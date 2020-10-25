@@ -91,7 +91,7 @@ class _UserSettingState extends State<UserSetting> {
             textAlign: TextAlign.start,
           ),
           content: Container(
-            height: 180,
+            height: 200,
             child: Column(
               children: <Widget>[
                 Text(
