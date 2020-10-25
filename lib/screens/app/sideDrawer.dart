@@ -194,7 +194,7 @@ Widget sideDrawer(BuildContext context) {
             "Search",
           ),
           onTap: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => SearchHome(),
@@ -210,7 +210,7 @@ Widget sideDrawer(BuildContext context) {
             "Orders",
           ),
           onTap: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => OrdersHomeScreen(),
@@ -226,7 +226,7 @@ Widget sideDrawer(BuildContext context) {
             AppLocalizations.of(context).translate('profile_settings'),
           ),
           onTap: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => UserSetting(),
@@ -243,7 +243,7 @@ Widget sideDrawer(BuildContext context) {
             "User Wallet",
           ),
           onTap: () {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => WalletHome(),
