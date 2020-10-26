@@ -115,18 +115,16 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                     children: <Widget>[
                       Icon(
                         Icons.question_answer,
-                        size: 25.0,
+                        size: 27.0,
                         color: CustomColors.black,
                       ),
-                      Text(
-                        "CHATS",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: CustomColors.black,
-                        ),
+                      SizedBox(
+                        height: 3,
                       ),
+                      Text("Chats",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.orienta()),
                     ],
                   ),
                 ),
@@ -176,13 +174,13 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                 children: <Widget>[
                   Icon(
                     Icons.question_answer,
-                    size: 25.0,
+                    size: 27.0,
                     color: CustomColors.black,
                   ),
-                  Text(
-                    "CHATS",
-                    style: GoogleFonts.openSans()
+                  SizedBox(
+                    height: 3,
                   ),
+                  Text("Chats", style: GoogleFonts.orienta()),
                 ],
               ),
             ),

@@ -5,6 +5,7 @@ import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Widget bottomBar(BuildContext context) {
@@ -38,12 +39,12 @@ Widget bottomBar(BuildContext context) {
               children: <Widget>[
                 Icon(
                   Icons.home,
-                  size: 25.0,
+                  size: 30.0,
                   color: CustomColors.black,
                 ),
                 Text(
-                  "HOME",
-                  style: GoogleFonts.openSans()
+                  "Home",
+                  style: GoogleFonts.orienta()
                 ),
               ],
             ),
@@ -67,12 +68,12 @@ Widget bottomBar(BuildContext context) {
               children: <Widget>[
                 Icon(
                   Icons.search,
-                  size: 25.0,
+                  size: 30.0,
                   color: CustomColors.black,
                 ),
                 Text(
-                  "SEARCH",
-                  style: GoogleFonts.openSans()
+                  "Search",
+                  style: GoogleFonts.orienta()
                 ),
               ],
             ),
@@ -96,13 +97,16 @@ Widget bottomBar(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(
-                  Icons.content_copy,
+                  FontAwesomeIcons.shoppingBag,
                   size: 25.0,
                   color: CustomColors.black,
                 ),
+                SizedBox(
+                  height: 5,
+                ),
                 Text(
-                  "ORDERS",
-                  style: GoogleFonts.openSans()
+                  "Orders",
+                  style: GoogleFonts.orienta()
                 ),
               ],
             ),
@@ -124,12 +128,15 @@ Widget bottomBar(BuildContext context) {
               children: <Widget>[
                 Icon(
                   Icons.settings,
-                  size: 25.0,
+                  size: 27.0,
                   color: CustomColors.black,
                 ),
+                SizedBox(
+                  height: 3,
+                ),
                 Text(
-                  "SETTINGS",
-                  style: GoogleFonts.openSans(),
+                  "Settings",
+                  style: GoogleFonts.orienta(),
                 ),
               ],
             ),

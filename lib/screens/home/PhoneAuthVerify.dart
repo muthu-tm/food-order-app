@@ -35,8 +35,6 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   final AuthController _authController = AuthController();
 
-  double _height, _width, _fixedPadding;
-
   FocusNode focusNode1 = FocusNode();
   FocusNode focusNode2 = FocusNode();
   FocusNode focusNode3 = FocusNode();
@@ -54,10 +52,6 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   @override
   Widget build(BuildContext context) {
-    _height = MediaQuery.of(context).size.height;
-    _width = MediaQuery.of(context).size.width;
-    _fixedPadding = _height * 0.025;
-
     return Scaffold(
       key: _scaffoldKey,
       bottomNavigationBar: Text(
