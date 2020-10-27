@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -120,7 +121,10 @@ class ChatTemplate {
           .orderBy('created_at', descending: true)
           .snapshots();
     } catch (err) {
-      print(err);
+      Analytics.sendAnalyticsEvent({
+        'type': 'store_chat_get_error',
+        'error': err.toString()
+      }, 'chats');
       throw err;
     }
   }

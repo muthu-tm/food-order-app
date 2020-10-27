@@ -11,6 +11,7 @@ import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +122,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   return OrderSuccessWidget();
                 });
           } catch (err) {
-            print(err);
+            Analytics.reportError(
+                {'type': 'order_create_error', 'error': err.toString()},
+                'orders');
+            Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+            Fluttertoast.showToast(
+                msg: 'Unable to place order',
+                backgroundColor: CustomColors.alertRed,
+                textColor: CustomColors.white);
           }
         },
         child: Container(

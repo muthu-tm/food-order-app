@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 
@@ -89,8 +90,9 @@ class _TakePicturePageState extends State<TakePicturePage> {
       await _cameraController.takePicture(widget.path);
 
       Navigator.pop(context, widget.path);
-    } catch (e) {
-      print(e.toString());
+    } catch (err) {
+      Analytics.sendAnalyticsEvent(
+          {'type': 'image_capture_error', 'error': err.toString()}, 'storage');
     }
   }
 }

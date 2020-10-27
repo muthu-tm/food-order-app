@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/model.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -76,7 +77,9 @@ class ProductCategories extends Model {
 
       return categories;
     } catch (err) {
-      print(err);
+      Analytics.sendAnalyticsEvent(
+          {'type': 'categories_get_error', 'error': err.toString()},
+          'products');
       throw err;
     }
   }
@@ -98,6 +101,9 @@ class ProductCategories extends Model {
 
       return categories;
     } catch (err) {
+      Analytics.sendAnalyticsEvent(
+          {'type': 'categories_get_error', 'error': err.toString()},
+          'products');
       throw err;
     }
   }

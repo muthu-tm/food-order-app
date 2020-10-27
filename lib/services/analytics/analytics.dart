@@ -21,6 +21,7 @@ class Analytics {
 
   static Future loginEvent(String userID) async {
     await analytics.setUserId(userID);
+    await analytics.setUserProperty(name: "app", value: "Buyer");
     await analytics.logLogin(loginMethod: 'Mobile');
   }
 

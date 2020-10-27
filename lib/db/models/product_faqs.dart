@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'product_faqs.g.dart';
@@ -48,8 +49,17 @@ class ProductFaqs {
       this.updatedAt = DateTime.now();
 
       await docRef.setData(this.toJson());
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_faq_create',
+        'product_id': productID,
+        'faq_id': this.uuid,
+      }, 'product_faq');
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'product_faq_create_error',
+        'faq_id': this.uuid,
+        'error': err.toString()
+      }, 'product_faq');
       throw err;
     }
   }
@@ -61,7 +71,12 @@ class ProductFaqs {
 
       await docRef.updateData(this.toJson());
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'product_faq_update_error',
+        'product_id': productID,
+        'faq_id': id,
+        'error': err.toString()
+      }, 'product_faq');
       throw err;
     }
   }

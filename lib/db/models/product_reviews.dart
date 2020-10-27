@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,8 +53,18 @@ class ProductReviews {
       this.location = cachedLocalUser.primaryLocation.address.city;
 
       await docRef.setData(this.toJson());
+      Analytics.sendAnalyticsEvent({
+        'type': 'product_review_create',
+        'product_id': productID,
+        'review_id': this.uuid,
+      }, 'product_review');
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'product_review_create_error',
+        'product_id': productID,
+        'review_id': this.uuid,
+        'error': err.toString()
+      }, 'product_review');
       throw err;
     }
   }
@@ -65,7 +76,12 @@ class ProductReviews {
 
       await docRef.updateData(this.toJson());
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'product_review_update_error',
+        'product_id': productID,
+        'review_id': id,
+        'error': err.toString()
+      }, 'product_review');
       throw err;
     }
   }

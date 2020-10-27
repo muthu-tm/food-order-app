@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -152,7 +153,11 @@ class Store extends Model {
 
       return stores;
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'store_search_error',
+        'type_id': typeID,
+        'error': err.toString()
+      }, 'store');
       throw err;
     }
   }
@@ -250,6 +255,8 @@ class Store extends Model {
 
       return _distanceInMeters / 1000;
     } catch (err) {
+      Analytics.reportError(
+          {'type': 'store_distance_error', 'error': err.toString()}, 'store');
       throw err;
     }
   }
@@ -275,7 +282,11 @@ class Store extends Model {
 
       return val;
     } catch (err) {
-      print(err);
+      Analytics.reportError({
+        'type': 'store_shipping_charge_error',
+        'store_id': storeID,
+        'error': err.toString()
+      }, 'store');
       throw err;
     }
   }

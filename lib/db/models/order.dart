@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:chipchop_buyer/db/models/customers.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -144,6 +145,12 @@ class Order {
 
         await docRef.setData(this.toJson());
       }
+
+      Analytics.sendAnalyticsEvent({
+        'type': 'order_create',
+        'store_id': storeID,
+        'order_id': this.uuid,
+      }, 'orders');
     } catch (err) {
       throw err;
     }
@@ -186,8 +193,9 @@ class Order {
   }
 
   Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
-    QuerySnapshot snap =
-        await getCollectionRef().where('order_id', isGreaterThanOrEqualTo: id).getDocuments();
+    QuerySnapshot snap = await getCollectionRef()
+        .where('order_id', isGreaterThanOrEqualTo: id)
+        .getDocuments();
 
     List<Map<String, dynamic>> oList = [];
     if (snap.documents.isNotEmpty) {

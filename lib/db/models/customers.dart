@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/model.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -44,33 +45,45 @@ class Customers {
   }
 
   Future<void> storeCreateCustomer(String storeID, String storeName) async {
-    DocumentSnapshot custSnap =
-        await getCollectionRef(storeID).document(cachedLocalUser.getID()).get();
+    try {
+      DocumentSnapshot custSnap = await getCollectionRef(storeID)
+          .document(cachedLocalUser.getID())
+          .get();
 
-    if (custSnap.exists) return;
+      if (custSnap.exists) return;
 
-    if (storeName == "") {
-      DocumentSnapshot docSnap =
-          await Model.db.collection("stores").document(storeID).get();
+      if (storeName == "") {
+        DocumentSnapshot docSnap =
+            await Model.db.collection("stores").document(storeID).get();
 
-      if (docSnap.exists) {
-        storeName = docSnap.data['store_name'];
+        if (docSnap.exists) {
+          storeName = docSnap.data['store_name'];
+        }
       }
-    }
 
-    await getCollectionRef(storeID).document(cachedLocalUser.getID()).setData({
-      'contact_number': cachedLocalUser.getID(),
-      'first_name': cachedLocalUser.firstName,
-      'last_name': cachedLocalUser.lastName,
-      'store_name': storeName,
-      'has_store_unread': false,
-      'has_customer_unread': false,
-      'store_uuid': storeID,
-      'total_amount': 0.00,
-      'available_balance': 0.00,
-      'created_at': DateTime.now(),
-      'updated_at': DateTime.now()
-    });
+      await getCollectionRef(storeID)
+          .document(cachedLocalUser.getID())
+          .setData({
+        'contact_number': cachedLocalUser.getID(),
+        'first_name': cachedLocalUser.firstName,
+        'last_name': cachedLocalUser.lastName,
+        'store_name': storeName,
+        'has_store_unread': false,
+        'has_customer_unread': false,
+        'store_uuid': storeID,
+        'total_amount': 0.00,
+        'available_balance': 0.00,
+        'created_at': DateTime.now(),
+        'updated_at': DateTime.now()
+      });
+    } catch (err) {
+      Analytics.sendAnalyticsEvent({
+        'type': 'customer_create_error',
+        'store_id': storeID,
+        'error': err.toString()
+      }, 'customers');
+      throw err;
+    }
   }
 
   Stream<QuerySnapshot> streamUsersStores() {
@@ -81,6 +94,8 @@ class Customers {
   }
 
   Stream<DocumentSnapshot> streamUsersData(String storeID) {
-    return getCollectionRef(storeID).document(cachedLocalUser.getID()).snapshots();
+    return getCollectionRef(storeID)
+        .document(cachedLocalUser.getID())
+        .snapshots();
   }
 }

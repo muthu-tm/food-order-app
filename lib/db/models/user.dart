@@ -2,6 +2,7 @@ import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/db/models/user_preferences.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -147,6 +148,8 @@ class User extends Model {
           {'primary_location': loc.toJson(), 'updated_at': DateTime.now()});
       cachedLocalUser.primaryLocation = loc;
     } catch (err) {
+      Analytics.reportError(
+          {'type': 'user_primary_loc_error', 'error': err.toString()}, 'store');
       throw err;
     }
   }
@@ -155,6 +158,8 @@ class User extends Model {
     try {
       await getLocationCollectionRef().document(loc.uuid).delete();
     } catch (err) {
+      Analytics.reportError(
+          {'type': 'user_primary_loc_error', 'error': err.toString()}, 'store');
       throw err;
     }
   }

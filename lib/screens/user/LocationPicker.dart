@@ -4,6 +4,7 @@ import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -80,7 +81,6 @@ class LocationPickerState extends State<LocationPicker> {
               ),
             );
           } catch (err) {
-            print(err);
             _scaffoldKey.currentState.showSnackBar(
               CustomSnackBar.errorSnackBar(
                   "Sorry, Unable to add your location now. Please try again later!",
@@ -165,7 +165,12 @@ class LocationPickerState extends State<LocationPicker> {
           ),
         ),
       );
-    } catch (e) {
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'location_search_error',
+        'search_key': searchKey,
+        'error': err.toString()
+      }, 'location');
       Fluttertoast.showToast(
           msg: 'Error, Unable to find matching address',
           backgroundColor: CustomColors.alertRed,

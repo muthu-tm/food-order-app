@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/user.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,6 +57,13 @@ class ShoppingCart {
 
       await docRef.setData(this.toJson());
     } catch (err) {
+      Analytics.reportError({
+        'type': 'cart_create_error',
+        'store_id': this.storeID,
+        'product_id': productID,
+        'cart_id': this.uuid,
+        'error': err.toString()
+      }, 'cart');
       throw err;
     }
   }
@@ -79,6 +87,12 @@ class ShoppingCart {
               {'quantity': _sc.quantity - 1.0, 'updated_at': DateTime.now()});
       }
     } catch (err) {
+      Analytics.reportError({
+        'type': 'cart_update_error',
+        'store_id': storeId,
+        'product_id': productID,
+        'error': err.toString()
+      }, 'cart');
       throw err;
     }
   }
@@ -97,6 +111,9 @@ class ShoppingCart {
               {'quantity': _sc.quantity - 1.0, 'updated_at': DateTime.now()});
       }
     } catch (err) {
+      Analytics.reportError(
+          {'type': 'cart_update_error', 'cart_id': id, 'error': err.toString()},
+          'cart');
       throw err;
     }
   }
@@ -112,6 +129,12 @@ class ShoppingCart {
       if (snap.documents.isNotEmpty)
         await snap.documents.first.reference.delete();
     } catch (err) {
+      Analytics.reportError({
+        'type': 'cart_update_error',
+        'store_id': storeId,
+        'product_id': productID,
+        'error': err.toString()
+      }, 'cart');
       throw err;
     }
   }
