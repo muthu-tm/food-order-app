@@ -1,6 +1,5 @@
 import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/screens/Home/AuthPage.dart';
-import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -54,14 +53,6 @@ class _MyAppState extends State<MyApp> {
       title: buyer_app_name,
       theme: ThemeData(
         brightness: Brightness.light,
-        // textTheme: TextTheme(
-        //   headline5: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
-        //   headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
-        //   bodyText2: TextStyle(
-        //     fontSize: 14.0,
-        //     color: CustomColors.white,
-        //   ),
-        // ),
         textTheme: GoogleFonts.poppinsTextTheme(
             Theme.of(context).textTheme,
           )
