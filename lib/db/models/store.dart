@@ -45,7 +45,7 @@ class Store extends Model {
   @JsonKey(name: 'store_images', defaultValue: [""])
   List<String> storeImages;
   @JsonKey(name: 'users')
-  List<int> users;
+  List<String> users;
   @JsonKey(name: 'users_access')
   List<StoreUserAccess> usersAccess;
   @JsonKey(name: 'contacts')

@@ -7,7 +7,7 @@ class StoreUserAccess {
   @JsonKey(name: 'position_name', defaultValue: "")
   String positionName;
   @JsonKey(name: 'user_number')
-  int userNumber;
+  String userNumber;
   @JsonKey(name: 'access_level')
   List<int> accessLevel;
 

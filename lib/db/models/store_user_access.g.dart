@@ -9,7 +9,7 @@ part of 'store_user_access.dart';
 StoreUserAccess _$StoreUserAccessFromJson(Map<String, dynamic> json) {
   return StoreUserAccess()
     ..positionName = json['position_name'] as String ?? ''
-    ..userNumber = json['user_number'] as int
+    ..userNumber = json['user_number'] as String
     ..accessLevel =
         (json['access_level'] as List)?.map((e) => e as int)?.toList();
 }

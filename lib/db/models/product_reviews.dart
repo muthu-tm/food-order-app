@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'product_reviews.g.dart';
@@ -46,6 +47,9 @@ class ProductReviews {
       this.uuid = docRef.documentID;
       this.createdTime = DateTime.now().millisecondsSinceEpoch;
       this.updatedAt = DateTime.now();
+      this.userName = cachedLocalUser.firstName;
+      this.userNumber = cachedLocalUser.getID();
+      this.location = cachedLocalUser.primaryLocation.address.city;
 
       await docRef.setData(this.toJson());
     } catch (err) {
