@@ -5,7 +5,6 @@ part 'product_faqs.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ProductFaqs {
-
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
   @JsonKey(name: 'question', defaultValue: "")
@@ -17,7 +16,7 @@ class ProductFaqs {
   @JsonKey(name: 'answered_at')
   int answeredAt;
   @JsonKey(name: 'user_number')
-  int userNumber;
+  String userNumber;
   @JsonKey(name: 'helpful', defaultValue: 1)
   int helpful;
   @JsonKey(name: 'user_name', defaultValue: "")
@@ -29,7 +28,8 @@ class ProductFaqs {
 
   ProductFaqs();
 
-  factory ProductFaqs.fromJson(Map<String, dynamic> json) => _$ProductFaqsFromJson(json);
+  factory ProductFaqs.fromJson(Map<String, dynamic> json) =>
+      _$ProductFaqsFromJson(json);
   Map<String, dynamic> toJson() => _$ProductFaqsToJson(this);
 
   CollectionReference getCollectionRef(String uuid) {
@@ -38,5 +38,57 @@ class ProductFaqs {
 
   String getID() {
     return this.uuid;
+  }
+
+  Future<void> create(String productID) async {
+    try {
+      DocumentReference docRef = getCollectionRef(productID).document();
+      this.uuid = docRef.documentID;
+      this.createdAt = DateTime.now();
+      this.updatedAt = DateTime.now();
+
+      await docRef.setData(this.toJson());
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<void> update(String productID, String id) async {
+    try {
+      DocumentReference docRef = getCollectionRef(productID).document(id);
+      this.updatedAt = DateTime.now();
+
+      await docRef.updateData(this.toJson());
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<List<ProductFaqs>> getAllFAQs(String productID) async {
+    try {
+      QuerySnapshot qSnap = await getCollectionRef(productID).getDocuments();
+      List<ProductFaqs> faqs = [];
+
+      for (var i = 0; i < qSnap.documents.length; i++) {
+        ProductFaqs faq = ProductFaqs.fromJson(qSnap.documents[i].data);
+        faqs.add(faq);
+      }
+
+      return faqs;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Stream<QuerySnapshot> streamAllFAQs(String productID) {
+    try {
+      return getCollectionRef(productID).snapshots();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 }
