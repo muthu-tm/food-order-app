@@ -7,7 +7,7 @@ ProductFaqs _$ProductFaqsFromJson(Map<String, dynamic> json) {
     ..questionedAt = json['questioned_at'] as int
     ..answer = json['answer'] as String ?? ''
     ..answeredAt = json['answered_at'] as int
-    ..userNumber = json['user_number'] as int
+    ..userNumber = json['user_number'] as String
     ..userName = json['user_name'] as String ?? ""
     ..helpful = json['helpful'] as int ?? 1
     ..createdAt = json['created_at'] == null

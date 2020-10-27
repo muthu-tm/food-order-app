@@ -6,7 +6,7 @@ ProductReviews _$ProductReviewsFromJson(Map<String, dynamic> json) {
     ..title = json['title'] as String ?? ''
     ..review = json['review'] as String ?? ''
     ..rating = json['rating'] as int ?? 1
-    ..userNumber = json['user_number'] as int
+    ..userNumber = json['user_number'] as String
     ..userName = json['user_name'] as String ?? ""
     ..location = json['user_location'] as String ?? ""
     ..images = (json['images'] as List)
@@ -14,10 +14,6 @@ ProductReviews _$ProductReviewsFromJson(Map<String, dynamic> json) {
             ?.toList() ??
         []
     ..createdTime = json['created_time'] as int
-    ..createdAt = json['created_at'] == null
-        ? null
-        : DateTime.fromMillisecondsSinceEpoch(
-            _getMillisecondsSinceEpoch(json['created_at'] as Timestamp))
     ..updatedAt = json['updated_at'] == null
         ? null
         : DateTime.fromMillisecondsSinceEpoch(
@@ -38,6 +34,5 @@ Map<String, dynamic> _$ProductReviewsToJson(ProductReviews instance) => <String,
       'user_location': instance.location ?? "",
       'images': instance.images == null ? [] : instance.images,
       'created_time': instance.createdTime,
-      'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

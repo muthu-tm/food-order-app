@@ -5,7 +5,6 @@ part 'product_reviews.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ProductReviews {
-
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
   @JsonKey(name: 'title', defaultValue: "")
@@ -15,7 +14,7 @@ class ProductReviews {
   @JsonKey(name: 'rating', defaultValue: 1)
   int rating;
   @JsonKey(name: 'user_number')
-  int userNumber;
+  String userNumber;
   @JsonKey(name: 'user_name', defaultValue: "")
   String userName;
   @JsonKey(name: 'user_location', defaultValue: "")
@@ -24,14 +23,13 @@ class ProductReviews {
   List<String> images;
   @JsonKey(name: 'created_time', nullable: true)
   int createdTime;
-  @JsonKey(name: 'created_at', nullable: true)
-  DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
   ProductReviews();
 
-  factory ProductReviews.fromJson(Map<String, dynamic> json) => _$ProductReviewsFromJson(json);
+  factory ProductReviews.fromJson(Map<String, dynamic> json) =>
+      _$ProductReviewsFromJson(json);
   Map<String, dynamic> toJson() => _$ProductReviewsToJson(this);
 
   CollectionReference getCollectionRef(String uuid) {
@@ -40,5 +38,46 @@ class ProductReviews {
 
   String getID() {
     return this.uuid;
+  }
+
+  Future<void> create(String productID) async {
+    try {
+      DocumentReference docRef = getCollectionRef(productID).document();
+      this.uuid = docRef.documentID;
+      this.createdTime = DateTime.now().millisecondsSinceEpoch;
+      this.updatedAt = DateTime.now();
+
+      await docRef.setData(this.toJson());
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<List<ProductReviews>> getAllReviews(String productID) async {
+    try {
+      QuerySnapshot qSnap = await getCollectionRef(productID).getDocuments();
+      List<ProductReviews> reviews = [];
+
+      for (var i = 0; i < qSnap.documents.length; i++) {
+        ProductReviews _review =
+            ProductReviews.fromJson(qSnap.documents[i].data);
+        reviews.add(_review);
+      }
+
+      return reviews;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Stream<QuerySnapshot> streamAllReviews(String productID) {
+    try {
+      return getCollectionRef(productID).snapshots();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
   }
 }
