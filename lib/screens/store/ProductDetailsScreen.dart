@@ -7,6 +7,7 @@ import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/products.dart';
@@ -24,8 +25,10 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     with SingleTickerProviderStateMixin {
   TabController _controller;
+  TextEditingController _feedbackController;
 
   Store store;
+  double ratings;
 
   List<Widget> list = [
     Tab(
@@ -54,6 +57,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   @override
   void initState() {
     super.initState();
+    ratings = 0.0;
+    _feedbackController = TextEditingController();
     _controller = TabController(length: list.length, vsync: this);
   }
 
@@ -117,9 +122,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               widget.product.shortDetails,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  fontSize: 14,
-                  color: CustomColors.black,
-                  ),
+                fontSize: 14,
+                color: CustomColors.black,
+              ),
             ),
           ),
           Padding(
@@ -210,7 +215,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Returnable"
                               : "Not Returnable",
                           style: TextStyle(
-                              color: CustomColors.black, ),
+                            color: CustomColors.black,
+                          ),
                         )
                       ],
                     ),
@@ -237,7 +243,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "Home Delivery"
                               : "Self Pickup",
                           style: TextStyle(
-                              color: CustomColors.black, ),
+                            color: CustomColors.black,
+                          ),
                         )
                       ],
                     ),
@@ -267,7 +274,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ? "In Stock"
                               : "Out Of Stock",
                           style: TextStyle(
-                              color: CustomColors.black, ),
+                            color: CustomColors.black,
+                          ),
                         )
                       ],
                     ),
@@ -292,13 +300,132 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 Container(
                   child: getStoreDetails(context),
                 ),
-                Container(),
+                Container(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text("Ratings & Reviews"),
+                          RaisedButton(
+                            onPressed: () {
+                              getReviewsAndRatings(context);
+                            },
+                            child: Text(
+                              "Add reviews",
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
                 Container()
               ],
             ),
           )
         ],
       ),
+    );
+  }
+
+  getReviewsAndRatings(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Help us improve!",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Please rate your experience"),
+                  RatingBar(
+                    initialRating: ratings,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      ratings = rating;
+                    },
+                  ),
+                  Text("Provide your feedback"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      maxLines: 3,
+                      textAlign: TextAlign.start,
+                      autofocus: false,
+                      controller: _feedbackController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                            width: 0,
+                          ),
+                        ),
+                        fillColor: CustomColors.white,
+                        filled: true,
+                        contentPadding: EdgeInsets.all(14),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RaisedButton(
+                        onPressed: () {},
+                        child: Text("Submit"),
+                        color: CustomColors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          
+                          Navigator.pop(context);
+                        },
+                        child: Text("Cancel"),
+                        color: CustomColors.alertRed,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -318,7 +445,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               child: Text(
                 "Unable to load Store Details",
                 style: TextStyle(
-                  
                   color: CustomColors.alertRed,
                   fontSize: 16.0,
                 ),
