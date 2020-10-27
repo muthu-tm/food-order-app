@@ -54,6 +54,18 @@ class ProductReviews {
     }
   }
 
+  Future<void> update(String productID, String id) async {
+    try {
+      DocumentReference docRef = getCollectionRef(productID).document(id);
+      this.updatedAt = DateTime.now();
+
+      await docRef.updateData(this.toJson());
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
   Future<List<ProductReviews>> getAllReviews(String productID) async {
     try {
       QuerySnapshot qSnap = await getCollectionRef(productID).getDocuments();
