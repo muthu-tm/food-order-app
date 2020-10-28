@@ -296,33 +296,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   child: getStoreDetails(context),
                 ),
                 Container(
-                  // child: Column(
-                  //   children: [
-                  //     SizedBox(
-                  //       height: 10,
-                  //     ),
-                  //     Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //       children: [
-                  //         Text("Ratings & Reviews"),
-                  //         RaisedButton(
-                  //           onPressed: () {
-                  //             getReviewsAndRatings(context);
-                  //           },
-                  //           child: Text(
-                  //             "Add reviews",
-                  //             style: TextStyle(
-                  //               color: Colors.black,
-                  //             ),
-                  //           ),
-                  //           shape: RoundedRectangleBorder(
-                  //             borderRadius: BorderRadius.circular(18.0),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     )
-                  //   ],
-                  // ),
                 ),
                 Container()
               ],

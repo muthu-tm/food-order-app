@@ -2,17 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/screens/orders/OrderAmountWidget.dart';
 import 'package:chipchop_buyer/screens/chats/OrderChatScreen.dart';
+import 'package:chipchop_buyer/screens/orders/ProductReviewScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
-import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/ImageView.dart';
-import 'package:chipchop_buyer/services/storage/image_uploader.dart';
-import 'package:chipchop_buyer/services/storage/storage_utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../db/models/order.dart';
 import '../../services/utils/DateUtils.dart';
@@ -34,9 +30,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
   double ratings;
 
   TabController _controller;
-  TextEditingController _feedbackController;
-  List<String> imagePaths = [];
-  String _userNumber = "0";
 
   List<Widget> list = [
     Tab(
@@ -66,7 +59,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
   void initState() {
     super.initState();
     ratings = 0;
-    _feedbackController = TextEditingController();
     _controller = TabController(length: list.length, vsync: this);
   }
 
@@ -223,25 +215,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                         ),
                       ),
                     ),
-              ListTile(
-                leading: Icon(
-                  Icons.rate_review,
-                  color: CustomColors.blueGreen,
-                  size: 35,
-                ),
-                title: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: RaisedButton(
-                    onPressed: () {
-                      getReviewsAndRatings(context);
-                    },
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    child: Text("Add a review"),
-                  ),
-                ),
-              ),
               SizedBox(
                 height: 20,
               ),
@@ -480,19 +453,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                           ),
                                                         ],
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsets.all(5.0),
-                                                        child: Align(
-                                                          alignment: Alignment
-                                                              .bottomRight,
-                                                          child: FlatButton(
+                                                      Column(
+                                                        children: [
+                                                          RaisedButton(
                                                             child: Text(
                                                               "Show Details",
                                                               style: TextStyle(
                                                                   color:
                                                                       CustomColors
                                                                           .blue),
+                                                            ),
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          18.0),
                                                             ),
                                                             onPressed: () {
                                                               Navigator.push(
@@ -509,7 +485,32 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                               );
                                                             },
                                                           ),
-                                                        ),
+                                                          RaisedButton(
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          ProductReviewScreen(),
+                                                                  settings:
+                                                                      RouteSettings(
+                                                                          name:
+                                                                              '/product/review'),
+                                                                ),
+                                                              );
+                                                            },
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          18.0),
+                                                            ),
+                                                            child: Text(
+                                                                "Add Review"),
+                                                          ),
+                                                        ],
                                                       )
                                                     ],
                                                   ),
@@ -914,7 +915,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                   borderSide: BorderSide(
                                       color: CustomColors.lightGreen),
                                 ),
-                                labelText: "Delivery - Contact Numer",
+                                labelText: "Delivery - Contact Number",
                                 labelStyle: TextStyle(
                                   fontSize: 12,
                                   color: CustomColors.blue,
@@ -944,245 +945,6 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           );
         }
         return child;
-      },
-    );
-  }
-
-  getReviewsAndRatings(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "Help us improve!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text("Please rate your experience"),
-                  RatingBar(
-                    initialRating: ratings,
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: false,
-                    itemCount: 5,
-                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {
-                      ratings = rating;
-                    },
-                  ),
-                  Text("Provide your feedback"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      maxLines: 3,
-                      textAlign: TextAlign.start,
-                      autofocus: false,
-                      controller: _feedbackController,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                            width: 0,
-                          ),
-                        ),
-                        fillColor: CustomColors.white,
-                        filled: true,
-                        contentPadding: EdgeInsets.all(14),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: FlatButton.icon(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      color: CustomColors.alertRed,
-                      onPressed: () async {
-                        String imageUrl = '';
-                        try {
-                          ImagePicker imagePicker = ImagePicker();
-                          PickedFile pickedFile;
-
-                          pickedFile = await imagePicker.getImage(
-                              source: ImageSource.gallery);
-                          if (pickedFile == null) return;
-
-                          String fileName =
-                              DateTime.now().millisecondsSinceEpoch.toString();
-                          String fbFilePath =
-                              'reviews/$_userNumber/$fileName.png';
-                          CustomDialogs.actionWaiting(context);
-                          // Upload to storage
-                          imageUrl = await Uploader().uploadImageFile(
-                              true, pickedFile.path, fbFilePath);
-                          Navigator.of(context).pop();
-                        } catch (err) {
-                          Fluttertoast.showToast(
-                              msg: 'This file is not an image');
-                        }
-                        if (imageUrl != "")
-                          setState(() {
-                            imagePaths.add(imageUrl);
-                          });
-                      },
-                      label: Text(
-                        "Add Image",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: CustomColors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      icon: Icon(FontAwesomeIcons.images),
-                    ),
-                  ),
-                  imagePaths.length > 0
-                      ? GridView.count(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          shrinkWrap: true,
-                          primary: false,
-                          mainAxisSpacing: 10,
-                          children: List.generate(
-                            imagePaths.length,
-                            (index) {
-                              return Stack(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 10, right: 10, top: 5),
-                                    child: InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ImageView(
-                                              url: imagePaths[index],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          child: CachedNetworkImage(
-                                            imageUrl: imagePaths[index],
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Image(
-                                              fit: BoxFit.fill,
-                                              image: imageProvider,
-                                            ),
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                Center(
-                                              child: SizedBox(
-                                                height: 50.0,
-                                                width: 50.0,
-                                                child: CircularProgressIndicator(
-                                                    value: downloadProgress
-                                                        .progress,
-                                                    valueColor:
-                                                        AlwaysStoppedAnimation(
-                                                            CustomColors.blue),
-                                                    strokeWidth: 2.0),
-                                              ),
-                                            ),
-                                            errorWidget:
-                                                (context, url, error) => Icon(
-                                              Icons.error,
-                                              size: 35,
-                                            ),
-                                            fadeOutDuration:
-                                                Duration(seconds: 1),
-                                            fadeInDuration:
-                                                Duration(seconds: 2),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 10,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: CustomColors.alertRed,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: InkWell(
-                                        child: Icon(
-                                          Icons.close,
-                                          size: 25,
-                                          color: CustomColors.white,
-                                        ),
-                                        onTap: () async {
-                                          CustomDialogs.actionWaiting(context);
-                                          bool res = await StorageUtils()
-                                              .removeFile(imagePaths[index]);
-                                          Navigator.of(context).pop();
-                                          if (res)
-                                            setState(() {
-                                              imagePaths
-                                                  .remove(imagePaths[index]);
-                                            });
-                                          else
-                                            Fluttertoast.showToast(
-                                                msg: 'Unable to remove image');
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              );
-                            },
-                          ),
-                        )
-                      : Container(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      RaisedButton(
-                        onPressed: () {},
-                        child: Text("Submit"),
-                        color: CustomColors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                      ),
-                      RaisedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("Cancel"),
-                        color: CustomColors.alertRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
       },
     );
   }
