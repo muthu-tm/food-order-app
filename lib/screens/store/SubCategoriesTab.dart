@@ -39,7 +39,7 @@ class SubCategoriesTab extends StatelessWidget {
             else
               return GridView.count(
                 crossAxisCount: 3,
-                childAspectRatio: (itemWidth / itemHeight),
+                childAspectRatio: 0.78,
                 crossAxisSpacing: 5,
                 shrinkWrap: true,
                 mainAxisSpacing: 10,

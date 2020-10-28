@@ -73,7 +73,7 @@ class StoreProfileWidget extends StatelessWidget {
             child: Container(
               child: GridView.count(
                 crossAxisCount: 3,
-                childAspectRatio: (itemWidth / itemHeight),
+                childAspectRatio: 0.78,
                 crossAxisSpacing: 10,
                 shrinkWrap: true,
                 primary: false,
@@ -101,12 +101,16 @@ class StoreProfileWidget extends StatelessWidget {
                           ),
                           Text(
                             store.contacts[index].contactName,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: CustomColors.black,
                             ),
                           ),
                           Text(
                             store.contacts[index].contactNumber.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: CustomColors.black,
                             ),
@@ -209,7 +213,8 @@ class StoreProfileWidget extends StatelessWidget {
                     ),
                   ),
                   trailing: Text(
-                    DateUtils.getFormattedTime(store.deliveryDetails.deliveryFrom),
+                    DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryFrom),
                     style: TextStyle(
                       color: CustomColors.black,
                     ),
@@ -223,7 +228,8 @@ class StoreProfileWidget extends StatelessWidget {
                     ),
                   ),
                   trailing: Text(
-                    DateUtils.getFormattedTime(store.deliveryDetails.deliveryTill),
+                    DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryTill),
                     style: TextStyle(
                       color: CustomColors.black,
                     ),

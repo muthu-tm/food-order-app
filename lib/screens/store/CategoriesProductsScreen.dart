@@ -64,10 +64,6 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
           .streamProductsForCategory(widget.storeID, widget.categoryID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget children;
-
-        var size = MediaQuery.of(context).size;
-        final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-    final double itemWidth = size.width / 2;
         
         if (snapshot.hasData) {
           if (snapshot.data.documents.isNotEmpty) {
@@ -75,7 +71,7 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
               child: GridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 10,
-                childAspectRatio: (itemWidth / itemHeight),
+                childAspectRatio: 0.78,
                 shrinkWrap: true,
                 mainAxisSpacing: 10,
                 children: List.generate(
@@ -146,6 +142,8 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                                   children: [
                                     Text(
                                       "${product.weight} ${product.getUnit()}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: CustomColors.black,
                                         fontSize: 12.0,
@@ -154,6 +152,8 @@ class _CategoriesProductsScreenState extends State<CategoriesProductsScreen> {
                                     ),
                                     Text(
                                       "Rs. ${product.currentPrice.toString()}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         color: CustomColors.black,
                                         fontSize: 12.0,
