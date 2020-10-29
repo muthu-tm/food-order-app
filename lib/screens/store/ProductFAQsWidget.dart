@@ -180,20 +180,20 @@ class ProductFAQsWidget extends StatelessWidget {
                       ),
                       _faq.answer != null && _faq.answer.isNotEmpty
                           ? RichText(
-                              text: TextSpan(
+                              text: TextSpan(children: [
+                                TextSpan(
                                   text: 'A. ',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                       color: CustomColors.black),
-                                  children: [
-                                    TextSpan(
-                                      text: '${_faq.answer}',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: CustomColors.black),
-                                    ),
-                                  ]),
+                                ),
+                                TextSpan(
+                                  text: '${_faq.answer}',
+                                  style: TextStyle(
+                                      fontSize: 14, color: CustomColors.black),
+                                ),
+                              ]),
                             )
                           : Container(),
                       Padding(
