@@ -23,6 +23,8 @@ class ProductReviews {
   String location;
   @JsonKey(name: 'images', defaultValue: [""])
   List<String> images;
+  @JsonKey(name: 'helpful', defaultValue: 1)
+  int helpful;
   @JsonKey(name: 'created_time', nullable: true)
   int createdTime;
   @JsonKey(name: 'updated_at', nullable: true)

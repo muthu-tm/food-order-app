@@ -9,6 +9,7 @@ ProductReviews _$ProductReviewsFromJson(Map<String, dynamic> json) {
     ..userNumber = json['user_number'] as String
     ..userName = json['user_name'] as String ?? ""
     ..location = json['user_location'] as String ?? ""
+    ..helpful = json['helpful'] as int ?? 1
     ..images = (json['images'] as List)
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
@@ -32,6 +33,7 @@ Map<String, dynamic> _$ProductReviewsToJson(ProductReviews instance) => <String,
       'user_number': instance.userNumber,
       'user_name': instance.userName ?? "",
       'user_location': instance.location ?? "",
+      'helpful': instance.helpful ?? 1,
       'images': instance.images == null ? [] : instance.images,
       'created_time': instance.createdTime,
       'updated_at': instance.updatedAt,
