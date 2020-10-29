@@ -60,7 +60,11 @@ class ProductReviewWidget extends StatelessWidget {
                             ),
                             Icon(
                               Icons.star,
-                              color: Colors.amber,
+                              color: snapshot.data[index].rating < 2
+                                  ? Colors.red
+                                  : snapshot.data[index].rating <= 3.5
+                                      ? Colors.amber
+                                      : CustomColors.green,
                             ),
                           ],
                         ),
@@ -180,7 +184,11 @@ class ProductReviewDetailed extends StatelessWidget {
                     ),
                     Icon(
                       Icons.star,
-                      color: Colors.amber,
+                      color: review.rating < 2
+                          ? Colors.red
+                          : review.rating <= 3.5
+                              ? Colors.amber
+                              : CustomColors.green,
                     ),
                     SizedBox(
                       width: 10,
