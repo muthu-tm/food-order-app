@@ -14,7 +14,7 @@ class ProductReviews {
   @JsonKey(name: 'review', defaultValue: "")
   String review;
   @JsonKey(name: 'rating', defaultValue: 1)
-  int rating;
+  double rating;
   @JsonKey(name: 'user_number')
   String userNumber;
   @JsonKey(name: 'user_name', defaultValue: "")

@@ -549,7 +549,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                         context,
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              ProductReviewScreen(),
+                                                                              ProductReviewScreen(_p),
                                                                           settings:
                                                                               RouteSettings(name: '/product/review'),
                                                                         ),

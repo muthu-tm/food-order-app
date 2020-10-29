@@ -5,7 +5,7 @@ ProductReviews _$ProductReviewsFromJson(Map<String, dynamic> json) {
     ..uuid = json['uuid'] as String
     ..title = json['title'] as String ?? ''
     ..review = json['review'] as String ?? ''
-    ..rating = json['rating'] as int ?? 1
+    ..rating = (json['rating'] as num)?.toDouble() ?? 1.00
     ..userNumber = json['user_number'] as String
     ..userName = json['user_name'] as String ?? ""
     ..location = json['user_location'] as String ?? ""
@@ -28,7 +28,7 @@ Map<String, dynamic> _$ProductReviewsToJson(ProductReviews instance) => <String,
       'uuid': instance.uuid,
       'title': instance.title,
       'review': instance.review,
-      'rating': instance.rating ?? 1,
+      'rating': instance.rating ?? 1.0,
       'user_number': instance.userNumber,
       'user_name': instance.userName ?? "",
       'user_location': instance.location ?? "",

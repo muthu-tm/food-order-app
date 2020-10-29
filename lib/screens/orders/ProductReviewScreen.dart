@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:camera/camera.dart';
+import 'package:chipchop_buyer/db/models/product_reviews.dart';
+import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/ImageView.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
 import 'package:chipchop_buyer/services/storage/storage_utils.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +16,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'ShoppingCartScreen.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ProductReviewScreen extends StatefulWidget {
+  ProductReviewScreen(this.product);
+
+  final Products product;
   @override
   _ProductReviewScreenState createState() => _ProductReviewScreenState();
 }
@@ -22,7 +31,6 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
   TextEditingController _feedbackController;
   TextEditingController _headlineController;
   List<String> imagePaths = [];
-  String _userNumber = "0";
   double ratings;
 
   @override
@@ -30,7 +38,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
     super.initState();
     _feedbackController = TextEditingController();
     _headlineController = TextEditingController();
-    ratings = 0;
+    ratings = 1.0;
   }
 
   @override
@@ -39,12 +47,18 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Add a review",
+          "Review - ${widget.product.name}",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: CustomColors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
         backgroundColor: CustomColors.green,
-        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -65,32 +79,63 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
               SizedBox(
                 height: 10,
               ),
-              Text("Please rate your experience"),
-              RatingBar(
-                initialRating: ratings,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: false,
-                itemCount: 5,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => Icon(
-                  Icons.star,
-                  color: Colors.amber,
+              Text("Rate the Product"),
+              Align(
+                alignment: Alignment.centerRight,
+                child: RatingBar(
+                  initialRating: ratings,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    ratings = rating;
+                  },
                 ),
-                onRatingUpdate: (rating) {
-                  ratings = rating;
-                },
               ),
               SizedBox(
                 height: 10,
               ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: FlatButton.icon(
+              Text("Add Image"),
+              ListTile(
+                leading: FlatButton.icon(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                   ),
-                  color: CustomColors.alertRed,
+                  padding:
+                      EdgeInsets.only(right: 15, left: 15, top: 5, bottom: 5),
+                  color: CustomColors.grey,
+                  onPressed: () async {
+                    try {
+                      String tempPath = (await getTemporaryDirectory()).path;
+                      String filePath = '$tempPath/chipchop_image.png';
+                      if (File(filePath).existsSync())
+                        await File(filePath).delete();
+                      await _showCamera(filePath);
+                    } catch (err) {
+                      Fluttertoast.showToast(msg: 'This file is not an image');
+                    }
+                  },
+                  label: Text(
+                    "Capture",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: CustomColors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  icon: Icon(FontAwesomeIcons.cameraRetro),
+                ),
+                trailing: FlatButton.icon(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  color: CustomColors.blueGreen,
                   onPressed: () async {
                     String imageUrl = '';
                     try {
@@ -103,7 +148,8 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
 
                       String fileName =
                           DateTime.now().millisecondsSinceEpoch.toString();
-                      String fbFilePath = 'reviews/$_userNumber/$fileName.png';
+                      String fbFilePath =
+                          'product_reviews/${cachedLocalUser.getID()}/$fileName.png';
                       CustomDialogs.actionWaiting(context);
                       // Upload to storage
                       imageUrl = await Uploader()
@@ -118,7 +164,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                       });
                   },
                   label: Text(
-                    "Add Image",
+                    "Pick Image",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 16,
@@ -229,7 +275,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
               SizedBox(
                 height: 10,
               ),
-              Text("Add a headline"),
+              Text("Review Headline"),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -256,7 +302,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  maxLines: 3,
+                  maxLines: 5,
                   textAlign: TextAlign.start,
                   autofocus: false,
                   controller: _feedbackController,
@@ -277,21 +323,30 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   RaisedButton(
-                    onPressed: () {},
-                    child: Text("Submit"),
-                    color: CustomColors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                  ),
-                  RaisedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: Text("Cancel"),
                     color: CustomColors.alertRed,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  RaisedButton(
+                    onPressed: () async {
+                      ProductReviews review = ProductReviews();
+                      review.images = imagePaths;
+                      review.title = _headlineController.text;
+                      review.review = _feedbackController.text;
+                      review.rating = ratings;
+
+                      await review.create(widget.product.uuid);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Submit"),
+                    color: CustomColors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
                   ),
                 ],
@@ -301,5 +356,38 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _showCamera(String filePath) async {
+    List<CameraDescription> cameras = await availableCameras();
+    CameraDescription camera = cameras.first;
+
+    var result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TakePicturePage(
+          camera: camera,
+          path: filePath,
+        ),
+      ),
+    );
+    if (result != null) {
+      CustomDialogs.actionWaiting(context);
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      String filePath =
+          'product_reviews/${cachedLocalUser.getID()}/$fileName.png';
+      String imageUrl = '';
+      try {
+        imageUrl =
+            await Uploader().uploadImageFile(true, result.toString(), filePath);
+        Navigator.of(context).pop();
+        setState(() {
+          imagePaths.add(imageUrl);
+        });
+      } catch (err) {
+        Navigator.of(context).pop();
+        Fluttertoast.showToast(msg: 'Sorry, Unable to perform the action!');
+      }
+    }
   }
 }
