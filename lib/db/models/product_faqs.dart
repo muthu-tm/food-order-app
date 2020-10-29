@@ -1,5 +1,6 @@
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 part 'product_faqs.g.dart';
@@ -47,6 +48,8 @@ class ProductFaqs {
       this.uuid = docRef.documentID;
       this.createdAt = DateTime.now();
       this.updatedAt = DateTime.now();
+      this.userName = cachedLocalUser.firstName;
+      this.userNumber = cachedLocalUser.getID();
 
       await docRef.setData(this.toJson());
       Analytics.sendAnalyticsEvent({
