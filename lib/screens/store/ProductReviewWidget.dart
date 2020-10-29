@@ -5,6 +5,7 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class ProductReviewWidget extends StatelessWidget {
   ProductReviewWidget(this.productID, this.productName);
@@ -14,11 +15,9 @@ class ProductReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: getReviewDetails(productID),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: getReviewDetails(productID),
     );
   }
 
@@ -30,91 +29,127 @@ class ProductReviewWidget extends StatelessWidget {
 
           if (snapshot.hasData) {
             if (snapshot.data.isNotEmpty) {
-              child = ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  primary: false,
-                  shrinkWrap: true,
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      elevation: 5.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+              double tRating = 0.00;
+
+              for (var i = 0; i < snapshot.data.length; i++) {
+                tRating += snapshot.data[i].rating;
+              }
+
+              tRating = tRating / snapshot.data.length;
+
+              child = Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  ListTile(
+                    leading: Text(
+                      "Customer Reviews",
+                      style: TextStyle(fontSize: 16, color: CustomColors.black),
+                    ),
+                    trailing: RatingBarIndicator(
+                      rating: tRating,
+                      itemBuilder: (context, index) => Icon(
+                        Icons.star,
+                        color: tRating < 2
+                            ? Colors.red
+                            : tRating <= 3.5
+                                ? Colors.amber
+                                : CustomColors.green,
                       ),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductReviewDetailed(
-                                  snapshot.data[index], productName),
-                              settings:
-                                  RouteSettings(name: 'store/products/review'),
-                            ),
-                          );
-                        },
-                        leading: Column(
-                          children: [
-                            Text(
-                              snapshot.data[index].rating.toString(),
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: snapshot.data[index].rating < 2
-                                  ? Colors.red
-                                  : snapshot.data[index].rating <= 3.5
-                                      ? Colors.amber
-                                      : CustomColors.green,
-                            ),
-                          ],
-                        ),
-                        title: Text(
-                          snapshot.data[index].title,
-                          maxLines: 2,
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              snapshot.data[index].review,
-                              maxLines: 3,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
+                      itemCount: 5,
+                      itemSize: 30.0,
+                      direction: Axis.horizontal,
+                    ),
+                  ),
+                  ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      // primary: false,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          elevation: 5.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProductReviewDetailed(
+                                      snapshot.data[index], productName),
+                                  settings: RouteSettings(
+                                      name: 'store/products/review'),
+                                ),
+                              );
+                            },
+                            leading: Column(
                               children: [
                                 Text(
-                                  snapshot.data[index].userName,
-                                  style: TextStyle(
-                                      fontSize: 12, color: CustomColors.grey),
+                                  snapshot.data[index].rating.toString(),
                                 ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Container(
-                                  height: 15,
-                                  width: 1,
-                                  color: Colors.grey,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  DateUtils.formatDateTime(
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                        snapshot.data[index].createdTime),
-                                  ),
-                                  style: TextStyle(
-                                      fontSize: 12, color: CustomColors.grey),
+                                Icon(
+                                  Icons.star,
+                                  color: snapshot.data[index].rating < 2
+                                      ? Colors.red
+                                      : snapshot.data[index].rating <= 3.5
+                                          ? Colors.amber
+                                          : CustomColors.green,
                                 ),
                               ],
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  });
+                            ),
+                            title: Text(
+                              snapshot.data[index].title,
+                              maxLines: 2,
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  snapshot.data[index].review,
+                                  maxLines: 3,
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      snapshot.data[index].userName,
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: CustomColors.grey),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      height: 15,
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      DateUtils.formatDateTime(
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            snapshot.data[index].createdTime),
+                                      ),
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: CustomColors.grey),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ],
+              );
             } else {
               child = Container(
                 alignment: Alignment.center,

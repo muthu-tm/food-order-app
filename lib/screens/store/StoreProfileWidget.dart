@@ -20,9 +20,6 @@ class StoreProfileWidget extends StatelessWidget {
   final Store store;
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    final double itemHeight = (size.height - kToolbarHeight - 24) / 2;
-    final double itemWidth = size.width / 2;
     return SingleChildScrollView(
       primary: true,
       child: Column(
