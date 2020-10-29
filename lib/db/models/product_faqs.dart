@@ -103,7 +103,9 @@ class ProductFaqs {
 
   Stream<QuerySnapshot> streamAllFAQs(String productID) {
     try {
-      return getCollectionRef(productID).snapshots();
+      return getCollectionRef(productID)
+          .orderBy('created_at', descending: true)
+          .snapshots();
     } catch (err) {
       print(err);
       throw err;
