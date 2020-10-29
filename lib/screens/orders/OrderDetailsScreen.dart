@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_buyer/db/models/product_reviews.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/screens/orders/OrderAmountWidget.dart';
 import 'package:chipchop_buyer/screens/chats/OrderChatScreen.dart';
@@ -482,7 +483,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                       "Show Details",
                                                                       style: TextStyle(
                                                                           fontSize:
-                                                                              12,
+                                                                              14,
                                                                           color: Colors
                                                                               .indigo
                                                                               .shade700)),
@@ -540,17 +541,31 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                                 FlatButton(
                                                                   onPressed:
                                                                       () async {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                ProductReviewScreen(_p),
-                                                                        settings:
-                                                                            RouteSettings(name: '/product/review'),
-                                                                      ),
-                                                                    );
+                                                                    bool
+                                                                        reviewed =
+                                                                        await ProductReviews()
+                                                                            .reviewedProduct(_p.uuid);
+
+                                                                    if (!reviewed) {
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              ProductReviewScreen(_p),
+                                                                          settings:
+                                                                              RouteSettings(name: '/product/review'),
+                                                                        ),
+                                                                      );
+                                                                    } else {
+                                                                      Fluttertoast.showToast(
+                                                                          msg:
+                                                                              "Reviewed this Product already!",
+                                                                          backgroundColor: CustomColors
+                                                                              .alertRed,
+                                                                          textColor:
+                                                                              CustomColors.lightGrey);
+                                                                    }
                                                                   },
                                                                   child: Text(
                                                                       "Add Review",

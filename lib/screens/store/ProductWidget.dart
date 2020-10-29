@@ -80,7 +80,7 @@ class ProductWidget extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
+                        "${product.weight} ${product.getUnit()} - Rs. ${product.currentPrice.toString()}",
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

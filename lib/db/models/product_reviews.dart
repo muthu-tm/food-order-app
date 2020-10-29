@@ -90,7 +90,9 @@ class ProductReviews {
 
   Future<List<ProductReviews>> getAllReviews(String productID) async {
     try {
-      QuerySnapshot qSnap = await getCollectionRef(productID).getDocuments();
+      QuerySnapshot qSnap = await getCollectionRef(productID)
+          .orderBy('created_time', descending: true)
+          .getDocuments();
       List<ProductReviews> reviews = [];
 
       for (var i = 0; i < qSnap.documents.length; i++) {
@@ -100,6 +102,21 @@ class ProductReviews {
       }
 
       return reviews;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<bool> reviewedProduct(String productID) async {
+    try {
+      QuerySnapshot qSnap = await getCollectionRef(productID)
+          .where('user_number', isEqualTo: cachedLocalUser.getID())
+          .getDocuments();
+      if (qSnap.documents.isNotEmpty)
+        return true;
+      else
+        return false;
     } catch (err) {
       print(err);
       throw err;

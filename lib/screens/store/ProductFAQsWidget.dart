@@ -236,8 +236,8 @@ class ProductFAQsWidget extends StatelessWidget {
             );
           } else {
             children = Text(
-              "No Q & A found!",
-              style: TextStyle(fontSize: 14, color: CustomColors.blue),
+              "No Q & A found !!",
+              style: TextStyle(fontSize: 16, color: CustomColors.blue),
             );
           }
         } else if (snapshot.hasError) {

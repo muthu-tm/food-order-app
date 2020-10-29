@@ -7,146 +7,144 @@ import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
 
 class ProductReviewWidget extends StatelessWidget {
-  ProductReviewWidget(this.productID);
+  ProductReviewWidget(this.productID, this.productName);
 
   final String productID;
+  final String productName;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          children: [getReviewDetails(productID)],
-        ),
+        child: getReviewDetails(productID),
       ),
     );
   }
-}
 
-Widget getReviewDetails(String productID) {
-  return FutureBuilder(
-      future: ProductReviews().getAllReviews(productID),
-      builder: (context, AsyncSnapshot<List<ProductReviews>> snapshot) {
-        Widget child;
+  Widget getReviewDetails(String productID) {
+    return FutureBuilder(
+        future: ProductReviews().getAllReviews(productID),
+        builder: (context, AsyncSnapshot<List<ProductReviews>> snapshot) {
+          Widget child;
 
-        if (snapshot.hasData) {
-          if (snapshot.data.isNotEmpty) {
-            child = ListView.builder(
-                scrollDirection: Axis.vertical,
-                primary: false,
-                shrinkWrap: true,
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Card(
-                    elevation: 5.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ProductReviewDetailed(snapshot.data[index]),
-                            settings: RouteSettings(name: 'review/detailed'),
-                          ),
-                        );
-                      },
-                      leading: Column(
-                        children: [
-                          Text(
-                            snapshot.data[index].rating.toString(),
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                          ),
-                        ],
+          if (snapshot.hasData) {
+            if (snapshot.data.isNotEmpty) {
+              child = ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  primary: false,
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      elevation: 5.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      title: Text(
-                        snapshot.data[index].title,
-                        maxLines: 2,
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            snapshot.data[index].review,
-                            maxLines: 3,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                snapshot.data[index].userName,
-                                style: TextStyle(
-                                    fontSize: 12, color: CustomColors.grey),
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                height: 15,
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                DateUtils.formatDateTime(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      snapshot.data[index].createdTime),
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductReviewDetailed(
+                                  snapshot.data[index], productName),
+                              settings:
+                                  RouteSettings(name: 'store/products/review'),
+                            ),
+                          );
+                        },
+                        leading: Column(
+                          children: [
+                            Text(
+                              snapshot.data[index].rating.toString(),
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.amber,
+                            ),
+                          ],
+                        ),
+                        title: Text(
+                          snapshot.data[index].title,
+                          maxLines: 2,
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              snapshot.data[index].review,
+                              maxLines: 3,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  snapshot.data[index].userName,
+                                  style: TextStyle(
+                                      fontSize: 12, color: CustomColors.grey),
                                 ),
-                                style: TextStyle(
-                                    fontSize: 12, color: CustomColors.grey),
-                              ),
-                            ],
-                          )
-                        ],
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  height: 15,
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  DateUtils.formatDateTime(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                        snapshot.data[index].createdTime),
+                                  ),
+                                  style: TextStyle(
+                                      fontSize: 12, color: CustomColors.grey),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                });
-          } else {
-            child = Container(
-              padding: EdgeInsets.all(10),
-              color: CustomColors.white,
-              width: MediaQuery.of(context).size.width * 0.9,
-              child: Text(
-                "No reviews found",
-                style: TextStyle(
-                  color: CustomColors.alertRed,
-                  fontSize: 16.0,
+                    );
+                  });
+            } else {
+              child = Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(10),
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Text(
+                  "No Reviews !!",
+                  style: TextStyle(fontSize: 16.0, color: CustomColors.blue),
                 ),
+              );
+            }
+          } else if (snapshot.hasError) {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
+            );
+          } else {
+            child = Center(
+              child: Column(
+                children: AsyncWidgets.asyncWaiting(),
               ),
             );
           }
-        } else if (snapshot.hasError) {
-          child = Center(
-            child: Column(
-              children: AsyncWidgets.asyncError(),
-            ),
-          );
-        } else {
-          child = Center(
-            child: Column(
-              children: AsyncWidgets.asyncWaiting(),
-            ),
-          );
-        }
-        return child;
-      });
+          return child;
+        });
+  }
 }
 
 class ProductReviewDetailed extends StatelessWidget {
   final ProductReviews review;
+  final String productName;
 
-  ProductReviewDetailed(this.review);
+  ProductReviewDetailed(this.review, this.productName);
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +155,10 @@ class ProductReviewDetailed extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
+        ),
+        title: Text(
+          "Review - $productName",
+          style: TextStyle(color: Colors.black, fontSize: 16),
         ),
       ),
       body: SingleChildScrollView(
@@ -201,7 +203,7 @@ class ProductReviewDetailed extends StatelessWidget {
               ),
               Text(
                 review.title,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 10,
