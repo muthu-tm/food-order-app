@@ -162,21 +162,22 @@ class ProductFAQsWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
-                        text: TextSpan(
+                        text: TextSpan(children: [
+                          TextSpan(
                             text: 'Q. ',
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: CustomColors.black),
-                            children: [
-                              TextSpan(
-                                text: '${_faq.question}',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: CustomColors.black),
-                              ),
-                            ]),
+                          ),
+                          TextSpan(
+                            text: '${_faq.question}',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: CustomColors.black),
+                          ),
+                        ]),
                       ),
                       _faq.answer != null && _faq.answer.isNotEmpty
                           ? RichText(
