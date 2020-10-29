@@ -2,6 +2,7 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/CartCounterWidget.dart';
+import 'package:chipchop_buyer/screens/store/ProductFAQsWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreProfileWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
@@ -297,7 +298,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 ),
                 Container(
                 ),
-                Container()
+                SingleChildScrollView(child: ProductFAQsWidget(widget.product.uuid)),
               ],
             ),
           )
