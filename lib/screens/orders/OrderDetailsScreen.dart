@@ -453,65 +453,128 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                                           ),
                                                         ],
                                                       ),
-                                                      Column(
-                                                        children: [
-                                                          RaisedButton(
-                                                            child: Text(
-                                                              "Show Details",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      CustomColors
-                                                                          .blue),
-                                                            ),
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          18.0),
-                                                            ),
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      ProductDetailsScreen(
-                                                                          _p),
-                                                                  settings:
-                                                                      RouteSettings(
-                                                                          name:
-                                                                              '/store/products'),
+                                                      order.status != 4
+                                                          ? Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(5.0),
+                                                              child: Align(
+                                                                alignment: Alignment
+                                                                    .bottomRight,
+                                                                child:
+                                                                    FlatButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                ProductDetailsScreen(_p),
+                                                                        settings:
+                                                                            RouteSettings(name: '/store/products'),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child: Text(
+                                                                      "Show Details",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color: Colors
+                                                                              .indigo
+                                                                              .shade700)),
+                                                                  splashColor:
+                                                                      Colors
+                                                                          .transparent,
+                                                                  highlightColor:
+                                                                      Colors
+                                                                          .transparent,
                                                                 ),
-                                                              );
-                                                            },
-                                                          ),
-                                                          RaisedButton(
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          ProductReviewScreen(),
-                                                                  settings:
-                                                                      RouteSettings(
-                                                                          name:
-                                                                              '/product/review'),
-                                                                ),
-                                                              );
-                                                            },
-                                                            shape:
-                                                                RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          18.0),
-                                                            ),
-                                                            child: Text(
-                                                                "Add Review"),
-                                                          ),
-                                                        ],
-                                                      )
+                                                              ),
+                                                            )
+                                                          : Container(
+                                                              child: Row(
+                                                                children: <
+                                                                    Widget>[
+                                                                  Spacer(
+                                                                    flex: 2,
+                                                                  ),
+                                                                  FlatButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              ProductDetailsScreen(_p),
+                                                                          settings:
+                                                                              RouteSettings(name: '/store/products'),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    child: Text(
+                                                                        "Show Details",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Colors.indigo.shade700)),
+                                                                    splashColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    highlightColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                  ),
+                                                                  Spacer(
+                                                                    flex: 3,
+                                                                  ),
+                                                                  Container(
+                                                                    height: 20,
+                                                                    width: 1,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                  ),
+                                                                  Spacer(
+                                                                    flex: 3,
+                                                                  ),
+                                                                  FlatButton(
+                                                                    onPressed:
+                                                                        () async {
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              ProductReviewScreen(),
+                                                                          settings:
+                                                                              RouteSettings(name: '/product/review'),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    child: Text(
+                                                                        "Add Review",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Colors.indigo.shade700)),
+                                                                    splashColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                    highlightColor:
+                                                                        Colors
+                                                                            .transparent,
+                                                                  ),
+                                                                  Spacer(
+                                                                    flex: 2,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )
                                                     ],
                                                   ),
                                                 ),

@@ -236,7 +236,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text(
                 "Unable to load Top Categories",
                 style: TextStyle(
-                  
                   color: CustomColors.alertRed,
                   fontSize: 16.0,
                 ),

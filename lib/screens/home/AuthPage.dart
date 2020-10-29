@@ -303,6 +303,7 @@ class _SecretKeyAuthState extends State<SecretKeyAuth> {
             ),
             child: TextFormField(
               textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
               inputFormatters: [
                 LengthLimitingTextInputFormatter(4),
               ],
