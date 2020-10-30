@@ -107,14 +107,13 @@ class _ProductsListViewScreenState extends State<ProductsListViewScreen> {
                           title: Text(
                             product.name,
                             style: TextStyle(
-                              
                               color: CustomColors.blue,
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           subtitle: Text(
-                            "${product.weight} ${product.getUnit()} - Rs. ${product.originalPrice.toString()}",
+                            "${product.weight} ${product.getUnit()} - Rs. ${product.currentPrice.toString()}",
                             style: TextStyle(
                               color: CustomColors.blue,
                               fontSize: 13.0,
