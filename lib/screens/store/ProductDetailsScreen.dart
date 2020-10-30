@@ -290,7 +290,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                 tabs: list),
           ),
           SizedBox(
-            height: 300,
+            height: MediaQuery.of(context).size.height - 150,
             child: TabBarView(
               controller: _controller,
               children: [

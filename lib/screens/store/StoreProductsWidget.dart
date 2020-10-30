@@ -316,7 +316,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                     )
                                   : Card(
                                       elevation: 2.0,
-                                      color: CustomColors.lightGreen,
+                                      color: CustomColors.green,
                                       child: Container(
                                         height: 40,
                                         width: 40,
@@ -352,7 +352,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                               // _wlMap.contains(product.uuid)
                               //     ? Card(
                               //         elevation: 2.0,
-                              //         color: CustomColors.lightGreen,
+                              //         color: CustomColors.green,
                               //         child: Container(
                               //           height: 40,
                               //           width: 40,

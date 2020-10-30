@@ -52,6 +52,8 @@ class ProductFAQsWidget extends StatelessWidget {
   }
 
   getQuestionDialog(BuildContext context) {
+    _feedbackController.text = "";
+    
     return showDialog(
       context: context,
       builder: (BuildContext context) {
