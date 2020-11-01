@@ -284,7 +284,13 @@ Widget sideDrawer(BuildContext context) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => AuthPage(),
+                builder: (context) => AuthPage(
+                    cachedLocalUser.getID(),
+                    cachedLocalUser.firstName +
+                            ' ' +
+                            cachedLocalUser.lastName ??
+                        "",
+                    cachedLocalUser.getSmallProfilePicPath()),
                 settings: RouteSettings(name: '/logout'),
               ),
               (Route<dynamic> route) => false,

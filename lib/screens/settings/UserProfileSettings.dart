@@ -151,7 +151,13 @@ class _UserSettingState extends State<UserSetting> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AuthPage(),
+                        builder: (context) => AuthPage(
+                            cachedLocalUser.getID(),
+                            cachedLocalUser.firstName +
+                                    ' ' +
+                                    cachedLocalUser.lastName ??
+                                "",
+                            cachedLocalUser.getSmallProfilePicPath()),
                         settings: RouteSettings(name: '/logout'),
                       ),
                       (Route<dynamic> route) => false,

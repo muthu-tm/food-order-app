@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,9 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _passKeyController = TextEditingController();
   final AuthController _authController = AuthController();
+
+  bool _rememberUser = true;
+  bool _radioValue = true;
 
   @override
   void initState() {
@@ -144,10 +148,8 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       ),
                       fillColor: CustomColors.white,
                       hintText: "Mobile Number",
-                      hintStyle: TextStyle(
-                          fontSize: 16.0,
-                          
-                          color: Colors.black54),
+                      hintStyle:
+                          TextStyle(fontSize: 16.0, color: Colors.black54),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
@@ -177,9 +179,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                               fillColor: CustomColors.white,
                               hintText: "First Name",
                               hintStyle: TextStyle(
-                                  fontSize: 16.0,
-                                  
-                                  color: Colors.black54),
+                                  fontSize: 16.0, color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
@@ -208,9 +208,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                               fillColor: CustomColors.white,
                               hintText: "Last Name",
                               hintStyle: TextStyle(
-                                  fontSize: 16.0,
-                                  
-                                  color: Colors.black54),
+                                  fontSize: 16.0, color: Colors.black54),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
@@ -261,10 +259,8 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                         ),
                         fillColor: CustomColors.white,
                         hintText: "4-digit secret key",
-                        hintStyle: TextStyle(
-                            fontSize: 16.0,
-                            
-                            color: Colors.black54),
+                        hintStyle:
+                            TextStyle(fontSize: 16.0, color: Colors.black54),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
@@ -318,28 +314,61 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             ],
           ),
           SizedBox(height: 5),
-          SizedBox(
-            height: 40,
-            width: 125,
-            child: RaisedButton(
-              elevation: 10.0,
-              onPressed: startPhoneAuth,
-              child: Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Text(
-                  AppLocalizations.of(context).translate('get_otp'),
-                  style: TextStyle(
-                    color: CustomColors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Radio(
+                    value: _radioValue,
+                    groupValue: _rememberUser,
+                    activeColor: CustomColors.alertRed,
+                    toggleable: true,
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          _rememberUser = true;
+                        });
+                      } else {
+                        setState(() {
+                          _rememberUser = false;
+                        });
+                      }
+                    },
+                  ),
+                  Text(
+                    'Remember Me',
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 40,
+                width: 200,
+                child: RaisedButton(
+                  elevation: 10.0,
+                  onPressed: startPhoneAuth,
+                  child: Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Register",
+                      style: TextStyle(
+                        color: CustomColors.white,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  color: CustomColors.alertRed,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(5),
+                    ),
                   ),
                 ),
               ),
-              color: CustomColors.alertRed,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
+            ],
           ),
           Column(
             children: [
@@ -351,7 +380,6 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       AppLocalizations.of(context).translate('already_account'),
                       style: TextStyle(
                         fontSize: 14,
-                        
                         color: CustomColors.positiveGreen,
                       ),
                     ),
@@ -438,12 +466,21 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           _lastNameController.text,
           authResult.user.uid);
       if (!result['is_success']) {
-        Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+        Navigator.pop(context);
         _scaffoldKey.currentState
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
         final SharedPreferences prefs = await _prefs;
-        prefs.setString("mobile_number", countryCode.toString() + number);
+        if (_rememberUser) {
+          prefs.setBool('user_session_live', true);
+        } else {
+          prefs.setBool('user_session_live', false);
+        }
+        prefs.setString(
+            "user_profile_pic", cachedLocalUser.getSmallProfilePicPath());
+        prefs.setString("user_name",
+            cachedLocalUser.firstName + " " + cachedLocalUser.lastName ?? "");
+        prefs.setString("mobile_number", cachedLocalUser.getID());
 
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
@@ -455,7 +492,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
         );
       }
     }).catchError((error) {
-      Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+      Navigator.pop(context);
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
       _scaffoldKey.currentState
@@ -484,6 +521,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (BuildContext context) => PhoneAuthVerify(
+            _rememberUser,
             true,
             number,
             countryCode,

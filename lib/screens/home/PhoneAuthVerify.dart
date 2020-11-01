@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
@@ -14,9 +15,17 @@ import 'package:chipchop_buyer/app_localizations.dart';
 // OTP VERIFICATION SCREEN
 
 class PhoneAuthVerify extends StatefulWidget {
-  PhoneAuthVerify(this.isRegister, this.number, this.countryCode, this.passKey,
-      this.name, this.lastName, this.verificationID);
+  PhoneAuthVerify(
+      this._rememberUser,
+      this.isRegister,
+      this.number,
+      this.countryCode,
+      this.passKey,
+      this.name,
+      this.lastName,
+      this.verificationID);
 
+  final bool _rememberUser;
   final bool isRegister;
   final String number;
   final int countryCode;
@@ -114,7 +123,6 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                 Text(
                   "My Pass Code",
                   style: TextStyle(
-                    
                     color: Colors.black,
                     fontSize: 18.0,
                   ),
@@ -252,10 +260,8 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
           await _success();
         }
       } else {
-        Map<String, dynamic> _uJSON =
-            await User().getByID(widget.countryCode.toString() + widget.number);
-        dynamic result =
-            await _authController.signInWithMobileNumber(User.fromJson(_uJSON));
+        dynamic result = await _authController.signInWithMobileNumber(
+            widget.countryCode.toString() + widget.number);
         if (!result['is_success']) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
           _scaffoldKey.currentState
@@ -281,8 +287,17 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   _success() async {
     final SharedPreferences prefs = await _prefs;
+
+    if (widget._rememberUser) {
+      prefs.setBool('user_session_live', true);
+    } else {
+      prefs.setBool('user_session_live', false);
+    }
     prefs.setString(
-        "mobile_number", widget.countryCode.toString() + widget.number);
+        "user_profile_pic", cachedLocalUser.getSmallProfilePicPath());
+    prefs.setString("user_name",
+        cachedLocalUser.firstName + " " + cachedLocalUser.lastName ?? "");
+    prefs.setString("mobile_number", cachedLocalUser.getID());
 
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(

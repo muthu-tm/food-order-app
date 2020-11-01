@@ -1,4 +1,5 @@
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,11 +16,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chipchop_buyer/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage(this.isNewScaffold, this._scaffoldKey);
-
-  final bool isNewScaffold;
-  final GlobalKey<ScaffoldState> _scaffoldKey;
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -27,7 +23,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
-  GlobalKey<ScaffoldState> _scaffoldKey;
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController _nController = TextEditingController();
   AuthController _authController = AuthController();
 
@@ -39,59 +35,41 @@ class _LoginPageState extends State<LoginPage> {
   int countryCode = 91;
   String _smsVerificationCode;
 
+  bool _rememberUser = true;
+  bool _radioValue = true;
+
   @override
   void initState() {
     super.initState();
-
-    if (widget.isNewScaffold) {
-      _scaffoldKey = GlobalKey<ScaffoldState>();
-    } else {
-      _scaffoldKey = widget._scaffoldKey;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.isNewScaffold
-        ? Scaffold(
-            key: _scaffoldKey,
-            backgroundColor: CustomColors.lightGrey,
-            bottomNavigationBar: 
-            Text(
-              "Powered by Fourcup Inc.",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-              ),
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: CustomColors.lightGrey,
+      bottomNavigationBar: Text(
+        "Powered by Fourcup Inc.",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+        ),
+      ),
+      extendBody: true,
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            extendBody: true,
-            body: SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: _getBody(),
-              ),
-            ),
-          )
-        : SingleChildScrollView(
-            child: Container(
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xffD8F2A7), Color(0xffA4D649)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: _getBody(),
-            ),
-          );
+          ),
+          child: _getBody(),
+        ),
+      ),
+    );
   }
 
   Widget _getBody() {
@@ -131,7 +109,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ),
-        SizedBox(height: 20,),
+        SizedBox(
+          height: 20,
+        ),
         Container(
           child: Column(
             children: [
@@ -228,26 +208,59 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               Padding(padding: EdgeInsets.all(5.0)),
-              SizedBox(
-                height: 40,
-                width: 125,
-                child: RaisedButton(
-                  color: CustomColors.alertRed,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Radio(
+                        value: _radioValue,
+                        groupValue: _rememberUser,
+                        activeColor: CustomColors.alertRed,
+                        toggleable: true,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _rememberUser = true;
+                            });
+                          } else {
+                            setState(() {
+                              _rememberUser = false;
+                            });
+                          }
+                        },
+                      ),
+                      Text(
+                        'Remember Me',
+                      ),
+                    ],
                   ),
-                  onPressed: () {
-                    _submit();
-                  },
-                  child: Text(
-                    AppLocalizations.of(context).translate('get_otp'),
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: CustomColors.white,
-                      fontWeight: FontWeight.bold,
+                  SizedBox(
+                    height: 40,
+                    width: 150,
+                    child: RaisedButton(
+                      color: CustomColors.alertRed,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomLeft: Radius.circular(5),
+                        ),
+                      ),
+                      onPressed: () {
+                        _submit();
+                      },
+                      child: Text(
+                        "Get OTP",
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          color: CustomColors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ],
           ),
@@ -262,7 +275,6 @@ class _LoginPageState extends State<LoginPage> {
                     AppLocalizations.of(context).translate('no_account'),
                     style: TextStyle(
                       fontSize: 13.0,
-                      
                       color: CustomColors.alertRed,
                       fontWeight: FontWeight.bold,
                     ),
@@ -306,7 +318,6 @@ class _LoginPageState extends State<LoginPage> {
                 label: Text(
                   AppLocalizations.of(context).translate('help_support'),
                   style: TextStyle(
-                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.blue,
                     fontSize: 16.0,
@@ -381,9 +392,8 @@ class _LoginPageState extends State<LoginPage> {
         .signInWithCredential(authCredential)
         .then((AuthResult authResult) async {
       final SharedPreferences prefs = await _prefs;
-      prefs.setString("mobile_number", countryCode.toString() + number);
 
-      var result = await _authController.signInWithMobileNumber(_user);
+      var result = await _authController.signInWithMobileNumber(_user.getID());
 
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
@@ -392,6 +402,17 @@ class _LoginPageState extends State<LoginPage> {
         _scaffoldKey.currentState
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
+        if (_rememberUser) {
+          prefs.setBool('user_session_live', true);
+        } else {
+          prefs.setBool('user_session_live', false);
+        }
+        prefs.setString(
+            "user_profile_pic", cachedLocalUser.getSmallProfilePicPath());
+        prefs.setString("user_name",
+            cachedLocalUser.firstName + " " + cachedLocalUser.lastName ?? "");
+        prefs.setString("mobile_number", cachedLocalUser.getID());
+
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (BuildContext context) => UpdateApp(
@@ -433,6 +454,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (BuildContext context) => PhoneAuthVerify(
+            _rememberUser,
             false,
             _user.mobileNumber.toString(),
             _user.countryCode,

@@ -53,8 +53,11 @@ class AuthController {
     }
   }
 
-  dynamic signInWithMobileNumber(User user) async {
+  dynamic signInWithMobileNumber(String userID) async {
     try {
+      Map<String, dynamic> _userData = await User().getByID(userID);
+      User user = User.fromJson(_userData);
+
       var platformData = await UserFCM().getPlatformDetails();
 
       if (platformData != null) {
@@ -78,12 +81,9 @@ class AuthController {
 
       return CustomResponse.getSuccesReponse(user);
     } catch (err) {
-      Analytics.reportError({
-        "type": 'log_in_error',
-        "user_id": user.mobileNumber,
-        'name': user.firstName,
-        'error': err.toString()
-      }, 'log_in');
+      Analytics.reportError(
+          {"type": 'log_in_error', "user_id": userID, 'error': err.toString()},
+          'log_in');
       return CustomResponse.getFailureReponse(err.toString());
     }
   }
