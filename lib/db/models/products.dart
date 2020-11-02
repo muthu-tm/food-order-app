@@ -18,6 +18,13 @@ class Products extends Model {
   String productSubCategory;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
+  @JsonKey(name: 'rating', defaultValue: 1)
+  double rating;
+  @JsonKey(name: 'total_ratings', defaultValue: 1)
+  double totalRatings;
+  @JsonKey(name: 'total_reviews', defaultValue: 1)
+  int totalReviews;
+
   @JsonKey(name: 'short_details', defaultValue: "")
   String shortDetails;
   @JsonKey(name: 'store_uuid', defaultValue: "")

@@ -77,9 +77,11 @@ class Order {
   }
 
   String generateOrderID() {
+    var _random = new Random();
+
     return DateFormat('ddMMyy').format(this.createdAt) +
         "-" +
-        Random(100).nextInt(1000).toString() +
+        (10 + _random.nextInt(10000 - 10)).toString() +
         this.totalProducts.toString();
   }
 

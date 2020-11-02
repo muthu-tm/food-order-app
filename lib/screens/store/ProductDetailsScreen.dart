@@ -298,8 +298,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                   child: getStoreDetails(context),
                 ),
                 SingleChildScrollView(
-                  child: ProductReviewWidget(
-                      widget.product.uuid, widget.product.name),
+                  child: ProductReviewWidget(widget.product),
                 ),
                 SingleChildScrollView(
                     child: ProductFAQsWidget(widget.product.uuid)),

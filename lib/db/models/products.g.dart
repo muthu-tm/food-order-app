@@ -7,6 +7,9 @@ Products _$ProductsFromJson(Map<String, dynamic> json) {
     ..productCategory = json['product_category'] as String ?? ""
     ..productSubCategory = json['product_sub_category'] as String ?? ""
     ..name = json['name'] as String ?? ''
+    ..rating = (json['rating'] as num)?.toDouble() ?? 0.00
+    ..totalRatings = (json['total_ratings'] as num)?.toDouble() ?? 0.00
+    ..totalReviews = json['total_reviews'] as int ?? 0
     ..shortDetails = json['short_details'] as String
     ..storeID = json['store_uuid'] as String ?? ''
     ..productImages = (json['product_images'] as List)
@@ -46,6 +49,9 @@ Map<String, dynamic> _$ProductsToJson(Products instance) => <String, dynamic>{
       'product_category': instance.productCategory ?? "",
       'product_sub_category': instance.productSubCategory ?? "",
       'name': instance.name,
+      'rating': instance.rating ?? 0.0,
+      'total_ratings': instance.totalRatings ?? 0.00,
+      'total_reviews': instance.totalReviews ?? 0,
       'short_details': instance.shortDetails,
       'store_uuid': instance.storeID ?? "",
       'product_images':

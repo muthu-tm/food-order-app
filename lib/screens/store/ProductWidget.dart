@@ -34,32 +34,29 @@ class ProductWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Hero(
-                tag: "${product.uuid}",
-                child: CachedNetworkImage(
-                  imageUrl: product.getProductImage(),
-                  imageBuilder: (context, imageProvider) => Container(
-                    width: 125,
-                    height: 90,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                      shape: BoxShape.rectangle,
-                      image: DecorationImage(
-                          fit: BoxFit.fill, image: imageProvider),
+              CachedNetworkImage(
+                imageUrl: product.getProductImage(),
+                imageBuilder: (context, imageProvider) => Container(
+                  width: 125,
+                  height: 90,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                        fit: BoxFit.fill, image: imageProvider),
                   ),
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.error,
-                    size: 35,
-                  ),
-                  fadeOutDuration: Duration(seconds: 1),
-                  fadeInDuration: Duration(seconds: 2),
                 ),
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(
+                        value: downloadProgress.progress),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.error,
+                  size: 35,
+                ),
+                fadeOutDuration: Duration(seconds: 1),
+                fadeInDuration: Duration(seconds: 2),
               ),
               Padding(
                 padding: EdgeInsets.all(5),

@@ -20,7 +20,6 @@ class _SearchAppBarState extends State<SearchAppBar> {
 
   TextEditingController _searchController = TextEditingController();
   int searchMode = 0;
-  String searchKey = "";
   Future<List<Map<String, dynamic>>> snapshot;
 
   List<CustomRadioModel> inOutList = List<CustomRadioModel>();
@@ -50,6 +49,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
         title: TextFormField(
           controller: _searchController,
           keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.search,
           textCapitalization: TextCapitalization.sentences,
           style: TextStyle(
             color: CustomColors.black,
@@ -60,6 +60,25 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 : searchMode == 1 ? "Type Product Name" : "Type Order ID",
             hintStyle: TextStyle(color: CustomColors.black),
           ),
+          onFieldSubmitted: (searchKey) {
+            if (searchKey.trim().isEmpty || searchKey.trim().length < 2) {
+              _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2));
+              return null;
+            } else {
+              setState(
+                () {
+                  searchMode == 0
+                      ? snapshot = Store().getStoreByName(searchKey)
+                      : searchMode == 1
+                          ? snapshot = Products().getByNameRange(searchKey)
+                          : snapshot = Order().getByOrderID(searchKey);
+                },
+              );
+
+              return null;
+            }
+          },
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
@@ -68,54 +87,17 @@ class _SearchAppBarState extends State<SearchAppBar> {
         actions: <Widget>[
           IconButton(
             icon: Icon(
-              Icons.search,
-              size: 30.0,
+              Icons.close,
+              size: 25.0,
               color: CustomColors.black,
             ),
             onPressed: () {
-              if (_searchController.text.isEmpty ||
-                  _searchController.text.trim().length < 2) {
-                _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2));
-                return null;
-              } else {
-                searchKey = _searchController.text.trim();
-
-                setState(
-                  () {
-                    searchMode == 0
-                        ? snapshot = Store().getStoreByName(searchKey)
-                        : searchMode == 1
-                            ? snapshot = Products().getByNameRange(searchKey)
-                            : snapshot = Order().getByOrderID(searchKey);
-                  },
-                );
-
-                return null;
-              }
+              setState(() {
+                _searchController.text = "";
+              });
             },
           ),
         ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.alertRed,
-        tooltip: "Clear Results",
-        onPressed: () {
-          setState(() {
-            searchKey = "";
-            _searchController.text = "";
-          });
-        },
-        elevation: 5.0,
-        icon: Icon(
-          Icons.remove_circle,
-          size: 30,
-          color: CustomColors.white,
-        ),
-        label: Text(
-          "Clear",
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(

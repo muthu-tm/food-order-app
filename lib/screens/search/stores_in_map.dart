@@ -4,6 +4,7 @@ import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -250,21 +251,20 @@ class _StoresInMapState extends State<StoresInMap> {
                                         child: Text(
                                       store.name,
                                       style: TextStyle(
-                                          color: CustomColors.blue,
-                                          fontSize: 20.0,
+                                          color: CustomColors.purple,
+                                          fontSize: 18.0,
                                           fontWeight: FontWeight.bold),
                                     )),
                                     SizedBox(height: 5.0),
                                     Container(
                                       child: getStoreDistance(context, pos),
                                     ),
-                                    SizedBox(height: 5.0),
                                     Container(
                                         child: Text(
-                                      "Timings - ${store.activeFrom} : ${store.activeTill}",
+                                      "Timings - ${DateUtils.getFormattedTime(store.activeFrom)} : ${DateUtils.getFormattedTime(store.activeTill)}",
                                       style: TextStyle(
                                         color: CustomColors.black,
-                                        fontSize: 18.0,
+                                        fontSize: 14.0,
                                       ),
                                     )),
                                   ],
