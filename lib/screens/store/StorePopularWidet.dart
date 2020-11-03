@@ -22,7 +22,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   Map<String, double> _cartMap = {};
-  List<String> _wlMap = [];
 
   @override
   void initState() {
@@ -37,10 +36,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
           await ShoppingCart().fetchForStore(widget.storeID);
 
       for (var item in cDetails) {
-        if (item.inWishlist)
-          _wlMap.add(item.productID);
-        else
-          _cartMap[item.productID] = item.quantity;
+        if (!item.inWishlist) _cartMap[item.productID] = item.quantity;
       }
 
       setState(() {});

@@ -21,7 +21,7 @@ class ListOfTopCategoryStores extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          "$categoryName stores",
+          "$categoryName",
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
         actions: <Widget>[

@@ -24,7 +24,6 @@ class Products extends Model {
   double totalRatings;
   @JsonKey(name: 'total_reviews', defaultValue: 1)
   int totalReviews;
-
   @JsonKey(name: 'short_details', defaultValue: "")
   String shortDetails;
   @JsonKey(name: 'store_uuid', defaultValue: "")

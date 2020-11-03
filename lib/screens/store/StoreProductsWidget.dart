@@ -22,7 +22,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   Map<String, double> _cartMap = {};
-  List<String> _wlList = [];
 
   @override
   void initState() {
@@ -34,21 +33,16 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
   _loadCartDetails() async {
     try {
       Map<String, double> _tempMap = {};
-      List<String> _tempList = [];
 
       List<ShoppingCart> cDetails =
           await ShoppingCart().fetchForStore(widget.storeID);
 
       for (var item in cDetails) {
-        if (item.inWishlist)
-          _tempList.add(item.productID);
-        else
-          _tempMap[item.productID] = item.quantity;
+        if (!item.inWishlist) _tempMap[item.productID] = item.quantity;
       }
 
       setState(() {
         _cartMap = _tempMap;
-        _wlList = _tempList;
       });
     } catch (err) {
       print(err);

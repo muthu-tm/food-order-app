@@ -30,7 +30,6 @@ class _SubCategoriesProductsScreenState
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   Map<String, double> _cartMap = {};
-  List<String> _wlList = [];
 
   @override
   void initState() {
@@ -42,21 +41,17 @@ class _SubCategoriesProductsScreenState
   _loadCartDetails() async {
     try {
       Map<String, double> _tempMap = {};
-      List<String> _tempList = [];
 
       List<ShoppingCart> cDetails =
           await ShoppingCart().fetchForStore(widget.storeID);
 
       for (var item in cDetails) {
-        if (item.inWishlist)
-          _tempList.add(item.productID);
-        else
+        if (!item.inWishlist)
           _tempMap[item.productID] = item.quantity;
       }
 
       setState(() {
         _cartMap = _tempMap;
-        _wlList = _tempList;
       });
     } catch (err) {
       print(err);
@@ -430,70 +425,6 @@ class _SubCategoriesProductsScreenState
                                               ),
                                             ),
                                           ),
-                                    // _wlMap.contains(product.uuid)
-                                    //     ? Card(
-                                    //         elevation: 2.0,
-                                    //         color: CustomColors.lightGreen,
-                                    //         child: Container(
-                                    //           height: 40,
-                                    //           width: 40,
-                                    //           child: IconButton(
-                                    //             iconSize: 20,
-                                    //             alignment: Alignment.center,
-                                    //             icon: Icon(
-                                    //               Icons.favorite,
-                                    //             ),
-                                    //             onPressed: () async {
-                                    //               try {
-                                    //                 CustomDialogs.actionWaiting(
-                                    //                     context);
-                                    //                 await ShoppingCart().removeItem(
-                                    //                     true,
-                                    //                     widget.storeID,
-                                    //                     product.uuid);
-                                    //                 setState(() {
-                                    //                   _wlMap.remove(product.uuid);
-                                    //                 });
-                                    //                 Navigator.pop(context);
-                                    //               } catch (err) {
-                                    //                 print(err);
-                                    //               }
-                                    //             },
-                                    //           ),
-                                    //         ),
-                                    //       )
-                                    //     : Card(
-                                    //         elevation: 2.0,
-                                    //         color: CustomColors.lightGrey,
-                                    //         child: Container(
-                                    //           height: 40,
-                                    //           width: 40,
-                                    //           child: IconButton(
-                                    //             iconSize: 20,
-                                    //             alignment: Alignment.center,
-                                    //             icon: Icon(Icons.favorite_border),
-                                    //             onPressed: () async {
-                                    //               try {
-                                    //                 CustomDialogs.actionWaiting(
-                                    //                     context);
-                                    //                 ShoppingCart wl = ShoppingCart();
-                                    // wl.storeName = widget.storeName;
-                                    //                 wl.storeID = widget.storeID;
-                                    //                 wl.productID = product.uuid;
-                                    //                 wl.inWishlist = true;
-                                    //                 wl.quantity = 1.0;
-                                    //                 wl.create();
-                                    //                 setState(() {
-                                    //                   _wlMap.add(product.uuid);
-                                    //                 });
-                                    //                 Navigator.pop(context);
-                                    //               } catch (err) {
-                                    //                 print(err);
-                                    //               }
-                                    //             },
-                                    //           ),
-                                    //         ),
-                                    //       )
                                   ],
                                 )
                               ],
