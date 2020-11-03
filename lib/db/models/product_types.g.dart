@@ -6,6 +6,7 @@ ProductTypes _$ProductTypesFromJson(Map<String, dynamic> json) {
     ..name = json['name'] as String ?? ''
     ..shortDetails = json['short_details'] as String
     ..showInDashboard = json['show_in_dashboard'] as bool ?? false
+    ..dashboardOrder = json['dashboard_order'] as int
     ..productImages = (json['product_images'] as List)
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
@@ -29,6 +30,7 @@ Map<String, dynamic> _$ProductTypesToJson(ProductTypes instance) =>
       'uuid': instance.uuid,
       'name': instance.name,
       'show_in_dashboard': instance.showInDashboard ?? false,
+      'dashboard_order': instance.dashboardOrder,
       'short_details': instance.shortDetails,
       'product_images':
           instance.productImages == null ? [] : instance.productImages,

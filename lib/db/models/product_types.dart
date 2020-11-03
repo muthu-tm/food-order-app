@@ -16,6 +16,8 @@ class ProductTypes extends Model {
   String name;
   @JsonKey(name: 'show_in_dashboard', defaultValue: "")
   bool showInDashboard;
+  @JsonKey(name: 'dashboard_order')
+  int dashboardOrder;
   @JsonKey(name: 'short_details', defaultValue: "")
   String shortDetails;
   @JsonKey(name: 'product_images', defaultValue: [""])
@@ -81,6 +83,7 @@ class ProductTypes extends Model {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('show_in_dashboard', isEqualTo: true)
+          .orderBy('dashboard_order')
           .getDocuments();
 
       List<ProductTypes> types = [];
