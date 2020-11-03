@@ -89,8 +89,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                       });
                     },
                     child: Container(
-                      height: 50,
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(
                           Radius.circular(10.0),
@@ -133,30 +132,32 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                                   fadeInDuration: Duration(seconds: 2),
                                 ),
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${product.weight} ${product.getUnit()}",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
+                              Flexible(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${product.weight} ${product.getUnit()}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: CustomColors.black,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "Rs. ${product.currentPrice.toString()}",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: CustomColors.black,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
+                                    Text(
+                                      "Rs. ${product.currentPrice.toString()}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: CustomColors.black,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
