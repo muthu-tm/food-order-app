@@ -25,73 +25,80 @@ class ProductWidget extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(10.0),
           ),
-          border: Border.all(color: CustomColors.green),
           color: CustomColors.white,
         ),
-        padding: EdgeInsets.only(top: 5),
-        alignment: Alignment.centerLeft,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CachedNetworkImage(
-                imageUrl: product.getProductImage(),
-                imageBuilder: (context, imageProvider) => Container(
-                  width: 125,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10.0),
-                    ),
-                    shape: BoxShape.rectangle,
-                    image: DecorationImage(
-                        fit: BoxFit.fill, image: imageProvider),
+        padding: EdgeInsets.all(2),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CachedNetworkImage(
+              imageUrl: product.getProductImage(),
+              imageBuilder: (context, imageProvider) => Container(
+                width: 125,
+                height: 90,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
                   ),
+                  shape: BoxShape.rectangle,
+                  image:
+                      DecorationImage(fit: BoxFit.fill, image: imageProvider),
                 ),
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    CircularProgressIndicator(
-                        value: downloadProgress.progress),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.error,
-                  size: 35,
-                ),
-                fadeOutDuration: Duration(seconds: 1),
-                fadeInDuration: Duration(seconds: 2),
               ),
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Text(
-                        product.name,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) => Icon(
+                Icons.error,
+                size: 35,
+              ),
+              fadeOutDuration: Duration(seconds: 1),
+              fadeInDuration: Duration(seconds: 2),
+            ),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Text(
+                      product.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: CustomColors.black,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Center(
-                      child: Text(
-                        "${product.weight} ${product.getUnit()} - Rs. ${product.currentPrice.toString()}",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  ),
+                  Center(
+                    child: Text(
+                      "${product.weight} ${product.getUnit()}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                  Center(
+                    child: Text(
+                      "Rs. ${product.currentPrice.toString()}",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
