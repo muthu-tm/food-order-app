@@ -197,10 +197,7 @@ class _AuthPageState extends State<AuthPage> {
                 ),
                 child: TextFormField(
                   textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(4),
-                  ],
+                  keyboardType: TextInputType.text,
                   obscureText: true,
                   autofocus: false,
                   controller: _pController,

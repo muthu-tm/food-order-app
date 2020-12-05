@@ -232,10 +232,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                         EdgeInsets.only(bottom: 5.0, left: 20.0, right: 20.0),
                     child: TextField(
                       textAlign: TextAlign.left,
-                      keyboardType: TextInputType.number,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(4),
-                      ],
+                      keyboardType: TextInputType.text,
                       controller: _passKeyController,
                       obscureText: _passwordVisible,
                       maxLengthEnforced: true,
@@ -258,7 +255,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                           minWidth: 75,
                         ),
                         fillColor: CustomColors.white,
-                        hintText: "4-digit secret key",
+                        hintText: "Secret KEY",
                         hintStyle:
                             TextStyle(fontSize: 16.0, color: Colors.black54),
                         border: OutlineInputBorder(
@@ -412,9 +409,9 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('enter_your_name'), 2));
       return;
-    } else if (_passKeyController.text.length != 4) {
+    } else if (_passKeyController.text.length < 4) {
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('secret_key_validation'), 2));
+          "Password must have minimum 4 digits", 2));
       return;
     } else {
       CustomDialogs.showLoadingDialog(context, _keyLoader);

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 class DateUtils {
   static DateFormat dateFormatter = new DateFormat('dd-MMM-yyyy');
-  static DateFormat dateTimeFormatter = new DateFormat('dd-MMM-yyyy h:mm a');
+  static DateFormat dateTimeFormatter = new DateFormat('dd MMM, yyyy h:mm a');
 
   static String getCurrentFormattedDate() {
     return dateFormatter.format(DateTime.now());
@@ -45,6 +45,21 @@ class DateUtils {
           parsedTime.minute.toString().padLeft(2, '0') +
           " PM";
   }
+
+  static getTimeInMinutes(String time) {
+    List<String> val = time.split(':');
+    return (int.parse(val[0]) * 60) + int.parse(val[1]);
+  }
+
+  static getCurrentTimeInMinutes(){
+    return (DateTime.now().hour * 60) + DateTime.now().minute;
+  }
+
+  static String durationInMinutesToHoursAndMinutes(int minutes) {
+    var d = Duration(minutes:minutes);
+    List<String> parts = d.toString().split(':');
+    return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
+}
 
   static String formatDateTime(DateTime dateTime) {
     if (dateTime == null) {

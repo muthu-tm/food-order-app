@@ -99,6 +99,10 @@ class User extends Model {
     return this.countryCode.toString() + this.mobileNumber.toString();
   }
 
+  String getFullName() {
+    return this.firstName + " " + this.lastName ?? "";
+  }
+
   int getIntID() {
     return int.parse(
         this.countryCode.toString() + this.mobileNumber.toString());

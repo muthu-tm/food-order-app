@@ -72,7 +72,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
                       textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
                           color: CustomColors.blue,
@@ -98,7 +98,7 @@ class _ChangeSecretState extends State<ChangeSecret> {
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
                       textAlign: TextAlign.start,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
                       obscureText: true,
                       decoration: InputDecoration(
                         labelStyle: TextStyle(
