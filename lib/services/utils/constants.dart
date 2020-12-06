@@ -18,3 +18,10 @@ const empty_cart_placeholder = "https://firebasestorage.googleapis.com/v0/b/fc-c
 
 const buyer_app_name = "Uniques";
 const app_version = '1.0.0';
+
+// Static app URLs
+const chipchop_website = "https://chipchop.in/";
+const chipchop_faq_url = "https://www.chipchop.in/help/faq/";
+const terms_and_conditions_url = "https://www.chipchop.in/terms-conditions/";
+const support_email_ID = "support@chipchop.in";
+const support_mobile_numer = "917550251906";

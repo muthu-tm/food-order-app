@@ -7,22 +7,18 @@ import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
-class SubCategoriesProductsWidget extends StatefulWidget {
-  SubCategoriesProductsWidget(
-      this.storeID, this.storeName, this.categoryID, this.subCategoryID);
+class CategoriesProductsWidget extends StatefulWidget {
+  CategoriesProductsWidget(this.storeID, this.storeName, this.categoryID);
 
   final String storeID;
   final String storeName;
   final String categoryID;
-  final String subCategoryID;
   @override
-  _SubCategoriesProductsWidgetState createState() =>
-      _SubCategoriesProductsWidgetState();
+  _CategoriesProductsWidgetState createState() =>
+      _CategoriesProductsWidgetState();
 }
 
-class _SubCategoriesProductsWidgetState
-    extends State<SubCategoriesProductsWidget> {
-
+class _CategoriesProductsWidgetState extends State<CategoriesProductsWidget> {
   Map<String, double> _cartMap = {};
   Map<String, List<String>> _cartsVarientsMap = {};
   List<String> _wlList = [];
@@ -69,11 +65,15 @@ class _SubCategoriesProductsWidgetState
     return '${sc.productID}_${sc.variantID}';
   }
 
+  String getVarientID(String id) {
+    return id.split("_")[1];
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Products>>(
-      future: Products().getProductsForSubCategories(
-          widget.storeID, widget.categoryID, widget.subCategoryID),
+      future: Products()
+          .getProductsForCategories([widget.storeID], widget.categoryID),
       builder: (BuildContext context, AsyncSnapshot<List<Products>> snapshot) {
         Widget children;
 
@@ -141,7 +141,7 @@ class _SubCategoriesProductsWidgetState
                   ),
                   SizedBox(height: 20),
                   Text(
-                    "You could still place Written/Captured ORDER !!",
+                    "You could still place Written/Captured ORDER here.",
                     style: TextStyle(
                       color: CustomColors.blue,
                       fontSize: 16.0,

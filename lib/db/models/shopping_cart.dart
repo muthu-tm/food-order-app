@@ -15,6 +15,10 @@ class ShoppingCart {
   String storeName;
   @JsonKey(name: 'product_uuid', defaultValue: "")
   String productID;
+  @JsonKey(name: 'product_name', nullable: false)
+  String productName;
+  @JsonKey(name: 'variant_id', nullable: false)
+  String variantID;
   @JsonKey(name: 'quantity')
   double quantity;
   @JsonKey(name: 'in_wishlist')
@@ -69,12 +73,13 @@ class ShoppingCart {
   }
 
   Future<void> updateCartQuantity(
-      bool isAdd, String storeId, String productID) async {
+      bool isAdd, String storeId, String productID, String varient) async {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('in_wishlist', isEqualTo: false)
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
+          .where('variant_id', isEqualTo: varient)
           .getDocuments();
 
       if (snap.documents.isNotEmpty) {
@@ -118,12 +123,67 @@ class ShoppingCart {
     }
   }
 
-  Future<void> removeItem(bool isWL, String storeId, String productID) async {
+  Future<bool> moveToCart(
+      String id, String storeId, String productID, String varient) async {
+    try {
+      QuerySnapshot existSnap = await getCollectionRef()
+          .where('in_wishlist', isEqualTo: false)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .where('variant_id', isEqualTo: varient)
+          .getDocuments();
+
+      if (existSnap.documents.isNotEmpty) return false;
+
+      DocumentSnapshot snap = await getCollectionRef().document(id).get();
+
+      if (snap.exists)
+        await snap.reference
+            .updateData({'in_wishlist': false, 'updated_at': DateTime.now()});
+      return true;
+    } catch (err) {
+      Analytics.reportError(
+          {'type': 'cart_update_error', 'cart_id': id, 'error': err.toString()},
+          'cart');
+      throw err;
+    }
+  }
+
+  Future<bool> moveToWishlist(
+      String id, String storeId, String productID, String varient) async {
+    try {
+      QuerySnapshot existSnap = await getCollectionRef()
+          .where('in_wishlist', isEqualTo: true)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .where('variant_id', isEqualTo: varient)
+          .getDocuments();
+
+      if (existSnap.documents.isNotEmpty) return false;
+
+      DocumentSnapshot snap = await getCollectionRef().document(id).get();
+
+      if (snap.exists)
+        await snap.reference
+            .updateData({'in_wishlist': true, 'updated_at': DateTime.now()});
+
+      return true;
+    } catch (err) {
+      Analytics.reportError(
+          {'type': 'cart_update_error', 'cart_id': id, 'error': err.toString()},
+          'cart');
+      throw err;
+    }
+  }
+
+  Future<void> removeItem(
+      bool isWL, String storeId, String productID, String varient) async {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('in_wishlist', isEqualTo: isWL)
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
+          .where('variant_id', isEqualTo: varient)
           .getDocuments();
 
       if (snap.documents.isNotEmpty)
@@ -172,6 +232,24 @@ class ShoppingCart {
     }
   }
 
+  Future<void> clearCartForProduct(String storeID, String productID) async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .where('in_wishlist', isEqualTo: false)
+          .getDocuments();
+
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          await snap.documents[i].reference.delete();
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Stream<QuerySnapshot> streamWishlist() {
     try {
       return getCollectionRef()
@@ -193,10 +271,20 @@ class ShoppingCart {
     }
   }
 
+  Stream<QuerySnapshot> streamWishlistForStore(String storeID) {
+    try {
+      return getCollectionRef()
+          .where('in_wishlist', isEqualTo: true)
+          .where('store_uuid', isEqualTo: storeID)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Future<List<ShoppingCart>> fetchForStore(String storeID) async {
     try {
       QuerySnapshot snap = await getCollectionRef()
-          .where('in_wishlist', isEqualTo: false)
           .where('store_uuid', isEqualTo: storeID)
           .getDocuments();
 
@@ -212,12 +300,14 @@ class ShoppingCart {
     }
   }
 
-  Future<ShoppingCart> checkWishlist(String storeID, String productID) async {
+  Future<ShoppingCart> checkWishlist(
+      String storeID, String productID, String varient) async {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('in_wishlist', isEqualTo: true)
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
+          .where('variant_id', isEqualTo: varient)
           .getDocuments();
 
       if (snap.documents.isEmpty)
@@ -233,6 +323,38 @@ class ShoppingCart {
     try {
       return getCollectionRef()
           .where('in_wishlist', isEqualTo: false)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .snapshots();
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<ShoppingCart>> getCartForProduct(
+      String storeID, String productID, String varient) async {
+    try {
+      QuerySnapshot snap = await getCollectionRef()
+          .where('in_wishlist', isEqualTo: false)
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_uuid', isEqualTo: productID)
+          .where('variant_id', isEqualTo: varient)
+          .getDocuments();
+
+      List<ShoppingCart> _sc = [];
+
+      snap.documents.forEach((element) {
+        _sc.add(ShoppingCart.fromJson(element.data));
+      });
+      return _sc;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Stream<QuerySnapshot> streamForProduct(String storeID, String productID) {
+    try {
+      return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .snapshots();

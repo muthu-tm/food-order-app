@@ -16,13 +16,20 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
         []
-    ..writtenOrders = json['written_orders'] as String ?? ''
+    ..writtenOrders = (json['written_orders'] as List)
+        ?.map((e) => e == null
+            ? null
+            : WrittenOrders.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..customerNotes = json['customer_notes'] as String ?? ''
-    ..status = json['status'] as int
+    ..storeNotes = json['store_notes'] as String ?? ''
+    ..status = json['status'] as int ?? 0
+    ..statusDetails = (json['status_details'] as List)
+        ?.map((e) =>
+            e == null ? null : OrderStatus.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..isReturnable = json['is_returnable'] as bool
     ..returnDays = json['return_days'] as int
-    ..returnedAt = json['returned_at'] as int
-    ..cancelledAt = json['cancelled_at'] as int
     ..amount = json['amount'] == null
         ? new OrderAmount()
         : OrderAmount.fromJson(json['amount'] as Map<String, dynamic>)
@@ -52,13 +59,15 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'total_products': instance.totalProducts,
       'products': instance.products?.map((e) => e?.toJson())?.toList(),
       'order_images': instance.orderImages == null ? [] : instance.orderImages,
-      'written_orders': instance.writtenOrders ?? '',
+      'written_orders':
+          instance.writtenOrders?.map((e) => e?.toJson())?.toList(),
       'customer_notes': instance.customerNotes ?? '',
+      'store_notes': instance.storeNotes ?? '',
       'status': instance.status ?? 0,
+      'status_details':
+          instance.statusDetails?.map((e) => e?.toJson())?.toList(),
       'is_returnable': instance.isReturnable,
       'return_days': instance.returnDays,
-      'returned_at': instance.returnedAt,
-      'cancelled_at': instance.cancelledAt,
       'amount': instance.amount?.toJson(),
       'delivery': instance.delivery?.toJson(),
       'created_at': instance.createdAt,

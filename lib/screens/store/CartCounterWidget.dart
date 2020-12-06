@@ -1,18 +1,20 @@
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
-import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/CustomColors.dart';
 
 class CartCounter extends StatefulWidget {
-  CartCounter(this.storeID, this.productID);
+  CartCounter(this.storeID, this.storeName, this.productID, this.productName,
+      this.variantID);
 
   final String storeID;
+  final String storeName;
   final String productID;
+  final String productName;
+  final String variantID;
   @override
   _CartCounterState createState() => _CartCounterState();
 }
@@ -20,166 +22,350 @@ class CartCounter extends StatefulWidget {
 class _CartCounterState extends State<CartCounter> {
   final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
-  String storeName = "";
-
   @override
   void initState() {
     super.initState();
-    loadStoreName();
   }
-
-  loadStoreName() async {
-    try {
-      Map<String, dynamic> storeData = await Store().getByID(widget.storeID);
-
-      if(storeData != null) {
-        this.storeName = storeData['store_name'];
-      }
-    } catch (err) {
-      this.storeName = "";
-      print("Unablt to Load Store Name for '${widget.storeID}'");
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: ShoppingCart()
-            .streamCartForProduct(widget.storeID, widget.productID),
+        stream:
+            ShoppingCart().streamForProduct(widget.storeID, widget.productID),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           Widget child;
 
           if (snapshot.hasData) {
             if (snapshot.data.documents.isEmpty) {
-              child = Card(
-                elevation: 2.0,
-                color: CustomColors.green,
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  child: IconButton(
-                    iconSize: 20,
-                    alignment: Alignment.center,
-                    icon: Icon(
-                      FontAwesomeIcons.cartPlus,
-                      color: CustomColors.black,
+              child = Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Card(
+                    color: Colors.greenAccent[100],
+                    elevation: 3.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
-                    onPressed: () async {
-                      try {
-                        CustomDialogs.showLoadingDialog(context, _keyLoader);
-                        ShoppingCart sc = ShoppingCart();
-                        sc.storeName = storeName;
-                        sc.storeID = widget.storeID;
-                        sc.productID = widget.productID;
-                        sc.inWishlist = false;
-                        sc.quantity = 1.0;
-                        await sc.create();
-                        Navigator.of(_keyLoader.currentContext,
-                                rootNavigator: true)
-                            .pop();
-                      } catch (err) {
-                        print(err);
-                      }
-                    },
+                    child: InkWell(
+                      onTap: () async {
+                        try {
+                          CustomDialogs.actionWaiting(context);
+                          ShoppingCart wl = ShoppingCart();
+                          wl.storeName = widget.storeName;
+                          wl.storeID = widget.storeID;
+                          wl.productID = widget.productID;
+                          wl.productName = widget.productName;
+                          wl.inWishlist = false;
+                          wl.variantID = widget.variantID;
+                          wl.quantity = 1.0;
+                          await wl.create();
+                          Navigator.pop(context);
+                        } catch (err) {
+                          print(err);
+                        }
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 70,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add, size: 20, color: Colors.green),
+                            Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                "ADD",
+                                style: TextStyle(color: Colors.green),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Card(
+                    color: Colors.blue[100],
+                    elevation: 3.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    child: InkWell(
+                      onTap: () async {
+                        try {
+                          CustomDialogs.actionWaiting(context);
+                          ShoppingCart wl = ShoppingCart();
+                          wl.storeName = widget.storeName;
+                          wl.storeID = widget.storeID;
+                          wl.productID = widget.productID;
+                          wl.variantID = widget.variantID;
+                          wl.inWishlist = true;
+                          wl.quantity = 1.0;
+                          await wl.create();
+                          Navigator.pop(context);
+                        } catch (err) {
+                          print(err);
+                        }
+                      },
+                      child: Container(
+                        height: 30,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add, size: 20, color: Colors.blueAccent),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.0),
+                              child: Icon(Icons.favorite,
+                                  color: Colors.blueAccent),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               );
             } else {
-              ShoppingCart sc =
-                  ShoppingCart.fromJson(snapshot.data.documents.first.data);
-              child = Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    sc.quantity == 1.0
-                        ? SizedBox(
-                            width: 35,
-                            height: 35,
-                            child: OutlineButton(
-                              padding: EdgeInsets.zero,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+              bool isWishlist = false;
+              double quantity = 0;
+              snapshot.data.documents.forEach((element) {
+                ShoppingCart sc = ShoppingCart.fromJson(element.data);
+
+                if (sc.variantID == widget.variantID) {
+                  if (sc.inWishlist) {
+                    isWishlist = true;
+                  } else {
+                    quantity = sc.quantity;
+                  }
+                }
+              });
+              child = Row(
+                children: [
+                  quantity > 0
+                      ? Container(
+                          width: 100,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.blue[100]),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              quantity == 1.0
+                                  ? InkWell(
+                                      onTap: () async {
+                                        try {
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
+                                          await ShoppingCart().removeItem(
+                                              false,
+                                              widget.storeID,
+                                              widget.productID,
+                                              widget.variantID);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        } catch (err) {
+                                          print(err);
+                                        }
+                                      },
+                                      child: SizedBox(
+                                        width: 35,
+                                        height: 35,
+                                        child: Icon(Icons.delete_forever),
+                                      ),
+                                    )
+                                  : InkWell(
+                                      onTap: () async {
+                                        try {
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
+                                          await ShoppingCart()
+                                              .updateCartQuantity(
+                                                  false,
+                                                  widget.storeID,
+                                                  widget.productID,
+                                                  widget.variantID);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        } catch (err) {
+                                          print(err);
+                                        }
+                                      },
+                                      child: SizedBox(
+                                        width: 35,
+                                        height: 35,
+                                        child: Icon(Icons.remove),
+                                      ),
+                                    ),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(right: 10.0, left: 10.0),
+                                child: Text(
+                                  quantity.round().toString(),
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      color: CustomColors.blue,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                              onPressed: () async {
-                                try {
-                                  CustomDialogs.showLoadingDialog(
-                                      context, _keyLoader);
-                                  await ShoppingCart().removeItem(
-                                      false, widget.storeID, widget.productID);
-                                  Navigator.of(_keyLoader.currentContext,
-                                          rootNavigator: true)
-                                      .pop();
-                                } catch (err) {
-                                  print(err);
-                                }
-                              },
-                              child: Icon(
-                                Icons.delete_forever,
-                                size: 20,
+                              InkWell(
+                                onTap: () async {
+                                  try {
+                                    CustomDialogs.showLoadingDialog(
+                                        context, _keyLoader);
+                                    await ShoppingCart().updateCartQuantity(
+                                        true,
+                                        widget.storeID,
+                                        widget.productID,
+                                        widget.variantID);
+                                    Navigator.of(_keyLoader.currentContext,
+                                            rootNavigator: true)
+                                        .pop();
+                                  } catch (err) {
+                                    print(err);
+                                  }
+                                },
+                                child: SizedBox(
+                                  width: 35,
+                                  height: 35,
+                                  child: Icon(Icons.add),
+                                ),
                               ),
-                            ),
-                          )
-                        : SizedBox(
-                            width: 35,
-                            height: 35,
-                            child: OutlineButton(
-                              padding: EdgeInsets.zero,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+                            ],
+                          ),
+                        )
+                      : Card(
+                          color: Colors.greenAccent[100],
+                          elevation: 3.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              try {
+                                CustomDialogs.actionWaiting(context);
+                                ShoppingCart wl = ShoppingCart();
+                                wl.storeName = widget.storeName;
+                                wl.storeID = widget.storeID;
+                                wl.productID = widget.productID;
+                                wl.productName = widget.productName;
+                                wl.variantID = widget.variantID;
+                                wl.inWishlist = false;
+                                wl.quantity = 1.0;
+                                await wl.create();
+                                Navigator.pop(context);
+                              } catch (err) {
+                                print(err);
+                              }
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 70,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add,
+                                      size: 20, color: Colors.green),
+                                  Padding(
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      "ADD",
+                                      style: TextStyle(color: Colors.green),
+                                    ),
+                                  )
+                                ],
                               ),
-                              onPressed: () async {
-                                try {
-                                  CustomDialogs.showLoadingDialog(
-                                      context, _keyLoader);
-                                  await ShoppingCart().updateCartQuantity(
-                                      false, widget.storeID, widget.productID);
-                                  Navigator.of(_keyLoader.currentContext,
-                                          rootNavigator: true)
-                                      .pop();
-                                } catch (err) {
-                                  print(err);
-                                }
-                              },
-                              child: Icon(Icons.remove),
                             ),
                           ),
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: Text(
-                        sc.quantity.round().toString(),
-                        style: TextStyle(
-                            
-                            color: CustomColors.blue,
-                            fontSize: 17),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 35,
-                      height: 35,
-                      child: OutlineButton(
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
                         ),
-                        onPressed: () async {
-                          try {
-                            CustomDialogs.showLoadingDialog(
-                                context, _keyLoader);
-                            await ShoppingCart().updateCartQuantity(
-                                true, widget.storeID, widget.productID);
-                            Navigator.of(_keyLoader.currentContext,
-                                    rootNavigator: true)
-                                .pop();
-                          } catch (err) {
-                            print(err);
-                          }
-                        },
-                        child: Icon(Icons.add),
-                      ),
-                    ),
-                  ],
-                ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  !isWishlist
+                      ? Card(
+                          color: Colors.blue[100],
+                          elevation: 3.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: InkWell(
+                            onTap: () async {
+                              try {
+                                CustomDialogs.actionWaiting(context);
+                                ShoppingCart wl = ShoppingCart();
+                                wl.storeName = widget.storeName;
+                                wl.storeID = widget.storeID;
+                                wl.productID = widget.productID;
+                                wl.variantID = widget.variantID;
+                                wl.inWishlist = true;
+                                wl.quantity = 1.0;
+                                await wl.create();
+                                Navigator.pop(context);
+                              } catch (err) {
+                                print(err);
+                              }
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 60,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.add,
+                                      size: 20, color: Colors.blueAccent),
+                                  Padding(
+                                    padding: EdgeInsets.only(left: 5.0),
+                                    child: Icon(Icons.favorite,
+                                        color: Colors.blueAccent),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      : Card(
+                          color: Colors.blue[100],
+                          elevation: 3.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Container(
+                            height: 30,
+                            width: 60,
+                            child: InkWell(
+                              onTap: () async {
+                                try {
+                                  CustomDialogs.actionWaiting(context);
+                                  await ShoppingCart().removeItem(
+                                      true,
+                                      widget.storeID,
+                                      widget.productID,
+                                      widget.variantID);
+                                  Navigator.pop(context);
+                                } catch (err) {
+                                  print(err);
+                                }
+                              },
+                              child: Icon(Icons.favorite,
+                                  color: Colors.blueAccent),
+                            ),
+                          ),
+                        )
+                ],
               );
             }
           } else if (snapshot.hasError) {

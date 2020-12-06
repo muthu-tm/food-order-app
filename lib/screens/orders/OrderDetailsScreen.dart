@@ -1,15 +1,12 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_buyer/db/models/product_reviews.dart';
-import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/OrderAmountWidget.dart';
 import 'package:chipchop_buyer/screens/chats/OrderChatScreen.dart';
-import 'package:chipchop_buyer/screens/orders/ProductReviewScreen.dart';
-import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
-import 'package:chipchop_buyer/screens/utils/ImageView.dart';
+import 'package:chipchop_buyer/screens/orders/OrderDeliveryDetailsScreen.dart';
+import 'package:chipchop_buyer/screens/orders/OrdersView.dart';
+import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
+import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../db/models/order.dart';
 import '../../services/utils/DateUtils.dart';
@@ -28,39 +25,13 @@ class OrderDetailsScreen extends StatefulWidget {
 class _OrderDetailsScreenState extends State<OrderDetailsScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
+  TextEditingController _pController = TextEditingController();
   double ratings;
-
-  TabController _controller;
-
-  List<Widget> list = [
-    Tab(
-      icon: Icon(
-        Icons.card_travel,
-        size: 20,
-      ),
-      text: "Details",
-    ),
-    Tab(
-      icon: Icon(
-        FontAwesomeIcons.moneyBill,
-        size: 20,
-      ),
-      text: "Amount",
-    ),
-    Tab(
-      icon: Icon(
-        Icons.local_shipping,
-        size: 20,
-      ),
-      text: "Delivery",
-    ),
-  ];
 
   @override
   void initState() {
     super.initState();
     ratings = 0;
-    _controller = TabController(length: list.length, vsync: this);
   }
 
   @override
@@ -69,7 +40,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          "Order - ${widget.orderID}",
+          "Order : ${widget.orderID}",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -83,12 +54,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
         backgroundColor: CustomColors.green,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blueGreen,
+        backgroundColor: Colors.green[300],
         onPressed: () {
           return _scaffoldKey.currentState.showBottomSheet((context) {
             return Builder(builder: (BuildContext childContext) {
               return Container(
-                height: 400,
+                height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
                   color: CustomColors.lightGrey,
                   borderRadius: BorderRadius.only(
@@ -96,21 +67,23 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                     topLeft: Radius.circular(10),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: OrderChatScreen(
-                    orderUUID: widget.orderUUID,
-                  ),
+                child: OrderChatScreen(
+                  orderUUID: widget.orderUUID,
                 ),
               );
             });
           });
         },
-        label: Text("Chat"),
-        icon: Icon(Icons.chat),
+        label: Text(
+          "Chat with Store",
+          style: TextStyle(color: CustomColors.black),
+        ),
+        icon: Icon(Icons.chat_bubble, color: CustomColors.black),
       ),
-      body: Container(
-        child: getBody(context),
+      body: SingleChildScrollView(
+        child: Container(
+          child: getBody(context),
+        ),
       ),
     );
   }
@@ -125,41 +98,26 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           Order order = Order.fromJson(snapshot.data.data);
 
           child = Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: Icon(
-                  Icons.store,
-                  color: CustomColors.blueGreen,
-                ),
-                title: Text("Store"),
+                leading: Text("Store"),
                 trailing: Text(
                   order.storeName,
                   style: TextStyle(
-                    color: CustomColors.black,
+                    color: CustomColors.purple,
                     fontSize: 14,
                   ),
                 ),
               ),
               ListTile(
-                leading: Icon(
-                  Icons.shopping_basket,
-                  color: CustomColors.blueGreen,
-                ),
-                title: Text("Status"),
+                leading: Text("Order ID"),
                 trailing: Text(
-                  order.getStatus(),
-                  style: TextStyle(
-                    color: CustomColors.purple,
-                    fontSize: 18,
-                  ),
+                  order.orderID,
                 ),
               ),
               ListTile(
-                leading: Icon(
-                  Icons.access_time,
-                  color: CustomColors.blueGreen,
-                ),
-                title: Text("Ordered At"),
+                leading: Text("Ordered At"),
                 trailing: Text(
                   DateUtils.formatDateTime(order.createdAt),
                   style: TextStyle(
@@ -168,40 +126,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                   ),
                 ),
               ),
-              order.delivery.deliveryType != 3
+              ListTile(
+                leading: Text(
+                  "Delivery Mode",
+                ),
+                trailing: Text(
+                  order.getDeliveryType(),
+                ),
+              ),
+              order.delivery.deliveryType == 3 && order.status != 5
                   ? ListTile(
-                      leading: Icon(
-                        Icons.local_shipping,
-                        size: 35,
-                        color: CustomColors.blueGreen,
-                      ),
-                      title: Text(
-                        "Delivery",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                      trailing: Text(
-                        order.getDeliveryType(),
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 16,
-                        ),
-                      ),
-                    )
-                  : ListTile(
-                      leading: Icon(
-                        Icons.local_shipping,
-                        size: 35,
-                        color: CustomColors.blueGreen,
-                      ),
-                      title: Text(
+                      leading: Text(
                         "Delivery At",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 16,
-                        ),
                       ),
                       trailing: Text(
                         order.delivery.scheduledDate != null
@@ -215,792 +151,468 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                           fontSize: 14,
                         ),
                       ),
-                    ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                child: TabBar(
-                    indicatorColor: CustomColors.alertRed,
-                    labelColor: CustomColors.blueGreen,
-                    unselectedLabelColor: CustomColors.black,
-                    controller: _controller,
-                    tabs: list),
-              ),
-              Expanded(
-                child: TabBarView(controller: _controller, children: [
-                  SingleChildScrollView(
-                    child: Container(
-                      child: Column(
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            primary: false,
-                            itemCount: order.products.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return FutureBuilder(
-                                future: Products().getByProductID(
-                                    order.products[index].productID),
-                                builder: (context,
-                                    AsyncSnapshot<Products> snapshot) {
-                                  Widget child;
-                                  if (snapshot.hasData) {
-                                    Products _p = snapshot.data;
-                                    child = Card(
-                                      child: Container(
-                                        padding: EdgeInsets.all(1),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: <Widget>[
-                                                Container(
-                                                  width: 110,
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Container(
-                                                        width: 110,
-                                                        height: 110,
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.0),
-                                                          child:
-                                                              CachedNetworkImage(
-                                                            imageUrl: _p
-                                                                .getProductImage(),
-                                                            imageBuilder: (context,
-                                                                    imageProvider) =>
-                                                                Image(
-                                                              fit: BoxFit.fill,
-                                                              image:
-                                                                  imageProvider,
-                                                            ),
-                                                            progressIndicatorBuilder:
-                                                                (context, url,
-                                                                        downloadProgress) =>
-                                                                    Center(
-                                                              child: SizedBox(
-                                                                height: 50.0,
-                                                                width: 50.0,
-                                                                child: CircularProgressIndicator(
-                                                                    value: downloadProgress
-                                                                        .progress,
-                                                                    valueColor: AlwaysStoppedAnimation(
-                                                                        CustomColors
-                                                                            .blue),
-                                                                    strokeWidth:
-                                                                        2.0),
-                                                              ),
-                                                            ),
-                                                            errorWidget:
-                                                                (context, url,
-                                                                        error) =>
-                                                                    Icon(
-                                                              Icons.error,
-                                                              size: 35,
-                                                            ),
-                                                            fadeOutDuration:
-                                                                Duration(
-                                                                    seconds: 1),
-                                                            fadeInDuration:
-                                                                Duration(
-                                                                    seconds: 2),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Container(
-                                                  padding: EdgeInsets.all(5),
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width -
-                                                      135,
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: <Widget>[
-                                                      Align(
-                                                        alignment: Alignment
-                                                            .centerLeft,
-                                                        child: Text(
-                                                          '${_p.name}',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 3,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  CustomColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .centerLeft,
-                                                            child: Text(
-                                                              'Weight: ',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  color: CustomColors
-                                                                      .lightBlue,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            '${_p.weight}',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: TextStyle(
-                                                              color:
-                                                                  CustomColors
-                                                                      .black,
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    5.0),
-                                                            child: Text(
-                                                              _p.getUnit(),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                color:
-                                                                    CustomColors
-                                                                        .black,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .centerLeft,
-                                                            child: Text(
-                                                              'Price: ',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  color: CustomColors
-                                                                      .lightBlue,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                          ),
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .centerRight,
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(5.0),
-                                                              child: Text(
-                                                                'Rs. ${_p.currentPrice}',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 16,
-                                                                  color:
-                                                                      CustomColors
-                                                                          .black,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      // if order not deliverred yet
-                                                      order.status != 5
-                                                          ? Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(5.0),
-                                                              child: Align(
-                                                                alignment: Alignment
-                                                                    .bottomRight,
-                                                                child:
-                                                                    FlatButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                ProductDetailsScreen(_p),
-                                                                        settings:
-                                                                            RouteSettings(name: '/store/products'),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  child: Text(
-                                                                      "Show Details",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              14,
-                                                                          color: Colors
-                                                                              .indigo
-                                                                              .shade700)),
-                                                                  splashColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  highlightColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                ),
-                                                              ),
-                                                            )
-                                                          : Row(
-                                                              children: <
-                                                                  Widget>[
-                                                                Spacer(),
-                                                                FlatButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                ProductDetailsScreen(_p),
-                                                                        settings:
-                                                                            RouteSettings(name: '/store/products'),
-                                                                      ),
-                                                                    );
-                                                                  },
-                                                                  child: Text(
-                                                                      "Show Details",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color: Colors
-                                                                              .indigo
-                                                                              .shade700)),
-                                                                  splashColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  highlightColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                ),
-                                                                Spacer(),
-                                                                Container(
-                                                                  height: 20,
-                                                                  width: 1,
-                                                                  color: Colors
-                                                                      .grey,
-                                                                ),
-                                                                Spacer(),
-                                                                FlatButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    bool
-                                                                        reviewed =
-                                                                        await ProductReviews()
-                                                                            .reviewedProduct(_p.uuid);
-
-                                                                    if (!reviewed) {
-                                                                      Navigator
-                                                                          .push(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              ProductReviewScreen(_p),
-                                                                          settings:
-                                                                              RouteSettings(name: '/product/review'),
-                                                                        ),
-                                                                      );
-                                                                    } else {
-                                                                      Fluttertoast.showToast(
-                                                                          msg:
-                                                                              "Reviewed this Product already!",
-                                                                          backgroundColor: CustomColors
-                                                                              .alertRed,
-                                                                          textColor:
-                                                                              CustomColors.lightGrey);
-                                                                    }
-                                                                  },
-                                                                  child: Text(
-                                                                      "Add Review",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color: Colors
-                                                                              .indigo
-                                                                              .shade700)),
-                                                                  splashColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                  highlightColor:
-                                                                      Colors
-                                                                          .transparent,
-                                                                ),
-                                                                Spacer(),
-                                                              ],
-                                                            )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            ListTile(
-                                              leading: Text(
-                                                "Quantity: ",
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: CustomColors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              title: Text(
-                                                '${order.products[index].quantity.round()}',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: CustomColors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              trailing: Text(
-                                                'Rs. ${order.products[index].amount}',
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    color: CustomColors.black,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    child = Center(
-                                      child: Column(
-                                        children: AsyncWidgets.asyncError(),
-                                      ),
-                                    );
-                                  } else {
-                                    child = Center(
-                                      child: Column(
-                                        children: AsyncWidgets.asyncWaiting(),
-                                      ),
-                                    );
-                                  }
-
-                                  return child;
-                                },
-                              );
-                            },
-                          ),
-                          ListTile(
-                            leading: Icon(
-                              FontAwesomeIcons.images,
-                              color: CustomColors.blueGreen,
-                            ),
-                            title: Text("Images"),
-                          ),
-                          order.orderImages.length > 0
-                              ? GridView.count(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10,
-                                  shrinkWrap: true,
-                                  primary: false,
-                                  mainAxisSpacing: 10,
-                                  children: List.generate(
-                                    order.orderImages.length,
-                                    (index) {
-                                      return Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 10, right: 10, top: 5),
-                                        child: InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => ImageView(
-                                                  url: order.orderImages[index],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: Container(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                              child: CachedNetworkImage(
-                                                imageUrl:
-                                                    order.orderImages[index],
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Image(
-                                                  fit: BoxFit.fill,
-                                                  image: imageProvider,
-                                                ),
-                                                progressIndicatorBuilder:
-                                                    (context, url,
-                                                            downloadProgress) =>
-                                                        Center(
-                                                  child: SizedBox(
-                                                    height: 50.0,
-                                                    width: 50.0,
-                                                    child: CircularProgressIndicator(
-                                                        value: downloadProgress
-                                                            .progress,
-                                                        valueColor:
-                                                            AlwaysStoppedAnimation(
-                                                                CustomColors
-                                                                    .blue),
-                                                        strokeWidth: 2.0),
-                                                  ),
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Icon(
-                                                  Icons.error,
-                                                  size: 35,
-                                                ),
-                                                fadeOutDuration:
-                                                    Duration(seconds: 1),
-                                                fadeInDuration:
-                                                    Duration(seconds: 2),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                )
-                              : Container(
-                                  child: Text(
-                                    "No Images added",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: CustomColors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                          ListTile(
-                            leading: Icon(
-                              FontAwesomeIcons.solidEdit,
-                              color: CustomColors.blueGreen,
-                            ),
-                            title: Text("Written Orders"),
-                          ),
-                          order.writtenOrders.trim().isNotEmpty
-                              ? Container(
-                                  child: ListTile(
-                                    title: TextFormField(
-                                      initialValue: order.writtenOrders,
-                                      maxLines: 10,
-                                      keyboardType: TextInputType.multiline,
-                                      textCapitalization:
-                                          TextCapitalization.sentences,
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                        fillColor: CustomColors.white,
-                                        filled: true,
-                                        contentPadding: EdgeInsets.symmetric(
-                                            vertical: 3.0, horizontal: 3.0),
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: CustomColors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  child: Text(
-                                    "No Orders Written",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: CustomColors.black,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                          order.status <= 1
-                              ? RaisedButton.icon(
-                                  color: CustomColors.alertRed,
-                                  onPressed: () async {
-                                    try {
-                                      await order.cancelOrder(order.uuid, "");
-                                      Fluttertoast.showToast(
-                                          msg: 'Order Cancelled Successfully',
-                                          backgroundColor: CustomColors.grey,
-                                          textColor: CustomColors.white);
-                                    } catch (err) {
-                                      print(err);
-                                      Fluttertoast.showToast(
-                                          msg: 'Error, Unable to Cancel Order',
-                                          backgroundColor:
-                                              CustomColors.alertRed,
-                                          textColor: CustomColors.white);
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.close,
-                                    color: CustomColors.lightGrey,
-                                  ),
-                                  label: Text(
-                                    "Cancel Order",
-                                    style: TextStyle(
-                                        color: CustomColors.lightGrey,
-                                        fontSize: 14),
-                                  ),
-                                )
-                              : Container(),
-                          Padding(
-                            padding: EdgeInsets.all(30),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SingleChildScrollView(child: OrderAmountWidget(order)),
-                  SingleChildScrollView(
-                    child: Container(
-                      color: CustomColors.grey,
-                      child: Column(
-                        children: [
-                          ListTile(
-                            leading: Icon(
-                              Icons.local_shipping,
-                              size: 35,
-                              color: CustomColors.blueGreen,
-                            ),
-                            title: Text(
-                              "Delivery Address",
-                            ),
-                          ),
-                          ListTile(
-                            leading: Text(""),
-                            title: Container(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              padding: EdgeInsets.only(right: 10, left: 10),
-                              decoration: BoxDecoration(
-                                color: CustomColors.lightGrey,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(5),
-                                ),
+                    )
+                  : Container(),
+              Padding(
+                padding: EdgeInsets.fromLTRB(20, 5, 5, 5),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemCount: order.statusDetails.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.stop_circle,
+                                color: order.statusDetails[index].status == 2 ||
+                                        order.statusDetails[index].status == 3
+                                    ? CustomColors.alertRed
+                                    : CustomColors.green,
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 6,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(order.getStatus(
+                                        order.statusDetails[index].status)),
+                                    Text(
+                                      DateUtils.formatDateTime(
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            order.statusDetails[index].status ==
+                                                    5
+                                                ? order.delivery.deliveredAt
+                                                : order.statusDetails[index]
+                                                    .createdAt),
+                                      ),
+                                      style: TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        index != order.statusDetails.length - 1
+                            ? Container(
+                                height: 40,
+                                width: 25,
+                                child: VerticalDivider(
+                                  color: Colors.black,
+                                  thickness: 1,
+                                ),
+                              )
+                            : index == order.statusDetails.length - 1 &&
+                                    (order.status == 0 ||
+                                        order.status == 1 ||
+                                        order.status == 4)
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
                                       Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          order.delivery.userLocation.userName,
-                                          style: TextStyle(
-                                              color: CustomColors.blue,
-                                              fontSize: 14),
+                                        height: 40,
+                                        width: 25,
+                                        child: VerticalDivider(
+                                          color: Colors.black,
+                                          thickness: 1,
                                         ),
                                       ),
                                       Container(
-                                        padding: EdgeInsets.only(
-                                            left: 8,
-                                            right: 8,
-                                            top: 4,
-                                            bottom: 4),
-                                        decoration: BoxDecoration(
-                                          color: CustomColors.purple,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          order.delivery.userLocation
-                                              .locationName,
-                                          style: TextStyle(
-                                              color: CustomColors.white,
-                                              fontSize: 10),
+                                        padding:
+                                            EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.stop_circle,
+                                              color: CustomColors.blue,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  5, 0, 0, 0),
+                                              child: Text(order.status == 0
+                                                  ? "Waiting for Order Confirmation"
+                                                  : order.status == 1
+                                                      ? "Preparing your Order"
+                                                      : order.status == 4
+                                                          ? "On the Way"
+                                                          : ""),
+                                            )
+                                          ],
                                         ),
                                       )
                                     ],
+                                  )
+                                : Container(),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Card(
+                elevation: 2,
+                child: Container(
+                  color: CustomColors.lightGrey,
+                  padding: EdgeInsets.fromLTRB(15, 5, 15, 5),
+                  child: Column(
+                    children: [
+                      OrderAmountWidget(order),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: CustomColors.white,
+                          border: Border.all(color: CustomColors.grey),
+                        ),
+                        padding: EdgeInsets.all(10),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => OrderViewScreen(order),
+                              ),
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("View Order Details"),
+                              Icon(Icons.chevron_right)
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      order.status <= 1
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color: CustomColors.white,
+                                border: Border.all(color: CustomColors.grey),
+                              ),
+                              padding: EdgeInsets.all(10),
+                              child: InkWell(
+                                onTap: () async {
+                                  await cancelOrder(order, context);
+                                },
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text("Request Cancellation"),
+                                    Icon(Icons.chevron_right)
+                                  ],
+                                ),
+                              ),
+                            )
+                          : order.status == 5
+                              ? Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.white,
+                                        border: Border.all(
+                                            color: CustomColors.grey),
+                                      ),
+                                      padding: EdgeInsets.all(10),
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OrderDeliveryDetails(order),
+                                              settings: RouteSettings(
+                                                  name: '/order/delivery'),
+                                            ),
+                                          );
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Delivery Details"),
+                                            Icon(Icons.chevron_right)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.white,
+                                        border: Border.all(
+                                            color: CustomColors.grey),
+                                      ),
+                                      padding: EdgeInsets.all(10),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          // await cancelOrder(order, context);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Return Items"),
+                                            Icon(Icons.chevron_right)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.white,
+                                        border: Border.all(
+                                            color: CustomColors.grey),
+                                      ),
+                                      padding: EdgeInsets.all(10),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          // await cancelOrder(order, context);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("Replace Items"),
+                                            Icon(Icons.chevron_right)
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      order.delivery.deliveryType == 0
+                          ? Container(
+                              decoration: BoxDecoration(
+                                color: CustomColors.white,
+                                border: Border.all(color: CustomColors.grey),
+                              ),
+                              padding: EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Pickup From Store",
+                                        style: TextStyle(
+                                            color: CustomColors.black,
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14),
+                                      ),
+                                    ],
                                   ),
-                                  createAddressText(
-                                      order
-                                          .delivery.userLocation.address.street,
-                                      6),
-                                  createAddressText(
-                                      order.delivery.userLocation.address.city,
-                                      6),
-                                  createAddressText(
-                                      order.delivery.userLocation.address
-                                          .pincode,
-                                      6),
                                   SizedBox(
-                                    height: 6,
+                                    height: 10,
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "LandMark : ",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: CustomColors.blue),
-                                        ),
-                                        TextSpan(
-                                          text: order.delivery.userLocation
-                                              .address.landmark,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
+                                  InkWell(
+                                      onTap: () async {
+                                        Store store = await Store()
+                                            .getStoresByID(order.storeID);
+                                        if (store != null) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ViewStoreScreen(store),
+                                              settings:
+                                                  RouteSettings(name: '/store'),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Expanded(
+                                              child: Text(
+                                            "View Store Details",
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: CustomColors.blue,
+                                                fontSize: 14),
+                                          )),
+                                          Icon(Icons.chevron_right)
+                                        ],
+                                      ))
+                                ],
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                color: CustomColors.white,
+                                border: Border.all(color: CustomColors.grey),
+                              ),
+                              child: Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      "Shipping Address",
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 6,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: "Mobile : ",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: CustomColors.blue),
+                                  ListTile(
+                                    title: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      padding:
+                                          EdgeInsets.only(right: 10, left: 10),
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.lightGrey,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5),
                                         ),
-                                        TextSpan(
-                                          text: order
-                                              .delivery.userLocation.userNumber,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12),
-                                        ),
-                                      ],
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            height: 6,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Text(
+                                                  order.delivery.userLocation
+                                                      .userName,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: CustomColors.blue,
+                                                      fontSize: 14),
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    left: 8,
+                                                    right: 8,
+                                                    top: 4,
+                                                    bottom: 4),
+                                                decoration: BoxDecoration(
+                                                  color: CustomColors.purple,
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                    Radius.circular(5),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  order.delivery.userLocation
+                                                      .locationName,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: TextStyle(
+                                                      color: CustomColors.white,
+                                                      fontSize: 10),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          createAddressText(
+                                              order.delivery.userLocation
+                                                  .address.street,
+                                              6),
+                                          createAddressText(
+                                              order.delivery.userLocation
+                                                  .address.city,
+                                              6),
+                                          createAddressText(
+                                              order.delivery.userLocation
+                                                  .address.pincode,
+                                              6),
+                                          SizedBox(
+                                            height: 6,
+                                          ),
+                                          RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: "LandMark : ",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: CustomColors.blue),
+                                                ),
+                                                TextSpan(
+                                                  text: order
+                                                      .delivery
+                                                      .userLocation
+                                                      .address
+                                                      .landmark,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 6,
+                                          ),
+                                          RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: "Mobile : ",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: CustomColors.blue),
+                                                ),
+                                                TextSpan(
+                                                  text: order.delivery
+                                                      .userLocation.userNumber,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 16,
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 16,
                                   ),
                                 ],
                               ),
                             ),
-                          ),
-                          ListTile(
-                            leading: Icon(
-                              FontAwesomeIcons.shippingFast,
-                              color: CustomColors.blueGreen,
-                            ),
-                            title: TextFormField(
-                              initialValue: order.delivery.expectedAt == null
-                                  ? ""
-                                  : DateUtils.formatDateTime(
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          order.delivery.expectedAt),
-                                    ),
-                              textAlign: TextAlign.start,
-                              autofocus: false,
-                              readOnly: true,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.lightGreen),
-                                ),
-                                labelText: "Expected Delivery Time",
-                                labelStyle: TextStyle(
-                                  fontSize: 12,
-                                  color: CustomColors.blue,
-                                ),
-                              ),
-                            ),
-                          ),
-                          ListTile(
-                            leading: Icon(
-                              Icons.phone_android,
-                              size: 35,
-                              color: CustomColors.blueGreen,
-                            ),
-                            title: TextFormField(
-                              initialValue:
-                                  order.delivery.deliveryContact ?? "",
-                              textAlign: TextAlign.start,
-                              autofocus: false,
-                              readOnly: true,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.lightGreen),
-                                ),
-                                labelText: "Delivery - Contact Number",
-                                labelStyle: TextStyle(
-                                  fontSize: 12,
-                                  color: CustomColors.blue,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    ],
                   ),
-                ]),
+                ),
+              ),
+              SizedBox(
+                height: 70,
               ),
             ],
           );
@@ -1029,6 +641,102 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
         strAddress,
         style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
       ),
+    );
+  }
+
+  Future cancelOrder(Order order, BuildContext context) async {
+    _pController.text = "";
+
+    await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: CustomColors.lightGrey,
+          title: Text(
+            "Confirm!",
+            style: TextStyle(
+                color: CustomColors.alertRed,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold),
+            textAlign: TextAlign.start,
+          ),
+          content: Container(
+            height: 125,
+            child: Column(
+              children: <Widget>[
+                Text("Please help us with the Reason!"),
+                Expanded(
+                  child: TextFormField(
+                    textAlign: TextAlign.start,
+                    maxLines: 3,
+                    keyboardType: TextInputType.text,
+                    textCapitalization: TextCapitalization.sentences,
+                    autofocus: false,
+                    controller: _pController,
+                    decoration: InputDecoration(
+                      fillColor: CustomColors.white,
+                      filled: true,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                color: CustomColors.green,
+                child: Text(
+                  "NO",
+                  style: TextStyle(
+                      color: CustomColors.black,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start,
+                ),
+                onPressed: () {
+                  _pController.text = "";
+                  Navigator.pop(context);
+                }),
+            FlatButton(
+              color: CustomColors.alertRed,
+              child: Text(
+                "YES",
+                style: TextStyle(
+                    color: CustomColors.lightGrey,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              onPressed: () async {
+                if (_pController.text.trim().isEmpty) {
+                  Navigator.pop(context);
+                  _scaffoldKey.currentState.showSnackBar(
+                    CustomSnackBar.errorSnackBar(
+                      "Please provide the reason for cancellation!",
+                      2,
+                    ),
+                  );
+                } else {
+                  try {
+                    await order.cancelOrder(_pController.text.trim());
+                    Navigator.pop(context);
+                  } catch (err) {
+                    print(err);
+                    _pController.text = "";
+                    Navigator.pop(context);
+                    _scaffoldKey.currentState.showSnackBar(
+                      CustomSnackBar.errorSnackBar(
+                        "Unable to cancel the order!",
+                        3,
+                      ),
+                    );
+                  }
+                }
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/screens/Home/AuthPage.dart';
-import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/home/LoginPage.dart';
 import 'package:chipchop_buyer/screens/home/update_app.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
@@ -110,9 +109,7 @@ class _MyAppState extends State<MyApp> {
       },
       navigatorObservers: <NavigatorObserver>[widget.observer],
       home: widget.isLive
-          ? UpdateApp(
-              child: HomeScreen(),
-            )
+          ? UpdateApp()
           : (widget.userID != "")
               ? AuthPage(widget.userID, widget.userName, widget.userImage)
               : LoginPage(),

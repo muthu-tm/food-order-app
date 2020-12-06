@@ -1,3 +1,5 @@
+import 'package:chipchop_buyer/db/models/product_description.dart';
+import 'package:chipchop_buyer/db/models/product_variants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
@@ -16,6 +18,8 @@ class Products extends Model {
   String productCategory;
   @JsonKey(name: 'product_sub_category', defaultValue: "")
   String productSubCategory;
+  @JsonKey(name: 'brand_name', defaultValue: "")
+  String brandName;
   @JsonKey(name: 'name', defaultValue: "")
   String name;
   @JsonKey(name: 'rating', defaultValue: 1)
@@ -28,20 +32,26 @@ class Products extends Model {
   String shortDetails;
   @JsonKey(name: 'store_uuid', defaultValue: "")
   String storeID;
+  @JsonKey(name: 'store_name', defaultValue: "")
+  String storeName;
+  @JsonKey(name: 'orders')
+  int orders;
+  @JsonKey(name: 'image', defaultValue: "")
+  String image;
   @JsonKey(name: 'product_images', defaultValue: [""])
   List<String> productImages;
-  @JsonKey(name: 'weight')
-  double weight;
-  @JsonKey(name: 'unit')
-  int unit;
-  @JsonKey(name: 'org_price')
-  double originalPrice;
-  @JsonKey(name: 'offer', defaultValue: 0.00)
-  double offer;
-  @JsonKey(name: 'current_price')
-  double currentPrice;
+  @JsonKey(name: 'product_description', defaultValue: [""])
+  List<ProductDescription> productDescription;
+  @JsonKey(name: 'variants', defaultValue: [""])
+  List<ProductVariants> variants;
   @JsonKey(name: 'is_returnable', defaultValue: false)
   bool isReturnable;
+  @JsonKey(name: 'return_within', defaultValue: false)
+  int returnWithin;
+  @JsonKey(name: 'is_replaceable', defaultValue: false)
+  bool isReplaceable;
+  @JsonKey(name: 'replace_within', defaultValue: false)
+  int replaceWithin;
   @JsonKey(name: 'is_available')
   bool isAvailable;
   @JsonKey(name: 'is_deliverable')
@@ -56,26 +66,6 @@ class Products extends Model {
   DateTime updatedAt;
 
   Products();
-
-  String getUnit() {
-    if (this.unit == null) return "";
-
-    if (this.unit == 0) {
-      return "Nos";
-    } else if (this.unit == 1) {
-      return "Kg";
-    } else if (this.unit == 2) {
-      return "gram";
-    } else if (this.unit == 3) {
-      return "milli gram";
-    } else if (this.unit == 4) {
-      return "litre";
-    } else if (this.unit == 5) {
-      return "milli litre";
-    } else {
-      return "Count";
-    }
-  }
 
   List<String> getSmallProfilePicPath() {
     List<String> paths = [];
@@ -167,6 +157,23 @@ class Products extends Model {
     }
   }
 
+  Future<List<Products>> getProductsForStore(String storeID) async {
+    try {
+      List<Products> products = [];
+      QuerySnapshot snap = await getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .getDocuments();
+      for (var j = 0; j < snap.documents.length; j++) {
+        Products _c = Products.fromJson(snap.documents[j].data);
+        products.add(_c);
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   Stream<QuerySnapshot> streamProductsForCategory(
       String storeID, String categoryID) {
     try {
@@ -212,6 +219,26 @@ class Products extends Model {
           Products _c = Products.fromJson(snap.documents[j].data);
           products.add(_c);
         }
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<Products>> getProductsForSubCategories(
+      String storeID, String categoryID, String subCategoryID) async {
+    try {
+      List<Products> products = [];
+      QuerySnapshot snap = await getCollectionRef()
+          .where('store_uuid', isEqualTo: storeID)
+          .where('product_category', isEqualTo: categoryID)
+          .where('product_sub_category', isEqualTo: subCategoryID)
+          .getDocuments();
+      for (var j = 0; j < snap.documents.length; j++) {
+        Products _c = Products.fromJson(snap.documents[j].data);
+        products.add(_c);
       }
 
       return products;

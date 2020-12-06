@@ -6,6 +6,8 @@ ShoppingCart _$ShoppingCartFromJson(Map<String, dynamic> json) {
     ..storeID = json['store_uuid'] as String ?? ''
     ..storeName = json['store_name'] as String ?? ''
     ..productID = json['product_uuid'] as String ?? ''
+    ..productName = json['product_name'] as String ?? ''
+    ..variantID = json['variant_id'] as String ?? '0'
     ..quantity = (json['quantity'] as num)?.toDouble() ?? 1.00
     ..inWishlist = json['in_wishlist'] as bool ?? true
     ..createdAt = json['created_at'] == null
@@ -28,6 +30,8 @@ Map<String, dynamic> _$ShoppingCartToJson(ShoppingCart instance) =>
       'store_uuid': instance.storeID ?? "",
       'store_name': instance.storeName ?? "",
       'product_uuid': instance.productID ?? "",
+      'product_name': instance.productName ?? "",
+      'variant_id': instance.variantID ?? "0",
       'quantity': instance.quantity ?? 1.00,
       'in_wishlist': instance.inWishlist ?? true,
       'created_at': instance.createdAt,

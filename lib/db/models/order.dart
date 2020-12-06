@@ -1,7 +1,11 @@
 import 'dart:math';
 
 import 'package:chipchop_buyer/db/models/customers.dart';
+import 'package:chipchop_buyer/db/models/order_status.dart';
+import 'package:chipchop_buyer/db/models/order_written_details.dart';
+import 'package:chipchop_buyer/db/models/users_shopping_details.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,20 +36,20 @@ class Order {
   List<OrderProduct> products;
   @JsonKey(name: 'order_images', defaultValue: [""])
   List<String> orderImages;
-  @JsonKey(name: 'written_orders', defaultValue: "")
-  String writtenOrders;
+  @JsonKey(name: 'written_orders', nullable: false)
+  List<WrittenOrders> writtenOrders;
   @JsonKey(name: 'customer_notes', defaultValue: "")
   String customerNotes;
-  @JsonKey(name: 'status', defaultValue: 0)
+  @JsonKey(name: 'store_notes', defaultValue: "")
+  String storeNotes;
+  @JsonKey(name: 'status')
   int status;
+  @JsonKey(name: 'status_details')
+  List<OrderStatus> statusDetails;
   @JsonKey(name: 'is_returnable', defaultValue: false)
   bool isReturnable;
   @JsonKey(name: 'return_days', defaultValue: false)
   int returnDays;
-  @JsonKey(name: 'returned_at', nullable: true)
-  int returnedAt;
-  @JsonKey(name: 'cancelled_at', nullable: true)
-  int cancelledAt;
   @JsonKey(name: 'delivery')
   OrderDelivery delivery;
   @JsonKey(name: 'amount')
@@ -79,39 +83,104 @@ class Order {
   String generateOrderID() {
     var _random = new Random();
 
-    return DateFormat('ddMMyy').format(this.createdAt) +
+    return DateFormat('yyMMdd').format(this.createdAt) +
         "-" +
-        (10 + _random.nextInt(10000 - 10)).toString() +
-        this.totalProducts.toString();
+        this.totalProducts.toString() +
+        (10 + _random.nextInt(10000 - 10)).toString();
   }
 
-  String getStatus() {
-    if (this.status == 0) {
-      return "Ordered";
-    } else if (this.status == 1) {
-      return "Confirmed";
-    } else if (this.status == 2) {
-      return "Cancelled By User";
-    } else if (this.status == 3) {
-      return "Cancelled By Store";
-    } else if (this.status == 4) {
-      return "DisPatched";
-    } else {
-      return "Delivered";
+  String getStatus(int status) {
+    switch (status) {
+      case 0:
+        return "Ordered";
+        break;
+      case 1:
+        return "Confirmed";
+        break;
+      case 2:
+        return "Cancelled By User";
+        break;
+      case 3:
+        return "Cancelled By Store";
+        break;
+      case 4:
+        return "DisPatched";
+        break;
+      case 5:
+        return "Delivered";
+        break;
+      case 6:
+        return "Return Requested";
+        break;
+      case 7:
+        return "Return Cancelled";
+        break;
+      default:
+        return "Returned";
+    }
+  }
+
+  Color getTextColor() {
+    switch (status) {
+      case 0:
+        return Colors.orange;
+        break;
+      case 1:
+      case 4:
+        return Colors.blue;
+        break;
+      case 2:
+      case 3:
+      case 7:
+        return Colors.red;
+        break;
+      case 5:
+        return Colors.green;
+        break;
+      default:
+        return Colors.black;
+    }
+  }
+
+  Color getBackGround() {
+    switch (status) {
+      case 0:
+        return Colors.orange[100];
+        break;
+      case 1:
+      case 4:
+        return Colors.blue[100];
+        break;
+      case 2:
+      case 3:
+      case 7:
+        return Colors.red[100];
+        break;
+      case 5:
+        return Colors.green[100];
+        break;
+      default:
+        return Colors.black45;
     }
   }
 
   String getDeliveryType() {
-    if (this.delivery.deliveryType == 0) {
-      return "Pickup from Store";
-    } else if (this.delivery.deliveryType == 1) {
-      return "Instant Delivery";
-    } else if (this.delivery.deliveryType == 2) {
-      return "Same-Day Delivery";
-    } else if (this.delivery.deliveryType == 3) {
-      return "Scheduled Delivery";
-    } else {
-      return "Pickup from Store";
+    switch (this.delivery.deliveryType) {
+      case 0:
+        return "Pickup From Store";
+        break;
+      case 1:
+        return "Instant Delivery";
+        break;
+      case 2:
+        return "Standard Delivery";
+        break;
+      case 3:
+        return "Scheduled Delivery";
+        break;
+      default:
+        return "Standard Delivery";
+        break;
     }
   }
 
@@ -119,6 +188,14 @@ class Order {
     this.createdAt = DateTime.now();
     this.updatedAt = DateTime.now();
     this.status = 0;
+    this.statusDetails = [
+      OrderStatus.fromJson({
+        'created_at': DateTime.now().millisecondsSinceEpoch,
+        'updated_by': cachedLocalUser.getFullName(),
+        'user_number': cachedLocalUser.getID(),
+        'status': 0
+      })
+    ];
     this.orderID = generateOrderID();
 
     try {
@@ -148,6 +225,34 @@ class Order {
         await docRef.setData(this.toJson());
       }
 
+      if (this.products.length > 0) {
+        CollectionReference _collRef =
+            UserShoppingDetails().getCollectionRef(cachedLocalUser.getID());
+        for (var i = 0; i < this.products.length; i++) {
+          String _id = '${this.storeID}_${this.products[i].productID}';
+          DocumentSnapshot _docSnap = await _collRef.document(_id).get();
+
+          if (_docSnap.exists) {
+            UserShoppingDetails _shoppDetails =
+                UserShoppingDetails.fromJson(_docSnap.data);
+            _shoppDetails.quantity += this.products[i].quantity;
+            _shoppDetails.updatedAt = DateTime.now().millisecondsSinceEpoch;
+            _docSnap.reference.updateData(_shoppDetails.toJson());
+          } else {
+            UserShoppingDetails _shoppDetails = UserShoppingDetails();
+            _shoppDetails.productID = this.products[i].productID;
+            _shoppDetails.productName = this.products[i].productName;
+            _shoppDetails.quantity = this.products[i].quantity;
+            _shoppDetails.storeID = this.storeID;
+            _shoppDetails.userID = cachedLocalUser.getID();
+            _shoppDetails.userName = cachedLocalUser.getFullName();
+            _shoppDetails.updatedAt = DateTime.now().millisecondsSinceEpoch;
+
+            _docSnap.reference.setData(_shoppDetails.toJson());
+          }
+        }
+      }
+
       Analytics.sendAnalyticsEvent({
         'type': 'order_create',
         'store_id': storeID,
@@ -160,12 +265,22 @@ class Order {
     return this;
   }
 
-  Future<void> cancelOrder(String orderUUID, String notes) async {
-    await this.getCollectionRef().document(orderUUID).updateData(
+  Future<void> cancelOrder(String notes) async {
+    List<OrderStatus> _newStatus = this.statusDetails;
+    _newStatus.add(
+      OrderStatus.fromJson({
+        'created_at': DateTime.now().millisecondsSinceEpoch,
+        'updated_by': cachedLocalUser.getFullName(),
+        'user_number': cachedLocalUser.getID(),
+        'status': 2
+      }),
+    );
+
+    await this.getCollectionRef().document(this.getID()).updateData(
       {
+        'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
         'status': 2,
         'updated_at': DateTime.now(),
-        'cancelled_at': DateTime.now().millisecondsSinceEpoch,
         'customer_notes': notes
       },
     );

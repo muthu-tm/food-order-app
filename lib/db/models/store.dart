@@ -25,6 +25,8 @@ class Store extends Model {
   String ownedBy;
   @JsonKey(name: 'store_name', defaultValue: "")
   String name;
+  @JsonKey(name: 'short_details', defaultValue: "")
+  String shortDetails;
   @JsonKey(name: 'geo_point', defaultValue: "")
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')
@@ -41,12 +43,22 @@ class Store extends Model {
   String activeTill;
   @JsonKey(name: 'address')
   Address address;
+  @JsonKey(name: 'deliver_anywhere', defaultValue: false)
+  bool deliverAnywhere;
   @JsonKey(name: 'is_active', defaultValue: true)
   bool isActive;
+  @JsonKey(name: 'image', defaultValue: "")
+  String image;
   @JsonKey(name: 'store_images', defaultValue: [""])
   List<String> storeImages;
   @JsonKey(name: 'users')
   List<String> users;
+  @JsonKey(name: 'upi')
+  String upiID;
+  @JsonKey(name: 'wallet_number')
+  String walletNumber;
+  @JsonKey(name: 'avail_payments')
+  List<int> availablePayments; // 0 - Cash, 1 - Gpay, 2 - Card, 3, PayTM
   @JsonKey(name: 'users_access')
   List<StoreUserAccess> usersAccess;
   @JsonKey(name: 'contacts')
@@ -82,6 +94,15 @@ class Store extends Model {
               firebase_storage_path, image_kit_path + ik_medium_size)
         ];
     }
+  }
+
+  String getPrimaryImage() {
+    if (image != null && image.trim() != "")
+      return image.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
+    else
+      return no_image_placeholder.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
   }
 
   List<String> getStoreOriginalImages() {
@@ -187,6 +208,25 @@ class Store extends Model {
     return stores;
   }
 
+  Future<Store> getStoresByID(String storeID) async {
+    try {
+      DocumentSnapshot snap = await getCollectionRef().document(storeID).get();
+      if (snap.exists) {
+        Store _s = Store.fromJson(snap.data);
+        return _s;
+      }
+
+      return null;
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'store_search_error',
+        'store_id': storeID,
+        'error': err.toString()
+      }, 'store');
+      throw err;
+    }
+  }
+
   Future<List<Map<String, dynamic>>> getStoreByName(String searchKey) async {
     List<Map<String, dynamic>> stores = [];
 
@@ -206,34 +246,11 @@ class Store extends Model {
     List<Store> stores = [];
 
     try {
-      // if (loc != null &&
-      //     (cachedLocalUser.favStores == null ||
-      //         cachedLocalUser.favStores.isEmpty)) {
-      //   await streamNearByStores(loc, 10).take(1).forEach((snap) {
-      //     for (var i = 0; i < snap.length; i++) {
-      //       Store _s = Store.fromJson(snap[i].data);
-      //       stores.add(_s);
-      //     }
-      //   });
-      // } else if (cachedLocalUser.favStores != null) {
-      //   QuerySnapshot snap = await getCollectionRef()
-      //       .where('uuid', whereIn: cachedLocalUser.favStores)
-      //       .getDocuments();
-      //   if (snap.documents.isNotEmpty) {
-      //     for (var i = 0; i < snap.documents.length; i++) {
-      //       Store _s = Store.fromJson(snap.documents[i].data);
-      //       stores.add(_s);
-      //     }
-      //   }
-      // }
-
-      if (stores.isEmpty) {
-        QuerySnapshot snap = await getCollectionRef().getDocuments();
-        if (snap.documents.isNotEmpty) {
-          for (var i = 0; i < snap.documents.length; i++) {
-            Store _s = Store.fromJson(snap.documents[i].data);
-            stores.add(_s);
-          }
+      QuerySnapshot snap = await getCollectionRef().getDocuments();
+      if (snap.documents.isNotEmpty) {
+        for (var i = 0; i < snap.documents.length; i++) {
+          Store _s = Store.fromJson(snap.documents[i].data);
+          stores.add(_s);
         }
       }
 
@@ -257,6 +274,36 @@ class Store extends Model {
     } catch (err) {
       Analytics.reportError(
           {'type': 'store_distance_error', 'error': err.toString()}, 'store');
+      throw err;
+    }
+  }
+
+  Future<double> getShippingChargeByID(String storeID) async {
+    try {
+      DocumentSnapshot snap = await getCollectionRef().document(storeID).get();
+
+      double val = 0.00;
+
+      if (snap.exists) {
+        Store _s = Store.fromJson(snap.data);
+        double dis = await _s.getUserDistance();
+        if (dis < 2.0)
+          val = _s.deliveryDetails.deliveryCharges02;
+        else if (dis < 5.0)
+          val = _s.deliveryDetails.deliveryCharges05;
+        else if (dis < 10.0)
+          val = _s.deliveryDetails.deliveryCharges10;
+        else
+          val = _s.deliveryDetails.deliveryChargesMax;
+      }
+
+      return val;
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'store_shipping_charge_error',
+        'store_id': storeID,
+        'error': err.toString()
+      }, 'store');
       throw err;
     }
   }

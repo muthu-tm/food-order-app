@@ -71,30 +71,30 @@ class ProductWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Center(
-                    child: Text(
-                      "${product.weight} ${product.getUnit()}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: CustomColors.blue,
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: Text(
-                      "Rs. ${product.currentPrice.toString()}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: CustomColors.blue,
-                        fontSize: 13.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  // Center(
+                  //   child: Text(
+                  //     "${product.weight} ${product.getUnit()}",
+                  //     maxLines: 1,
+                  //     overflow: TextOverflow.ellipsis,
+                  //     style: TextStyle(
+                  //       color: CustomColors.blue,
+                  //       fontSize: 13.0,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
+                  // Center(
+                  //   child: Text(
+                  //     "Rs. ${product.currentPrice.toString()}",
+                  //     maxLines: 1,
+                  //     overflow: TextOverflow.ellipsis,
+                  //     style: TextStyle(
+                  //       color: CustomColors.blue,
+                  //       fontSize: 13.0,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             )

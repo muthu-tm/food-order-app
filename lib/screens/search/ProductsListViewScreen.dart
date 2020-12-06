@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
+import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
+import 'package:chipchop_buyer/screens/store/VariantsWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
@@ -68,6 +70,14 @@ class _ProductsListViewScreenState extends State<ProductsListViewScreen> {
                       ),
                       child: InkWell(
                         onTap: () {
+                          UserActivityTracker _activity = UserActivityTracker();
+                          _activity.keywords = "";
+                          _activity.storeID = product.storeID;
+                          _activity.productID = product.uuid;
+                          _activity.productName = product.name;
+                          _activity.type = 2;
+                          _activity.create();
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -112,14 +122,7 @@ class _ProductsListViewScreenState extends State<ProductsListViewScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          subtitle: Text(
-                            "${product.weight} ${product.getUnit()} - Rs. ${product.currentPrice.toString()}",
-                            style: TextStyle(
-                              color: CustomColors.blue,
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          subtitle: ProductVariantsWidget(product, 0),
                         ),
                       ),
                     ),
