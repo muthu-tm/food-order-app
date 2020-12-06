@@ -1,7 +1,9 @@
 import 'package:chipchop_buyer/db/models/order.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/screens/orders/OrderWidget.dart';
+import 'package:chipchop_buyer/screens/search/RecentSearches.dart';
 import 'package:chipchop_buyer/screens/search/SearchOptionsRadio.dart';
 import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreWidget.dart';
@@ -11,6 +13,10 @@ import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:flutter/material.dart';
 
 class SearchAppBar extends StatefulWidget {
+  SearchAppBar(this.mode, this.searchKey);
+
+  final int mode;
+  final String searchKey;
   @override
   _SearchAppBarState createState() => new _SearchAppBarState();
 }
@@ -27,14 +33,36 @@ class _SearchAppBarState extends State<SearchAppBar> {
   @override
   void initState() {
     super.initState();
+
+    setState(() {
+      searchMode = widget.mode;
+    });
+
     inOutList.add(
-      CustomRadioModel(true, 'Store', ''),
+      CustomRadioModel(widget.mode == 0, 'Store', ''),
     );
     inOutList.add(
-      CustomRadioModel(false, 'Product', ''),
+      CustomRadioModel(widget.mode == 1, 'Product', ''),
     );
     inOutList.add(
-      CustomRadioModel(false, 'Order', ''),
+      CustomRadioModel(widget.mode == 2, 'Order', ''),
+    );
+
+    if (widget.searchKey != "") {
+      _searchController.text = widget.searchKey;
+      _submit(widget.searchKey);
+    }
+  }
+
+  _submit(String searchKey) {
+    setState(
+      () {
+        searchMode == 0
+            ? snapshot = Store().getStoreByName(searchKey)
+            : searchMode == 1
+                ? snapshot = Products().getByNameRange(searchKey)
+                : snapshot = Order().getByOrderID(searchKey);
+      },
     );
   }
 
@@ -57,7 +85,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
           decoration: InputDecoration(
             hintText: searchMode == 0
                 ? "Type Store Name"
-                : searchMode == 1 ? "Type Product Name" : "Type Order ID",
+                : searchMode == 1
+                    ? "Type Product Name"
+                    : "Type Order ID",
             hintStyle: TextStyle(color: CustomColors.black),
           ),
           onFieldSubmitted: (searchKey) {
@@ -66,17 +96,14 @@ class _SearchAppBarState extends State<SearchAppBar> {
                   CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2));
               return null;
             } else {
-              setState(
-                () {
-                  searchMode == 0
-                      ? snapshot = Store().getStoreByName(searchKey)
-                      : searchMode == 1
-                          ? snapshot = Products().getByNameRange(searchKey)
-                          : snapshot = Order().getByOrderID(searchKey);
-                },
-              );
+              _submit(searchKey);
 
-              return null;
+              UserActivityTracker _activity = UserActivityTracker();
+              _activity.keywords = searchKey;
+              _activity.type = searchMode == 0
+                  ? 3
+                  : 4; // 3 - Store Search, 4 - product search
+              _activity.create();
             }
           },
         ),
@@ -229,28 +256,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
                     children: AsyncWidgets.asyncWaiting(),
                   );
                 } else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Text(
-                          "No Search Triggerred yet!",
-                          style: TextStyle(
-                              color: CustomColors.blue, fontSize: 16.0),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-                        child: Text(
-                          "Try some keywords..",
-                          style: TextStyle(
-                              color: CustomColors.grey, fontSize: 16.0),
-                        ),
-                      ),
-                    ],
-                  );
+                  return UserRecentSearches();
                 }
               },
             ),

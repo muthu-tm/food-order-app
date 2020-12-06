@@ -19,7 +19,7 @@ class SearchBarWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SearchAppBar(),
+                builder: (context) => SearchAppBar(0, ''),
                 settings: RouteSettings(name: '/search/type'),
               ),
             );
