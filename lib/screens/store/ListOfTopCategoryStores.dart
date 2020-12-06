@@ -6,9 +6,10 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class ListOfTopCategoryStores extends StatelessWidget {
-  final String typeID;
+  final String id;
+  final String fieldName;
   final String categoryName;
-  ListOfTopCategoryStores(this.typeID, this.categoryName);
+  ListOfTopCategoryStores(this.id, this.fieldName, this.categoryName);
 
   @override
   Widget build(BuildContext context) {
@@ -40,23 +41,50 @@ class ListOfTopCategoryStores extends StatelessWidget {
         ],
       ),
       backgroundColor: CustomColors.white,
-      body: SingleChildScrollView(child: getListOfStores()),
+      body: SingleChildScrollView(
+          child: Column(
+        children: [
+          ListTile(
+            title: Text(
+              "Listed $categoryName shops near you",
+              textAlign: TextAlign.left,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          getListOfStores(),
+        ],
+      )),
     );
   }
 
   Widget getListOfStores() {
     return FutureBuilder(
-      future: Store().getStoresByTypes(typeID),
+      future: Store().getStoresByTypes(fieldName, id),
       builder: (context, AsyncSnapshot<List<Store>> snapshot) {
         Widget child;
+
+        double height = MediaQuery.of(context).size.height;
+        var padding = MediaQuery.of(context).padding;
+        // height without status and toolbar
+        double height3 = height - padding.top - kToolbarHeight;
 
         if (snapshot.hasData) {
           if (snapshot.data.length == 0) {
             child = Container(
+              height: height3,
               child: Center(
-                child: Text(
-                  "No stores Found",
-                  style: TextStyle(color: CustomColors.black),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Sorry, no stores found",
+                      style: TextStyle(color: CustomColors.black),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Icon(Icons.sentiment_dissatisfied)
+                  ],
                 ),
               ),
             );

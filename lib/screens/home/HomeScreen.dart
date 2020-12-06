@@ -7,6 +7,7 @@ import 'package:chipchop_buyer/db/models/users_shopping_details.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/home/MoreCategoriesScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/store/ListOfTopCategoryStores.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
@@ -75,6 +76,25 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: getCategoryCards(context),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MoreCategoriesScreen(),
+                      settings: RouteSettings(name: '/search/categories'),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: Text(
+                    "More Categories",
+                    style: TextStyle(
+                        decoration: TextDecoration.underline, fontSize: 12),
+                  ),
+                ),
               ),
               RecentStoresWidget(),
               getPopularProducts(context),
@@ -355,7 +375,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              ListOfTopCategoryStores(types.uuid, types.name),
+                              ListOfTopCategoryStores(types.uuid, 'avail_products', types.name),
                           settings: RouteSettings(name: '/home/categories'),
                         ),
                       );
