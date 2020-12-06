@@ -150,7 +150,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                           widget.product.variants[int.parse(_variants)].offer;
                       _priceDetails = [cPrice, oPrice, sCharge];
 
-                      OrderProduct _op = OrderProduct();
                       _op.productID = widget.product.uuid;
                       _op.variantID = _variants;
                       _op.amount = widget
@@ -190,13 +189,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                       context,
                       MaterialPageRoute(
                         builder: (context) => CheckoutScreen(
-                            false,
                             [_op],
                             _priceDetails,
                             widget.product.storeID,
-                            widget.product.storeName,
-                            [],
-                            ""),
+                            widget.product.storeName),
                         settings: RouteSettings(name: '/products/checkout'),
                       ),
                     );

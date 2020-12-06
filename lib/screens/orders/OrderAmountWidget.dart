@@ -1,7 +1,6 @@
 import 'package:chipchop_buyer/db/models/order.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OrderAmountWidget extends StatelessWidget {
   OrderAmountWidget(this.order);
@@ -10,45 +9,62 @@ class OrderAmountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Container(
-        color: CustomColors.grey,
-        child: Column(
-          children: [
-            ListTile(
-              leading: Icon(
-                FontAwesomeIcons.moneyBill,
-                color: CustomColors.blueGreen,
-              ),
-              title: Text("Amount Details"),
-              trailing: Text(
-                  '₹ ${order.amount.orderAmount + order.amount.deliveryCharge}'),
+    double wOrderAmount = 0.00;
+
+    if (order.writtenOrders.length > 0 &&
+        order.writtenOrders.first.name.trim().isNotEmpty) {
+      order.writtenOrders.forEach((element) {
+        wOrderAmount += element.price;
+      });
+    }
+
+    return Container(
+      child: Column(
+        children: [
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              "Order Amount",
+              style: TextStyle(
+                  color: CustomColors.black, fontWeight: FontWeight.bold),
             ),
-            Divider(color: CustomColors.white, indent: 65.0),
-            ListTile(
-              leading: Text(""),
-              title: Text("Order Amount"),
-              trailing: Text('₹ ${order.amount.orderAmount}'),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text("Ordered Amount : "),
+            trailing: Text('₹ ${order.amount.orderAmount}'),
+          ),
+          (order.writtenOrders.length > 0 &&
+                  order.writtenOrders.first.name.trim().isNotEmpty)
+              ? ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text("Price for Written List : "),
+                  trailing: Text('₹ $wOrderAmount'),
+                )
+              : Container(),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text("Wallet Amount : "),
+            trailing: Text(
+              '₹ ${order.amount.walletAmount}',
             ),
-            ListTile(
-              leading: Text(""),
-              title: Text("Wallet Amount"),
-              trailing: Text('₹ ${order.amount.walletAmount}'),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text("Delivery Charge : "),
+            trailing: Text('₹ ${order.amount.deliveryCharge}'),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              "Total Billed Amount : ",
+              style: TextStyle(
+                  color: CustomColors.black, fontWeight: FontWeight.w500),
             ),
-            ListTile(
-              leading: Text(""),
-              title: Text("Delivery Charge"),
-              trailing: Text('₹ ${order.amount.deliveryCharge}'),
-            ),
-            Divider(color: CustomColors.white, indent: 65.0),
-            ListTile(
-              leading: Text(""),
-              title: Text("Paid Amount"),
-              trailing: Text('₹ ${order.amount.paidAmount}'),
-            ),
-          ],
-        ),
+            trailing: Text(
+                '₹ ${order.amount.orderAmount + wOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}'),
+          ),
+        ],
       ),
     );
   }

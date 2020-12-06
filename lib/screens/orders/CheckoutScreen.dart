@@ -6,28 +6,29 @@ import 'package:chipchop_buyer/db/models/order_delivery.dart';
 import 'package:chipchop_buyer/db/models/order_product.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrderSuccessWidget.dart';
 import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  CheckoutScreen(this.clearAll, this.op, this._priceDetails, this.storeID,
-      this.storeName, this.images, this.writtenOrders);
+  CheckoutScreen(this.op, this._priceDetails, this.storeID, this.storeName);
 
-  final bool clearAll;
   final List<double> _priceDetails;
-  final List<String> images;
-  final String writtenOrders;
   final List<OrderProduct> op;
   final String storeID;
   final String storeName;
@@ -38,15 +39,13 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
-  final GlobalKey<State> _keyLoader = new GlobalKey<State>();
 
   int deliveryOption = 0;
-  double shippingCharge = 0.00;
   double wAmount = 0.00;
   bool isAmountUsed = false;
 
   DateTime selectedDate;
-  final format = DateFormat("dd-MMM-yyyy HH:mm");
+  final format = DateFormat('dd MMM, yyyy h:mm a');
 
   @override
   void initState() {
@@ -77,12 +76,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       floatingActionButton: InkWell(
         onTap: () async {
           try {
-            CustomDialogs.showLoadingDialog(context, _keyLoader);
+            CustomDialogs.actionWaiting(context);
             Order _o = Order();
             OrderAmount _oa = OrderAmount();
             OrderDelivery _od = OrderDelivery();
 
-            _oa.deliveryCharge = shippingCharge;
+            _oa.deliveryCharge =
+                deliveryOption != 0 ? widget._priceDetails[2] : 0.00;
             _oa.offerAmount = 0.00;
             _oa.walletAmount = wAmount;
             _oa.orderAmount = widget._priceDetails[0];
@@ -90,11 +90,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             _od.userLocation = cachedLocalUser.primaryLocation;
             _od.deliveryType = deliveryOption;
-            _od.deliveryCharge = shippingCharge;
+            _od.deliveryCharge =
+                deliveryOption != 0 ? widget._priceDetails[2] : 0.00;
             _od.notes = "";
             _od.scheduledDate = deliveryOption == 3
                 ? selectedDate.millisecondsSinceEpoch
-                : DateTime.now().millisecondsSinceEpoch;
+                : null;
             _o.delivery = _od;
 
             _o.customerNotes = "";
@@ -102,30 +103,42 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             _o.storeName = widget.storeName;
             _o.userNumber = cachedLocalUser.getID();
             _o.storeID = widget.storeID;
-            // _o.writtenOrders = widget.writtenOrders;
-            _o.orderImages = widget.images;
+            _o.writtenOrders = [];
+            _o.orderImages = [];
             _o.isReturnable = false;
             _o.products = widget.op;
             _o.totalProducts = widget.op.length;
 
-            await Customers().storeCreateCustomer(widget.storeID, "");
+            await Customers()
+                .storeCreateCustomer(widget.storeID, widget.storeName);
 
             await _o.create();
-            if (widget.clearAll)
-              await ShoppingCart().clearCart();
-            else
-              await ShoppingCart().clearCartForStore(widget.storeID);
-            Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+            await ShoppingCart()
+                .clearCartForProduct(widget.storeID, widget.op.first.productID);
+            Navigator.of(context).pop();
             showDialog(
                 context: _scaffoldKey.currentContext,
                 builder: (context) {
                   return OrderSuccessWidget();
                 });
-          } catch (err) {
+          } on PlatformException catch (e) {
+            Navigator.of(context).pop();
+            if (e.message.contains('offline')) {
+              Fluttertoast.showToast(
+                  msg: 'Please check your internet and try again',
+                  backgroundColor: CustomColors.alertRed,
+                  textColor: CustomColors.white);
+            } else {
+              Fluttertoast.showToast(
+                  msg: 'Unable to place order',
+                  backgroundColor: CustomColors.alertRed,
+                  textColor: CustomColors.white);
+            }
+          } on Exception catch (err) {
             Analytics.reportError(
                 {'type': 'order_create_error', 'error': err.toString()},
                 'orders');
-            Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
+            Navigator.of(context).pop();
             Fluttertoast.showToast(
                 msg: 'Unable to place order',
                 backgroundColor: CustomColors.alertRed,
@@ -175,35 +188,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.locationArrow,
-                          color: CustomColors.alertRed,
-                        ),
-                        title: Text("Delivery Address"),
-                        trailing: Icon(
-                          Icons.edit,
-                          color: CustomColors.alertRed,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ViewLocationsScreen(),
-                              settings: RouteSettings(name: '/location'),
-                            ),
-                          ).then((value) {
-                            setState(() {});
-                          });
-                        },
-                      ),
-                      selectedAddressSection(),
-                      ListTile(
-                        leading: Icon(FontAwesomeIcons.shippingFast,
-                            color: CustomColors.alertRed),
-                        title: Text("Delivery Options"),
-                      ),
+                      this.deliveryOption != 0
+                          ? selectedAddressSection()
+                          : Container(),
                       deliveyOption(store),
+                      Card(
+                        elevation: 2,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: getOrderPriceDetails(store),
+                      ),
                       Padding(
                         padding: EdgeInsets.all(30),
                       )
@@ -233,252 +229,204 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   deliveyOption(Store store) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.only(left: 12, top: 8, right: 12),
-          margin: EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: CustomColors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(4),
-            ),
-            border: Border.all(color: Colors.grey.shade200),
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: CustomColors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(FontAwesomeIcons.shippingFast,
+                size: 20, color: CustomColors.alertRed),
+            title: Text("Delivery Options"),
           ),
-          child: ListView.builder(
+          ListView.builder(
             shrinkWrap: true,
             primary: false,
             itemCount: store.deliveryDetails.availableOptions.length,
             itemBuilder: (BuildContext context, int index) {
-              int dFee = getDeliveryFee(
-                  store.deliveryDetails.availableOptions[index],
-                  store.deliveryDetails);
-
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 12.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(
                     Radius.circular(8.0),
                   ),
-                  color: Color(0xFFE7F9F5),
-                  border: Border.all(
-                    color: Color(0xFF4CD7A5),
-                  ),
+                  color: Colors.teal[100],
+                  border: Border.all(color: Colors.teal[800]),
                 ),
                 child: ListTile(
                   onTap: () {
-                    int dFee = getDeliveryFee(
-                        store.deliveryDetails.availableOptions[index],
-                        store.deliveryDetails);
-                    double fee = 0.00;
-
-                    if (dFee == 0)
-                      fee = widget._priceDetails[2];
-                    else if (dFee.isNegative) {
-                      fee = widget._priceDetails[2] -
-                          widget._priceDetails[2] / 100 * dFee.abs();
-                      if (fee.isNegative) fee = 0.00;
-                    } else {
-                      fee = widget._priceDetails[2] +
-                          widget._priceDetails[2] / 100 * dFee.abs();
-                    }
-
                     setState(() {
-                      shippingCharge = fee;
                       deliveryOption =
                           store.deliveryDetails.availableOptions[index];
                     });
                   },
                   trailing: Icon(
-                    deliveryOption ==
-                            store.deliveryDetails.availableOptions[index]
-                        ? Icons.check_box
-                        : Icons.check_box_outline_blank,
-                    color: Color(0xFF10CA88),
-                  ),
-                  title: Text(getDeliveryOption(
-                      store.deliveryDetails.availableOptions[index])),
-                  subtitle: RichText(
-                    text: TextSpan(
-                      text: 'Delivery: ',
-                      style: TextStyle(
-                          color: dFee == 0
-                              ? CustomColors.blue
-                              : dFee.isNegative
-                                  ? CustomColors.green
-                                  : CustomColors.alertRed),
-                      children: [
-                        TextSpan(
-                          text: dFee == -100
-                              ? 'FREE'
-                              : dFee == 0 || dFee == -100
-                                  ? ' Standard '
-                                  : dFee.isNegative
-                                      ? ' ${dFee.abs()}%'
-                                      : ' $dFee%',
-                          style: TextStyle(
-                              color: dFee == 0
-                                  ? CustomColors.blue
-                                  : dFee.isNegative
-                                      ? CustomColors.green
-                                      : CustomColors.alertRed),
-                        ),
-                        TextSpan(
-                          text: dFee == -100
-                              ? ''
-                              : dFee == 0
-                                  ? 'Charge'
-                                  : dFee.isNegative ? " OFFER" : " Extra Fee",
-                          style: TextStyle(
-                              color: dFee == 0
-                                  ? CustomColors.blue
-                                  : dFee.isNegative
-                                      ? CustomColors.green
-                                      : CustomColors.alertRed),
-                        ),
-                      ],
+                      deliveryOption ==
+                              store.deliveryDetails.availableOptions[index]
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      color: Colors.teal[800]),
+                  title: Text(
+                    getDeliveryOption(
+                      store.deliveryDetails.availableOptions[index],
                     ),
+                  ),
+                  subtitle: Text(
+                    store.deliveryDetails.availableOptions[index] == 0
+                        ? ' Delivery Charge : FREE '
+                        : ' Delivery Charge : ₹  ${widget._priceDetails[2]}',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color:
+                            store.deliveryDetails.availableOptions[index] == 0
+                                ? Colors.teal[800]
+                                : CustomColors.alertRed),
                   ),
                 ),
               );
             },
           ),
-        ),
-        this.deliveryOption == 3
-            ? ListTile(
-                leading: Icon(
-                  Icons.av_timer,
-                  color: CustomColors.alertRed,
-                ),
-                title: DateTimeField(
-                  decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                    suffixIcon: Icon(Icons.date_range,
-                        color: CustomColors.blue, size: 30),
-                    labelText: "DateTime",
-                    labelStyle: TextStyle(
-                      fontSize: 12,
-                      color: CustomColors.blue,
-                    ),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: CustomColors.white),
-                    ),
+          this.deliveryOption == 3
+              ? ListTile(
+                  leading: Icon(
+                    Icons.delivery_dining,
+                    size: 40,
+                    color: CustomColors.black,
                   ),
-                  format: format,
-                  initialValue: selectedDate,
-                  onShowPicker: (context, currentValue) async {
-                    final date = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime.now(),
-                      initialDate: currentValue ?? DateTime.now(),
-                      lastDate: DateTime.now().add(
-                        Duration(days: 30),
+                  title: DateTimeField(
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      suffixIcon: Icon(Icons.date_range,
+                          color: CustomColors.blue, size: 30),
+                      labelText: "Deliver by",
+                      labelStyle: TextStyle(
+                        fontSize: 13,
+                        color: CustomColors.black,
                       ),
-                    );
-
-                    if (date != null) {
-                      final time = await showTimePicker(
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors.white),
+                      ),
+                    ),
+                    format: format,
+                    initialValue: selectedDate,
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
                         context: context,
-                        initialTime: TimeOfDay.fromDateTime(
-                            currentValue ?? DateTime.now()),
+                        firstDate: DateTime.now(),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime.now().add(
+                          Duration(days: 30),
+                        ),
                       );
-                      selectedDate = DateTimeField.combine(date, time);
-                      return selectedDate;
-                    } else {
-                      return currentValue;
-                    }
-                  },
-                ),
-              )
-            : Container(),
-        ListTile(
-          leading: Icon(
-            FontAwesomeIcons.fileInvoiceDollar,
-            color: CustomColors.alertRed,
-          ),
-          title: Text("Price Details"),
-        ),
+
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()),
+                        );
+                        selectedDate = DateTimeField.combine(date, time);
+                        return selectedDate;
+                      } else {
+                        return currentValue;
+                      }
+                    },
+                  ),
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+
+  Widget getOrderPriceDetails(Store store) {
+    return Container(
+      decoration: BoxDecoration(
+        color: CustomColors.white,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
         getWalletWidget(),
         Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
           margin: EdgeInsets.all(4),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(4)),
           ),
-          child: Card(
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(4))),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  border: Border.all(color: Colors.grey.shade200)),
-              padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
-              child: Column(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                height: 8,
+              ),
+              createPriceItem(
+                  "Ordered Price : ",
+                  '₹ ' + widget._priceDetails[0].toString(),
+                  CustomColors.black),
+              createPriceItem(
+                  "Your Savings : ",
+                  '₹ ' + widget._priceDetails[1].toString(),
+                  CustomColors.green),
+              createPriceItem("Wallet Amount : ", '₹ ' + wAmount.toString(),
+                  CustomColors.green),
+              createPriceItem(
+                  "Delivery Charges : ",
+                  '₹ ' +
+                      (deliveryOption != 0
+                          ? widget._priceDetails[2].toString()
+                          : 0.00.toString()),
+                  CustomColors.black),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                width: double.infinity,
+                height: 0.5,
+                margin: EdgeInsets.symmetric(vertical: 4),
+                color: Colors.grey.shade400,
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(
-                    height: 4,
-                  ),
                   Text(
-                    "PRICE DETAILS",
+                    "Total : ",
                     style: TextStyle(
-                        fontSize: 12,
                         color: Colors.black,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600),
                   ),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 0.5,
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    color: Colors.grey.shade400,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  createPriceItem(
-                      "Order Total",
-                      '₹ ' + widget._priceDetails[0].toString(),
-                      CustomColors.black),
-                  createPriceItem(
-                      "Your Savings",
-                      '₹ ' + widget._priceDetails[1].toString(),
-                      CustomColors.green),
-                  createPriceItem("Delievery Charges",
-                      '₹ ' + shippingCharge.toString(), CustomColors.black),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 0.5,
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    color: Colors.grey.shade400,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "Total",
-                        style: TextStyle(color: Colors.black, fontSize: 12),
-                      ),
-                      Text(
-                        "₹ ${widget._priceDetails[0] + shippingCharge}",
-                        style: TextStyle(color: Colors.black, fontSize: 12),
-                      )
-                    ],
+                  Text(
+                    "₹ ${widget._priceDetails[0] + (deliveryOption != 0 ? widget._priceDetails[2] : 0.00) - wAmount}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600),
                   )
                 ],
               ),
-            ),
+              SizedBox(
+                height: 8,
+              ),
+              Container(
+                width: double.infinity,
+                height: 0.5,
+                margin: EdgeInsets.symmetric(vertical: 4),
+                color: Colors.grey.shade400,
+              ),
+            ],
           ),
         ),
         Container(
@@ -488,7 +436,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               SizedBox(width: 5.0),
               Icon(
                 Icons.info,
-                color: CustomColors.alertRed,
+                color: CustomColors.grey,
                 size: 20.0,
               ),
               SizedBox(width: 5.0),
@@ -498,23 +446,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       TextSpan(
                         text:
-                            "While Confirming the ORDER, store may update the",
+                            "Store may change the Order Price, if you have added",
                         style: TextStyle(
-                            color: CustomColors.blue,
-                            fontWeight: FontWeight.w400),
+                          fontSize: 12.0,
+                          color: CustomColors.alertRed,
+                        ),
                       ),
                       TextSpan(
-                        text: " Amount",
+                        text: " `Written Orders / Captured List`",
                         style: TextStyle(
                             color: CustomColors.alertRed,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.w700),
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold),
                       ),
                       TextSpan(
                         text:
-                            ", if you have added 'Written Orders/Captured List'",
+                            ". You may chat with Store for further clarifications. ",
                         style: TextStyle(
-                            color: CustomColors.blue,
+                          fontSize: 12.0,
+                          color: CustomColors.alertRed,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "CHAT HERE",
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => StoreChatScreen(
+                                  storeID: store.uuid,
+                                  storeName: store.name,
+                                ),
+                                settings: RouteSettings(name: '/store/chat'),
+                              ),
+                            );
+                          },
+                        style: TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.green,
+                            decoration: TextDecoration.underline,
                             fontWeight: FontWeight.w400),
                       ),
                     ],
@@ -524,7 +495,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             ],
           ),
         ),
-      ],
+        Flexible(
+            child: Row(
+          children: [
+            SizedBox(width: 10.0),
+            Text("* "),
+            InkWell(
+              onTap: () {
+                UrlLauncherUtils.launchURL(terms_and_conditions_url);
+              },
+              child: Text("Check our Terms of Services",
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: Colors.black,
+                    decoration: TextDecoration.underline,
+                  )),
+            ),
+          ],
+        )),
+      ]),
     );
   }
 
@@ -544,111 +533,113 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             if (walletAmount != 0.00 && !walletAmount.isNegative) {
               child = Container(
                 height: 120,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    CheckboxListTile(
-                      value: isAmountUsed,
-                      onChanged: (bool newValue) {
-                        if (walletAmount.isNegative) {
-                          Fluttertoast.showToast(
-                              msg: 'Cannot Use Wallet',
-                              backgroundColor: CustomColors.alertRed,
-                              textColor: CustomColors.white);
-                          return;
-                        }
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (walletAmount.isNegative) {
+                              Fluttertoast.showToast(
+                                  msg: 'Cannot Use Wallet',
+                                  backgroundColor: CustomColors.alertRed,
+                                  textColor: CustomColors.white);
+                              return;
+                            }
 
-                        if (newValue) {
-                          if (walletAmount >
-                              widget._priceDetails[0] + shippingCharge)
-                            wAmount = widget._priceDetails[0] + shippingCharge;
-                          else
-                            wAmount = walletAmount;
-                        } else {
-                          wAmount = 0;
-                        }
-                        setState(() {
-                          isAmountUsed = newValue;
-                        });
-                      },
-                      title: Text(
-                        "Apply Balance",
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          color: CustomColors.blue,
+                            if (!isAmountUsed) {
+                              if (walletAmount >
+                                  (widget._priceDetails[0] + deliveryOption != 0
+                                      ? widget._priceDetails[2]
+                                      : 0.00))
+                                wAmount =
+                                    widget._priceDetails[0] + deliveryOption !=
+                                            0
+                                        ? widget._priceDetails[2]
+                                        : 0.00;
+                              else
+                                wAmount = walletAmount;
+                            } else {
+                              wAmount = 0;
+                            }
+                            setState(() {
+                              isAmountUsed = !isAmountUsed;
+                            });
+                          },
+                          child: Icon(isAmountUsed
+                              ? Icons.radio_button_on
+                              : Icons.radio_button_off),
                         ),
-                      ),
-                      secondary: Text(
-                        "₹ $walletAmount",
-                        style: TextStyle(
-                          color: walletAmount.isNegative
-                              ? CustomColors.alertRed
-                              : CustomColors.green,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          "Apply Store Wallet Balance : ",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: CustomColors.blue,
+                          ),
                         ),
-                      ),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      activeColor: CustomColors.alertRed,
+                      ],
                     ),
-                    ListTile(
-                      leading: Text(""),
-                      title: Text(
-                        "Amount Applied",
-                        style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 14.0,
-                        ),
-                      ),
-                      trailing: Text(
-                        "₹ $wAmount",
-                        style: TextStyle(
-                          color: CustomColors.green,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    Text(
+                      "₹ $walletAmount",
+                      style: TextStyle(
+                        color: walletAmount.isNegative
+                            ? CustomColors.alertRed
+                            : CustomColors.blue,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
               );
             } else {
-              child = ListTile(
-                leading: Text(""),
-                title: Text(
-                  "Wallet Balance",
-                  style: TextStyle(
-                    color: CustomColors.blue,
-                    fontSize: 14.0,
-                  ),
-                ),
-                trailing: Text(
-                  "₹ $walletAmount",
-                  style: TextStyle(
-                    color: CustomColors.green,
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+              child = Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Store Wallet Balance : ",
+                      style: TextStyle(
+                          color: CustomColors.blue,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      "₹ 0.00",
+                      style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               );
             }
           } else {
-            child = ListTile(
-              leading: Text(""),
-              title: Text(
-                "Wallet Balance",
-                style: TextStyle(
-                  color: CustomColors.blue,
-                  fontSize: 14.0,
-                ),
-              ),
-              trailing: Text(
-                "₹ 0.00",
-                style: TextStyle(
-                  color: CustomColors.green,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),
+            child = Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Store Wallet Balance : ",
+                    style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    "₹ 0.00",
+                    style: TextStyle(
+                      color: CustomColors.blue,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             );
           }
@@ -668,33 +659,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
         return Padding(
           padding: EdgeInsets.all(5.0),
-          child: Card(
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  leading: Icon(
-                    Icons.account_balance_wallet,
-                    size: 30.0,
-                    color: CustomColors.alertRed,
-                  ),
-                  title: Text(
-                    "Store Wallet",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: CustomColors.positiveGreen,
-                      fontSize: 17.0,
-                    ),
-                  ),
-                ),
-                Divider(
-                  color: CustomColors.blue,
-                  height: 0,
-                ),
-                child,
-              ],
-            ),
-          ),
+          child: child,
         );
       },
     );
@@ -709,13 +674,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         return "Instant Delivery";
         break;
       case 2:
-        return "Same-Day Delivery";
+        return "Standard Delivery";
         break;
       case 3:
-        return "Schedule Delivery";
+        return "Scheduled Delivery";
         break;
       default:
-        return "Same-Day Delivery";
+        return "Standard Delivery";
         break;
     }
   }
@@ -758,6 +723,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text("Delivery Address"),
+                  InkWell(
+                    child: Icon(
+                      Icons.edit,
+                      color: CustomColors.alertRed,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewLocationsScreen(),
+                          settings: RouteSettings(name: '/location'),
+                        ),
+                      ).then((value) {
+                        setState(() {});
+                      });
+                    },
+                  ),
+                ]),
+            Divider(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
