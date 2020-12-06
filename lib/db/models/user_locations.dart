@@ -1,6 +1,7 @@
 import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/geopoint_data.dart';
+import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -31,7 +32,26 @@ class UserLocations {
     return Model.db.collectionGroup('user_locations');
   }
 
+  CollectionReference getCollectionRef() {
+    return Model.db
+        .collection("buyers")
+        .document(cachedLocalUser.getID())
+        .collection("user_locations");
+  }
+
   String getID() {
     return this.uuid;
+  }
+
+  Future updateLocation() async {
+    try {
+      await getCollectionRef().document(getID()).updateData(this.toJson());
+
+      if (cachedLocalUser.primaryLocation.uuid == this.uuid) {
+        cachedLocalUser.primaryLocation = UserLocations.fromJson(this.toJson());
+      }
+    } catch (err) {
+      throw err;
+    }
   }
 }

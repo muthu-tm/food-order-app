@@ -1,6 +1,6 @@
 import 'package:chipchop_buyer/db/models/user_locations.dart';
-import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/user/AddLocation.dart';
+import 'package:chipchop_buyer/screens/user/EditLocation.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
@@ -35,7 +35,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
         backgroundColor: CustomColors.green,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blueGreen,
+        backgroundColor: CustomColors.green.withOpacity(0.8),
         onPressed: () {
           Navigator.push(
             context,
@@ -70,9 +70,9 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                       Text(
                         "No Locations Found!",
                         style: TextStyle(
-                            color: CustomColors.blueGreen,
-                            fontSize: 16,
-                            ),
+                          color: CustomColors.blueGreen,
+                          fontSize: 16,
+                        ),
                       ),
                       SizedBox(height: 20),
                     ],
@@ -80,127 +80,142 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                 ),
               );
             } else {
-              child = Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  primary: false,
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    UserLocations loc = UserLocations.fromJson(
-                        snapshot.data.documents[index].data);
+              child = SingleChildScrollView(
+                child: Container(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          UserLocations loc = UserLocations.fromJson(
+                              snapshot.data.documents[index].data);
 
-                    return Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5),
-                          ),
-                          border: Border.all(color: Colors.grey.shade200),
-                        ),
-                        padding: EdgeInsets.only(left: 12, top: 8, right: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    loc.userName,
-                                    style: TextStyle(
-                                        color: CustomColors.blue,
-                                        fontSize: 14),
-                                  ),
+                          return Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(5),
                                 ),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 8, right: 8, top: 4, bottom: 4),
-                                  decoration: BoxDecoration(
-                                    color: primaryLocID == loc.uuid
-                                        ? CustomColors.green
-                                        : Colors.grey.shade300,
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(5),
+                                border: Border.all(color: Colors.grey.shade200),
+                              ),
+                              padding:
+                                  EdgeInsets.only(left: 12, top: 8, right: 12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          loc.userName,
+                                          style: TextStyle(
+                                              color: CustomColors.blue,
+                                              fontSize: 14),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            left: 8,
+                                            right: 8,
+                                            top: 4,
+                                            bottom: 4),
+                                        decoration: BoxDecoration(
+                                          color: primaryLocID == loc.uuid
+                                              ? CustomColors.green
+                                              : Colors.grey.shade300,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(5),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          loc.locationName,
+                                          style: TextStyle(
+                                              color: CustomColors.blue,
+                                              fontSize: 10),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  createAddressText(loc.address.street, 6),
+                                  createAddressText(loc.address.city, 6),
+                                  createAddressText(loc.address.pincode, 6),
+                                  SizedBox(
+                                    height: 6,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "LandMark : ",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: CustomColors.blue),
+                                        ),
+                                        TextSpan(
+                                          text: loc.address.landmark,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Text(
-                                    loc.locationName,
-                                    style: TextStyle(
-                                        color: CustomColors.blue,
-                                        fontSize: 10),
+                                  SizedBox(
+                                    height: 6,
                                   ),
-                                )
-                              ],
-                            ),
-                            createAddressText(loc.address.street, 6),
-                            createAddressText(loc.address.city, 6),
-                            createAddressText(loc.address.pincode, 6),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "LandMark : ",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: CustomColors.blue),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: "Mobile : ",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: CustomColors.blue),
+                                        ),
+                                        TextSpan(
+                                          text: loc.userNumber,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  TextSpan(
-                                    text: loc.address.landmark,
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 13),
+                                  SizedBox(
+                                    height: 10,
                                   ),
+                                  Container(
+                                    color: Colors.grey.shade300,
+                                    height: 1,
+                                    width: double.infinity,
+                                  ),
+                                  addressAction(loc),
                                 ],
                               ),
                             ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: "Mobile : ",
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: CustomColors.blue),
-                                  ),
-                                  TextSpan(
-                                    text: loc.userNumber,
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 13),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              color: Colors.grey.shade300,
-                              height: 1,
-                              width: double.infinity,
-                            ),
-                            addressAction(loc)
-                          ],
-                        ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                      SizedBox(
+                        height: 70,
+                      ),
+                    ],
+                  ),
                 ),
               );
             }
@@ -240,38 +255,38 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           Spacer(
             flex: 2,
           ),
-          // FlatButton.icon(
-          //   onPressed: () {
-          //     // Navigator.push(
-          //     //   context,
-          //     //   MaterialPageRoute(
-          //     //     builder: (context) => AddLocation(),
-          //     //     settings: RouteSettings(name: '/location'),
-          //     //   ),
-          //     // );
-          //   },
-          //   icon: Icon(
-          //     Icons.edit_location,
-          //     color: CustomColors.blue,
-          //   ),
-          //   label: Text(
-          //     "Edit",
-          //     style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
-          //   ),
-          //   splashColor: Colors.transparent,
-          //   highlightColor: Colors.transparent,
-          // ),
-          // Spacer(
-          //   flex: 3,
-          // ),
-          // Container(
-          //   height: 20,
-          //   width: 1,
-          //   color: Colors.grey,
-          // ),
-          // Spacer(
-          //   flex: 3,
-          // ),
+          FlatButton.icon(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditLocation(loc),
+                  settings: RouteSettings(name: '/location/edit'),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.edit_location,
+              color: CustomColors.black,
+            ),
+            label: Text(
+              "Edit",
+              style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
+            ),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          Spacer(
+            flex: 3,
+          ),
+          Container(
+            height: 20,
+            width: 1,
+            color: Colors.grey,
+          ),
+          Spacer(
+            flex: 3,
+          ),
           FlatButton.icon(
             onPressed: () async {
               if (primaryLocID == loc.uuid) {

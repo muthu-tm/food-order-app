@@ -8,11 +8,11 @@ import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
 import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
+import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../services/controllers/user/user_service.dart';
@@ -140,6 +140,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               document.data['msg_type'] == 0
                   // Text
@@ -151,9 +152,9 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                       width: 200.0,
                       decoration: BoxDecoration(
-                          color: CustomColors.grey,
-                          borderRadius: BorderRadius.circular(8.0)),
-                      margin: EdgeInsets.only(bottom: 5.0, right: 10.0),
+                          color: CustomColors.green.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(20.0)),
+                      margin: EdgeInsets.only(bottom: 3.0),
                     )
                   : Container(
                       child: FlatButton(
@@ -206,17 +207,16 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                         },
                         padding: EdgeInsets.all(0),
                       ),
-                      margin: EdgeInsets.only(bottom: 5.0, right: 10.0),
+                      margin: EdgeInsets.only(right: 10.0),
                     )
             ],
-            mainAxisAlignment: MainAxisAlignment.end,
           ),
 
           // Time
           isLastMessageRight(index)
               ? Container(
                   child: Text(
-                    DateFormat('dd MMM kk:mm').format(
+                    DateUtils.formatDateTime(
                       DateTime.fromMillisecondsSinceEpoch(
                         (document.data['created_at'] as Timestamp)
                             .millisecondsSinceEpoch,
@@ -227,121 +227,106 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                         fontSize: 12.0,
                         fontStyle: FontStyle.italic),
                   ),
-                  margin: EdgeInsets.only(right: 20),
+                  margin: EdgeInsets.only(right: 10),
                 )
               : Container()
         ],
       );
     } else {
       // Left (peer message)
-      return Container(
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Material(
-                  child: Icon(
-                    Icons.headset_mic,
-                    size: 35,
-                    color: CustomColors.grey,
-                  ),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(18.0),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                ),
-                document.data['msg_type'] == 0
-                    ? Container(
-                        child: Text(
-                          document.data['content'],
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                        width: 200.0,
-                        decoration: BoxDecoration(
-                            color: CustomColors.green,
-                            borderRadius: BorderRadius.circular(8.0)),
-                        margin: EdgeInsets.only(left: 10.0),
-                      )
-                    : Container(
-                        child: FlatButton(
-                          child: Material(
-                            child: CachedNetworkImage(
-                              placeholder: (context, url) => Container(
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      CustomColors.grey),
-                                ),
-                                width: 200.0,
-                                height: 200.0,
-                                padding: EdgeInsets.all(70.0),
-                                decoration: BoxDecoration(
-                                  color: CustomColors.grey,
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(8.0),
-                                  ),
-                                ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              document.data['msg_type'] == 0
+                  ? Container(
+                      child: Text(
+                        document.data['content'],
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+                      width: 200.0,
+                      decoration: BoxDecoration(
+                          color: CustomColors.grey,
+                          borderRadius: BorderRadius.circular(20.0)),
+                      margin: EdgeInsets.only(bottom: 3.0),
+                    )
+                  : Container(
+                      child: FlatButton(
+                        child: Material(
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => Container(
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    CustomColors.grey),
                               ),
-                              errorWidget: (context, url, error) => Material(
-                                child: Image.asset(
-                                  'images/img_not_available.jpeg',
-                                  width: 200.0,
-                                  height: 200.0,
-                                  fit: BoxFit.cover,
-                                ),
+                              width: 200.0,
+                              height: 200.0,
+                              padding: EdgeInsets.all(70.0),
+                              decoration: BoxDecoration(
+                                color: CustomColors.grey,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(8.0),
                                 ),
-                                clipBehavior: Clip.hardEdge,
                               ),
-                              imageUrl: document.data['content'],
-                              width: 200.0,
-                              height: 200.0,
-                              fit: BoxFit.cover,
                             ),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                            clipBehavior: Clip.hardEdge,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ImageView(
-                                  url: document.data['content'],
-                                ),
+                            errorWidget: (context, url, error) => Material(
+                              child: Image.asset(
+                                'images/img_not_available.jpeg',
+                                width: 200.0,
+                                height: 200.0,
+                                fit: BoxFit.cover,
                               ),
-                            );
-                          },
-                          padding: EdgeInsets.all(0),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(8.0),
+                              ),
+                              clipBehavior: Clip.hardEdge,
+                            ),
+                            imageUrl: document.data['content'],
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                          clipBehavior: Clip.hardEdge,
                         ),
-                        margin: EdgeInsets.only(left: 10.0),
-                      )
-              ],
-            ),
-
-            // Time
-            isLastMessageLeft(index)
-                ? Container(
-                    child: Text(
-                      DateFormat('dd MMM kk:mm').format(
-                        DateTime.fromMillisecondsSinceEpoch(
-                          (document.data['created_at'] as Timestamp)
-                              .millisecondsSinceEpoch,
-                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageView(
+                                url: document.data['content'],
+                              ),
+                            ),
+                          );
+                        },
+                        padding: EdgeInsets.all(0),
                       ),
-                      style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 12.0,
-                          fontStyle: FontStyle.italic),
+                      margin: EdgeInsets.only(left: 10.0),
+                    )
+            ],
+          ),
+
+          // Time
+          isLastMessageLeft(index)
+              ? Container(
+                  child: Text(
+                    DateUtils.formatDateTime(
+                      DateTime.fromMillisecondsSinceEpoch(
+                        (document.data['created_at'] as Timestamp)
+                            .millisecondsSinceEpoch,
+                      ),
                     ),
-                    margin: EdgeInsets.only(left: 50.0, top: 5.0, bottom: 5.0),
-                  )
-                : Container()
-          ],
-          crossAxisAlignment: CrossAxisAlignment.start,
-        ),
-        margin: EdgeInsets.only(bottom: 10.0),
+                    style: TextStyle(
+                        color: CustomColors.blue,
+                        fontSize: 12.0,
+                        fontStyle: FontStyle.italic),
+                  ),
+                  margin: EdgeInsets.only(left: 10.0),
+                )
+              : Container()
+        ],
       );
     }
   }
@@ -349,6 +334,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   bool isLastMessageLeft(int index) {
     if ((index > 0 &&
             listMessage != null &&
+            listMessage[index - 1].data['sender_type'] == 0 &&
             listMessage[index - 1].data['from'] == cachedLocalUser.getID()) ||
         index == 0) {
       return true;
@@ -360,6 +346,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
   bool isLastMessageRight(int index) {
     if ((index > 0 &&
             listMessage != null &&
+            listMessage[index - 1].data['sender_type'] == 1 &&
             listMessage[index - 1].data['from'] != cachedLocalUser.getID()) ||
         index == 0) {
       return true;
@@ -394,18 +381,8 @@ class StoreChatScreenState extends State<StoreChatScreen> {
       ),
       body: Stack(
         children: <Widget>[
-          SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  // List of messages
-                  buildListMessage(),
-                  // Input content
-                  buildInput(),
-                ],
-              ),
-            ),
-          ),
+          buildListMessage(),
+          Positioned(bottom: 0, left: 0, child: buildInput()),
 
           // Loading
           buildLoading()
@@ -448,7 +425,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
               child: Icon(
                 Icons.camera_alt,
                 size: 25,
-                color: CustomColors.blueGreen,
+                color: CustomColors.black,
               ),
               color: CustomColors.white,
             ),
@@ -460,7 +437,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
               child: Icon(
                 Icons.image,
                 size: 25,
-                color: CustomColors.blueGreen,
+                color: CustomColors.black,
               ),
               color: CustomColors.white,
             ),
@@ -489,12 +466,12 @@ class StoreChatScreenState extends State<StoreChatScreen> {
             child: IconButton(
               icon: Icon(Icons.send),
               onPressed: () => onSendMessage(textEditingController.text, 0),
-              color: CustomColors.blueGreen,
+              color: CustomColors.green,
             ),
           ),
         ],
       ),
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       height: 50.0,
       decoration: BoxDecoration(
           border: Border(
@@ -557,20 +534,30 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                   alignment: AlignmentDirectional.center,
                   height: 200,
                   child: Text(
-                    "No Chats Found",
+                    "No Chats Found !!",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: CustomColors.grey, fontSize: 16),
                   ));
             }
+            listMessage.clear();
             listMessage.addAll(snapshot.data.documents);
-            return ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemBuilder: (context, index) =>
-                  buildItem(index, snapshot.data.documents[index]),
-              itemCount: snapshot.data.documents.length,
-              reverse: true,
-              shrinkWrap: true,
-              controller: listScrollController,
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(10.0),
+                    itemBuilder: (context, index) =>
+                        buildItem(index, snapshot.data.documents[index]),
+                    itemCount: snapshot.data.documents.length,
+                    reverse: true,
+                    shrinkWrap: true,
+                    controller: listScrollController,
+                  ),
+                ),
+                SizedBox(
+                  height: 50,
+                )
+              ],
             );
           }
         },

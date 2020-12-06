@@ -20,85 +20,70 @@ class ProductWidget extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-          color: CustomColors.white,
-        ),
-        padding: EdgeInsets.all(2),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CachedNetworkImage(
-              imageUrl: product.getProductImage(),
-              imageBuilder: (context, imageProvider) => Container(
-                width: 125,
-                height: 90,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                  shape: BoxShape.rectangle,
-                  image:
-                      DecorationImage(fit: BoxFit.fill, image: imageProvider),
+      child: Padding(
+        padding: EdgeInsets.all(3.0),
+        child: Container(
+          width: 130,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+          child: InkWell(
+            onTap: () async {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductDetailsScreen(product),
+                  settings: RouteSettings(name: '/products'),
                 ),
-              ),
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(value: downloadProgress.progress),
-              errorWidget: (context, url, error) => Icon(
-                Icons.error,
-                size: 35,
-              ),
-              fadeOutDuration: Duration(seconds: 1),
-              fadeInDuration: Duration(seconds: 2),
-            ),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      product.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: CustomColors.black,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
+              );
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  child: CachedNetworkImage(
+                    imageUrl: product.getProductImage(),
+                    imageBuilder: (context, imageProvider) => Container(
+                      width: 130,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        shape: BoxShape.rectangle,
+                        image: DecorationImage(
+                            fit: BoxFit.fill, image: imageProvider),
                       ),
                     ),
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                      size: 35,
+                    ),
+                    fadeOutDuration: Duration(seconds: 1),
+                    fadeInDuration: Duration(seconds: 2),
                   ),
-                  // Center(
-                  //   child: Text(
-                  //     "${product.weight} ${product.getUnit()}",
-                  //     maxLines: 1,
-                  //     overflow: TextOverflow.ellipsis,
-                  //     style: TextStyle(
-                  //       color: CustomColors.blue,
-                  //       fontSize: 13.0,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Center(
-                  //   child: Text(
-                  //     "Rs. ${product.currentPrice.toString()}",
-                  //     maxLines: 1,
-                  //     overflow: TextOverflow.ellipsis,
-                  //     style: TextStyle(
-                  //       color: CustomColors.blue,
-                  //       fontSize: 13.0,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            )
-          ],
+                ),
+                Flexible(
+                  child: Text(
+                    product.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
@@ -75,50 +74,33 @@ class RecentStoresWidget extends StatelessWidget {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    child: FutureBuilder(
-                                        future:
-                                            Store().getStoresByID(_ua.storeID),
-                                        builder: (context,
-                                            AsyncSnapshot<Store> snapshot) {
-                                          if (snapshot.hasData) {
-                                            return CachedNetworkImage(
-                                              imageUrl: snapshot.data
-                                                  .getPrimaryImage(),
-                                              imageBuilder:
-                                                  (context, imageProvider) =>
-                                                      Container(
-                                                width: 130,
-                                                height: 100,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  shape: BoxShape.rectangle,
-                                                  image: DecorationImage(
-                                                      fit: BoxFit.fill,
-                                                      image: imageProvider),
-                                                ),
-                                              ),
-                                              progressIndicatorBuilder:
-                                                  (context, url,
-                                                          downloadProgress) =>
-                                                      CircularProgressIndicator(
-                                                          value:
-                                                              downloadProgress
-                                                                  .progress),
-                                              errorWidget:
-                                                  (context, url, error) => Icon(
-                                                Icons.error,
-                                                size: 35,
-                                              ),
-                                              fadeOutDuration:
-                                                  Duration(seconds: 1),
-                                              fadeInDuration:
-                                                  Duration(seconds: 2),
-                                            );
-                                          } else {
-                                            return CircularProgressIndicator();
-                                          }
-                                        }),
+                                    child: CachedNetworkImage(
+                                      imageUrl: _ua.getImage(),
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        width: 130,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          shape: BoxShape.rectangle,
+                                          image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: imageProvider),
+                                        ),
+                                      ),
+                                      progressIndicatorBuilder: (context, url,
+                                              downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(
+                                        Icons.error,
+                                        size: 35,
+                                      ),
+                                      fadeOutDuration: Duration(seconds: 1),
+                                      fadeInDuration: Duration(seconds: 2),
+                                    ),
                                   ),
                                   Flexible(
                                     child: Text(

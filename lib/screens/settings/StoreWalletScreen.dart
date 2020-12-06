@@ -85,13 +85,12 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                       Text(
                         "Available Balance",
                         style: TextStyle(
-                          color: CustomColors.green,
+                          color: CustomColors.black,
                           fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "Rs.${amount ?? 0.00}",
+                        "₹ ${amount ?? 0.00}",
                         style: TextStyle(
                           color: CustomColors.green,
                           fontSize: 18.0,
@@ -111,7 +110,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                 padding: EdgeInsets.all(10),
                 height: 50,
                 child: Text(
-                  "Rs.0.00",
+                  "₹ 0.00",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: CustomColors.green,
@@ -148,7 +147,6 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                   "Wallet Amount",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.green,
                     fontSize: 17.0,
@@ -183,12 +181,12 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                 UserStoreWalletHstory history = UserStoreWalletHstory.fromJson(
                     snapshot.data.documents[index].data);
 
-                Color tileColor = CustomColors.green;
+                Color tileColor = CustomColors.green.withOpacity(0.5);
                 Color textColor = CustomColors.white;
 
                 if (index % 2 == 0) {
                   tileColor = CustomColors.white;
-                  textColor = CustomColors.alertRed;
+                  textColor = CustomColors.black;
                 }
 
                 return Padding(
@@ -198,7 +196,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                     elevation: 3.0,
                     borderRadius: BorderRadius.circular(10.0),
                     child: Container(
-                      height: 75,
+                      height: 90,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
@@ -221,20 +219,22 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
+                                history.details.isNotEmpty ? Flexible(
+                                                                  child: Text(
+                                    history.details,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: textColor,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ) : Container(),
                                 Text(
-                                  history.details,
-                                  style: TextStyle(
-                                      
-                                      fontSize: 18.0,
-                                      color: textColor,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text(
-                                  'At: ${DateUtils.formatDate(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
+                                  '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
                                   style: TextStyle(
                                       fontSize: 12.0,
-                                      color: textColor,
-                                      fontWeight: FontWeight.bold),
+                                      color: textColor),
                                 ),
                                 Text(
                                   history.type == 0
@@ -242,21 +242,21 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                                       : history.type == 1
                                           ? "Order Credit"
                                           : history.type == 2
-                                              ? "Store Offer"
+                                              ? "Store Transaction"
                                               : "Offer",
                                   style: TextStyle(
                                       fontSize: 10.0,
-                                      color: CustomColors.alertRed
-                                          .withOpacity(0.7),
+                                      color: textColor,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 5.0),
+                          Flexible(
                             child: Text(
-                              '${history.amount}/-',
+                              '₹ ${history.amount}',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
                               style: TextStyle(
                                   fontSize: 14.0,
                                   color: textColor,
@@ -278,7 +278,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "No Transactions Found",
+                    "No Transactions Found !!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: CustomColors.alertRed,
@@ -318,7 +318,6 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                   "Transaction History",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    
                     fontWeight: FontWeight.bold,
                     color: CustomColors.green,
                     fontSize: 17.0,

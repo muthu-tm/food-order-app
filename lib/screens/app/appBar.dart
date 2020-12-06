@@ -40,74 +40,76 @@ Widget appBar(BuildContext context) {
     ),
     actions: <Widget>[
       cachedLocalUser.primaryLocation == null
-        ? InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddLocation(),
-                  settings: RouteSettings(name: '/location/add'),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Row(
-                children: [
-                  Text(
-                    "Add Location",
-                    style: TextStyle(color: CustomColors.black),
+          ? InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddLocation(),
+                    settings: RouteSettings(name: '/location/add'),
                   ),
-                  Icon(
-                    Icons.location_on,
-                    color: Colors.black,
-                  )
-                ],
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Add Location",
+                      style: TextStyle(color: CustomColors.black),
+                    ),
+                    Icon(
+                      Icons.location_on,
+                      color: Colors.black,
+                    )
+                  ],
+                ),
+              ),
+            )
+          : InkWell(
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewLocationsScreen(),
+                    settings: RouteSettings(name: '/location'),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "${cachedLocalUser.primaryLocation.locationName}",
+                      style: TextStyle(color: CustomColors.black),
+                    ),
+                    Icon(
+                      Icons.location_on,
+                      color: Colors.black,
+                    )
+                  ],
+                ),
               ),
             ),
-          )
-        : InkWell(
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewLocationsScreen(),
-                  settings: RouteSettings(name: '/location'),
-                ),
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Row(
-                children: [
-                  Text(
-                    "${cachedLocalUser.primaryLocation.locationName}",
-                    style: TextStyle(color: CustomColors.black),
-                  ),
-                  Icon(
-                    Icons.location_on,
-                    color: Colors.black,
-                  )
-                ],
+      cachedLocalUser.primaryLocation != null
+          ? IconButton(
+              icon: Icon(
+                Icons.shopping_cart,
+                size: 30.0,
+                color: CustomColors.black,
               ),
-            ),
-          ),
-      IconButton(
-        icon: Icon(
-          Icons.shopping_cart,
-          size: 30.0,
-          color: CustomColors.black,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ShoppingCartScreen(),
-              settings: RouteSettings(name: '/cart'),
-            ),
-          );
-        },
-      ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShoppingCartScreen(),
+                    settings: RouteSettings(name: '/cart'),
+                  ),
+                );
+              },
+            )
+          : Container(),
     ],
   );
 }

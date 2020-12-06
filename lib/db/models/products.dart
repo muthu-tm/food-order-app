@@ -112,17 +112,12 @@ class Products extends Model {
   }
 
   String getProductImage() {
-    if (this.productImages.isEmpty) {
+    if (image != null && image.trim() != "")
+      return image.replaceFirst(
+          firebase_storage_path, image_kit_path + ik_medium_size);
+    else
       return no_image_placeholder.replaceFirst(
           firebase_storage_path, image_kit_path + ik_medium_size);
-    } else {
-      if (this.productImages.first != null && this.productImages.first != "")
-        return this.productImages.first.replaceFirst(
-            firebase_storage_path, image_kit_path + ik_medium_size);
-      else
-        return no_image_placeholder.replaceFirst(
-            firebase_storage_path, image_kit_path + ik_medium_size);
-    }
   }
 
   List<String> getProductImages() {

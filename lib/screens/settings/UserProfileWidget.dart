@@ -74,6 +74,7 @@ class UserProfileWidget extends StatelessWidget {
             ),
             title: TextFormField(
               initialValue: user.firstName,
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 fillColor: CustomColors.white,
                 filled: true,
@@ -177,6 +178,7 @@ class UserProfileWidget extends StatelessWidget {
             ),
             title: TextFormField(
               initialValue: user.gender,
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 fillColor: CustomColors.white,
                 filled: true,
@@ -257,6 +259,7 @@ class UserProfileWidget extends StatelessWidget {
             ),
             title: TextFormField(
               initialValue: user.address.toString(),
+              textCapitalization: TextCapitalization.sentences,
               maxLines: 5,
               decoration: InputDecoration(
                 fillColor: CustomColors.white,

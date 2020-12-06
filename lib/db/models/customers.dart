@@ -93,6 +93,28 @@ class Customers {
         .snapshots();
   }
 
+  Future<List<Customers>> getUsersStores() async {
+    try {
+      QuerySnapshot snap = await Model.db
+          .collectionGroup("customers")
+          .where('contact_number', isEqualTo: cachedLocalUser.getID())
+          .getDocuments();
+
+      List<Customers> _stores = [];
+
+      snap.documents.forEach((element) {
+        Customers _c = Customers.fromJson(element.data);
+        _stores.add(_c);
+      });
+
+      return _stores;
+    } catch (err) {
+      Analytics.sendAnalyticsEvent(
+          {'type': 'store_chat_get_error', 'error': err.toString()}, 'chats');
+      throw err;
+    }
+  }
+
   Stream<DocumentSnapshot> streamUsersData(String storeID) {
     return getCollectionRef(storeID)
         .document(cachedLocalUser.getID())

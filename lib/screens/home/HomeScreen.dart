@@ -76,20 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: getCategoryCards(context),
               ),
-              ListTile(
-                title: Text(
-                  "Popular Products",
-                  style: TextStyle(
-                      color: CustomColors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: getPopularProducts(context),
-              ),
               RecentStoresWidget(),
+              getPopularProducts(context),
               RecentProductsWidget(''),
               getFrequentlyShoppedProducts(context),
             ],
@@ -157,6 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   _activity.storeID = _sd.storeID;
                                   _activity.productID = _sd.productID;
                                   _activity.productName = _p.name;
+                                  _activity.refImage = _p.getProductImage();
                                   _activity.type = 2;
                                   _activity.create();
 
@@ -280,23 +269,43 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (snapshot.data.isEmpty) {
                         return Container();
                       } else {
-                        return Container(
-                          height: 210,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              primary: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: snapshot.data.length,
-                              padding: EdgeInsets.all(5),
-                              itemBuilder: (BuildContext context, int index) {
-                                return Container(
-                                  padding: EdgeInsets.all(5.0),
-                                  width: 150,
-                                  child: ProductWidget(
-                                    snapshot.data[index],
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text(
+                                "Popular Products",
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Container(
+                                height: 160,
+                                child: Container(
+                                  height: 160,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                );
-                              }),
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      primary: true,
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: snapshot.data.length,
+                                      padding: EdgeInsets.all(5),
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return ProductWidget(
+                                          snapshot.data[index],
+                                        );
+                                      }),
+                                ),
+                              ),
+                            ),
+                          ],
                         );
                       }
                     } else {
@@ -304,31 +313,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   });
             } else {
-              child = Container(
-                padding: EdgeInsets.all(10),
-                color: CustomColors.white,
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Text(
-                  "No Popular Products",
-                  style: TextStyle(
-                    color: CustomColors.alertRed,
-                    fontSize: 16.0,
-                  ),
-                ),
-              );
+              child = Container();
             }
           } else if (snapshot.hasError) {
-            child = Center(
-              child: Column(
-                children: AsyncWidgets.asyncError(),
-              ),
-            );
+            child = Container();
           } else {
-            child = Center(
-              child: Column(
-                children: AsyncWidgets.asyncWaiting(),
-              ),
-            );
+            child = Container();
           }
           return child;
         });

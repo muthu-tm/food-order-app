@@ -27,7 +27,7 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         if (message['data']['type'] == '1') {
-          ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
           setState(() {
             _newStoreNotification = true;
             newStoreNotification = true;
@@ -69,9 +69,9 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
             child: InkWell(
               onTap: () {
                 setState(() {
-                    _newStoreNotification = false;
-                    newStoreNotification = false;
-                  });
+                  _newStoreNotification = false;
+                  newStoreNotification = false;
+                });
 
                 Navigator.push(
                   context,
@@ -87,7 +87,7 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                   Stack(alignment: Alignment.center, children: <Widget>[
                     Icon(
                       Icons.question_answer,
-                      size: 25.0,
+                      size: 22.0,
                       color: CustomColors.black,
                     ),
                     Positioned(
@@ -100,16 +100,8 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         constraints: BoxConstraints(
-                          minWidth: 12,
-                          minHeight: 12,
-                        ),
-                        child: Text(
-                          '',
-                          style: TextStyle(
-                            color: CustomColors.black,
-                            fontSize: 8,
-                          ),
-                          textAlign: TextAlign.center,
+                          minWidth: 10,
+                          minHeight: 10,
                         ),
                       ),
                     )
@@ -130,10 +122,10 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
             child: InkWell(
               onTap: () {
                 setState(() {
-                    _newStoreNotification = false;
-                    newStoreNotification = false;
-                  });
-                  
+                  _newStoreNotification = false;
+                  newStoreNotification = false;
+                });
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -147,7 +139,7 @@ class _ChatBottomWidgetState extends State<ChatBottomWidget> {
                 children: <Widget>[
                   Icon(
                     Icons.question_answer,
-                    size: 25.0,
+                    size: 22.0,
                     color: CustomColors.black,
                   ),
                   SizedBox(

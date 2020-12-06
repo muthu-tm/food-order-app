@@ -1,11 +1,11 @@
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
+import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatsHome extends StatefulWidget {
@@ -36,18 +36,30 @@ class _ChatsHomeState extends State<ChatsHome>
   }
 
   Widget getBody(BuildContext context) {
-    return StreamBuilder(
-      stream: ChatTemplate().streamStoreChatsList(),
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    return FutureBuilder(
+      future: Customers().getUsersStores(),
+      builder: (context, AsyncSnapshot<List<Customers>> snapshot) {
         Widget child;
 
         if (snapshot.hasData) {
-          if (snapshot.data == null || snapshot.data.documents.length == 0) {
+          if (snapshot.data == null || snapshot.data.length == 0) {
             child = Center(
               child: Container(
-                child: Text(
-                  "No Chats",
-                  style: TextStyle(color: CustomColors.black),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Icon(
+                      Icons.question_answer,
+                      size: 30,
+                    ),
+                    Text(
+                      "No Chats !!",
+                      style: TextStyle(color: CustomColors.black),
+                    ),
+                  ],
                 ),
               ),
             );
@@ -57,51 +69,54 @@ class _ChatsHomeState extends State<ChatsHome>
                 scrollDirection: Axis.vertical,
                 primary: true,
                 shrinkWrap: true,
-                itemCount: snapshot.data.documents.length,
+                itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
+                  Customers _cust = snapshot.data[index];
+
                   return Padding(
-                    padding: EdgeInsets.all(5),
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => StoreChatScreen(
-                              storeID: snapshot
-                                  .data.documents[index].data['store_uuid'],
-                              storeName: snapshot
-                                  .data.documents[index].data['store_name'],
-                            ),
-                            settings: RouteSettings(name: '/chats/store'),
-                          ),
-                        ).then((value) async {
-                          await ChatTemplate().updateToRead(snapshot
-                              .data.documents[index].data['store_uuid']);
-                        });
-                      },
-                      leading: Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: CustomColors.grey,
-                          borderRadius: BorderRadius.circular(40.0),
-                        ),
-                        child: Icon(
-                          Icons.store,
-                          color: CustomColors.green,
-                        ),
+                    padding: const EdgeInsets.all(5.0),
+                    child: Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      trailing: (snapshot.data.documents[index].data
-                                  .containsKey('has_customer_unread') &&
-                              snapshot.data.documents[index]
-                                  .data['has_customer_unread'])
-                          ? Icon(
-                              Icons.question_answer,
-                              color: CustomColors.alertRed,
-                            )
-                          : Text(""),
-                      title: Text(
-                        snapshot.data.documents[index].data['store_name'],
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(10),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StoreChatScreen(
+                                storeID: _cust.storeID,
+                                storeName: _cust.storeName,
+                              ),
+                              settings: RouteSettings(name: '/chats/store'),
+                            ),
+                          ).then((value) async {
+                            await ChatTemplate().updateToRead(_cust.storeID);
+                          });
+                        },
+                        leading: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: CustomColors.black,
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Icon(
+                            Icons.store,
+                            color: CustomColors.white,
+                          ),
+                        ),
+                        trailing: (_cust.hasCustUnread)
+                            ? Icon(
+                                Icons.question_answer,
+                                color: CustomColors.alertRed,
+                              )
+                            : Text(""),
+                        title: Text(
+                          _cust.storeName,
+                        ),
                       ),
                     ),
                   );

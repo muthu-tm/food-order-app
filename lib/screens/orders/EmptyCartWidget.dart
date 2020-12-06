@@ -1,15 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class EmptyCartWidget extends StatefulWidget {
-  @override
-  _EmptyCartWidgetState createState() =>
-      _EmptyCartWidgetState();
-}
-
-class _EmptyCartWidgetState extends State<EmptyCartWidget> {
+class EmptyCartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -61,15 +56,42 @@ class _EmptyCartWidgetState extends State<EmptyCartWidget> {
               ),
             ),
             Container(
-              width: double.infinity,
-              child: Text(
-                "Your cart is Empty!!",
-                style: TextStyle(
-                  color: CustomColors.black,
-                  
-                  fontSize: 16,
-                ),
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    "Your cart is Empty !!",
+                    style: TextStyle(
+                      color: CustomColors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  RaisedButton(
+                    elevation: 3,
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(),
+                          settings: RouteSettings(name: '/'),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Text(
+                      "Continue shopping",
+                      style: TextStyle(color: CustomColors.green),
+                    ),
+                    color: CustomColors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                  )
+                ],
               ),
             )
           ],

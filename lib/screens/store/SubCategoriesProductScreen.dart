@@ -97,6 +97,7 @@ class _SubCategoriesProductsWidgetState
                         _activity.storeID = product.storeID;
                         _activity.productID = product.uuid;
                         _activity.productName = product.name;
+                        _activity.refImage = product.getProductImage();
                         _activity.type = 2;
                         _activity.create();
 

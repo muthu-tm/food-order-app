@@ -5,9 +5,10 @@ UserActivityTracker _$UserActivityTrackerFromJson(Map<String, dynamic> json) {
     ..storeID = json['store_uuid'] as String ?? ''
     ..storeName = json['store_name'] as String ?? ''
     ..productID = json['product_uuid'] as String ?? ''
+    ..productName = json['product_name'] as String ?? ''
+    ..refImage = json['image'] as String ?? ''
     ..userID = json['user_number'] as String ?? ''
     ..userName = json['user_name'] as String ?? ''
-    ..productName = json['product_name'] as String ?? ''
     ..keywords = json['keywords'] as String ?? ''
     ..type = json['type'] as int
     ..updatedAt = json['updated_at'] as int
@@ -21,6 +22,7 @@ Map<String, dynamic> _$UserActivityTrackerToJson(
       'store_name': instance.storeName ?? '',
       'product_uuid': instance.productID ?? '',
       'product_name': instance.productName ?? '',
+      'image': instance.refImage ?? '',
       'keywords': instance.keywords ?? '',
       'type': instance.type,
       'user_number': instance.userID,

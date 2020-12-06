@@ -1,18 +1,22 @@
 import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
+import 'package:chipchop_buyer/screens/user/EditLocationPicker.dart';
 import 'package:chipchop_buyer/screens/user/LocationPicker.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 
-class AddLocation extends StatefulWidget {
+class EditLocation extends StatefulWidget {
+  EditLocation(this.loc);
+
+  final UserLocations loc;
   @override
-  _AddLocationState createState() => _AddLocationState();
+  _EditLocationState createState() => _EditLocationState();
 }
 
-class _AddLocationState extends State<AddLocation> {
+class _EditLocationState extends State<EditLocation> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Address updatedAddress = Address();
@@ -23,6 +27,11 @@ class _AddLocationState extends State<AddLocation> {
   @override
   void initState() {
     super.initState();
+
+    locName = widget.loc.locationName;
+    userName = widget.loc.userName;
+    uNumber = int.parse(widget.loc.userNumber);
+    updatedAddress = widget.loc.address;
   }
 
   @override
@@ -59,7 +68,7 @@ class _AddLocationState extends State<AddLocation> {
             final FormState form = _formKey.currentState;
 
             if (form.validate()) {
-              UserLocations loc = UserLocations();
+              UserLocations loc = widget.loc;
               loc.locationName = locName;
               loc.userNumber = uNumber.toString();
               loc.userName = userName;
@@ -68,8 +77,8 @@ class _AddLocationState extends State<AddLocation> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LocationPicker(loc),
-                  settings: RouteSettings(name: '/location/add/picker'),
+                  builder: (context) => EditLocationPicker(loc),
+                  settings: RouteSettings(name: '/location/edit/picker'),
                 ),
               );
             } else {
@@ -232,7 +241,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.street,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 maxLines: 3,
                                 decoration: InputDecoration(
                                   labelText: AppLocalizations.of(context)
@@ -272,7 +282,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.landmark,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 decoration: InputDecoration(
                                   labelText: "Landmark",
                                   floatingLabelBehavior:
@@ -308,7 +319,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.city,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 decoration: InputDecoration(
                                   labelText: AppLocalizations.of(context)
                                       .translate('city'),
@@ -341,7 +353,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.state,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 decoration: InputDecoration(
                                   labelText: AppLocalizations.of(context)
                                       .translate('state'),
@@ -414,7 +427,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.country ?? "India",
                                 keyboardType: TextInputType.number,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 textAlign: TextAlign.start,
                                 decoration: InputDecoration(
                                   labelText: "Country / Region",

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
-import 'package:chipchop_buyer/screens/Home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/Home/LoginPage.dart';
 import 'package:chipchop_buyer/screens/Home/MobileSigninPage.dart';
 import 'package:chipchop_buyer/screens/Home/update_app.dart';
@@ -36,7 +35,6 @@ class _AuthPageState extends State<AuthPage> {
   TextEditingController _pController = TextEditingController();
   final AuthController _authController = AuthController();
 
-  bool _passwordVisible = true;
   bool _rememberUser = true;
   bool _radioValue = true;
 
@@ -407,9 +405,7 @@ class _AuthPageState extends State<AuthPage> {
 
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (BuildContext context) => UpdateApp(
-            child: HomeScreen(),
-          ),
+          builder: (BuildContext context) => UpdateApp(),
         ),
         (Route<dynamic> route) => false,
       );

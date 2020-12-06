@@ -1,6 +1,6 @@
 import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
-import 'package:chipchop_buyer/screens/home/AuthPage.dart';
+import 'package:chipchop_buyer/screens/home/LoginPage.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
@@ -151,13 +151,7 @@ class _UserSettingState extends State<UserSetting> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AuthPage(
-                            cachedLocalUser.getID(),
-                            cachedLocalUser.firstName +
-                                    ' ' +
-                                    cachedLocalUser.lastName ??
-                                "",
-                            cachedLocalUser.getSmallProfilePicPath()),
+                        builder: (context) => LoginPage(),
                         settings: RouteSettings(name: '/logout'),
                       ),
                       (Route<dynamic> route) => false,

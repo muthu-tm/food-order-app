@@ -121,6 +121,7 @@ class _StoreSearchBarState extends State<StoreSearchBar> {
                                 _activity.storeID = product.storeID;
                                 _activity.productID = product.uuid;
                                 _activity.productName = product.name;
+                                _activity.refImage = product.getProductImage();
                                 _activity.type = 2;
                                 _activity.create();
 
@@ -321,55 +322,37 @@ class RecentProductsWidget extends StatelessWidget {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(10)),
-                                          child: FutureBuilder(
-                                              future: Products().getByProductID(
-                                                  _ua.productID),
-                                              builder: (context,
-                                                  AsyncSnapshot<Products>
-                                                      snapshot) {
-                                                if (snapshot.hasData) {
-                                                  return CachedNetworkImage(
-                                                    imageUrl: snapshot.data
-                                                        .getProductImage(),
-                                                    imageBuilder: (context,
-                                                            imageProvider) =>
-                                                        Container(
-                                                      width: 130,
-                                                      height: 100,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        shape:
-                                                            BoxShape.rectangle,
-                                                        image: DecorationImage(
-                                                            fit: BoxFit.fill,
-                                                            image:
-                                                                imageProvider),
-                                                      ),
-                                                    ),
-                                                    progressIndicatorBuilder: (context,
-                                                            url,
-                                                            downloadProgress) =>
-                                                        CircularProgressIndicator(
-                                                            value:
-                                                                downloadProgress
-                                                                    .progress),
-                                                    errorWidget:
-                                                        (context, url, error) =>
-                                                            Icon(
-                                                      Icons.error,
-                                                      size: 35,
-                                                    ),
-                                                    fadeOutDuration:
-                                                        Duration(seconds: 1),
-                                                    fadeInDuration:
-                                                        Duration(seconds: 2),
-                                                  );
-                                                } else {
-                                                  return CircularProgressIndicator();
-                                                }
-                                              }),
+                                          child: CachedNetworkImage(
+                                            imageUrl: _ua.getImage(),
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              width: 130,
+                                              height: 100,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                shape: BoxShape.rectangle,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.fill,
+                                                    image: imageProvider),
+                                              ),
+                                            ),
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                CircularProgressIndicator(
+                                                    value: downloadProgress
+                                                        .progress),
+                                            errorWidget:
+                                                (context, url, error) => Icon(
+                                              Icons.error,
+                                              size: 35,
+                                            ),
+                                            fadeOutDuration:
+                                                Duration(seconds: 1),
+                                            fadeInDuration:
+                                                Duration(seconds: 2),
+                                          ),
                                         ),
                                         Flexible(
                                           child: Text(

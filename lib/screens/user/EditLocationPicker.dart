@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/geopoint_data.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
@@ -12,19 +11,20 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class LocationPicker extends StatefulWidget {
-  LocationPicker(this.loc);
+class EditLocationPicker extends StatefulWidget {
+  EditLocationPicker(this.loc);
 
   final UserLocations loc;
   @override
-  State createState() => LocationPickerState();
+  State createState() => EditLocationPickerState();
 }
 
-class LocationPickerState extends State<LocationPicker> {
+class EditLocationPickerState extends State<EditLocationPicker> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   GoogleMapController mapController;
   Geoflutterfire geo = Geoflutterfire();
+
   GeoPointData geoData;
 
   final Set<Marker> _markers = {};
@@ -32,7 +32,17 @@ class LocationPickerState extends State<LocationPicker> {
   @override
   void initState() {
     super.initState();
-    _searchAndNavigate(widget.loc.address.pincode);
+    geoData = widget.loc.geoPoint;
+
+    _markers.add(
+      Marker(
+        markerId: MarkerId(
+          widget.loc.geoPoint.geoHash,
+        ),
+        position: LatLng(widget.loc.geoPoint.geoPoint.latitude,
+            widget.loc.geoPoint.geoPoint.longitude),
+      ),
+    );
   }
 
   @override
@@ -41,7 +51,7 @@ class LocationPickerState extends State<LocationPicker> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('title_add_location'),
+          "Edit Location",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -56,7 +66,7 @@ class LocationPickerState extends State<LocationPicker> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: CustomColors.blueGreen,
+        backgroundColor: CustomColors.green,
         onPressed: () async {
           if (geoData == null || geoData.geoHash.isEmpty) {
             _scaffoldKey.currentState.showSnackBar(
@@ -67,8 +77,7 @@ class LocationPickerState extends State<LocationPicker> {
           }
           widget.loc.geoPoint = geoData;
           try {
-            UserLocations _loc = await cachedLocalUser.addLocations(widget.loc);
-            await cachedLocalUser.updatePrimaryLocation(_loc);
+            await widget.loc.updateLocation();
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (BuildContext context) => HomeScreen(),
@@ -84,7 +93,7 @@ class LocationPickerState extends State<LocationPicker> {
           }
         },
         label: Text(
-          AppLocalizations.of(context).translate('button_add_location'),
+          "Update Location",
         ),
       ),
       body: Container(
@@ -92,8 +101,10 @@ class LocationPickerState extends State<LocationPicker> {
         child: Stack(
           children: [
             GoogleMap(
-              initialCameraPosition:
-                  CameraPosition(target: LatLng(12.9716, 77.5946), zoom: 5),
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                      geoData.geoPoint.latitude, geoData.geoPoint.longitude),
+                  zoom: 15),
               onTap: (latlang) {
                 if (_markers.length >= 1) {
                   _markers.clear();

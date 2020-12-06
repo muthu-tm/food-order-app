@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -82,27 +85,63 @@ class _StoresInMapState extends State<StoresInMap> {
       body: Stack(
         children: [
           _buildGoogleMap(context),
-          // Positioned(
-          //     top: 10,
-          //     left: 10,
-          //     child: Slider(
-          //       min: 0.0,
-          //       max: 20.0,
-          //       divisions: 4,
-          //       value: radius,
-          //       label: 'Radius ${radius}km',
-          //       activeColor: CustomColors.alertRed,
-          //       inactiveColor: CustomColors.alertRed.withOpacity(0.2),
-          //       onChanged: (rad) {
-          //         setState(() {
-          //           radius = rad;
-          //         });
-          //       },
-          //     )),
+          Positioned(
+            top: 10,
+            left: 10,
+            right: 80,
+            child: Card(
+              elevation: 2,
+              child: Container(
+                color: CustomColors.white,
+                alignment: Alignment.topCenter,
+                child: TextFormField(
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.search,
+                    textCapitalization: TextCapitalization.sentences,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.search),
+                      hintText: "Search",
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(5),
+                    ),
+                    autofocus: false,
+                    onFieldSubmitted: (searchKey) async {
+                      if (searchKey != "") await _searchAndNavigate(searchKey);
+                    }),
+              ),
+            ),
+          ),
           _buildContainer(),
         ],
       ),
     );
+  }
+
+  _searchAndNavigate(String searchKey) async {
+    try {
+      List<Placemark> marks =
+          await Geolocator().placemarkFromAddress(searchKey);
+      _controller.future.then((value) => value.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                zoom: 12,
+                target: LatLng(
+                    marks[0].position.latitude, marks[0].position.longitude),
+              ),
+            ),
+          ));
+    } catch (err) {
+      Analytics.reportError({
+        'type': 'location_search_error',
+        'search_key': searchKey,
+        'error': err.toString()
+      }, 'location');
+      Fluttertoast.showToast(
+          msg: 'Error, Unable to find matching address',
+          backgroundColor: CustomColors.alertRed,
+          textColor: Colors.white);
+    }
   }
 
   Widget _buildGoogleMap(BuildContext context) {
@@ -149,6 +188,14 @@ class _StoresInMapState extends State<StoresInMap> {
         infoWindow: InfoWindow(
             title: element.name,
             onTap: () {
+              UserActivityTracker _activity = UserActivityTracker();
+              _activity.keywords = "";
+              _activity.storeID = element.uuid;
+              _activity.storeName = element.name;
+              _activity.refImage = element.getPrimaryImage();
+              _activity.type = 1;
+              _activity.create();
+
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -196,6 +243,14 @@ class _StoresInMapState extends State<StoresInMap> {
                           _gotoLocation(pos.latitude, pos.longitude);
                         },
                         onTap: () {
+                          UserActivityTracker _activity = UserActivityTracker();
+                          _activity.keywords = "";
+                          _activity.storeID = store.uuid;
+                          _activity.storeName = store.name;
+                          _activity.refImage = store.getPrimaryImage();
+                          _activity.type = 1;
+                          _activity.create();
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -221,7 +276,7 @@ class _StoresInMapState extends State<StoresInMap> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(10.0),
                                     child: CachedNetworkImage(
-                                      imageUrl: store.getStoreImages().first,
+                                      imageUrl: store.getPrimaryImage(),
                                       imageBuilder: (context, imageProvider) =>
                                           Image(
                                         fit: BoxFit.fill,

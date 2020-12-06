@@ -39,6 +39,7 @@ class StoreWidget extends StatelessWidget {
           _activity.keywords = "";
           _activity.storeID = store.uuid;
           _activity.storeName = store.name;
+          _activity.refImage = store.getPrimaryImage();
           _activity.type = 1;
           _activity.create();
 

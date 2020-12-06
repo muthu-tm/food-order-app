@@ -1,5 +1,6 @@
 import 'package:chipchop_buyer/db/models/user.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'user_activity_tracker.g.dart';
@@ -14,6 +15,8 @@ class UserActivityTracker {
   String productID;
   @JsonKey(name: 'product_name', nullable: false)
   String productName;
+  @JsonKey(name: 'image', nullable: false)
+  String refImage;
   @JsonKey(name: 'user_number', nullable: false)
   String userID;
   @JsonKey(name: 'user_name', nullable: false)
@@ -41,6 +44,13 @@ class UserActivityTracker {
 
   String getID() {
     return '${this.createdAt}';
+  }
+
+  String getImage() {
+    if (this.refImage != null && this.refImage.isNotEmpty) {
+      return this.refImage;
+    } else
+      return no_image_placeholder;
   }
 
   Future<void> create() async {

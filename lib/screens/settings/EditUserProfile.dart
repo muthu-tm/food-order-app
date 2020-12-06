@@ -2,7 +2,6 @@ import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
-import 'package:chipchop_buyer/screens/utils/AddressWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
@@ -74,7 +73,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
           AppLocalizations.of(context).translate('save'),
           style: TextStyle(
             fontSize: 17,
-            
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -98,7 +96,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('first_name'),
                           style: TextStyle(
-                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -137,7 +134,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('last_name'),
                           style: TextStyle(
-                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -177,7 +173,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('email'),
                           style: TextStyle(
-                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -216,7 +211,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('dob'),
                           style: TextStyle(
-                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -260,7 +254,6 @@ class _EditUserProfileState extends State<EditUserProfile> {
                         child: Text(
                           AppLocalizations.of(context).translate('gender'),
                           style: TextStyle(
-                              
                               color: CustomColors.grey,
                               fontWeight: FontWeight.bold,
                               fontSize: 17),
@@ -309,7 +302,253 @@ class _EditUserProfileState extends State<EditUserProfile> {
                   ],
                 ),
               ),
-              AddressWidget("Address", user.address, updatedAddress),
+              Padding(
+                padding: EdgeInsets.all(5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 40,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Address",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: TextFormField(
+                              initialValue: user.address.street,
+                              textAlign: TextAlign.center,
+                              textCapitalization: TextCapitalization.sentences,
+                              maxLines: 3,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)
+                                    .translate('building_and_street'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                  fontSize: 12.0,
+                                  color: CustomColors.black,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              validator: (street) {
+                                if (street.trim().isEmpty) {
+                                  return "Enter your Street";
+                                } else {
+                                  updatedAddress.street = street.trim();
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: TextFormField(
+                              initialValue: user.address.landmark,
+                              textAlign: TextAlign.start,
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: InputDecoration(
+                                labelText: "Landmark",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                  fontSize: 12.0,
+                                  color: CustomColors.black,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 3.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              validator: (landmark) {
+                                if (landmark.trim() != "") {
+                                  updatedAddress.landmark = landmark.trim();
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: TextFormField(
+                              initialValue: user.address.city,
+                              textAlign: TextAlign.start,
+                              textCapitalization: TextCapitalization.sentences,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)
+                                    .translate('city'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                  fontSize: 12.0,
+                                  color: CustomColors.black,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 3.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              validator: (city) {
+                                if (city.trim().isEmpty) {
+                                  return "Enter your City";
+                                } else {
+                                  updatedAddress.city = city.trim();
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+                          Padding(padding: EdgeInsets.only(left: 5)),
+                          Flexible(
+                            child: TextFormField(
+                              initialValue: user.address.state,
+                              textCapitalization: TextCapitalization.sentences,
+                              textAlign: TextAlign.start,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)
+                                    .translate('state'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                  fontSize: 12.0,
+                                  color: CustomColors.black,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 3.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              validator: (state) {
+                                if (state.trim().isEmpty) {
+                                  return "Enter Your State";
+                                } else {
+                                  updatedAddress.state = state.trim();
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: TextFormField(
+                              initialValue: user.address.pincode,
+                              textAlign: TextAlign.start,
+                              decoration: InputDecoration(
+                                labelText: AppLocalizations.of(context)
+                                    .translate('pincode'),
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                  fontSize: 12.0,
+                                  color: CustomColors.black,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 3.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              validator: (pinCode) {
+                                if (pinCode.trim().isEmpty) {
+                                  return "Enter Your Pincode";
+                                } else {
+                                  updatedAddress.pincode = pinCode.trim();
+
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          Flexible(
+                            child: TextFormField(
+                              initialValue: user.address.country ?? "India",
+                              textCapitalization: TextCapitalization.sentences,
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.start,
+                              decoration: InputDecoration(
+                                labelText: "Country / Region",
+                                floatingLabelBehavior:
+                                    FloatingLabelBehavior.always,
+                                labelStyle: TextStyle(
+                                  fontSize: 12.0,
+                                  color: CustomColors.black,
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 3.0, horizontal: 10.0),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: CustomColors.lightGreen)),
+                                fillColor: CustomColors.white,
+                                filled: true,
+                              ),
+                              validator: (country) {
+                                if (country.trim().isEmpty) {
+                                  updatedAddress.country = "India";
+                                } else {
+                                  updatedAddress.country = country.trim();
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Padding(padding: EdgeInsets.only(top: 35, bottom: 35)),
             ],
           ),
