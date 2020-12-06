@@ -29,7 +29,7 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
                     imageUrl: item,
                     imageBuilder: (context, imageProvider) => Image(
                       width: double.infinity,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       image: imageProvider,
                     ),
                     progressIndicatorBuilder:
@@ -61,6 +61,7 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
       CarouselSlider(
         items: getSliders(),
         options: CarouselOptions(
+            height: 180,
             autoPlay: imgList.length > 1 ? true : false,
             enlargeCenterPage: imgList.length > 1 ? true : false,
             enableInfiniteScroll: imgList.length <= 1 ? false : true,
@@ -76,14 +77,15 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
         children: imgList.map((url) {
           int index = imgList.indexOf(url);
           return Container(
-            width: _current == index ? 10.0 : 6.0,
-            height: _current == index ? 10.0 : 6.0,
-            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+            width: 25.0,
+            height: 5.0,
+            margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _current == index
-                  ? CustomColors.green
-                  : CustomColors.alertRed,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+              border: Border.all(color: Colors.black),
+              color:
+                  _current == index ? Colors.black54 : CustomColors.lightGrey,
             ),
           );
         }).toList(),

@@ -1,8 +1,9 @@
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
+import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class StoreProfileWidget extends StatelessWidget {
   StoreProfileWidget(this.store);
@@ -22,235 +23,195 @@ class StoreProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       primary: true,
-      child: Column(
-        children: [
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.store,
-              color: CustomColors.green,
-            ),
-            title: Text(
-              store.name,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 13.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.addressCard,
-              color: CustomColors.green,
-            ),
-            title: Text(
-              store.address.toString(),
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 13.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.mobileAlt,
-              color: CustomColors.green,
-            ),
-            title: Text(
-              "Contacts",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 60.0),
-            child: Container(
-              child: GridView.count(
-                crossAxisCount: 3,
-                childAspectRatio: 0.78,
-                crossAxisSpacing: 10,
-                shrinkWrap: true,
-                primary: false,
-                mainAxisSpacing: 10,
-                children: List.generate(
-                  store.contacts.length,
-                  (index) {
-                    return Container(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: CustomColors.white),
-                            child: RawMaterialButton(
-                              onPressed: () {
-                                print("Contact Click");
-                              },
-                              shape: CircleBorder(),
-                              child: Icon(FontAwesomeIcons.image,
-                                  color: CustomColors.blue),
-                            ),
-                          ),
-                          Text(
-                            store.contacts[index].contactName,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: CustomColors.black,
-                            ),
-                          ),
-                          Text(
-                            store.contacts[index].contactNumber.toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: CustomColors.black,
-                            ),
-                          )
-                        ],
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Text(
+                      store.name,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      store.address.city,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ],
+                ),
+                InkWell(
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewStoreScreen(store),
+                        settings: RouteSettings(name: '/store'),
                       ),
                     );
                   },
-                ),
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.calendarCheck,
-              color: CustomColors.green,
-            ),
-            title: Text(
-              "Available Days",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: CustomColors.grey, width: 1.0),
-            ),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: selectedDays.toList(),
+                  child: Row(
+                    children: [
+                      Text(
+                        "View Store",
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                            decoration: TextDecoration.underline),
+                      ),
+                      Icon(Icons.chevron_right)
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.businessTime,
-              color: CustomColors.green,
+            SizedBox(
+              height: 10,
             ),
-            title: Text(
-              "Active From: ",
-              style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
+            CarouselIndicatorSlider(store.storeImages),
+            SizedBox(
+              height: 10,
             ),
-            trailing: Text(
-              DateUtils.getFormattedTime(store.activeFrom),
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Text(""),
-            title: Text(
-              "Active Till: ",
-              style: TextStyle(
-                  color: CustomColors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-            trailing: Text(
-              DateUtils.getFormattedTime(store.activeTill),
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                color: CustomColors.black,
-                fontSize: 14.0,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: Icon(
-              FontAwesomeIcons.truck,
-              color: CustomColors.green,
-            ),
-            title: Text(
-              "Delivery Details",
-              style: TextStyle(
-                  color: CustomColors.grey,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 60.0),
-            child: Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ListTile(
-                  leading: Text(
-                    "Delivery From:",
-                    style: TextStyle(
-                      color: CustomColors.black,
+                Icon(Icons.calendar_today_outlined),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "Business / Working Days",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: selectedDays.toList(),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.alarm),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "Business / Working Time",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
                     ),
                   ),
-                  trailing: Text(
-                    DateUtils.getFormattedTime(
-                        store.deliveryDetails.deliveryFrom),
-                    style: TextStyle(
-                      color: CustomColors.black,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      DateUtils.getFormattedTime(store.activeFrom),
                     ),
                   ),
                 ),
-                ListTile(
-                  leading: Text(
-                    "Delivery Till:",
-                    style: TextStyle(
-                      color: CustomColors.black,
+                Text("To"),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
                     ),
                   ),
-                  trailing: Text(
-                    DateUtils.getFormattedTime(
-                        store.deliveryDetails.deliveryTill),
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                ),
-                ListTile(
-                  leading: Text(
-                    "Max Distance:",
-                    style: TextStyle(
-                      color: CustomColors.black,
-                    ),
-                  ),
-                  trailing: Text(
-                    '${store.deliveryDetails.maxDistance.toString()} km',
-                    style: TextStyle(
-                      color: CustomColors.black,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      DateUtils.getFormattedTime(store.activeTill),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 50),
-        ],
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.delivery_dining),
+                SizedBox(
+                  width: 20,
+                ),
+                Text("Delivery Time",
+                    style: TextStyle(fontWeight: FontWeight.bold))
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryFrom)),
+                  ),
+                ),
+                Text("To"),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey[500],
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(DateUtils.getFormattedTime(
+                        store.deliveryDetails.deliveryTill)),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -260,12 +221,18 @@ class StoreProfileWidget extends StatelessWidget {
       yield Transform(
         transform: Matrix4.identity()..scale(0.9),
         child: ChoiceChip(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
           label: Text(days.value),
           selected: store.workingDays.contains(int.parse(days.key)),
-          elevation: 5.0,
-          selectedColor: CustomColors.blue,
+          elevation: 2.0,
+          selectedColor: CustomColors.green,
           backgroundColor: CustomColors.white,
-          labelStyle: TextStyle(color: CustomColors.green),
+          labelStyle: TextStyle(
+              color: store.workingDays.contains(int.parse(days.key))
+                  ? CustomColors.blue
+                  : CustomColors.black),
         ),
       );
     }
