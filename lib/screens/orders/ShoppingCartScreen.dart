@@ -90,30 +90,25 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
             });
 
             child = SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: cartStores.length,
-                      separatorBuilder: (BuildContext context, int index) =>
-                          Divider(
-                        color: CustomColors.black,
-                        height: 0,
-                      ),
-                      itemBuilder: (BuildContext context, int index) {
-                        String storeID =
-                            cartStores.entries.elementAt(index).key;
-                        String storeName =
-                            cartStores.entries.elementAt(index).value;
-                        return StoreCartItems(
-                            storeID, storeName, cartItems[storeID]);
-                      },
-                    ),
+              child: Container(
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  primary: false,
+                  itemCount: cartStores.length,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      Divider(
+                    color: CustomColors.black,
+                    height: 0,
                   ),
-                ],
+                  itemBuilder: (BuildContext context, int index) {
+                    String storeID =
+                        cartStores.entries.elementAt(index).key;
+                    String storeName =
+                        cartStores.entries.elementAt(index).value;
+                    return StoreCartItems(
+                        storeID, storeName, cartItems[storeID]);
+                  },
+                ),
               ),
             );
           }
