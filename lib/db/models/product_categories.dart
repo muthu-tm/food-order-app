@@ -61,27 +61,41 @@ class ProductCategories extends Model {
   }
 
   Future<List<ProductCategories>> getCategoriesForIDs(List<String> ids) async {
-    // handle empty params
-    if (ids.isEmpty) return [];
-
     List<ProductCategories> categories = [];
-
     try {
-      QuerySnapshot snap =
-          await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
-        ProductCategories _c =
-            ProductCategories.fromJson(snap.documents[j].data);
-        categories.add(_c);
-      }
+      // handle empty params
+      if (ids.isEmpty) return [];
 
-      return categories;
+      if (ids.length > 9) {
+        int end = 0;
+        for (int i = 0; i < ids.length; i = i + 9) {
+          if (end + 9 > ids.length)
+            end = ids.length;
+          else
+            end = end + 9;
+
+          QuerySnapshot snap = await getCollectionRef()
+              .where('uuid', whereIn: ids.sublist(i, end))
+              .getDocuments();
+          for (var j = 0; j < snap.documents.length; j++) {
+            ProductCategories _c =
+                ProductCategories.fromJson(snap.documents[j].data);
+            categories.add(_c);
+          }
+        }
+      } else {
+        QuerySnapshot snap =
+            await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
+        for (var j = 0; j < snap.documents.length; j++) {
+          ProductCategories _c =
+              ProductCategories.fromJson(snap.documents[j].data);
+          categories.add(_c);
+        }
+      }
     } catch (err) {
-      Analytics.sendAnalyticsEvent(
-          {'type': 'categories_get_error', 'error': err.toString()},
-          'products');
       throw err;
     }
+    return categories;
   }
 
   Future<List<ProductCategories>> getCategoriesForType(String typeID) async {
