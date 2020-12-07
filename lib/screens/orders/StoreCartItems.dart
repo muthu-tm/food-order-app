@@ -312,12 +312,12 @@ class _StoreCartItemsState extends State<StoreCartItems> {
 
                       await _o.create();
                       Navigator.of(context).pop();
-                      await ShoppingCart().clearCartForStore(widget.storeID);
                       showDialog(
                           context: context,
                           builder: (context) {
                             return OrderSuccessWidget();
                           });
+                      ShoppingCart().clearCartForStore(widget.storeID);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -477,10 +477,9 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                                 decimal: true),
                                         inputFormatters: <TextInputFormatter>[
                                           FilteringTextInputFormatter.allow(
-                                            RegExp(
-                                                '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$'),
-                                                replacementString: 0.toString()
-                                          ),
+                                              RegExp(
+                                                  '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$'),
+                                              replacementString: 0.toString()),
                                         ],
                                         decoration: InputDecoration(
                                           labelText: "Weight",
@@ -539,10 +538,8 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                         keyboardType: TextInputType.number,
                                         inputFormatters: <TextInputFormatter>[
                                           FilteringTextInputFormatter.allow(
-                                            RegExp(
-                                                r'^[0-9]*$'),
-                                                replacementString: 0.toString()
-                                          ),
+                                              RegExp(r'^[0-9]*$'),
+                                              replacementString: 0.toString()),
                                         ],
                                         decoration: InputDecoration(
                                           labelText: "Quantity",
@@ -1572,7 +1569,7 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                               Navigator.of(_keyLoader.currentContext,
                                       rootNavigator: true)
                                   .pop();
-                                  
+
                               if (!res)
                                 Fluttertoast.showToast(
                                     msg:

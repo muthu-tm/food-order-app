@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/screens/orders/StoreCartItems.dart';
+import 'package:chipchop_buyer/screens/orders/StoreWishlistItems.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -80,36 +81,36 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
           if (snapshot.data.documents.length == 0) {
             child = Container();
           } else {
-            child = SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      "Your Wishlist",
-                      style: TextStyle(
-                          color: CustomColors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                  ),
-                  Container(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: snapshot.data.documents.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        ShoppingCart _sc = ShoppingCart.fromJson(
-                            snapshot.data.documents[index].data);
+            List<ShoppingCart> _sc = [];
 
-                        if (index == snapshot.data.documents.length - 1) {
-                          return buildingWishListItem(context, _sc);
-                        } else {
-                          return buildingWishListItem(context, _sc);
-                        }
-                      },
-                    ),
-                  )
-                ],
+            snapshot.data.documents.forEach((element) {
+              _sc.add(ShoppingCart.fromJson(element.data));
+            });
+
+            child = SingleChildScrollView(
+              child: Card(
+                elevation: 2,
+                child: Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.grey[400]),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(5, 5, 5, 0),
+                        child: Text(
+                          "My Wishlist",
+                          style: TextStyle(
+                              color: CustomColors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                      ),
+                      Container(child: StoreWishlistItems(widget.storeID, _sc))
+                    ],
+                  ),
+                ),
               ),
             );
           }
