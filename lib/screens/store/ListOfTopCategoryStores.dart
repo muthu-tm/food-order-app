@@ -6,9 +6,10 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class ListOfTopCategoryStores extends StatelessWidget {
-  final String id;
+  final Map<String, String> id;
   final String fieldName;
   final String categoryName;
+
   ListOfTopCategoryStores(this.id, this.fieldName, this.categoryName);
 
   @override

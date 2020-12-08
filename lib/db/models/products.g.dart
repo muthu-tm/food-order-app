@@ -3,9 +3,15 @@ part of 'products.dart';
 Products _$ProductsFromJson(Map<String, dynamic> json) {
   return Products()
     ..uuid = json['uuid'] as String
-    ..productType = json['product_type'] as String ?? ""
-    ..productCategory = json['product_category'] as String ?? ""
-    ..productSubCategory = json['product_sub_category'] as String ?? ""
+    ..productType = json['product_type'] == null
+        ? null
+        : ProductCategoriesMap.fromJson(json['product_type'] as Map<String, dynamic>)
+    ..productCategory = json['product_category'] == null
+        ? null
+        : ProductCategoriesMap.fromJson(json['product_category'] as Map<String, dynamic>)
+    ..productSubCategory = json['product_sub_category'] == null
+        ? null
+        : ProductCategoriesMap.fromJson(json['product_sub_category'] as Map<String, dynamic>)
     ..brandName = json['brand_name'] as String ?? ""
     ..name = json['name'] as String ?? ''
     ..rating = (json['rating'] as num)?.toDouble() ?? 0.00
@@ -67,9 +73,9 @@ int _getMillisecondsSinceEpoch(Timestamp ts) {
 
 Map<String, dynamic> _$ProductsToJson(Products instance) => <String, dynamic>{
       'uuid': instance.uuid,
-      'product_type': instance.productType ?? "",
-      'product_category': instance.productCategory ?? "",
-      'product_sub_category': instance.productSubCategory ?? "",
+      'product_type': instance.productType?.toJson(),
+      'product_category': instance.productCategory?.toJson(),
+      'product_sub_category': instance.productSubCategory?.toJson(),
       'brand_name': instance.brandName ?? "",
       'name': instance.name,
       'rating': instance.rating ?? 0.0,

@@ -374,8 +374,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              ListOfTopCategoryStores(types.uuid, 'avail_products', types.name),
+                          builder: (context) => ListOfTopCategoryStores(
+                              {'uuid': types.uuid, 'name': types.name},
+                              'avail_products',
+                              types.name),
                           settings: RouteSettings(name: '/home/categories'),
                         ),
                       );

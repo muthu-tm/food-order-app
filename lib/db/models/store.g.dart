@@ -7,12 +7,19 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
     ..shortDetails = json['short_details'] as String ?? ''
     ..ownedBy = json['owned_by'] as String
     ..availProducts =
-        (json['avail_products'] as List)?.map((e) => e as String)?.toList()
+        (json['avail_products'] as List)?.map((e) => e == null
+            ? null
+            : ProductCategoriesMap.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..availProductCategories = (json['avail_product_categories'] as List)
-        ?.map((e) => e as String)
+        ?.map((e) => e == null
+            ? null
+            : ProductCategoriesMap.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..availProductSubCategories = (json['avail_product_sub_categories'] as List)
-        ?.map((e) => e as String)
+        ?.map((e) => e == null
+            ? null
+            : ProductCategoriesMap.fromJson(e as Map<String, dynamic>))
         ?.toList()
     ..workingDays =
         (json['working_days'] as List)?.map((e) => e as int)?.toList()
@@ -85,15 +92,15 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'store_name': instance.name,
       'short_details': instance.shortDetails,
       'owned_by': instance.ownedBy,
-      'avail_products': instance.availProducts,
-      'avail_product_categories': instance.availProductCategories,
-      'avail_product_sub_categories': instance.availProductSubCategories,
+      'avail_products': instance.availProducts?.map((e) => e?.toJson())?.toList(),
+      'avail_product_categories': instance.availProductCategories?.map((e) => e?.toJson())?.toList(),
+      'avail_product_sub_categories': instance.availProductSubCategories?.map((e) => e?.toJson())?.toList(),
       'working_days': instance.workingDays,
       'active_from': instance.activeFrom,
       'active_till': instance.activeTill,
       'address': instance.address?.toJson(),
       'geo_point': instance.geoPoint?.toJson(),
-      'is_active': instance.isActive,
+      'is_active': instance.isActive ?? true,
       'deliver_anywhere': instance.deliverAnywhere,
       'image': instance.image ?? "",
       'store_images': instance.storeImages == null ? [] : instance.storeImages,

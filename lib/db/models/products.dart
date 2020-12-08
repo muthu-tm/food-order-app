@@ -4,6 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
+import 'package:chipchop_buyer/db/models/product_categories_map.dart';
 part 'products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -13,11 +14,11 @@ class Products extends Model {
   @JsonKey(name: 'uuid', nullable: false)
   String uuid;
   @JsonKey(name: 'product_type', nullable: false)
-  String productType;
+  ProductCategoriesMap productType;
   @JsonKey(name: 'product_category', defaultValue: "")
-  String productCategory;
+  ProductCategoriesMap productCategory;
   @JsonKey(name: 'product_sub_category', defaultValue: "")
-  String productSubCategory;
+  ProductCategoriesMap productSubCategory;
   @JsonKey(name: 'brand_name', defaultValue: "")
   String brandName;
   @JsonKey(name: 'name', defaultValue: "")
@@ -174,7 +175,7 @@ class Products extends Model {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .where('product_category', isEqualTo: categoryID)
+          .where('product_category.uuid', isEqualTo: categoryID)
           .snapshots();
     } catch (err) {
       throw err;
@@ -198,7 +199,7 @@ class Products extends Model {
 
           QuerySnapshot snap = await getCollectionRef()
               .where('store_uuid', isEqualTo: storeID)
-              .where('product_category', isEqualTo: categoryID)
+              .where('product_category.uuid', isEqualTo: categoryID)
               .getDocuments();
           for (var j = 0; j < snap.documents.length; j++) {
             Products _c = Products.fromJson(snap.documents[j].data);
@@ -208,7 +209,7 @@ class Products extends Model {
       } else {
         QuerySnapshot snap = await getCollectionRef()
             .where('store_uuid', isEqualTo: storeID)
-            .where('product_category', isEqualTo: categoryID)
+            .where('product_category.uuid', isEqualTo: categoryID)
             .getDocuments();
         for (var j = 0; j < snap.documents.length; j++) {
           Products _c = Products.fromJson(snap.documents[j].data);
@@ -228,8 +229,8 @@ class Products extends Model {
       List<Products> products = [];
       QuerySnapshot snap = await getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .where('product_category', isEqualTo: categoryID)
-          .where('product_sub_category', isEqualTo: subCategoryID)
+          .where('product_category.uuid', isEqualTo: categoryID)
+          .where('product_sub_category.uuid', isEqualTo: subCategoryID)
           .getDocuments();
       for (var j = 0; j < snap.documents.length; j++) {
         Products _c = Products.fromJson(snap.documents[j].data);
@@ -247,8 +248,8 @@ class Products extends Model {
     try {
       return getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .where('product_category', isEqualTo: categoryID)
-          .where('product_sub_category', isEqualTo: subCategoryID)
+          .where('product_category.uuid', isEqualTo: categoryID)
+          .where('product_sub_category.uuid', isEqualTo: subCategoryID)
           .snapshots();
     } catch (err) {
       throw err;
@@ -341,7 +342,6 @@ class Products extends Model {
 
   Future<List<Map<String, dynamic>>> getByNameRange(String searchKey) async {
     QuerySnapshot snap = await getCollectionRef()
-        // .where('store_uuid', isEqualTo: storeID)
         .where('keywords', arrayContainsAny: searchKey.split(" "))
         .getDocuments();
 

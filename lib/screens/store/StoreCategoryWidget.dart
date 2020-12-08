@@ -22,8 +22,8 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
   @override
   void initState() {
     super.initState();
-    _future = ProductCategories()
-        .getCategoriesForIDs(widget.store.availProductCategories);
+    _future = ProductCategories().getCategoriesForIDs(
+        widget.store.availProductCategories.map((e) => e.uuid).toList());
   }
 
   @override

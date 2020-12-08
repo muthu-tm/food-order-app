@@ -68,7 +68,10 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
             scrollDirection: Axis.horizontal,
             child: FutureBuilder(
               future: ProductSubCategories().getSubCategoriesForIDs(
-                  widget.categoryID, widget.store.availProductSubCategories),
+                  widget.categoryID,
+                  widget.store.availProductSubCategories
+                      .map((e) => e.uuid)
+                      .toList()),
               builder: (context, AsyncSnapshot snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:

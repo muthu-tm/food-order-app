@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/db/models/product_categories_map.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
@@ -30,11 +31,11 @@ class Store extends Model {
   @JsonKey(name: 'geo_point', defaultValue: "")
   GeoPointData geoPoint;
   @JsonKey(name: 'avail_products')
-  List<String> availProducts;
+  List<ProductCategoriesMap> availProducts;
   @JsonKey(name: 'avail_product_categories')
-  List<String> availProductCategories;
+  List<ProductCategoriesMap> availProductCategories;
   @JsonKey(name: 'avail_product_sub_categories')
-  List<String> availProductSubCategories;
+  List<ProductCategoriesMap> availProductSubCategories;
   @JsonKey(name: 'working_days')
   List<int> workingDays;
   @JsonKey(name: 'active_from')
@@ -158,13 +159,13 @@ class Store extends Model {
         strictMode: true);
   }
 
-  Future<List<Store>> getStoresByTypes(String fieldName, String typeID) async {
+  Future<List<Store>> getStoresByTypes(String fieldName, Map<String, String> type) async {
     List<Store> stores = [];
 
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('is_active', isEqualTo: true)
-          .where(fieldName, arrayContains: typeID)
+          .where(fieldName, arrayContains: type)
           .getDocuments();
       if (snap.documents.isNotEmpty) {
         for (var i = 0; i < snap.documents.length; i++) {
@@ -177,7 +178,7 @@ class Store extends Model {
     } catch (err) {
       Analytics.reportError({
         'type': 'store_search_error',
-        'type_id': typeID,
+        'type_id': type,
         'error': err.toString()
       }, 'store');
       throw err;

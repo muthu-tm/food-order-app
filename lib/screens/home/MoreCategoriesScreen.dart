@@ -10,8 +10,7 @@ import 'package:flutter/material.dart';
 
 class MoreCategoriesScreen extends StatefulWidget {
   @override
-  _MoreCategoriesScreenState createState() =>
-      _MoreCategoriesScreenState();
+  _MoreCategoriesScreenState createState() => _MoreCategoriesScreenState();
 }
 
 class _MoreCategoriesScreenState extends State<MoreCategoriesScreen> {
@@ -92,15 +91,21 @@ class _MoreCategoriesScreenState extends State<MoreCategoriesScreen> {
                                                             MaterialPageRoute(
                                                               builder: (context) =>
                                                                   ListOfTopCategoryStores(
+                                                                {
+                                                                  'uuid':
                                                                       element
                                                                           .uuid,
-                                                                      'avail_product_sub_categories',
+                                                                  'name':
                                                                       element
-                                                                          .name),
+                                                                          .name
+                                                                },
+                                                                'avail_product_sub_categories',
+                                                                element.name,
+                                                              ),
                                                               settings:
                                                                   RouteSettings(
                                                                       name:
-                                                                          '/search/sub_categories'),
+                                                                          '/search/sub_categories.uuid'),
                                                             ),
                                                           );
                                                         },
@@ -196,8 +201,10 @@ class _MoreCategoriesScreenState extends State<MoreCategoriesScreen> {
                         ),
                         onPressed: () async {
                           List<Store> stores = await Store().getStoresByTypes(
-                              'avail_product_categories',
-                              snapshot.data[index].uuid);
+                              'avail_product_categories', {
+                            'uuid': snapshot.data[index].uuid,
+                            'name': snapshot.data[index].name
+                          });
 
                           List<String> storeIDs = [];
                           for (var i = 0; i < stores.length; i++) {
