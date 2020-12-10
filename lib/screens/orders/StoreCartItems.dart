@@ -75,6 +75,8 @@ class _StoreCartItemsState extends State<StoreCartItems> {
     5: "m.litre"
   };
 
+  bool isWithinWorkingHours;
+
   @override
   void initState() {
     super.initState();
@@ -98,16 +100,14 @@ class _StoreCartItemsState extends State<StoreCartItems> {
             return Container();
           } else {
             Store store = snapshot.data;
-            bool isWithinWorkingHours =
-                (DateUtils.getTimeInMinutes(store.activeTill) -
-                                DateUtils.getCurrentTimeInMinutes() >
-                            0 ||
-                        DateUtils.getCurrentTimeInMinutes() -
-                                DateUtils.getTimeInMinutes(store.activeFrom) <
-                            0) &&
-                    (DateTime.now().weekday <= 6
-                        ? store.workingDays.contains(DateTime.now().weekday)
-                        : store.workingDays.contains(0));
+            final currentTime = DateTime.now();
+            isWithinWorkingHours = (currentTime.isAfter(
+                        DateUtils.getTimeAsDateTimeObject(store.activeFrom)) &&
+                    currentTime.isBefore(
+                        DateUtils.getTimeAsDateTimeObject(store.activeTill))) &&
+                (DateTime.now().weekday <= 6
+                    ? store.workingDays.contains(DateTime.now().weekday)
+                    : store.workingDays.contains(0));
 
             double tAmount = 0.00;
             double oPrice = 0.00;

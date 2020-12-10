@@ -36,20 +36,22 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
 
   int selectedItem = 1;
   bool isWithinWorkingHours;
+  bool businessHours;
+  bool businessDays;
+  var currentTime;
 
   @override
   void initState() {
     super.initState();
-    isWithinWorkingHours =
-        (DateUtils.getTimeInMinutes(widget.store.activeTill) -
-                        DateUtils.getCurrentTimeInMinutes() >
-                    0 ||
-                DateUtils.getCurrentTimeInMinutes() -
-                        DateUtils.getTimeInMinutes(widget.store.activeFrom) <
-                    0) &&
-            (DateTime.now().weekday <= 6
-                ? widget.store.workingDays.contains(DateTime.now().weekday)
-                : widget.store.workingDays.contains(0));
+    currentTime = DateTime.now();
+    businessHours = (currentTime.isAfter(
+            DateUtils.getTimeAsDateTimeObject(widget.store.activeFrom)) &&
+        currentTime.isBefore(
+            DateUtils.getTimeAsDateTimeObject(widget.store.activeTill)));
+    businessDays = (DateTime.now().weekday <= 6
+        ? widget.store.workingDays.contains(DateTime.now().weekday)
+        : widget.store.workingDays.contains(0));
+    isWithinWorkingHours = businessHours && businessDays;
   }
 
   Widget flexibleAppBar(BuildContext context) {
@@ -70,12 +72,17 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                isWithinWorkingHours
+                (businessDays &&
+                        currentTime.isBefore(DateUtils.getTimeAsDateTimeObject(
+                            widget.store.activeFrom)))
                     ? Text(
-                        "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(widget.store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
-                        style: TextStyle(color: CustomColors.alertRed),
-                      )
-                    : Text("Store Closed"),
+                        "Opening in ${currentTime.difference(DateUtils.getTimeAsDateTimeObject(widget.store.activeFrom)).abs().toString().substring(0, 4)} hours")
+                    : isWithinWorkingHours
+                        ? Text(
+                            "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(widget.store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
+                            style: TextStyle(color: CustomColors.alertRed),
+                          )
+                        : Text("Store Closed"),
               ],
             ),
             Text(

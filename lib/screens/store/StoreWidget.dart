@@ -17,15 +17,15 @@ class StoreWidget extends StatelessWidget {
   final Store store;
   @override
   Widget build(BuildContext context) {
-    bool isWithinWorkingHours = (DateUtils.getTimeInMinutes(store.activeTill) -
-                    DateUtils.getCurrentTimeInMinutes() >
-                0 ||
-            DateUtils.getCurrentTimeInMinutes() -
-                    DateUtils.getTimeInMinutes(store.activeFrom) <
-                0) &&
-        (DateTime.now().weekday <= 6
-            ? store.workingDays.contains(DateTime.now().weekday)
-            : store.workingDays.contains(0));
+    final currentTime = DateTime.now();
+    bool businessHours = (currentTime
+            .isAfter(DateUtils.getTimeAsDateTimeObject(store.activeFrom)) &&
+        currentTime
+            .isBefore(DateUtils.getTimeAsDateTimeObject(store.activeTill)));
+    bool businessDays = (DateTime.now().weekday <= 6
+        ? store.workingDays.contains(DateTime.now().weekday)
+        : store.workingDays.contains(0));
+    bool isWithinWorkingHours = businessHours && businessDays;
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -121,15 +121,21 @@ class StoreWidget extends StatelessWidget {
                               context, store.geoPoint.geoPoint),
                         ),
                         SizedBox(height: 5.0),
-                        isWithinWorkingHours
+                        (businessDays &&
+                                currentTime.isBefore(
+                                    DateUtils.getTimeAsDateTimeObject(
+                                        store.activeFrom)))
                             ? Text(
-                                "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
-                                style: TextStyle(
-                                    fontSize: 13.0,
-                                    fontWeight: FontWeight.w400,
-                                    color: Colors.green),
-                              )
-                            : Text("Store Closed"),
+                                "Opening in ${currentTime.difference(DateUtils.getTimeAsDateTimeObject(store.activeFrom)).abs().toString().substring(0, 4)} hours")
+                            : isWithinWorkingHours
+                                ? Text(
+                                    "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
+                                    style: TextStyle(
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.green),
+                                  )
+                                : Text("Store Closed"),
                         SizedBox(
                           height: 10,
                         ),

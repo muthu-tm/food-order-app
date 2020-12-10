@@ -9,6 +9,13 @@ class DateUtils {
     return dateFormatter.format(DateTime.now());
   }
 
+  static getTimeAsDateTimeObject(String time) {
+    DateFormat dateFormat = new DateFormat.Hm();
+    DateTime now = DateTime.now();
+    DateTime formattedTime = dateFormat.parse(time);
+    return new DateTime(now.year, now.month, now.day, formattedTime.hour, formattedTime.minute);
+  }
+
   static String getFormattedDateFromEpoch(int epoch) {
     return dateFormatter.format(DateTime.fromMillisecondsSinceEpoch(epoch));
   }
