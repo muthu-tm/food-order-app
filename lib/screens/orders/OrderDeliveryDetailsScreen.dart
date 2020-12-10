@@ -7,9 +7,25 @@ class OrderDeliveryDetails extends StatelessWidget {
   OrderDeliveryDetails(this.order);
 
   final Order order;
+  double wOrderAmount = 0.00;
+  double cOrderAmount = 0.00;
 
   @override
   Widget build(BuildContext context) {
+    if (order.writtenOrders != null &&
+        order.writtenOrders.length > 0 &&
+        order.writtenOrders.first.name.trim().isNotEmpty) {
+      order.writtenOrders.forEach((element) {
+        wOrderAmount += element.price;
+      });
+    }
+
+    if (order.capturedOrders != null && order.capturedOrders.isNotEmpty) {
+      order.capturedOrders.forEach((element) {
+        cOrderAmount += element.price;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -232,44 +248,34 @@ class OrderDeliveryDetails extends StatelessWidget {
                         children: [
                           ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: Text("Ordered Amount : "),
-                            title: Text('₹ ${order.amount.orderAmount}'),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Text("Wallet Amount : "),
-                            title: Text('₹ ${order.amount.walletAmount}'),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Text("Delivery Charge : "),
-                            title: Text('₹ ${order.amount.deliveryCharge}'),
-                          ),
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: Text(
-                              "Total Billed Amount : ",
+                            title: Text(
+                              "Total Order Amount : ",
                               style: TextStyle(
                                   color: CustomColors.alertRed,
                                   fontWeight: FontWeight.w500),
                             ),
-                            title: Text(
-                                '₹ ${order.amount.orderAmount + order.amount.deliveryCharge - order.amount.walletAmount}',
+                            trailing: Text(
+                                '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge}',
                                 style: TextStyle(
                                   color: CustomColors.alertRed,
                                 )),
                           ),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
+                            title: Text("Wallet Amount : "),
+                            trailing: Text('₹ ${order.amount.walletAmount}'),
+                          ),
+                          ListTile(
+                            contentPadding: EdgeInsets.zero,
                             title: Text(
                               "Paid Amount : ",
                               style: TextStyle(
-                                  color: CustomColors.green,
+                                  color: Colors.green,
                                   fontWeight: FontWeight.w500),
                             ),
-                            trailing: Text('₹ ${order.amount.paidAmount}',
+                            trailing: Text('₹ ${order.amount.receivedAmount}',
                                 style: TextStyle(
-                                  color: CustomColors.green,
+                                  color: Colors.green,
                                 )),
                           ),
                         ],

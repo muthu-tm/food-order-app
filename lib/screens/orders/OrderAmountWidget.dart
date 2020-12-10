@@ -74,10 +74,25 @@ class OrderAmountWidget extends StatelessWidget {
             title: Text(
               "Total Billed Amount : ",
               style: TextStyle(
-                  color: CustomColors.black, fontWeight: FontWeight.w500),
+                  color: CustomColors.alertRed, fontWeight: FontWeight.w500),
             ),
             trailing: Text(
-                '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}'),
+                '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}',
+                style: TextStyle(
+                  color: CustomColors.alertRed,
+                )),
+          ),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(
+              "Paid Amount : ",
+              style:
+                  TextStyle(color: Colors.green, fontWeight: FontWeight.w500),
+            ),
+            trailing: Text('₹ ${order.amount.receivedAmount}',
+                style: TextStyle(
+                  color: Colors.green,
+                )),
           ),
         ],
       ),

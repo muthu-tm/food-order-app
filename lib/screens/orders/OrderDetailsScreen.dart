@@ -53,8 +53,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
         ),
         backgroundColor: CustomColors.green,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.green[300],
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: CustomColors.green,
         onPressed: () {
           return _scaffoldKey.currentState.showBottomSheet((context) {
             return Builder(builder: (BuildContext childContext) {
@@ -74,11 +74,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
             });
           });
         },
-        label: Text(
-          "Chat with Store",
-          style: TextStyle(color: CustomColors.black),
-        ),
-        icon: Icon(Icons.chat_bubble, color: CustomColors.black),
+        child: Icon(Icons.question_answer_outlined, color: CustomColors.black),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -366,31 +362,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text("Return Items"),
-                                            Icon(Icons.chevron_right)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: CustomColors.white,
-                                        border: Border.all(
-                                            color: CustomColors.grey),
-                                      ),
-                                      padding: EdgeInsets.all(10),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          // await cancelOrder(order, context);
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text("Replace Items"),
+                                            Text("Return / Replace Items"),
                                             Icon(Icons.chevron_right)
                                           ],
                                         ),
