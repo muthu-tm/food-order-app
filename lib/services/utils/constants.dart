@@ -13,7 +13,7 @@ const order_folder = "orders";
 const store_offers_folder = "store_offers";
 
 const no_image_placeholder =
-    "https://firebasestorage.googleapis.com/v0/b/fc-chipchop-test.appspot.com/o/app_images%2Fno-image-placeholder.png?alt=media&token=c2ff5e97-d21d-4137-8d25-b0fc380f6f8f";
+    "https://firebasestorage.googleapis.com/v0/b/fc-chipchop-test.appspot.com/o/app_images%2Funiques_logo.png?alt=media&token=7f16bde8-c3a6-4a51-9715-a41e6ee118c9";
 const empty_wishlist_placeholder =
     "https://firebasestorage.googleapis.com/v0/b/fc-chipchop-test.appspot.com/o/app_images%2Fempty_wish_list.png?alt=media&token=9d853c31-74d0-4633-9003-70f26a283491";
 const empty_cart_placeholder =
