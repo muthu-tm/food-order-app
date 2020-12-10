@@ -10,8 +10,8 @@ class OrderAmount extends Model {
   double deliveryCharge;
   @JsonKey(name: 'coupon_code', nullable: false)
   String couponCode;
-  @JsonKey(name: 'paid_amount', nullable: false)
-  double paidAmount;
+  @JsonKey(name: 'received_amount', nullable: false)
+  double receivedAmount;
   @JsonKey(name: 'offer_amount', nullable: true)
   double offerAmount;
   @JsonKey(name: 'wallet_amount', nullable: true)

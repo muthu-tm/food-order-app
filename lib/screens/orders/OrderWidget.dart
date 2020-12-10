@@ -10,6 +10,23 @@ class OrderWidget extends StatelessWidget {
   final Order order;
   @override
   Widget build(BuildContext context) {
+    double wOrderAmount = 0.00;
+    double cOrderAmount = 0.00;
+
+    if (order.writtenOrders != null &&
+        order.writtenOrders.length > 0 &&
+        order.writtenOrders.first.name.trim().isNotEmpty) {
+      order.writtenOrders.forEach((element) {
+        wOrderAmount += element.price;
+      });
+    }
+
+    if (order.capturedOrders != null && order.capturedOrders.isNotEmpty) {
+      order.capturedOrders.forEach((element) {
+        cOrderAmount += element.price;
+      });
+    }
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -117,7 +134,7 @@ class OrderWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '₹ ${order.amount.orderAmount.toString()}',
+                        '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge}',
                         style: TextStyle(
                           color: CustomColors.black,
                           fontSize: 13,

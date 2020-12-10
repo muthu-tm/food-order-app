@@ -12,10 +12,11 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : OrderProduct.fromJson(e as Map<String, dynamic>))
         ?.toList()
-    ..orderImages = (json['order_images'] as List)
-            ?.map((e) => e == null ? null : e as String)
-            ?.toList() ??
-        []
+    ..capturedOrders = (json['captured_order'] as List)
+        ?.map((e) => e == null
+            ? null
+            : CapturedOrders.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..writtenOrders = (json['written_orders'] as List)
         ?.map((e) => e == null
             ? null
@@ -58,7 +59,8 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'user_number': instance.userNumber,
       'total_products': instance.totalProducts,
       'products': instance.products?.map((e) => e?.toJson())?.toList(),
-      'order_images': instance.orderImages == null ? [] : instance.orderImages,
+      'captured_order':
+          instance.capturedOrders?.map((e) => e?.toJson())?.toList(),
       'written_orders':
           instance.writtenOrders?.map((e) => e?.toJson())?.toList(),
       'customer_notes': instance.customerNotes ?? '',

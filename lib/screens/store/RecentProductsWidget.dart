@@ -5,6 +5,7 @@ import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RecentProductsWidget extends StatelessWidget {
   RecentProductsWidget(this.storeID);
@@ -61,6 +62,15 @@ class RecentProductsWidget extends StatelessWidget {
                                   CustomDialogs.actionWaiting(context);
                                   Products _p = await Products()
                                       .getByProductID(_ua.productID);
+
+                                  if (_p == null) {
+                                    Navigator.pop(context);
+                                    Fluttertoast.showToast(
+                                        msg: 'Error, Unable to Load Product!',
+                                        backgroundColor: CustomColors.alertRed,
+                                        textColor: CustomColors.white);
+                                    return;
+                                  }
 
                                   Navigator.pushReplacement(
                                     context,

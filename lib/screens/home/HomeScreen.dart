@@ -159,6 +159,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Products _p = await Products()
                                       .getByProductID(_sd.productID);
 
+                                  if (_p == null) {
+                                    Navigator.pop(context);
+                                    Fluttertoast.showToast(
+                                        msg: 'Error, Unable to Load Product!',
+                                        backgroundColor: CustomColors.alertRed,
+                                        textColor: CustomColors.white);
+                                    return;
+                                  }
+
                                   UserActivityTracker _activity =
                                       UserActivityTracker();
                                   _activity.keywords = "";
