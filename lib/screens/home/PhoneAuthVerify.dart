@@ -278,8 +278,6 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
-      _scaffoldKey.currentState
-          .showSnackBar(CustomSnackBar.errorSnackBar("${error.toString()}", 2));
     });
   }
 

@@ -10,11 +10,19 @@ class OrderAmountWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double wOrderAmount = 0.00;
+    double cOrderAmount = 0.00;
 
-    if (order.writtenOrders.length > 0 &&
+    if (order.writtenOrders != null &&
+        order.writtenOrders.length > 0 &&
         order.writtenOrders.first.name.trim().isNotEmpty) {
       order.writtenOrders.forEach((element) {
         wOrderAmount += element.price;
+      });
+    }
+
+    if (order.capturedOrders != null && order.capturedOrders.isNotEmpty) {
+      order.capturedOrders.forEach((element) {
+        cOrderAmount += element.price;
       });
     }
 
@@ -42,6 +50,13 @@ class OrderAmountWidget extends StatelessWidget {
                   trailing: Text('₹ $wOrderAmount'),
                 )
               : Container(),
+          (order.capturedOrders != null && order.capturedOrders.isNotEmpty)
+              ? ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Text("Price for Captured List : "),
+                  trailing: Text('₹ $cOrderAmount'),
+                )
+              : Container(),
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text("Wallet Amount : "),
@@ -62,7 +77,7 @@ class OrderAmountWidget extends StatelessWidget {
                   color: CustomColors.black, fontWeight: FontWeight.w500),
             ),
             trailing: Text(
-                '₹ ${order.amount.orderAmount + wOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}'),
+                '₹ ${order.amount.orderAmount + wOrderAmount + cOrderAmount + order.amount.deliveryCharge - order.amount.walletAmount}'),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:chipchop_buyer/db/models/customers.dart';
+import 'package:chipchop_buyer/db/models/order_captured_image.dart';
 import 'package:chipchop_buyer/db/models/order_status.dart';
 import 'package:chipchop_buyer/db/models/order_written_details.dart';
 import 'package:chipchop_buyer/db/models/users_shopping_details.dart';
@@ -34,8 +35,8 @@ class Order {
   int totalProducts;
   @JsonKey(name: 'products', nullable: false)
   List<OrderProduct> products;
-  @JsonKey(name: 'order_images', defaultValue: [""])
-  List<String> orderImages;
+  @JsonKey(name: 'captured_order', defaultValue: [""])
+  List<CapturedOrders> capturedOrders;
   @JsonKey(name: 'written_orders', nullable: false)
   List<WrittenOrders> writtenOrders;
   @JsonKey(name: 'customer_notes', defaultValue: "")

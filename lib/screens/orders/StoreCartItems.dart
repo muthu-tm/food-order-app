@@ -6,6 +6,7 @@ import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/db/models/delivery_details.dart';
 import 'package:chipchop_buyer/db/models/order.dart';
 import 'package:chipchop_buyer/db/models/order_amount.dart';
+import 'package:chipchop_buyer/db/models/order_captured_image.dart';
 import 'package:chipchop_buyer/db/models/order_delivery.dart';
 import 'package:chipchop_buyer/db/models/order_product.dart';
 import 'package:chipchop_buyer/db/models/order_written_details.dart';
@@ -302,7 +303,9 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       } else {
                         _o.writtenOrders = [];
                       }
-                      _o.orderImages = _cartImagePaths;
+                      _o.capturedOrders = _cartImagePaths.map((e) {
+                        return CapturedOrders.fromJson({'image': e});
+                      }).toList();
                       _o.isReturnable = false;
                       _o.products = _orderProducts;
                       _o.totalProducts = _orderProducts.length;
@@ -668,103 +671,118 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                 ),
                 _cartImagePaths.length > 0
                     ? SizedBox(
-                        height: 160,
+                        height: 230,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           primary: true,
                           shrinkWrap: true,
                           itemCount: _cartImagePaths.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Stack(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 10, right: 10, top: 5),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ImageView(
-                                            url: _cartImagePaths[index],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl: _cartImagePaths[index],
-                                          imageBuilder:
-                                              (context, imageProvider) => Image(
-                                            fit: BoxFit.fill,
-                                            height: 150,
-                                            width: 150,
-                                            image: imageProvider,
-                                          ),
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              Center(
-                                            child: SizedBox(
-                                              height: 50.0,
-                                              width: 50.0,
-                                              child: CircularProgressIndicator(
-                                                  value:
-                                                      downloadProgress.progress,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation(
-                                                          CustomColors.blue),
-                                                  strokeWidth: 2.0),
+                            return Padding(
+                              padding:
+                                  EdgeInsets.only(left: 10, right: 10, top: 5),
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ImageView(
+                                                url: _cartImagePaths[index],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: CachedNetworkImage(
+                                              imageUrl: _cartImagePaths[index],
+                                              imageBuilder:
+                                                  (context, imageProvider) =>
+                                                      Image(
+                                                fit: BoxFit.fill,
+                                                height: 200,
+                                                width: 200,
+                                                image: imageProvider,
+                                              ),
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Center(
+                                                child: SizedBox(
+                                                  height: 50.0,
+                                                  width: 50.0,
+                                                  child: CircularProgressIndicator(
+                                                      value: downloadProgress
+                                                          .progress,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation(
+                                                              CustomColors
+                                                                  .blue),
+                                                      strokeWidth: 2.0),
+                                                ),
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) => Icon(
+                                                Icons.error,
+                                                size: 35,
+                                              ),
+                                              fadeOutDuration:
+                                                  Duration(seconds: 1),
+                                              fadeInDuration:
+                                                  Duration(seconds: 2),
                                             ),
                                           ),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(
-                                            Icons.error,
-                                            size: 35,
-                                          ),
-                                          fadeOutDuration: Duration(seconds: 1),
-                                          fadeInDuration: Duration(seconds: 2),
                                         ),
                                       ),
-                                    ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: CustomColors.alertRed,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: InkWell(
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 30,
+                                              color: CustomColors.white,
+                                            ),
+                                            onTap: () async {
+                                              CustomDialogs.showLoadingDialog(
+                                                  context, _keyLoader);
+                                              bool res = await StorageUtils()
+                                                  .removeFile(
+                                                      _cartImagePaths[index]);
+                                              Navigator.of(
+                                                      _keyLoader.currentContext,
+                                                      rootNavigator: true)
+                                                  .pop();
+                                              if (res)
+                                                setState(() {
+                                                  _cartImagePaths.remove(
+                                                      _cartImagePaths[index]);
+                                                });
+                                              else
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        'Unable to remove image');
+                                            },
+                                          ),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                ),
-                                Positioned(
-                                  right: 10,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.alertRed,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: InkWell(
-                                      child: Icon(
-                                        Icons.close,
-                                        size: 25,
-                                        color: CustomColors.white,
-                                      ),
-                                      onTap: () async {
-                                        CustomDialogs.showLoadingDialog(
-                                            context, _keyLoader);
-                                        bool res = await StorageUtils()
-                                            .removeFile(_cartImagePaths[index]);
-                                        Navigator.of(_keyLoader.currentContext,
-                                                rootNavigator: true)
-                                            .pop();
-                                        if (res)
-                                          setState(() {
-                                            _cartImagePaths
-                                                .remove(_cartImagePaths[index]);
-                                          });
-                                        else
-                                          Fluttertoast.showToast(
-                                              msg: 'Unable to remove image');
-                                      },
-                                    ),
-                                  ),
-                                )
-                              ],
+                                  Text("Amount : ₹ 0.00")
+                                ],
+                              ),
                             );
                           },
                         ),
@@ -1015,6 +1033,10 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       _cartWrittenOrders.first.name.trim().isNotEmpty)
                   ? createPriceItem(
                       "Price for Written List : ", '₹ 0.0', CustomColors.black)
+                  : Container(),
+              (_cartImagePaths.length > 0 && _cartImagePaths.isNotEmpty)
+                  ? createPriceItem("Price for Captured List : ", '₹ 0.0',
+                      CustomColors.black)
                   : Container(),
               createPriceItem("Your Savings : ",
                   '₹ ' + _priceDetails[1].toString(), CustomColors.green),

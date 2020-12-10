@@ -256,68 +256,78 @@ class OrderViewScreen extends StatelessWidget {
             );
           },
         ),
-        order.orderImages.length > 0
+        order.capturedOrders.length > 0
             ? Column(
                 children: [
                   ListTile(
                     title: Text("Ordered as Captured List"),
                   ),
                   SizedBox(
-                    height: 160,
+                    height: 175,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       primary: true,
                       shrinkWrap: true,
-                      itemCount: order.orderImages.length,
+                      itemCount: order.capturedOrders.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.only(left: 10, right: 10, top: 5),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ImageView(
-                                    url: order.orderImages[index],
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10.0),
-                                child: CachedNetworkImage(
-                                  imageUrl: order.orderImages[index],
-                                  imageBuilder: (context, imageProvider) =>
-                                      Image(
-                                    fit: BoxFit.fill,
-                                    height: 150,
-                                    width: 150,
-                                    image: imageProvider,
-                                  ),
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          Center(
-                                    child: SizedBox(
-                                      height: 50.0,
-                                      width: 50.0,
-                                      child: CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          valueColor: AlwaysStoppedAnimation(
-                                              CustomColors.blue),
-                                          strokeWidth: 2.0),
+                        return Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(left: 5, right: 5),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ImageView(
+                                        url: order.capturedOrders[index].image,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: CachedNetworkImage(
+                                      imageUrl:
+                                          order.capturedOrders[index].image,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Image(
+                                        fit: BoxFit.fill,
+                                        height: 150,
+                                        width: 150,
+                                        image: imageProvider,
+                                      ),
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Center(
+                                        child: SizedBox(
+                                          height: 50.0,
+                                          width: 50.0,
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      CustomColors.blue),
+                                              strokeWidth: 2.0),
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(
+                                        Icons.error,
+                                        size: 35,
+                                      ),
+                                      fadeOutDuration: Duration(seconds: 1),
+                                      fadeInDuration: Duration(seconds: 2),
                                     ),
                                   ),
-                                  errorWidget: (context, url, error) => Icon(
-                                    Icons.error,
-                                    size: 35,
-                                  ),
-                                  fadeOutDuration: Duration(seconds: 1),
-                                  fadeInDuration: Duration(seconds: 2),
                                 ),
                               ),
                             ),
-                          ),
+                            Text(
+                                "Price : ₹ ${order.capturedOrders[index].price}")
+                          ],
                         );
                       },
                     ),
