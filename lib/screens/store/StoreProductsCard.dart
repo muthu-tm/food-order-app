@@ -71,6 +71,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
               ),
               Flexible(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     widget.product.variants.length > 1
                         ? Container(
@@ -122,7 +123,6 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                               ),
                             ),
                           ),
-                    SizedBox(width: 10),
                     Text(
                       " ₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toString()}",
                       style: TextStyle(
@@ -154,17 +154,23 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                   ],
                 )
               : Container(),
-          Flexible(
-            child: Text(
-              widget.product.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: CustomColors.blue,
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold,
-              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    widget.product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: CustomColors.blue,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Row(
