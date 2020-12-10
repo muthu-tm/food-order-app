@@ -127,7 +127,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                       " ₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toString()}",
                       style: TextStyle(
                         color: CustomColors.black,
-                        fontSize: 12.0,
+                        fontSize: 13.0,
                       ),
                     )
                   ],
