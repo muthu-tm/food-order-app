@@ -122,7 +122,7 @@ class _CategoriesProductsWidgetState extends State<CategoriesProductsWidget> {
             children = Container(
               padding: EdgeInsets.all(10),
               color: CustomColors.white,
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
                   Text(

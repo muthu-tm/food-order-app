@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/product_categories.dart';
+import 'package:chipchop_buyer/db/models/product_sub_categories.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/store/StoreCategoriesScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
@@ -74,12 +76,22 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                     (context, index) {
                       ProductCategories _c = snapshot.data[index];
                       return InkWell(
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          CustomDialogs.actionWaiting(context);
+                          
+                          List<ProductSubCategories> subCat =
+                              await ProductSubCategories()
+                                  .getSubCategoriesForIDs(
+                                      _c.uuid,
+                                      widget.store.availProductSubCategories
+                                          .map((e) => e.uuid)
+                                          .toList());
+
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => StoreCategoriesScreen(
-                                  widget.store, _c.uuid, _c.name),
+                                  subCat, widget.store, _c.uuid, _c.name),
                             ),
                           );
                         },

@@ -77,7 +77,7 @@ class _SubCategoriesProductsWidgetState
       builder: (BuildContext context, AsyncSnapshot<List<Products>> snapshot) {
         Widget children;
 
-        if (snapshot.hasData) {
+        if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data.isNotEmpty) {
             children = Container(
               child: GridView.count(
@@ -122,7 +122,7 @@ class _SubCategoriesProductsWidgetState
             children = Container(
               padding: EdgeInsets.all(10),
               color: CustomColors.white,
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: MediaQuery.of(context).size.width,
               child: Column(
                 children: [
                   Text(

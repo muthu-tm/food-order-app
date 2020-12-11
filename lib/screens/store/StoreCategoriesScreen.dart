@@ -3,13 +3,14 @@ import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/CategoriesProductsWidget.dart';
 import 'package:chipchop_buyer/screens/store/SubCategoriesProductScreen.dart';
-import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class StoreCategoriesScreen extends StatefulWidget {
-  StoreCategoriesScreen(this.store, this.categoryID, this.categoryName);
+  StoreCategoriesScreen(
+      this.subCategories, this.store, this.categoryID, this.categoryName);
 
+  final List<ProductSubCategories> subCategories;
   final Store store;
   final String categoryID;
   final String categoryName;
@@ -62,78 +63,53 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: FutureBuilder(
-              future: ProductSubCategories().getSubCategoriesForIDs(
-                  widget.categoryID,
-                  widget.store.availProductSubCategories
-                      .map((e) => e.uuid)
-                      .toList()),
-              builder: (context, AsyncSnapshot snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Center(
-                      child: Column(
-                        children: AsyncWidgets.asyncWaiting(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 60,
+              padding: const EdgeInsets.all(5.0),
+              child: ListView.builder(
+                primary: true,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.subCategories.length,
+                padding: EdgeInsets.all(5),
+                itemBuilder: (BuildContext context, int index) {
+                  ProductSubCategories _sc = widget.subCategories[index];
+                  return Padding(
+                    padding: EdgeInsets.only(left: 5.0, right: 5),
+                    child: ActionChip(
+                      elevation: 6.0,
+                      backgroundColor: _subCategoryID == _sc.uuid
+                          ? CustomColors.green
+                          : Colors.white,
+                      onPressed: () {
+                        setState(() {
+                          _subCategoryID = _sc.uuid;
+                        });
+                      },
+                      label: Text(
+                        _sc.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            color: _subCategoryID == _sc.uuid
+                                ? Colors.black54
+                                : CustomColors.black),
                       ),
-                    );
-                  default:
-                    if (snapshot.hasError)
-                      return Center(
-                        child: Column(
-                          children: AsyncWidgets.asyncError(),
-                        ),
-                      );
-                    else
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Wrap(
-                          alignment: WrapAlignment.start,
-                          runAlignment: WrapAlignment.start,
-                          spacing: 5.0,
-                          direction: Axis.horizontal,
-                          children: List<Widget>.generate(
-                            snapshot.data.length,
-                            (index) {
-                              ProductSubCategories _sc = snapshot.data[index];
-                              return ActionChip(
-                                elevation: 6.0,
-                                backgroundColor: _subCategoryID == _sc.uuid
-                                    ? CustomColors.green
-                                    : Colors.white,
-                                onPressed: () {
-                                  setState(() {
-                                    _subCategoryID = _sc.uuid;
-                                  });
-                                },
-                                label: Text(
-                                  _sc.name,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: _subCategoryID == _sc.uuid
-                                          ? Colors.black54
-                                          : CustomColors.black),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                }
-              },
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          _subCategoryID.isEmpty
-              ? CategoriesProductsWidget(
-                  widget.store.uuid, widget.store.name, widget.categoryID)
-              : SubCategoriesProductsWidget(widget.store.uuid,
-                  widget.store.name, widget.categoryID, _subCategoryID)
-        ],
+            _subCategoryID.isEmpty
+                ? CategoriesProductsWidget(
+                    widget.store.uuid, widget.store.name, widget.categoryID)
+                : SubCategoriesProductsWidget(widget.store.uuid,
+                    widget.store.name, widget.categoryID, _subCategoryID)
+          ],
+        ),
       ),
     );
   }
