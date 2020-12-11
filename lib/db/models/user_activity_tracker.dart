@@ -50,7 +50,7 @@ class UserActivityTracker {
     if (this.refImage != null && this.refImage.isNotEmpty) {
       return this.refImage;
     } else
-      return no_image_placeholder;
+      return noImagePlaceholder;
   }
 
   Future<void> create() async {

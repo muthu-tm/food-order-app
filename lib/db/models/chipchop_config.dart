@@ -16,10 +16,8 @@ class ChipChopConfig {
   String platform;
   @JsonKey(name: 'app_url', nullable: true)
   String appURL;
-  @JsonKey(name: 'referral_bonus', defaultValue: 0)
-  int referralBonus;
-  @JsonKey(name: 'registration_bonus', defaultValue: 0)
-  int registrationBonus;
+  @JsonKey(name: 'default_image', defaultValue: 0)
+  String defaultImage;
 
   ChipChopConfig();
 

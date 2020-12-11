@@ -117,14 +117,14 @@ class Products extends Model {
       return image.replaceFirst(
           firebase_storage_path, image_kit_path + ik_medium_size);
     else
-      return no_image_placeholder.replaceFirst(
+      return noImagePlaceholder.replaceFirst(
           firebase_storage_path, image_kit_path + ik_medium_size);
   }
 
   List<String> getProductImages() {
     if (this.productImages.isEmpty) {
       return [
-        no_image_placeholder.replaceFirst(
+        noImagePlaceholder.replaceFirst(
             firebase_storage_path, image_kit_path + ik_medium_size)
       ];
     } else {
@@ -137,7 +137,7 @@ class Products extends Model {
         return images;
       } else
         return [
-          no_image_placeholder.replaceFirst(
+          noImagePlaceholder.replaceFirst(
               firebase_storage_path, image_kit_path + ik_medium_size)
         ];
     }

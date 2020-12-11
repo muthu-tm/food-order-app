@@ -30,14 +30,14 @@ class ProductSubCategories extends Model {
 
   String getSubCategoryImage() {
     if (this.productImages.isEmpty) {
-      return no_image_placeholder.replaceFirst(
+      return noImagePlaceholder.replaceFirst(
           firebase_storage_path, image_kit_path + ik_medium_size);
     } else {
       if (this.productImages.first != null && this.productImages.first != "") {
         return this.productImages.first.replaceFirst(
             firebase_storage_path, image_kit_path + ik_medium_size);
       } else
-        return no_image_placeholder.replaceFirst(
+        return noImagePlaceholder.replaceFirst(
             firebase_storage_path, image_kit_path + ik_medium_size);
     }
   }

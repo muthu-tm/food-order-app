@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
@@ -35,12 +36,12 @@ Widget contactAndSupportDialog(context) {
           ),
           SizedBox(height: 5),
           ClipRRect(
-              child: Image.asset(
-                "images/icons/logo.png",
-                height: 60,
-                width: 60,
-              ),
+            child: Image.asset(
+              "images/icons/logo.png",
+              height: 60,
+              width: 60,
             ),
+          ),
           SizedBox(height: 15),
           Text(
             AppLocalizations.of(context).translate('lost_need_help'),
@@ -82,18 +83,18 @@ Widget contactAndSupportDialog(context) {
                 elevation: 15.0,
                 onPressed: () {
                   UrlLauncherUtils.sendEmail(
-                      'hello.ifin@gmail.com',
+                      support_email_ID,
                       'Uniques - Help %26 Support',
                       'Please type your query/issue here with your mobile number.. We will get back to you ASAP!');
                 },
                 label: Text(
-                    AppLocalizations.of(context).translate('email'),
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  AppLocalizations.of(context).translate('email'),
+                  style: TextStyle(
+                    color: CustomColors.blue,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
                 color: CustomColors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -109,16 +110,16 @@ Widget contactAndSupportDialog(context) {
                 ),
                 elevation: 15.0,
                 onPressed: () {
-                  UrlLauncherUtils.makePhoneCall('919361808580');
+                  UrlLauncherUtils.makePhoneCall(support_mobile_number);
                 },
                 label: Text(
-                    AppLocalizations.of(context).translate('phone'),
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  AppLocalizations.of(context).translate('phone'),
+                  style: TextStyle(
+                    color: CustomColors.blue,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
                   ),
+                ),
                 color: CustomColors.green,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),

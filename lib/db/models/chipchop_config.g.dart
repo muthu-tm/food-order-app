@@ -6,8 +6,7 @@ ChipChopConfig _$ChipChopConfigFromJson(Map<String, dynamic> json) {
     ..minVersion = json['min_version'] as String
     ..platform = json['platform'] as String
     ..appURL = json['app_url'] as String
-    ..referralBonus = json['referral_bonus'] as int
-    ..registrationBonus = json['registration_bonus'] as int;
+    ..defaultImage = json['default_image'] as String;
 }
 
 Map<String, dynamic> _$ChipChopConfigToJson(ChipChopConfig instance) =>
@@ -16,6 +15,5 @@ Map<String, dynamic> _$ChipChopConfigToJson(ChipChopConfig instance) =>
       'min_version': instance.minVersion,
       'platform': instance.platform,
       'app_url': instance.appURL,
-      'referral_bonus': instance.referralBonus,
-      'registration_bonus': instance.registrationBonus,
+      'default_image': instance.defaultImage,
     };

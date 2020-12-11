@@ -12,7 +12,7 @@ const seller_profile_folder = "seller_profile";
 const order_folder = "orders";
 const store_offers_folder = "store_offers";
 
-const no_image_placeholder =
+String noImagePlaceholder =
     "https://firebasestorage.googleapis.com/v0/b/fc-chipchop-test.appspot.com/o/app_images%2Funiques_logo.png?alt=media&token=7f16bde8-c3a6-4a51-9715-a41e6ee118c9";
 const empty_wishlist_placeholder =
     "https://firebasestorage.googleapis.com/v0/b/fc-chipchop-test.appspot.com/o/app_images%2Fempty_wish_list.png?alt=media&token=9d853c31-74d0-4633-9003-70f26a283491";
@@ -27,4 +27,4 @@ const chipchop_website = "https://chipchop.in/";
 const chipchop_faq_url = "https://www.chipchop.in/help/faq/";
 const terms_and_conditions_url = "https://www.chipchop.in/terms-conditions/";
 const support_email_ID = "support@chipchop.in";
-const support_mobile_numer = "917550251906";
+const support_mobile_number = "917550251906";

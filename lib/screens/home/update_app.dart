@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
 import 'package:chipchop_buyer/screens/home/UserLocationChecker.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/db/models/chipchop_config.dart';
@@ -14,7 +15,6 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UpdateApp extends StatefulWidget {
-
   @override
   _UpdateAppState createState() => _UpdateAppState();
 }
@@ -34,13 +34,10 @@ class _UpdateAppState extends State<UpdateApp> {
 
     ChipChopConfig conf =
         await ChipChopConfig().getConfigByPlatform(Platform.operatingSystem);
-    if (conf == null)
-      return;
-      
-    url = conf.appURL;
+    if (conf == null) return;
 
-    await sPref.setInt('referral_bonus', conf.referralBonus ?? 25);
-    await sPref.setInt('registration_bonus', conf.registrationBonus ?? 25);
+    url = conf.appURL;
+    noImagePlaceholder = conf.defaultImage;
 
     Version minAppVersion = Version.parse(conf.minVersion);
     Version latestAppVersion = Version.parse(conf.cVersion);
