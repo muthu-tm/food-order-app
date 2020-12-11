@@ -198,7 +198,7 @@ class Products extends Model {
             end = end + 9;
 
           QuerySnapshot snap = await getCollectionRef()
-              .where('store_uuid', isEqualTo: storeID)
+              .where('store_uuid', whereIn: ids.sublist(i, end))
               .where('product_category.uuid', isEqualTo: categoryID)
               .getDocuments();
           for (var j = 0; j < snap.documents.length; j++) {
@@ -208,7 +208,7 @@ class Products extends Model {
         }
       } else {
         QuerySnapshot snap = await getCollectionRef()
-            .where('store_uuid', isEqualTo: storeID)
+            .where('store_uuid', whereIn: ids)
             .where('product_category.uuid', isEqualTo: categoryID)
             .getDocuments();
         for (var j = 0; j < snap.documents.length; j++) {
