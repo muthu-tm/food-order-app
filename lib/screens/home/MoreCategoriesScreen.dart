@@ -193,11 +193,11 @@ class _MoreCategoriesScreenState extends State<MoreCategoriesScreen> {
                   children:
                       List<Widget>.generate(snapshot.data.length, (int index) {
                     return ActionChip(
-                        elevation: 6.0,
-                        backgroundColor: CustomColors.blueGreen,
+                        elevation: 4.0,
+                        backgroundColor: CustomColors.green,
                         label: Text(
                           snapshot.data[index].name,
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: CustomColors.black),
                         ),
                         onPressed: () async {
                           List<Store> stores = await Store().getStoresByTypes(
