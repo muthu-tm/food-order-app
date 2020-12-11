@@ -146,7 +146,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: CustomColors.black,
+                          color: CustomColors.grey,
                           fontSize: 14.0,
                         ),
                       ),
@@ -164,7 +164,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: CustomColors.blue,
+                      color: CustomColors.black,
                       fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
