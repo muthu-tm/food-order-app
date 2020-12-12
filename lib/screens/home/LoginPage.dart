@@ -142,14 +142,13 @@ class _LoginPageState extends State<LoginPage> {
                     prefix: Text('+91'),
                     prefixIcon: Icon(
                       Icons.phone,
-                      color: CustomColors.lightGreen,
-                      size: 30.0,
-                    ),
-                    prefixIconConstraints: BoxConstraints(
-                      minWidth: 75,
+                      color: CustomColors.grey,
+                      size: 25.0,
                     ),
                     hintText:
                         AppLocalizations.of(context).translate('mobile_number'),
+                    hintStyle:
+                            TextStyle(fontSize: 16.0, color: Colors.black26),
                     fillColor: CustomColors.white,
                     filled: true,
                     contentPadding: EdgeInsets.all(14),

@@ -139,16 +139,13 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       prefix: Text('+91'),
                       prefixIcon: Icon(
                         Icons.phone,
-                        color: CustomColors.lightGreen,
-                        size: 30.0,
-                      ),
-                      prefixIconConstraints: BoxConstraints(
-                        minWidth: 75,
+                        color: CustomColors.grey,
+                        size: 25.0,
                       ),
                       fillColor: CustomColors.white,
                       hintText: "Mobile Number",
                       hintStyle:
-                          TextStyle(fontSize: 16.0, color: Colors.black54),
+                          TextStyle(fontSize: 16.0, color: Colors.black26),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide(
@@ -178,7 +175,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                               fillColor: CustomColors.white,
                               hintText: "First Name",
                               hintStyle: TextStyle(
-                                  fontSize: 16.0, color: Colors.black54),
+                                  fontSize: 16.0, color: Colors.black26),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
@@ -207,7 +204,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                               fillColor: CustomColors.white,
                               hintText: "Last Name",
                               hintStyle: TextStyle(
-                                  fontSize: 16.0, color: Colors.black54),
+                                  fontSize: 16.0, color: Colors.black26),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: BorderSide(
@@ -241,8 +238,8 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                             _passwordVisible
                                 ? Icons.visibility_off
                                 : Icons.visibility,
-                            color: CustomColors.lightGreen,
-                            size: 30.0,
+                            color: CustomColors.grey,
+                            size: 25.0,
                           ),
                           onPressed: () {
                             setState(() {
@@ -250,13 +247,10 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                             });
                           },
                         ),
-                        prefixIconConstraints: BoxConstraints(
-                          minWidth: 75,
-                        ),
                         fillColor: CustomColors.white,
                         hintText: "Secret KEY",
                         hintStyle:
-                            TextStyle(fontSize: 16.0, color: Colors.black54),
+                            TextStyle(fontSize: 16.0, color: Colors.black26),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                           borderSide: BorderSide(
