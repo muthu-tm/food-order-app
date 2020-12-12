@@ -110,7 +110,7 @@ class Customers {
       return _stores;
     } catch (err) {
       Analytics.sendAnalyticsEvent(
-          {'type': 'store_chat_get_error', 'error': err.toString()}, 'chats');
+          {'type': 'store_customers_error', 'error': err.toString()}, 'chats');
       throw err;
     }
   }

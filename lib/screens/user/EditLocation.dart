@@ -2,7 +2,6 @@ import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/user/EditLocationPicker.dart';
-import 'package:chipchop_buyer/screens/user/LocationPicker.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';

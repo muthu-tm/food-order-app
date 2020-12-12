@@ -96,9 +96,11 @@ class WalletHome extends StatelessWidget {
                 );
               }
             } else if (snapshot.hasError) {
-              child = Container(
-                child: Column(
-                  children: AsyncWidgets.asyncError(),
+              child = Center(
+                child: Container(
+                  child: Column(
+                    children: AsyncWidgets.asyncError(),
+                  ),
                 ),
               );
             } else {

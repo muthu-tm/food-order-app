@@ -125,9 +125,11 @@ class _ChatsHomeState extends State<ChatsHome>
             );
           }
         } else if (snapshot.hasError) {
-          child = Container(
-            child: Column(
-              children: AsyncWidgets.asyncError(),
+          child = Center(
+            child: Container(
+              child: Column(
+                children: AsyncWidgets.asyncError(),
+              ),
             ),
           );
         } else {
