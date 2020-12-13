@@ -61,6 +61,7 @@ class _StoreCartItemsState extends State<StoreCartItems> {
   double shippingCharge = 0.00;
   double wAmount = 0.00;
   bool isAmountUsed = false;
+  bool isWithinWorkingHours;
 
   DateTime selectedDate;
   final format = DateFormat('dd MMM, yyyy h:mm a');
@@ -75,8 +76,6 @@ class _StoreCartItemsState extends State<StoreCartItems> {
     4: "Litre",
     5: "m.litre"
   };
-
-  bool isWithinWorkingHours;
 
   @override
   void initState() {
@@ -1035,8 +1034,8 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       "Price for Written List : ", '₹ 0.0', CustomColors.black)
                   : Container(),
               (_cartImagePaths.length > 0 && _cartImagePaths.isNotEmpty)
-                  ? createPriceItem("Price for Captured List : ", '₹ 0.0',
-                      CustomColors.black)
+                  ? createPriceItem(
+                      "Price for Captured List : ", '₹ 0.0', CustomColors.black)
                   : Container(),
               createPriceItem("Your Savings : ",
                   '₹ ' + _priceDetails[1].toString(), CustomColors.green),
@@ -1134,18 +1133,27 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       TextSpan(
                         text: "CHAT HERE",
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => StoreChatScreen(
-                                  storeID: store.uuid,
-                                  storeName: store.name,
-                                ),
-                                settings: RouteSettings(name: '/store/chat'),
-                              ),
-                            );
-                          },
+                          ..onTap = isWithinWorkingHours
+                              ? () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => StoreChatScreen(
+                                        storeID: store.uuid,
+                                        storeName: store.name,
+                                      ),
+                                      settings:
+                                          RouteSettings(name: '/store/chat'),
+                                    ),
+                                  );
+                                }
+                              : () {
+                                  Fluttertoast.showToast(
+                                      msg: 'Store is closed',
+                                      backgroundColor: CustomColors.alertRed,
+                                      textColor: CustomColors.white);
+                                  return;
+                                },
                         style: TextStyle(
                             fontSize: 14.0,
                             color: Colors.green,

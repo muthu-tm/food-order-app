@@ -15,6 +15,7 @@ import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
@@ -43,6 +44,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int deliveryOption = 0;
   double wAmount = 0.00;
   bool isAmountUsed = false;
+  bool isWithinWorkingHours;
 
   DateTime selectedDate;
   final format = DateFormat('dd MMM, yyyy h:mm a');
@@ -176,6 +178,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               return Container();
             } else {
               Store store = Store.fromJson(snapshot.data);
+
+              final currentTime = DateTime.now();
+              bool businessHours = (currentTime.isAfter(
+                      DateUtils.getTimeAsDateTimeObject(store.activeFrom)) &&
+                  currentTime.isBefore(
+                      DateUtils.getTimeAsDateTimeObject(store.activeTill)));
+              bool businessDays = (DateTime.now().weekday <= 6
+                  ? store.workingDays.contains(DateTime.now().weekday)
+                  : store.workingDays.contains(0));
+              isWithinWorkingHours = businessHours && businessDays;
 
               child = SingleChildScrollView(
                 child: Container(
@@ -470,18 +482,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       TextSpan(
                         text: "CHAT HERE",
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => StoreChatScreen(
-                                  storeID: store.uuid,
-                                  storeName: store.name,
-                                ),
-                                settings: RouteSettings(name: '/store/chat'),
-                              ),
-                            );
-                          },
+                          ..onTap = isWithinWorkingHours
+                              ? () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => StoreChatScreen(
+                                        storeID: store.uuid,
+                                        storeName: store.name,
+                                      ),
+                                      settings:
+                                          RouteSettings(name: '/store/chat'),
+                                    ),
+                                  );
+                                }
+                              : () {
+                                  Fluttertoast.showToast(
+                                      msg: 'Store is closed',
+                                      backgroundColor: CustomColors.alertRed,
+                                      textColor: CustomColors.white);
+                                  return;
+                                },
                         style: TextStyle(
                             fontSize: 14.0,
                             color: Colors.green,
