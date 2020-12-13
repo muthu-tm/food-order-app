@@ -5,7 +5,7 @@ import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/screens/orders/OrderWidget.dart';
 import 'package:chipchop_buyer/screens/search/RecentSearches.dart';
 import 'package:chipchop_buyer/screens/search/SearchOptionsRadio.dart';
-import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
+import 'package:chipchop_buyer/screens/search/SearchProductsWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -199,12 +199,8 @@ class _SearchAppBarState extends State<SearchAppBar> {
                           return StoreWidget(
                               Store.fromJson(snapshot.data[index]));
                         } else if (inOutList[1].isSelected == true) {
-                          return Container(
-                            padding: EdgeInsets.all(5.0),
-                            width: 150,
-                            child: ProductWidget(
-                                Products.fromJson(snapshot.data[index])),
-                          );
+                          return SearchProductsWidget(
+                              Products.fromJson(snapshot.data[index]));
                         } else {
                           return OrderWidget(
                               Order.fromJson(snapshot.data[index]));
