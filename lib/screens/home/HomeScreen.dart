@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Card(
@@ -441,7 +441,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Container(
               padding: EdgeInsets.all(10),
               color: CustomColors.white,
-              width: MediaQuery.of(context).size.width * 0.9,
+              width: MediaQuery.of(context).size.width,
               child: Text(
                 "Unable to load Top Categories",
                 style: TextStyle(

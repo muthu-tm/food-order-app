@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
+import 'package:chipchop_buyer/screens/store/VariantsWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
@@ -114,7 +115,7 @@ class _StoreSearchBarState extends State<StoreSearchBar> {
                               ),
                               color: CustomColors.white,
                             ),
-                            child: InkWell(
+                            child: ListTile(
                               onTap: () async {
                                 UserActivityTracker _activity =
                                     UserActivityTracker();
@@ -136,58 +137,41 @@ class _StoreSearchBarState extends State<StoreSearchBar> {
                                   ),
                                 );
                               },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(10.0),
-                                    child: CachedNetworkImage(
-                                      imageUrl: product.getProductImage(),
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        width: 70,
-                                        height: 70,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.0),
-                                          ),
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                              fit: BoxFit.fill,
-                                              image: imageProvider),
-                                        ),
-                                      ),
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(
-                                        Icons.error,
-                                        size: 35,
-                                      ),
-                                      fadeOutDuration: Duration(seconds: 1),
-                                      fadeInDuration: Duration(seconds: 2),
+                              leading: CachedNetworkImage(
+                                imageUrl: product.getProductImage(),
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  width: 60,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(5.0),
                                     ),
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill, image: imageProvider),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        product.name,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: CustomColors.blue,
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                ),
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                errorWidget: (context, url, error) => Icon(
+                                  Icons.error,
+                                  size: 35,
+                                ),
+                                fadeOutDuration: Duration(seconds: 1),
+                                fadeInDuration: Duration(seconds: 2),
                               ),
+                              title: Text(
+                                product.name,
+                                style: TextStyle(
+                                  color: CustomColors.blue,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              subtitle: ProductVariantsWidget(product, 0),
                             ),
                           ),
                         );

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chipchop_buyer/db/models/order.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
@@ -5,8 +6,9 @@ import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/screens/orders/OrderWidget.dart';
 import 'package:chipchop_buyer/screens/search/RecentSearches.dart';
 import 'package:chipchop_buyer/screens/search/SearchOptionsRadio.dart';
-import 'package:chipchop_buyer/screens/search/SearchProductsWidget.dart';
+import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/store/StoreWidget.dart';
+import 'package:chipchop_buyer/screens/store/VariantsWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
@@ -199,8 +201,82 @@ class _SearchAppBarState extends State<SearchAppBar> {
                           return StoreWidget(
                               Store.fromJson(snapshot.data[index]));
                         } else if (inOutList[1].isSelected == true) {
-                          return SearchProductsWidget(
-                              Products.fromJson(snapshot.data[index]));
+                          Products product =
+                              Products.fromJson(snapshot.data[index]);
+                          return Padding(
+                            padding: EdgeInsets.all(5.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                                color: CustomColors.white,
+                              ),
+                              child: ListTile(
+                                onTap: () async {
+                                  Products _product = await Products()
+                                      .getByProductID(product.uuid);
+
+                                  UserActivityTracker _activity =
+                                      UserActivityTracker();
+                                  _activity.keywords = "";
+                                  _activity.storeID = _product.storeID;
+                                  _activity.productID = _product.uuid;
+                                  _activity.productName = _product.name;
+                                  _activity.refImage =
+                                      _product.getProductImage();
+                                  _activity.type = 2;
+                                  _activity.create();
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProductDetailsScreen(_product),
+                                      settings: RouteSettings(
+                                          name: '/settings/products/view'),
+                                    ),
+                                  );
+                                },
+                                leading: CachedNetworkImage(
+                                  imageUrl: product.getProductImage(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                    width: 60,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5.0),
+                                      ),
+                                      shape: BoxShape.rectangle,
+                                      image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: imageProvider),
+                                    ),
+                                  ),
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) => Icon(
+                                    Icons.error,
+                                    size: 35,
+                                  ),
+                                  fadeOutDuration: Duration(seconds: 1),
+                                  fadeInDuration: Duration(seconds: 2),
+                                ),
+                                title: Text(
+                                  product.name,
+                                  style: TextStyle(
+                                    color: CustomColors.blue,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: ProductVariantsWidget(product, 0),
+                              ),
+                            ),
+                          );
                         } else {
                           return OrderWidget(
                               Order.fromJson(snapshot.data[index]));
