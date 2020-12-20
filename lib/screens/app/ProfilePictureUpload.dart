@@ -260,7 +260,8 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
           } else {
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (BuildContext context) => HomeScreen(),
+                builder: (BuildContext context) => HomeScreen(0),
+                settings: RouteSettings(name: '/home'),
               ),
               (Route<dynamic> route) => false,
             );
@@ -270,4 +271,3 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
     }
   }
 }
-

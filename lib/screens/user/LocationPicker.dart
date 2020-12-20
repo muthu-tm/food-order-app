@@ -69,11 +69,12 @@ class LocationPickerState extends State<LocationPicker> {
           try {
             UserLocations _loc = await cachedLocalUser.addLocations(widget.loc);
             await cachedLocalUser.updatePrimaryLocation(_loc);
-            Navigator.of(context).pushReplacement(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (BuildContext context) => HomeScreen(),
-                settings: RouteSettings(name: '/'),
+                builder: (BuildContext context) => HomeScreen(0),
+                settings: RouteSettings(name: '/home'),
               ),
+              (Route<dynamic> route) => false,
             );
           } catch (err) {
             _scaffoldKey.currentState.showSnackBar(
@@ -93,7 +94,7 @@ class LocationPickerState extends State<LocationPicker> {
           children: [
             GoogleMap(
               initialCameraPosition:
-                  CameraPosition(target: LatLng(12.9716, 77.5946), zoom: 5),
+                  CameraPosition(target: LatLng(12.9716, 77.5946), zoom: 6),
               onTap: (latlang) {
                 if (_markers.length >= 1) {
                   _markers.clear();
@@ -150,7 +151,7 @@ class LocationPickerState extends State<LocationPicker> {
       mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-            zoom: 11,
+            zoom: 13,
             target:
                 LatLng(marks[0].position.latitude, marks[0].position.longitude),
           ),

@@ -105,7 +105,7 @@ class _MoreCategoriesScreenState extends State<MoreCategoriesScreen> {
                                                               settings:
                                                                   RouteSettings(
                                                                       name:
-                                                                          '/search/sub_categories.uuid'),
+                                                                          '/search/sub_categories'),
                                                             ),
                                                           );
                                                         },

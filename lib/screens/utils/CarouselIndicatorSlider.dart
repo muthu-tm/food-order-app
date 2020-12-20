@@ -4,8 +4,8 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class CarouselIndicatorSlider extends StatefulWidget {
-  CarouselIndicatorSlider(this.imgList);
-
+  CarouselIndicatorSlider(this.imgList, [this.height = 180]);
+  final double height;
   final List<String> imgList;
   @override
   State<StatefulWidget> createState() {
@@ -61,7 +61,7 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
       CarouselSlider(
         items: getSliders(),
         options: CarouselOptions(
-            height: 180,
+            height: widget.height,
             autoPlay: imgList.length > 1 ? true : false,
             enlargeCenterPage: imgList.length > 1 ? true : false,
             enableInfiniteScroll: imgList.length <= 1 ? false : true,

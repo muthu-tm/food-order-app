@@ -136,7 +136,7 @@ class _UpdateAppState extends State<UpdateApp> {
   @override
   Widget build(BuildContext context) {
     return cachedLocalUser.primaryLocation != null
-        ? HomeScreen()
+        ? HomeScreen(0)
         : UserLocationChecker();
   }
 }

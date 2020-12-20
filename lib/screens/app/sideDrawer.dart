@@ -3,8 +3,6 @@ import 'package:chipchop_buyer/screens/Home/AuthPage.dart';
 import 'package:chipchop_buyer/screens/app/ContactAndSupportWidget.dart';
 import 'package:chipchop_buyer/screens/app/ProfilePictureUpload.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
-import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
-import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_buyer/screens/settings/WalletHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -181,7 +179,7 @@ Widget sideDrawer(BuildContext context) {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => HomeScreen(0),
                   settings: RouteSettings(name: '/home'),
                 ),
                 (Route<dynamic> route) => false,
@@ -194,12 +192,13 @@ Widget sideDrawer(BuildContext context) {
             "Search",
           ),
           onTap: () {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => SearchHome(),
+                builder: (context) => HomeScreen(1),
                 settings: RouteSettings(name: '/search'),
               ),
+              (Route<dynamic> route) => false,
             );
           },
         ),
@@ -210,12 +209,13 @@ Widget sideDrawer(BuildContext context) {
             "Orders",
           ),
           onTap: () {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => OrdersHomeScreen(),
+                builder: (context) => HomeScreen(3),
                 settings: RouteSettings(name: '/orders'),
               ),
+              (Route<dynamic> route) => false,
             );
           },
         ),

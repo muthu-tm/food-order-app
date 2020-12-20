@@ -76,8 +76,8 @@ class EmptyCartWidget extends StatelessWidget {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HomeScreen(),
-                          settings: RouteSettings(name: '/'),
+                          builder: (context) => HomeScreen(0),
+                          settings: RouteSettings(name: '/home'),
                         ),
                         (Route<dynamic> route) => false,
                       );

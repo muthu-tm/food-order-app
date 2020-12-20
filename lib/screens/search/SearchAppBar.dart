@@ -191,98 +191,120 @@ class _SearchAppBarState extends State<SearchAppBar> {
                     snapshot.hasData &&
                     _searchController.text != '') {
                   if (snapshot.data.isNotEmpty) {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (inOutList[0].isSelected == true) {
-                          return StoreWidget(
-                              Store.fromJson(snapshot.data[index]));
-                        } else if (inOutList[1].isSelected == true) {
-                          Products product =
-                              Products.fromJson(snapshot.data[index]);
-                          return Padding(
-                            padding: EdgeInsets.all(5.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
+                    return Column(children: [
+                      ListTile(
+                        title: Text(
+                          "Your search results",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (inOutList[0].isSelected == true) {
+                            return StoreWidget(
+                                Store.fromJson(snapshot.data[index]));
+                          } else if (inOutList[1].isSelected == true) {
+                            Products product =
+                                Products.fromJson(snapshot.data[index]);
+                            return Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                  color: CustomColors.white,
                                 ),
-                                color: CustomColors.white,
-                              ),
-                              child: ListTile(
-                                onTap: () async {
-                                  Products _product = await Products()
-                                      .getByProductID(product.uuid);
+                                child: ListTile(
+                                  onTap: () async {
+                                    Products _product = await Products()
+                                        .getByProductID(product.uuid);
 
-                                  UserActivityTracker _activity =
-                                      UserActivityTracker();
-                                  _activity.keywords = "";
-                                  _activity.storeID = _product.storeID;
-                                  _activity.productID = _product.uuid;
-                                  _activity.productName = _product.name;
-                                  _activity.refImage =
-                                      _product.getProductImage();
-                                  _activity.type = 2;
-                                  _activity.create();
+                                    UserActivityTracker _activity =
+                                        UserActivityTracker();
+                                    _activity.keywords = "";
+                                    _activity.storeID = _product.storeID;
+                                    _activity.productID = _product.uuid;
+                                    _activity.productName = _product.name;
+                                    _activity.refImage =
+                                        _product.getProductImage();
+                                    _activity.type = 2;
+                                    _activity.create();
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProductDetailsScreen(_product),
-                                      settings: RouteSettings(
-                                          name: '/settings/products/view'),
-                                    ),
-                                  );
-                                },
-                                leading: CachedNetworkImage(
-                                  imageUrl: product.getProductImage(),
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    width: 60,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5.0),
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ProductDetailsScreen(_product),
+                                        settings: RouteSettings(
+                                            name: '/store/products'),
                                       ),
-                                      shape: BoxShape.rectangle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: imageProvider),
+                                    );
+                                  },
+                                  leading: CachedNetworkImage(
+                                    imageUrl: product.getProductImage(),
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      width: 60,
+                                      height: 70,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5.0),
+                                        ),
+                                        shape: BoxShape.rectangle,
+                                        image: DecorationImage(
+                                            fit: BoxFit.fill,
+                                            image: imageProvider),
+                                      ),
                                     ),
+                                    progressIndicatorBuilder: (context, url,
+                                            downloadProgress) =>
+                                        CircularProgressIndicator(
+                                            value: downloadProgress.progress),
+                                    errorWidget: (context, url, error) => Icon(
+                                      Icons.error,
+                                      size: 35,
+                                    ),
+                                    fadeOutDuration: Duration(seconds: 1),
+                                    fadeInDuration: Duration(seconds: 2),
                                   ),
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                  errorWidget: (context, url, error) => Icon(
-                                    Icons.error,
-                                    size: 35,
+                                  title: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.storeName,
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        product.name,
+                                        style: TextStyle(
+                                          color: CustomColors.black,
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  fadeOutDuration: Duration(seconds: 1),
-                                  fadeInDuration: Duration(seconds: 2),
+                                  subtitle: ProductVariantsWidget(product, 0),
                                 ),
-                                title: Text(
-                                  product.name,
-                                  style: TextStyle(
-                                    color: CustomColors.blue,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: ProductVariantsWidget(product, 0),
                               ),
-                            ),
-                          );
-                        } else {
-                          return OrderWidget(
-                              Order.fromJson(snapshot.data[index]));
-                        }
-                      },
-                    );
+                            );
+                          } else {
+                            return OrderWidget(
+                                Order.fromJson(snapshot.data[index]));
+                          }
+                        },
+                      ),
+                    ]);
                   } else {
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -301,7 +323,9 @@ class _SearchAppBarState extends State<SearchAppBar> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Divider(),
+                        SizedBox(
+                          height: 5,
+                        ),
                         Text(
                           "Try with different KEYWORDS..",
                           textAlign: TextAlign.center,
@@ -322,10 +346,13 @@ class _SearchAppBarState extends State<SearchAppBar> {
                   );
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: AsyncWidgets.asyncWaiting(),
+                  return Container(
+                    height: MediaQuery.of(context).size.height / 2,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: AsyncWidgets.asyncSearching(),
+                    ),
                   );
                 } else {
                   return UserRecentSearches();

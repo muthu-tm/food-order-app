@@ -1,9 +1,7 @@
-import 'package:chipchop_buyer/screens/app/appBar.dart';
-import 'package:chipchop_buyer/screens/app/bottomBar.dart';
-import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileSettings.dart';
 import 'package:chipchop_buyer/screens/settings/WalletHome.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -15,237 +13,218 @@ class SettingsHome extends StatefulWidget {
 class _SettingsHomeState extends State<SettingsHome> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          child: ListView(
-            children: <Widget>[
-              InkWell(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            width: 85,
-                            height: 80,
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: ListView(
+        children: <Widget>[
+          InkWell(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        width: 85,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            color: CustomColors.green,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(40),
+                                bottomRight: Radius.circular(40))),
+                      ),
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        child: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: DecoratedBox(
                             decoration: BoxDecoration(
-                                color: CustomColors.green,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(40),
-                                    bottomRight: Radius.circular(40))),
-                          ),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: CustomColors.alertRed,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 35,
-                                    color: CustomColors.white,
-                                  ),
-                                ),
+                              color: CustomColors.alertRed,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Icon(
+                                Icons.person,
+                                size: 35,
+                                color: CustomColors.white,
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        "Profile Settings",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          
-                          color: CustomColors.black,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserSetting(),
-                      settings: RouteSettings(name: '/settings/profile'),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "Profile Settings",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: CustomColors.black,
                     ),
-                  );
-                },
-              ),
-              Divider(
-                color: CustomColors.green,
-                thickness: 2.0,
-                height: 1,
-              ),
-              InkWell(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            width: 85,
-                            height: 80,
-                            decoration: BoxDecoration(
-                                color: CustomColors.green,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(40),
-                                    bottomRight: Radius.circular(40))),
-                          ),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: CustomColors.alertRed,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Icon(
-                                    Icons.account_balance_wallet,
-                                    size: 35,
-                                    color: CustomColors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        "User Wallet",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          
-                          color: CustomColors.black,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                onTap: () async {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          WalletHome(),
-                      settings: RouteSettings(name: '/settings/wallet'),
-                    ),
-                  );
-                },
-              ),
-              Divider(
-                color: CustomColors.green,
-                thickness: 2.0,
-                height: 1,
-              ),
-              InkWell(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                            width: 85,
-                            height: 80,
-                            decoration: BoxDecoration(
-                                color: CustomColors.green,
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(40),
-                                    bottomRight: Radius.circular(40))),
-                          ),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: SizedBox(
-                              width: 60,
-                              height: 60,
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: CustomColors.white,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: ClipRRect(
-                                    child: Image.asset(
-                                      "images/icons/logo.png",
-                                      height: 45,
-                                      width: 45,
-                                      cacheHeight: 45,
-                                      cacheWidth: 45,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        buyer_app_name,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          
-                          color: CustomColors.black,
-                        ),
-                      ),
-                    ),
-                  ],
+              ],
+            ),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserSetting(),
+                  settings: RouteSettings(name: '/settings/profile'),
                 ),
-                onTap: () async {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => UserSetting(),
-                  //     settings: RouteSettings(name: '/settings/profile'),
-                  //   ),
-                  // );
-                },
-              ),
-              Divider(
-                color: CustomColors.green,
-                thickness: 2.0,
-                height: 1,
-              ),
-            ],
+              );
+            },
           ),
-        ),
+          Divider(
+            color: CustomColors.green,
+            thickness: 2.0,
+            height: 1,
+          ),
+          InkWell(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        width: 85,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            color: CustomColors.green,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(40),
+                                bottomRight: Radius.circular(40))),
+                      ),
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        child: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: CustomColors.alertRed,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Icon(
+                                Icons.account_balance_wallet,
+                                size: 35,
+                                color: CustomColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "User Wallet",
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: CustomColors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WalletHome(),
+                  settings: RouteSettings(name: '/settings/wallet'),
+                ),
+              );
+            },
+          ),
+          Divider(
+            color: CustomColors.green,
+            thickness: 2.0,
+            height: 1,
+          ),
+          InkWell(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Stack(
+                    children: <Widget>[
+                      Container(
+                        width: 85,
+                        height: 80,
+                        decoration: BoxDecoration(
+                            color: CustomColors.green,
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(40),
+                                bottomRight: Radius.circular(40))),
+                      ),
+                      Positioned(
+                        top: 10,
+                        left: 10,
+                        child: SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: CustomColors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(5),
+                              child: ClipRRect(
+                                child: Image.asset(
+                                  "images/icons/logo.png",
+                                  height: 50,
+                                  width: 50,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    buyer_app_name,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: CustomColors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            onTap: () {
+              UrlLauncherUtils.launchURL(uniques_website);
+            },
+          ),
+          Divider(
+            color: CustomColors.green,
+            thickness: 2.0,
+            height: 1,
+          ),
+        ],
       ),
-      bottomNavigationBar: bottomBar(context),
     );
   }
 }

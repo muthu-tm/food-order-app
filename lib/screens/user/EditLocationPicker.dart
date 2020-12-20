@@ -34,6 +34,8 @@ class EditLocationPickerState extends State<EditLocationPicker> {
     super.initState();
     geoData = widget.loc.geoPoint;
 
+    _searchAndNavigate(widget.loc.address.pincode);
+
     _markers.add(
       Marker(
         markerId: MarkerId(
@@ -78,11 +80,12 @@ class EditLocationPickerState extends State<EditLocationPicker> {
           widget.loc.geoPoint = geoData;
           try {
             await widget.loc.updateLocation();
-            Navigator.of(context).pushReplacement(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
-                builder: (BuildContext context) => HomeScreen(),
-                settings: RouteSettings(name: '/'),
+                builder: (BuildContext context) => HomeScreen(0),
+                settings: RouteSettings(name: '/home'),
               ),
+              (Route<dynamic> route) => false,
             );
           } catch (err) {
             _scaffoldKey.currentState.showSnackBar(
@@ -161,7 +164,7 @@ class EditLocationPickerState extends State<EditLocationPicker> {
       mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
-            zoom: 11,
+            zoom: 13,
             target:
                 LatLng(marks[0].position.latitude, marks[0].position.longitude),
           ),

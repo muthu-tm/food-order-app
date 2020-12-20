@@ -72,7 +72,7 @@ class ProductReviewWidget extends StatelessWidget {
                                   builder: (context) => ProductReviewDetailed(
                                       snapshot.data[index], product.name),
                                   settings: RouteSettings(
-                                      name: 'store/products/review'),
+                                      name: '/store/products/review'),
                                 ),
                               );
                             },

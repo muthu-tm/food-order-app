@@ -1,14 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chipchop_buyer/db/models/chat_temp.dart';
 import 'package:chipchop_buyer/db/models/product_types.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/db/models/users_shopping_details.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
-import 'package:chipchop_buyer/screens/app/bottomBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
+import 'package:chipchop_buyer/screens/chats/ChatsHome.dart';
 import 'package:chipchop_buyer/screens/home/MoreCategoriesScreen.dart';
+import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
+import 'package:chipchop_buyer/screens/search/search_home.dart';
+import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
 import 'package:chipchop_buyer/screens/store/ListOfTopCategoryStores.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
@@ -18,21 +22,109 @@ import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+bool newStoreNotification = false;
 
 class HomeScreen extends StatefulWidget {
+  HomeScreen(this.index);
+
+  final int index;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  bool _newStoreNotification = false;
+
   int backPressCounter = 0;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.index;
+
+    _newStoreNotification = newStoreNotification;
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
+        print("onResume: $message");
+      },
+    );
+    _newStoreNotification = newStoreNotification;
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        if (message['data']['type'] == '1') {
+          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+
+          setState(() {
+            _newStoreNotification = true;
+            newStoreNotification = true;
+          });
+        }
+        print("onResume: $message");
+      },
+    );
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   Future<bool> onWillPop() {
@@ -50,6 +142,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = Size((MediaQuery.of(context).size.width / 5), 100);
+
     return WillPopScope(
       onWillPop: onWillPop,
       child: Scaffold(
@@ -57,59 +151,244 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: sideDrawer(context),
         backgroundColor: CustomColors.white,
         body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                child: SearchBarWidget(),
-              ),
-              //getBanners(),
-              ListTile(
-                title: Text(
-                  "Top Categories",
-                  style: TextStyle(
-                      color: CustomColors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: getCategoryCards(context),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MoreCategoriesScreen(),
-                      settings: RouteSettings(name: '/search/categories'),
+          child: _selectedIndex == 0
+              ? Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                      child: SearchBarWidget(),
                     ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(
-                    "More Categories",
-                    style: TextStyle(
-                        decoration: TextDecoration.underline, fontSize: 12),
+                    ListTile(
+                      title: Text(
+                        "Top Categories",
+                        style: TextStyle(
+                            color: CustomColors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 17),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: getCategoryCards(context),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MoreCategoriesScreen(),
+                            settings: RouteSettings(name: '/search/categories'),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Text(
+                          "More Categories",
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 12),
+                        ),
+                      ),
+                    ),
+                    RecentStoresWidget(),
+                    getPopularProducts(context),
+                    RecentProductsWidget(''),
+                    getFrequentlyShoppedProducts(context),
+                  ],
+                )
+              : _selectedIndex == 1
+                  ? SearchHome()
+                  : _selectedIndex == 2
+                      ? ChatsHome()
+                      : _selectedIndex == 3
+                          ? OrdersHomeScreen()
+                          : SettingsHome(),
+        ),
+        bottomNavigationBar: Container(
+          height: 60,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: [CustomColors.white, CustomColors.green],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox.fromSize(
+                size: size,
+                child: InkWell(
+                  onTap: () {
+                    _onItemTapped(0);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.home,
+                        size: 25.0,
+                        color: CustomColors.black,
+                      ),
+                      Text("Home", style: GoogleFonts.orienta()),
+                    ],
                   ),
                 ),
               ),
-              RecentStoresWidget(),
-              getPopularProducts(context),
-              RecentProductsWidget(''),
-              getFrequentlyShoppedProducts(context),
+              SizedBox.fromSize(
+                size: size,
+                child: InkWell(
+                  onTap: () {
+                    _onItemTapped(1);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                          color: CustomColors.black,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Icon(
+                          Icons.search,
+                          size: 16.0,
+                          color: CustomColors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Text("Search", style: GoogleFonts.orienta()),
+                    ],
+                  ),
+                ),
+              ),
+              _newStoreNotification
+                  ? SizedBox.fromSize(
+                      size: size,
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _newStoreNotification = false;
+                            _selectedIndex = 2;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.question_answer,
+                                    size: 22.0,
+                                    color: CustomColors.black,
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.all(1),
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.alertRed,
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      constraints: BoxConstraints(
+                                        minWidth: 10,
+                                        minHeight: 10,
+                                      ),
+                                    ),
+                                  )
+                                ]),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text("Chats",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.orienta()),
+                          ],
+                        ),
+                      ),
+                    )
+                  : SizedBox.fromSize(
+                      size: size,
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _newStoreNotification = false;
+                            _selectedIndex = 2;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.question_answer,
+                              size: 22.0,
+                              color: CustomColors.black,
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text("Chats", style: GoogleFonts.orienta()),
+                          ],
+                        ),
+                      ),
+                    ),
+              SizedBox.fromSize(
+                size: size,
+                child: InkWell(
+                  onTap: () {
+                    _onItemTapped(3);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        FontAwesomeIcons.shoppingBag,
+                        size: 22.0,
+                        color: CustomColors.black,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text("Orders", style: GoogleFonts.orienta()),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox.fromSize(
+                size: size,
+                child: InkWell(
+                  onTap: () {
+                    _onItemTapped(4);
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.settings,
+                        size: 22.0,
+                        color: CustomColors.black,
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Text(
+                        "Settings",
+                        style: GoogleFonts.orienta(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
-        bottomNavigationBar: bottomBar(context),
       ),
     );
-  }
-
-  Widget getBanners() {
-    return Container();
   }
 
   Widget getFrequentlyShoppedProducts(BuildContext context) {
@@ -136,7 +415,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       height: 160,
                       decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ListView.builder(
@@ -466,9 +745,5 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
-  }
-
-  Widget getTrendingProducts(BuildContext context) {
-    return Column();
   }
 }

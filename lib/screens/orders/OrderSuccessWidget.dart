@@ -1,5 +1,4 @@
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
-import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
@@ -50,12 +49,13 @@ class OrderSuccessWidget extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => OrdersHomeScreen(),
+                      builder: (context) => HomeScreen(3),
                       settings: RouteSettings(name: '/orders'),
                     ),
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: Text(
@@ -72,8 +72,8 @@ class OrderSuccessWidget extends StatelessWidget {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(),
-                    settings: RouteSettings(name: '/'),
+                    builder: (context) => HomeScreen(0),
+                    settings: RouteSettings(name: '/home'),
                   ),
                 );
               },

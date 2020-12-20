@@ -39,11 +39,11 @@ class ProductVariants {
     } else if (this.unit == 2) {
       return "gram";
     } else if (this.unit == 3) {
-      return "milli gram";
+      return "m.gram";
     } else if (this.unit == 4) {
-      return "litre";
+      return "Litre";
     } else if (this.unit == 5) {
-      return "milli litre";
+      return "m.litre";
     } else {
       return "Count";
     }

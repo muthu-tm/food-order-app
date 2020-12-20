@@ -85,7 +85,7 @@ class _ProductsListViewScreenState extends State<ProductsListViewScreen> {
                               builder: (context) =>
                                   ProductDetailsScreen(product),
                               settings: RouteSettings(
-                                  name: '/search/categgories/products/view'),
+                                  name: '/search/categories/products'),
                             ),
                           );
                         },

@@ -246,7 +246,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                   MaterialPageRoute(
                     builder: (context) =>
                         StoreOrderScreen(widget.store.uuid, widget.store.name),
-                    settings: RouteSettings(name: '/cart'),
+                    settings: RouteSettings(name: '/store/cart'),
                   ),
                 );
               },

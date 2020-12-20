@@ -242,10 +242,11 @@ class StoreWidget extends StatelessWidget {
                     padding: EdgeInsets.all(1.0),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: CustomColors.black)),
+                        border: Border.all(color: CustomColors.alertRed)),
                     child: Icon(
                       Icons.navigation,
                       size: 10,
+                      color: Colors.red,
                     )),
                 Padding(
                   padding: EdgeInsets.only(left: 5.0),

@@ -23,8 +23,8 @@ const buyer_app_name = "Uniques";
 const app_version = '1.0.0';
 
 // Static app URLs
-const chipchop_website = "https://chipchop.in/";
+const uniques_website = "https://www.uniquesfood.com/";
 const chipchop_faq_url = "https://www.chipchop.in/help/faq/";
 const terms_and_conditions_url = "https://www.chipchop.in/terms-conditions/";
-const support_email_ID = "support@chipchop.in";
-const support_mobile_number = "917550251906";
+const support_email_ID = "uniquesfood@gmail.com";
+const support_mobile_number = "918056725030";

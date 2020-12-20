@@ -40,7 +40,7 @@ class RecentProductsWidget extends StatelessWidget {
                     child: Container(
                       height: 160,
                       decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ListView.builder(
@@ -78,7 +78,7 @@ class RecentProductsWidget extends StatelessWidget {
                                       builder: (context) =>
                                           ProductDetailsScreen(_p),
                                       settings:
-                                          RouteSettings(name: '/products'),
+                                          RouteSettings(name: '/search/products'),
                                     ),
                                   );
                                 },

@@ -112,8 +112,6 @@ class _StoreCartItemsState extends State<StoreCartItems> {
             double tAmount = 0.00;
             double oPrice = 0.00;
 
-            List<OrderProduct> _orderProducts = [];
-
             child = Column(
               children: [
                 SizedBox(
@@ -186,16 +184,6 @@ class _StoreCartItemsState extends State<StoreCartItems> {
 
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
-                              OrderProduct _op = OrderProduct();
-                              _op.productID = _p.uuid;
-                              _op.productName = _p.name;
-                              _op.quantity = _sc.quantity;
-                              _op.variantID = _sc.variantID;
-                              _op.amount = _sc.quantity *
-                                  _p.variants[int.parse(_sc.variantID)]
-                                      .currentPrice;
-                              _orderProducts.add(_op);
-
                               tAmount += _sc.quantity *
                                   _p.variants[int.parse(_sc.variantID)]
                                       .currentPrice;
@@ -273,6 +261,22 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       Order _o = Order();
                       OrderAmount _oa = OrderAmount();
                       OrderDelivery _od = OrderDelivery();
+                      List<OrderProduct> _orderProducts = [];
+
+                      for (var i = 0; i < widget.cartItems.length; i++) {
+                        ShoppingCart _sc = widget.cartItems[i];
+                        Products _p =
+                            await Products().getByProductID(_sc.productID);
+
+                        OrderProduct _op = OrderProduct();
+                        _op.productID = _p.uuid;
+                        _op.productName = _p.name;
+                        _op.quantity = _sc.quantity;
+                        _op.variantID = _sc.variantID;
+                        _op.amount = _sc.quantity *
+                            _p.variants[int.parse(_sc.variantID)].currentPrice;
+                        _orderProducts.add(_op);
+                      }
 
                       _oa.deliveryCharge =
                           (deliveryOption != 0 ? shippingCharge : 0.00);
@@ -296,9 +300,12 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       _o.storeName = widget.storeName;
                       _o.userNumber = cachedLocalUser.getID();
                       _o.storeID = widget.storeID;
-                      if (_cartWrittenOrders.length > 0 &&
-                          _cartWrittenOrders.first.name.trim().isNotEmpty) {
-                        _o.writtenOrders = _cartWrittenOrders;
+                      if (_cartWrittenOrders.isNotEmpty) {
+                        if (_cartWrittenOrders.length == 1 &&
+                            _cartWrittenOrders.first.name.trim().isEmpty)
+                          _o.writtenOrders = [];
+                        else
+                          _o.writtenOrders = _cartWrittenOrders;
                       } else {
                         _o.writtenOrders = [];
                       }
@@ -426,147 +433,385 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                     ),
                   ],
                 ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: _cartWrittenOrders.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      WrittenOrders _wr = _cartWrittenOrders[index];
-
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 2.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              child: Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: TextFormField(
-                                  initialValue: _wr.name,
-                                  keyboardType: TextInputType.text,
-                                  textCapitalization:
-                                      TextCapitalization.sentences,
-                                  decoration: InputDecoration(
-                                    labelText: "Product Name",
-                                    fillColor: CustomColors.white,
-                                    filled: true,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: 3.0, horizontal: 3.0),
-                                    border: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: CustomColors.white),
-                                    ),
-                                  ),
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _wr.name = val;
-                                    });
-                                  },
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                Column(
+                  children: [
+                    _cartWrittenOrders.length == 1
+                        ? Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Flexible(
-                                      child: TextFormField(
-                                        initialValue: _wr.weight.toString(),
-                                        keyboardType:
-                                            TextInputType.numberWithOptions(
-                                                decimal: true),
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(
-                                                  '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$'),
-                                              replacementString: 0.toString()),
-                                        ],
-                                        decoration: InputDecoration(
-                                          labelText: "Weight",
-                                          fillColor: CustomColors.white,
-                                          filled: true,
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 3.0, horizontal: 3.0),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: CustomColors.white),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: TextFormField(
+                                          initialValue:
+                                              _cartWrittenOrders[0].name,
+                                          keyboardType: TextInputType.text,
+                                          textCapitalization:
+                                              TextCapitalization.sentences,
+                                          decoration: InputDecoration(
+                                            labelText: "Product Name",
+                                            fillColor: CustomColors.white,
+                                            filled: true,
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 3.0,
+                                                    horizontal: 10.0),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: CustomColors.white),
+                                            ),
                                           ),
+                                          onChanged: (val) {
+                                            setState(() {
+                                              _cartWrittenOrders[0].name = val;
+                                            });
+                                          },
                                         ),
-                                        onChanged: (val) {
-                                          setState(() {
-                                            _wr.weight = double.parse(val);
-                                          });
-                                        },
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                          border:
-                                              Border.all(color: Colors.black54),
-                                        ),
-                                        child: DropdownButtonHideUnderline(
-                                          child: DropdownButton(
-                                            hint: Text(
-                                              "Unit",
-                                            ),
-                                            value: _wr.unit.toString(),
-                                            items: _units.entries.map((f) {
-                                              return DropdownMenuItem<String>(
-                                                value: f.key.toString(),
-                                                child: Text(f.value),
-                                              );
-                                            }).toList(),
-                                            onChanged: (unit) {
-                                              setState(
-                                                () {
-                                                  _wr.unit = int.parse(unit);
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Flexible(
+                                              child: TextFormField(
+                                                initialValue:
+                                                    _cartWrittenOrders[0]
+                                                        .weight
+                                                        .toString(),
+                                                keyboardType: TextInputType
+                                                    .numberWithOptions(
+                                                        decimal: true),
+                                                inputFormatters: <
+                                                    TextInputFormatter>[
+                                                  FilteringTextInputFormatter.allow(
+                                                      RegExp(
+                                                          '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$'),
+                                                      replacementString:
+                                                          0.toString()),
+                                                ],
+                                                decoration: InputDecoration(
+                                                  labelText: "Weight",
+                                                  fillColor: CustomColors.white,
+                                                  filled: true,
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 3.0,
+                                                          horizontal: 10.0),
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white),
+                                                  ),
+                                                ),
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    _cartWrittenOrders[0]
+                                                            .weight =
+                                                        double.parse(val);
+                                                  });
                                                 },
-                                              );
-                                            },
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 5.0, right: 5.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  border: Border.all(
+                                                      color: Colors.black54),
+                                                ),
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton(
+                                                    hint: Text(
+                                                      "Unit",
+                                                    ),
+                                                    value: _cartWrittenOrders[0]
+                                                        .unit
+                                                        .toString(),
+                                                    items:
+                                                        _units.entries.map((f) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: f.key.toString(),
+                                                        child: Text(f.value),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (unit) {
+                                                      setState(
+                                                        () {
+                                                          _cartWrittenOrders[0]
+                                                                  .unit =
+                                                              int.parse(unit);
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.lightBlue[300],
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(20))),
+                                              child: Row(
+                                                children: [
+                                                  IconButton(
+                                                      icon: Icon(Icons.remove),
+                                                      onPressed:
+                                                          _cartWrittenOrders[0]
+                                                                      .quantity <=
+                                                                  1
+                                                              ? () {
+                                                                  Fluttertoast
+                                                                      .showToast(
+                                                                          msg:
+                                                                              "Quantity cannot be less than one");
+                                                                }
+                                                              : () {
+                                                                  setState(() {
+                                                                    _cartWrittenOrders[
+                                                                            0]
+                                                                        .quantity = (--_cartWrittenOrders[
+                                                                            0]
+                                                                        .quantity);
+                                                                  });
+                                                                }),
+                                                  Text(_cartWrittenOrders[0]
+                                                      .quantity
+                                                      .toString()),
+                                                  IconButton(
+                                                      icon: Icon(Icons.add),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          _cartWrittenOrders[0]
+                                                                  .quantity =
+                                                              (++_cartWrittenOrders[
+                                                                      0]
+                                                                  .quantity);
+                                                        });
+                                                      }),
+                                                ],
+                                              ),
+                                            )
+                                          ]),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            primary: false,
+                            itemCount: _cartWrittenOrders.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              WrittenOrders _wr = _cartWrittenOrders[index];
+
+                              return Padding(
+                                key: ObjectKey(_wr),
+                                padding: EdgeInsets.symmetric(vertical: 2.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Flexible(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: TextFormField(
+                                              initialValue: _wr.name,
+                                              keyboardType: TextInputType.text,
+                                              textCapitalization:
+                                                  TextCapitalization.sentences,
+                                              decoration: InputDecoration(
+                                                labelText: "Product Name",
+                                                fillColor: CustomColors.white,
+                                                filled: true,
+                                                contentPadding:
+                                                    EdgeInsets.symmetric(
+                                                        vertical: 3.0,
+                                                        horizontal: 10.0),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          CustomColors.white),
+                                                ),
+                                              ),
+                                              onChanged: (val) {
+                                                setState(() {
+                                                  _wr.name = val;
+                                                });
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        IconButton(
+                                            icon: Icon(
+                                              Icons.delete_forever,
+                                              color: Colors.red,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                _cartWrittenOrders
+                                                    .removeAt(index);
+                                                _cartWrittenOrders
+                                                    .forEach((element) {
+                                                  print(element.toJson());
+                                                });
+                                              });
+                                            })
+                                      ],
                                     ),
-                                    Flexible(
-                                      child: TextFormField(
-                                        initialValue: _wr.quantity.toString(),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'^[0-9]*$'),
-                                              replacementString: 0.toString()),
-                                        ],
-                                        decoration: InputDecoration(
-                                          labelText: "Quantity",
-                                          fillColor: CustomColors.white,
-                                          filled: true,
-                                          contentPadding: EdgeInsets.symmetric(
-                                              vertical: 3.0, horizontal: 3.0),
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                                color: CustomColors.white),
-                                          ),
-                                        ),
-                                        onChanged: (val) {
-                                          setState(() {
-                                            _wr.quantity = int.parse(val);
-                                          });
-                                        },
-                                      ),
+                                    Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Flexible(
+                                              child: TextFormField(
+                                                initialValue:
+                                                    _wr.weight.toString(),
+                                                keyboardType: TextInputType
+                                                    .numberWithOptions(
+                                                        decimal: true),
+                                                inputFormatters: <
+                                                    TextInputFormatter>[
+                                                  FilteringTextInputFormatter.allow(
+                                                      RegExp(
+                                                          '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$'),
+                                                      replacementString:
+                                                          0.toString()),
+                                                ],
+                                                decoration: InputDecoration(
+                                                  labelText: "Weight",
+                                                  fillColor: CustomColors.white,
+                                                  filled: true,
+                                                  contentPadding:
+                                                      EdgeInsets.symmetric(
+                                                          vertical: 3.0,
+                                                          horizontal: 10.0),
+                                                  border: OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white),
+                                                  ),
+                                                ),
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    _wr.weight =
+                                                        double.parse(val);
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 5.0, right: 5.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0),
+                                                  border: Border.all(
+                                                      color: Colors.black54),
+                                                ),
+                                                child:
+                                                    DropdownButtonHideUnderline(
+                                                  child: DropdownButton(
+                                                    hint: Text(
+                                                      "Unit",
+                                                    ),
+                                                    value: _wr.unit.toString(),
+                                                    items:
+                                                        _units.entries.map((f) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: f.key.toString(),
+                                                        child: Text(f.value),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (unit) {
+                                                      setState(
+                                                        () {
+                                                          _wr.unit =
+                                                              int.parse(unit);
+                                                        },
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.lightBlue[300],
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(20))),
+                                              child: Row(
+                                                children: [
+                                                  IconButton(
+                                                      icon: Icon(Icons.remove),
+                                                      onPressed:
+                                                          _cartWrittenOrders[
+                                                                          index]
+                                                                      .quantity <=
+                                                                  1
+                                                              ? () {
+                                                                  Fluttertoast
+                                                                      .showToast(
+                                                                          msg:
+                                                                              "Quantity cannot be less than one");
+                                                                }
+                                                              : () {
+                                                                  setState(() {
+                                                                    _cartWrittenOrders[
+                                                                            index]
+                                                                        .quantity = (--_cartWrittenOrders[
+                                                                            index]
+                                                                        .quantity);
+                                                                  });
+                                                                }),
+                                                  Text(_cartWrittenOrders[index]
+                                                      .quantity
+                                                      .toString()),
+                                                  IconButton(
+                                                      icon: Icon(Icons.add),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          _cartWrittenOrders[
+                                                                      index]
+                                                                  .quantity =
+                                                              (++_cartWrittenOrders[
+                                                                      index]
+                                                                  .quantity);
+                                                        });
+                                                      }),
+                                                ],
+                                              ),
+                                            )
+                                          ]),
                                     ),
-                                  ]),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
+                                  ],
+                                ),
+                              );
+                            }),
+                  ],
+                ),
                 Container(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

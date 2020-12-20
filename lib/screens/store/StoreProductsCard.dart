@@ -320,7 +320,6 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                     ),
               widget.wlList.contains(getCartID())
                   ? Card(
-                      color: Colors.blue[100],
                       elevation: 3.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
@@ -345,12 +344,11 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                               print(err);
                             }
                           },
-                          child: Icon(Icons.favorite, color: Colors.blueAccent),
+                          child: Icon(Icons.favorite, color: Colors.red),
                         ),
                       ),
                     )
                   : Card(
-                      color: Colors.blue[100],
                       elevation: 3.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
@@ -381,21 +379,10 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                           width: 60,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(30)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.add,
-                                  size: 20, color: Colors.blueAccent),
-                              Padding(
-                                padding: EdgeInsets.only(left: 5.0),
-                                child: Icon(Icons.favorite,
-                                    color: Colors.blueAccent),
-                              ),
-                            ],
-                          ),
+                          child: Icon(Icons.favorite_border, color: Colors.red),
                         ),
                       ),
-                    )
+                    ),
             ],
           ),
         ],

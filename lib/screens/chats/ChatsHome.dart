@@ -1,8 +1,5 @@
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
 import 'package:chipchop_buyer/db/models/customers.dart';
-import 'package:chipchop_buyer/screens/app/appBar.dart';
-import 'package:chipchop_buyer/screens/app/bottomBar.dart';
-import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -15,7 +12,6 @@ class ChatsHome extends StatefulWidget {
 
 class _ChatsHomeState extends State<ChatsHome>
     with SingleTickerProviderStateMixin {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -24,18 +20,6 @@ class _ChatsHomeState extends State<ChatsHome>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
-      body: SingleChildScrollView(
-        child: getBody(context),
-      ),
-      bottomNavigationBar: bottomBar(context),
-    );
-  }
-
-  Widget getBody(BuildContext context) {
     return FutureBuilder(
       future: Customers().getUsersStores(),
       builder: (context, AsyncSnapshot<List<Customers>> snapshot) {

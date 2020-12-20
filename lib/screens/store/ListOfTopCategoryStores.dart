@@ -64,29 +64,23 @@ class ListOfTopCategoryStores extends StatelessWidget {
       builder: (context, AsyncSnapshot<List<Store>> snapshot) {
         Widget child;
 
-        double height = MediaQuery.of(context).size.height;
-        var padding = MediaQuery.of(context).padding;
-        // height without status and toolbar
-        double height3 = height - padding.top - kToolbarHeight;
-
         if (snapshot.hasData) {
           if (snapshot.data.length == 0) {
             child = Container(
-              height: height3,
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Sorry, no stores found",
-                      style: TextStyle(color: CustomColors.black),
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Icon(Icons.sentiment_dissatisfied)
-                  ],
-                ),
+              height: 200,
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Sorry, No Stores Found !! ",
+                    style: TextStyle(color: CustomColors.black),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(Icons.sentiment_dissatisfied)
+                ],
               ),
             );
           } else {

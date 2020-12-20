@@ -45,38 +45,38 @@ class _AddLocationState extends State<AddLocation> {
         backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        height: 40,
-        width: 120,
-        padding: EdgeInsets.all(10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: CustomColors.green,
-            border: Border.all(color: CustomColors.black),
-            borderRadius: BorderRadius.circular(10.0)),
-        child: InkWell(
-          onTap: () {
-            final FormState form = _formKey.currentState;
+      floatingActionButton: InkWell(
+        onTap: () {
+          final FormState form = _formKey.currentState;
 
-            if (form.validate()) {
-              UserLocations loc = UserLocations();
-              loc.locationName = locName;
-              loc.userNumber = uNumber.toString();
-              loc.userName = userName;
-              loc.address = updatedAddress;
+          if (form.validate()) {
+            UserLocations loc = UserLocations();
+            loc.locationName = locName;
+            loc.userNumber = uNumber.toString();
+            loc.userName = userName;
+            loc.address = updatedAddress;
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LocationPicker(loc),
-                  settings: RouteSettings(name: '/location/add/picker'),
-                ),
-              );
-            } else {
-              _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
-            }
-          },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LocationPicker(loc),
+                settings: RouteSettings(name: '/location/add/picker'),
+              ),
+            );
+          } else {
+            _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+          }
+        },
+        child: Container(
+          height: 40,
+          width: 120,
+          padding: EdgeInsets.all(10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: CustomColors.green,
+              border: Border.all(color: CustomColors.black),
+              borderRadius: BorderRadius.circular(10.0)),
           child: Text(
             "Continue",
           ),
@@ -232,7 +232,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.street,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 maxLines: 3,
                                 decoration: InputDecoration(
                                   labelText: AppLocalizations.of(context)
@@ -272,7 +273,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.landmark,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 decoration: InputDecoration(
                                   labelText: "Landmark",
                                   floatingLabelBehavior:
@@ -308,7 +310,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.city,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 decoration: InputDecoration(
                                   labelText: AppLocalizations.of(context)
                                       .translate('city'),
@@ -341,7 +344,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.state,
                                 textAlign: TextAlign.start,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 decoration: InputDecoration(
                                   labelText: AppLocalizations.of(context)
                                       .translate('state'),
@@ -414,7 +418,8 @@ class _AddLocationState extends State<AddLocation> {
                               child: TextFormField(
                                 initialValue: updatedAddress.country ?? "India",
                                 keyboardType: TextInputType.number,
-                                textCapitalization: TextCapitalization.sentences,
+                                textCapitalization:
+                                    TextCapitalization.sentences,
                                 textAlign: TextAlign.start,
                                 decoration: InputDecoration(
                                   labelText: "Country / Region",

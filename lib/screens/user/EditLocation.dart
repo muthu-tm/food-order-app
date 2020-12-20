@@ -53,38 +53,38 @@ class _EditLocationState extends State<EditLocation> {
         backgroundColor: CustomColors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Container(
-        height: 40,
-        width: 120,
-        padding: EdgeInsets.all(10),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: CustomColors.green,
-            border: Border.all(color: CustomColors.black),
-            borderRadius: BorderRadius.circular(10.0)),
-        child: InkWell(
-          onTap: () {
-            final FormState form = _formKey.currentState;
+      floatingActionButton: InkWell(
+        onTap: () {
+          final FormState form = _formKey.currentState;
 
-            if (form.validate()) {
-              UserLocations loc = widget.loc;
-              loc.locationName = locName;
-              loc.userNumber = uNumber.toString();
-              loc.userName = userName;
-              loc.address = updatedAddress;
+          if (form.validate()) {
+            UserLocations loc = widget.loc;
+            loc.locationName = locName;
+            loc.userNumber = uNumber.toString();
+            loc.userName = userName;
+            loc.address = updatedAddress;
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditLocationPicker(loc),
-                  settings: RouteSettings(name: '/location/edit/picker'),
-                ),
-              );
-            } else {
-              _scaffoldKey.currentState.showSnackBar(
-                  CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
-            }
-          },
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditLocationPicker(loc),
+                settings: RouteSettings(name: '/location/edit/picker'),
+              ),
+            );
+          } else {
+            _scaffoldKey.currentState.showSnackBar(
+                CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
+          }
+        },
+        child: Container(
+          height: 40,
+          width: 120,
+          padding: EdgeInsets.all(10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: CustomColors.green,
+              border: Border.all(color: CustomColors.black),
+              borderRadius: BorderRadius.circular(10.0)),
           child: Text(
             "Continue",
           ),

@@ -89,7 +89,6 @@ class _CartCounterState extends State<CartCounter> {
                     width: 5,
                   ),
                   Card(
-                    color: Colors.blue[100],
                     elevation: 3.0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -116,17 +115,7 @@ class _CartCounterState extends State<CartCounter> {
                         width: 60,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.add, size: 20, color: Colors.blueAccent),
-                            Padding(
-                              padding: EdgeInsets.only(left: 5.0),
-                              child: Icon(Icons.favorite,
-                                  color: Colors.blueAccent),
-                            ),
-                          ],
-                        ),
+                        child: Icon(Icons.favorite_border, color: Colors.red),
                       ),
                     ),
                   )
@@ -295,7 +284,6 @@ class _CartCounterState extends State<CartCounter> {
                   ),
                   !isWishlist
                       ? Card(
-                          color: Colors.blue[100],
                           elevation: 3.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -322,23 +310,12 @@ class _CartCounterState extends State<CartCounter> {
                               width: 60,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30)),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add,
-                                      size: 20, color: Colors.blueAccent),
-                                  Padding(
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    child: Icon(Icons.favorite,
-                                        color: Colors.blueAccent),
-                                  ),
-                                ],
-                              ),
+                              child: Icon(Icons.favorite_border,
+                                  color: Colors.red),
                             ),
                           ),
                         )
                       : Card(
-                          color: Colors.blue[100],
                           elevation: 3.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
@@ -360,8 +337,7 @@ class _CartCounterState extends State<CartCounter> {
                                   print(err);
                                 }
                               },
-                              child: Icon(Icons.favorite,
-                                  color: Colors.blueAccent),
+                              child: Icon(Icons.favorite, color: Colors.red),
                             ),
                           ),
                         )

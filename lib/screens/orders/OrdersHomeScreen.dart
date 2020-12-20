@@ -3,9 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../db/models/order.dart';
-import '../app/appBar.dart';
-import '../app/bottomBar.dart';
-import '../app/sideDrawer.dart';
 import '../utils/AsyncWidgets.dart';
 import '../utils/CustomColors.dart';
 
@@ -30,63 +27,57 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  width: 210,
-                  height: 40,
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      labelText: "Filter",
-                      labelStyle: TextStyle(
-                        color: CustomColors.blue,
-                      ),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      fillColor: CustomColors.white,
-                      filled: true,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.white),
-                      ),
-                    ),
-                    items: _selectedFilter.entries.map(
-                      (f) {
-                        return DropdownMenuItem<String>(
-                          value: f.key,
-                          child: Text(f.value),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (newVal) {
-                      setState(() {
-                        filterBy = newVal;
-                      });
-                    },
-                    value: filterBy,
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.topRight,
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: Container(
+              width: 210,
+              height: 40,
+              child: DropdownButtonFormField(
+                decoration: InputDecoration(
+                  labelText: "Filter",
+                  labelStyle: TextStyle(
+                    color: CustomColors.blue,
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  fillColor: CustomColors.white,
+                  filled: true,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: CustomColors.white),
                   ),
                 ),
+                items: _selectedFilter.entries.map(
+                  (f) {
+                    return DropdownMenuItem<String>(
+                      value: f.key,
+                      child: Text(f.value),
+                    );
+                  },
+                ).toList(),
+                onChanged: (newVal) {
+                  setState(() {
+                    filterBy = newVal;
+                  });
+                },
+                value: filterBy,
               ),
             ),
-            getBody(context),
-          ],
+          ),
         ),
-      ),
-      bottomNavigationBar: bottomBar(context),
+        getBody(context),
+      ],
     );
   }
 
   Widget getBody(BuildContext context) {
     return StreamBuilder(
-      stream: Order().streamOrdersByStatus(filterBy == "0" ? null : (int.parse(filterBy) - 1)),
+      stream: Order().streamOrdersByStatus(
+          filterBy == "0" ? null : (int.parse(filterBy) - 1)),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget child;
 
@@ -107,17 +98,17 @@ class _OrdersHomeScreenState extends State<OrdersHomeScreen> {
                     Text(
                       "No Orders Found!",
                       style: TextStyle(
-                          color: CustomColors.blueGreen,
-                          fontSize: 16,
-                          ),
+                        color: CustomColors.blueGreen,
+                        fontSize: 16,
+                      ),
                     ),
                     SizedBox(height: 20),
                     Text(
                       "We are Live & Waiting for your ORDER...",
                       style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 16,
-                          ),
+                        color: CustomColors.blue,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),

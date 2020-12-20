@@ -1,8 +1,5 @@
 import 'package:chipchop_buyer/db/models/product_categories.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
-import 'package:chipchop_buyer/screens/app/appBar.dart';
-import 'package:chipchop_buyer/screens/app/bottomBar.dart';
-import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/search/ProductsListViewScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/stores_in_map.dart';
@@ -24,11 +21,7 @@ class _SearchHomeState extends State<SearchHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: appBar(context),
-      drawer: sideDrawer(context),
-      body: Container(
+    return Container(
         color: CustomColors.lightGrey,
         alignment: Alignment.center,
         child: Column(
@@ -104,8 +97,6 @@ class _SearchHomeState extends State<SearchHome> {
             getDailyEssentials(context)
           ],
         ),
-      ),
-      bottomNavigationBar: bottomBar(context),
     );
   }
 

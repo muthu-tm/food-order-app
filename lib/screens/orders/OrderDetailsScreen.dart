@@ -26,12 +26,12 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   TextEditingController _pController = TextEditingController();
-  double ratings;
+  bool isChatPressed;
 
   @override
   void initState() {
     super.initState();
-    ratings = 0;
+    isChatPressed = false;
   }
 
   @override
@@ -55,26 +55,36 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: CustomColors.green,
-        onPressed: () {
-          return _scaffoldKey.currentState.showBottomSheet((context) {
-            return Builder(builder: (BuildContext childContext) {
-              return Container(
-                height: MediaQuery.of(context).size.height * 0.5,
-                decoration: BoxDecoration(
-                  color: CustomColors.lightGrey,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10),
-                    topLeft: Radius.circular(10),
-                  ),
-                ),
-                child: OrderChatScreen(
-                  orderUUID: widget.orderUUID,
-                ),
-              );
-            });
-          });
-        },
-        child: Icon(Icons.question_answer_outlined, color: CustomColors.black),
+        onPressed: isChatPressed
+            ? () {
+                setState(() {
+                  isChatPressed = false;
+                });
+                Navigator.of(context).pop();
+              }
+            : () {
+                setState(() {
+                  isChatPressed = true;
+                });
+                return _scaffoldKey.currentState.showBottomSheet((context) {
+                  return Builder(builder: (BuildContext childContext) {
+                    return Container(
+                      height: MediaQuery.of(context).size.height * 0.5,
+                      decoration: BoxDecoration(
+                        color: CustomColors.lightGrey,
+                        border: Border.symmetric(
+                            horizontal: BorderSide(color: CustomColors.green)),
+                      ),
+                      child: OrderChatScreen(
+                        orderUUID: widget.orderUUID,
+                      ),
+                    );
+                  });
+                });
+              },
+        child: isChatPressed
+            ? Icon(Icons.close, color: CustomColors.black)
+            : Icon(Icons.question_answer_outlined, color: CustomColors.black),
       ),
       body: SingleChildScrollView(
         child: Container(
