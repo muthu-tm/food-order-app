@@ -561,12 +561,16 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                               ),
                                             ),
                                             Container(
+                                              height: 40,
+                                              width: 120,
                                               decoration: BoxDecoration(
-                                                  color: Colors.lightBlue[300],
+                                                  color: Colors.lightBlue[200],
                                                   borderRadius:
                                                       BorderRadius.all(
                                                           Radius.circular(20))),
                                               child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   IconButton(
                                                       icon: Icon(Icons.remove),
@@ -757,12 +761,16 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                               ),
                                             ),
                                             Container(
+                                              height: 40,
+                                              width: 120,
                                               decoration: BoxDecoration(
-                                                  color: Colors.lightBlue[300],
+                                                  color: Colors.lightBlue[200],
                                                   borderRadius:
                                                       BorderRadius.all(
                                                           Radius.circular(20))),
                                               child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   IconButton(
                                                       icon: Icon(Icons.remove),
