@@ -2,33 +2,21 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
-import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/db/models/delivery_details.dart';
-import 'package:chipchop_buyer/db/models/order.dart';
-import 'package:chipchop_buyer/db/models/order_amount.dart';
-import 'package:chipchop_buyer/db/models/order_captured_image.dart';
-import 'package:chipchop_buyer/db/models/order_delivery.dart';
-import 'package:chipchop_buyer/db/models/order_product.dart';
 import 'package:chipchop_buyer/db/models/order_written_details.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
-import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
-import 'package:chipchop_buyer/screens/orders/OrderSuccessWidget.dart';
+import 'package:chipchop_buyer/screens/orders/OrderBottomSheetWidget.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
-import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
-import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
-import 'package:chipchop_buyer/services/utils/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -58,9 +46,8 @@ class _StoreCartItemsState extends State<StoreCartItems> {
   bool textBoxEnabled = false;
 
   int deliveryOption = 0;
+  bool isOutOfRange = false;
   double shippingCharge = 0.00;
-  double wAmount = 0.00;
-  bool isAmountUsed = false;
   bool isWithinWorkingHours;
 
   DateTime selectedDate;
@@ -82,9 +69,15 @@ class _StoreCartItemsState extends State<StoreCartItems> {
     super.initState();
 
     Store().getShippingChargeByID(widget.storeID).then((value) {
-      setState(() {
-        shippingCharge = value;
-      });
+      if (value == -1000.0) {
+        setState(() {
+          isOutOfRange = true;
+        });
+      } else {
+        setState(() {
+          shippingCharge = value;
+        });
+      }
     });
   }
 
@@ -139,6 +132,15 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                         ),
                         InkWell(
                           onTap: () async {
+                            if (!store.isActive) {
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Store ${store.name} is not Live Now. Try Later!",
+                                  backgroundColor: CustomColors.alertRed,
+                                  textColor: CustomColors.white);
+                              return;
+                            }
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -257,76 +259,19 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                         return;
                       }
 
-                      CustomDialogs.actionWaiting(context);
-                      Order _o = Order();
-                      OrderAmount _oa = OrderAmount();
-                      OrderDelivery _od = OrderDelivery();
-                      List<OrderProduct> _orderProducts = [];
-
-                      for (var i = 0; i < widget.cartItems.length; i++) {
-                        ShoppingCart _sc = widget.cartItems[i];
-                        Products _p =
-                            await Products().getByProductID(_sc.productID);
-
-                        OrderProduct _op = OrderProduct();
-                        _op.productID = _p.uuid;
-                        _op.productName = _p.name;
-                        _op.quantity = _sc.quantity;
-                        _op.variantID = _sc.variantID;
-                        _op.amount = _sc.quantity *
-                            _p.variants[int.parse(_sc.variantID)].currentPrice;
-                        _orderProducts.add(_op);
-                      }
-
-                      _oa.deliveryCharge =
-                          (deliveryOption != 0 ? shippingCharge : 0.00);
-                      _oa.offerAmount = 0.00;
-                      _oa.walletAmount = wAmount;
-                      _oa.orderAmount = _priceDetails[0];
-                      _o.amount = _oa;
-
-                      _od.userLocation = cachedLocalUser.primaryLocation;
-                      _od.deliveryType = deliveryOption;
-                      _od.deliveryCharge =
-                          (deliveryOption != 0 ? shippingCharge : 0.00);
-                      _od.notes = "";
-                      _od.scheduledDate = deliveryOption == 3
-                          ? selectedDate.millisecondsSinceEpoch
-                          : null;
-                      _o.delivery = _od;
-
-                      _o.customerNotes = "";
-                      _o.status = 0;
-                      _o.storeName = widget.storeName;
-                      _o.userNumber = cachedLocalUser.getID();
-                      _o.storeID = widget.storeID;
-                      if (_cartWrittenOrders.isNotEmpty) {
-                        if (_cartWrittenOrders.length == 1 &&
-                            _cartWrittenOrders.first.name.trim().isEmpty)
-                          _o.writtenOrders = [];
-                        else
-                          _o.writtenOrders = _cartWrittenOrders;
-                      } else {
-                        _o.writtenOrders = [];
-                      }
-                      _o.capturedOrders = _cartImagePaths.map((e) {
-                        return CapturedOrders.fromJson({'image': e});
-                      }).toList();
-                      _o.isReturnable = false;
-                      _o.products = _orderProducts;
-                      _o.totalProducts = _orderProducts.length;
-
-                      Customers().storeCreateCustomer(
-                          widget.storeID, widget.storeName);
-
-                      await _o.create();
-                      Navigator.of(context).pop();
-                      showDialog(
+                      showModalBottomSheet<void>(
                           context: context,
-                          builder: (context) {
-                            return OrderSuccessWidget();
+                          builder: (BuildContext context) {
+                            return OrderBottomSheetWidget(
+                                store,
+                                widget.cartItems,
+                                selectedDate,
+                                deliveryOption,
+                                shippingCharge,
+                                _priceDetails,
+                                _cartWrittenOrders,
+                                _cartImagePaths);
                           });
-                      ShoppingCart().clearCartForStore(widget.storeID);
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
@@ -1054,9 +999,6 @@ class _StoreCartItemsState extends State<StoreCartItems> {
             dense: true,
             child: ExpansionTile(
               backgroundColor: CustomColors.grey,
-              onExpansionChanged: (val) {
-                if (val) setState(() {});
-              },
               title: Text(
                 "My Delivery Options",
                 style: TextStyle(fontSize: 14, color: CustomColors.black),
@@ -1081,29 +1023,31 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                     color: CustomColors.alertRed,
                                   ),
                                   title: Text("Delivery Address"),
-                                  trailing: Icon(
-                                    Icons.edit,
-                                    color: CustomColors.alertRed,
-                                  ),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ViewLocationsScreen(),
-                                        settings:
-                                            RouteSettings(name: '/location'),
-                                      ),
-                                    ).then((value) {
-                                      setState(() {});
-                                    });
-                                  },
+                                  // trailing: Icon(
+                                  //   Icons.edit,
+                                  //   color: CustomColors.alertRed,
+                                  // ),
+                                  // onTap: () {
+                                  //   Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //       builder: (context) =>
+                                  //           ViewLocationsScreen(),
+                                  //       settings:
+                                  //           RouteSettings(name: '/location'),
+                                  //     ),
+                                  //   ).then((value) {
+                                  //     setState(() {});
+                                  //   });
+                                  // },
                                 ),
                                 selectedAddressSection(),
                               ],
                             )
                           : Container(),
-                      deliveyOption(store),
+                      isOutOfRange
+                          ? onlyPickupOption(store)
+                          : deliveyOption(store),
                     ],
                   ),
                 ),
@@ -1111,28 +1055,108 @@ class _StoreCartItemsState extends State<StoreCartItems> {
             ),
           ),
         ),
-        Card(
-          elevation: 2,
-          color: Colors.grey,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: ListTileTheme(
-            dense: true,
-            child: ExpansionTile(
-              backgroundColor: CustomColors.grey,
-              onExpansionChanged: (val) {
-                if (val) setState(() {});
-              },
-              title: Text(
-                "Order Price Details",
-                style: TextStyle(fontSize: 14, color: CustomColors.black),
-              ),
-              children: [getOrderPriceDetails(store)],
-            ),
-          ),
-        ),
       ],
+    );
+  }
+
+  onlyPickupOption(Store store) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: CustomColors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        children: [
+          Row(children: [
+            Icon(FontAwesomeIcons.infoCircle,
+                size: 20, color: CustomColors.alertRed),
+            SizedBox(width: 10),
+            Flexible(
+              child: Text(
+                  "You are out of Store delivery Range - ${store.deliveryDetails.maxDistance}KMs. Only SELF PICKUP is Applicable for your Location!"),
+            ),
+          ]),
+          Container(
+              margin: EdgeInsets.symmetric(vertical: 12.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+                color: Colors.teal[100],
+                border: Border.all(color: Colors.teal[800]),
+              ),
+              child: ListTile(
+                onTap: () async {
+                  setState(() {
+                    deliveryOption = 0;
+                  });
+                },
+                trailing: Icon(Icons.check_box, color: Colors.teal[800]),
+                title: Text(
+                  getDeliveryOption(0),
+                ),
+                subtitle: Text(
+                  ' Delivery Charge : FREE ',
+                  style: TextStyle(fontSize: 12, color: Colors.teal[800]),
+                ),
+              )),
+          this.deliveryOption == 3
+              ? ListTile(
+                  leading: Icon(
+                    Icons.delivery_dining,
+                    size: 40,
+                    color: CustomColors.black,
+                  ),
+                  title: DateTimeField(
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      suffixIcon: Icon(Icons.date_range,
+                          color: CustomColors.blue, size: 30),
+                      labelText: "Deliver by",
+                      labelStyle: TextStyle(
+                        fontSize: 13,
+                        color: CustomColors.black,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors.white),
+                      ),
+                    ),
+                    format: format,
+                    initialValue: selectedDate,
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime.now(),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime.now().add(
+                          Duration(days: 30),
+                        ),
+                      );
+
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()),
+                        );
+                        selectedDate = DateTimeField.combine(date, time);
+                        return selectedDate;
+                      } else {
+                        return currentValue;
+                      }
+                    },
+                  ),
+                )
+              : Container(),
+        ],
+      ),
     );
   }
 
@@ -1253,340 +1277,6 @@ class _StoreCartItemsState extends State<StoreCartItems> {
               : Container(),
         ],
       ),
-    );
-  }
-
-  Widget getOrderPriceDetails(Store store) {
-    return Container(
-      decoration: BoxDecoration(
-        color: CustomColors.lightGrey,
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(10),
-          topLeft: Radius.circular(10),
-        ),
-      ),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        getWalletWidget(),
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          margin: EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 8,
-              ),
-              createPriceItem("Ordered Price : ",
-                  '₹ ' + _priceDetails[0].toString(), CustomColors.black),
-              (_cartWrittenOrders.length > 0 &&
-                      _cartWrittenOrders.first.name.trim().isNotEmpty)
-                  ? createPriceItem(
-                      "Price for Written List : ", '₹ 0.0', CustomColors.black)
-                  : Container(),
-              (_cartImagePaths.length > 0 && _cartImagePaths.isNotEmpty)
-                  ? createPriceItem(
-                      "Price for Captured List : ", '₹ 0.0', CustomColors.black)
-                  : Container(),
-              createPriceItem("Your Savings : ",
-                  '₹ ' + _priceDetails[1].toString(), CustomColors.green),
-              createPriceItem("Wallet Amount : ", '₹ ' + wAmount.toString(),
-                  CustomColors.green),
-              createPriceItem(
-                  "Delivery Charges : ",
-                  '₹ ' +
-                      (this.deliveryOption == 0
-                          ? 0.00.toString()
-                          : shippingCharge.toString()),
-                  CustomColors.black),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                height: 0.5,
-                margin: EdgeInsets.symmetric(vertical: 4),
-                color: Colors.grey.shade400,
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Total : ",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    "₹ ${_priceDetails[0] + (deliveryOption != 0 ? shippingCharge : 0.00) - wAmount}",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              Container(
-                width: double.infinity,
-                height: 0.5,
-                margin: EdgeInsets.symmetric(vertical: 4),
-                color: Colors.grey.shade400,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(width: 5.0),
-              Icon(
-                Icons.info,
-                color: CustomColors.grey,
-                size: 20.0,
-              ),
-              SizedBox(width: 5.0),
-              Flexible(
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text:
-                            "Store may change the Order Price, if you have added",
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: CustomColors.alertRed,
-                        ),
-                      ),
-                      TextSpan(
-                        text: " `Written Orders / Captured List`",
-                        style: TextStyle(
-                            color: CustomColors.alertRed,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      TextSpan(
-                        text:
-                            ". You may chat with Store for further clarifications. ",
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: CustomColors.alertRed,
-                        ),
-                      ),
-                      TextSpan(
-                        text: "CHAT HERE",
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = isWithinWorkingHours
-                              ? () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => StoreChatScreen(
-                                        storeID: store.uuid,
-                                        storeName: store.name,
-                                      ),
-                                      settings:
-                                          RouteSettings(name: '/store/chat'),
-                                    ),
-                                  );
-                                }
-                              : () {
-                                  Fluttertoast.showToast(
-                                      msg: 'Store is closed',
-                                      backgroundColor: CustomColors.alertRed,
-                                      textColor: CustomColors.white);
-                                  return;
-                                },
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.green,
-                            decoration: TextDecoration.underline,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Flexible(
-            child: Row(
-          children: [
-            SizedBox(width: 10.0),
-            Text("* "),
-            InkWell(
-              onTap: () {
-                UrlLauncherUtils.launchURL(terms_and_conditions_url);
-              },
-              child: Text("Check our Terms of Services",
-                  style: TextStyle(
-                    fontSize: 12.0,
-                    color: Colors.black,
-                    decoration: TextDecoration.underline,
-                  )),
-            ),
-          ],
-        )),
-      ]),
-    );
-  }
-
-  Widget getWalletWidget() {
-    return StreamBuilder(
-      stream: Customers().streamUsersData(widget.storeID),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        Widget child;
-
-        if (snapshot.hasData) {
-          if (snapshot.data.exists) {
-            Customers cust = Customers.fromJson(snapshot.data.data);
-
-            double walletAmount = cust.availableBalance;
-
-            if (walletAmount != 0.00 && !walletAmount.isNegative) {
-              child = Container(
-                height: 120,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            if (walletAmount.isNegative) {
-                              Fluttertoast.showToast(
-                                  msg: 'Cannot Use Wallet',
-                                  backgroundColor: CustomColors.alertRed,
-                                  textColor: CustomColors.white);
-                              return;
-                            }
-
-                            if (!isAmountUsed) {
-                              if (walletAmount >
-                                  _priceDetails[0] +
-                                      (deliveryOption != 0
-                                          ? shippingCharge
-                                          : 0.00))
-                                wAmount = _priceDetails[0] +
-                                    (deliveryOption != 0
-                                        ? shippingCharge
-                                        : 0.00);
-                              else
-                                wAmount = walletAmount;
-                            } else {
-                              wAmount = 0;
-                            }
-                            setState(() {
-                              isAmountUsed = !isAmountUsed;
-                            });
-                          },
-                          child: Icon(isAmountUsed
-                              ? Icons.radio_button_on
-                              : Icons.radio_button_off),
-                        ),
-                        Text(
-                          "Apply Store Wallet Balance : ",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: CustomColors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "₹ $walletAmount",
-                      style: TextStyle(
-                        color: walletAmount.isNegative
-                            ? CustomColors.alertRed
-                            : CustomColors.blue,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              child = Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Store Wallet Balance : ",
-                      style: TextStyle(
-                          color: CustomColors.blue,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    Text(
-                      "₹ 0.00",
-                      style: TextStyle(
-                        color: CustomColors.blue,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-          } else {
-            child = Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Store Wallet Balance : ",
-                    style: TextStyle(
-                        color: CustomColors.blue,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    "₹ 0.00",
-                    style: TextStyle(
-                      color: CustomColors.blue,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-        } else if (snapshot.hasError) {
-          child = Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: AsyncWidgets.asyncError(),
-          );
-        } else {
-          child = Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: AsyncWidgets.asyncWaiting(),
-          );
-        }
-
-        return Padding(
-          padding: EdgeInsets.all(5.0),
-          child: child,
-        );
-      },
     );
   }
 
@@ -2067,27 +1757,6 @@ class _StoreCartItemsState extends State<StoreCartItems> {
       child: Text(
         strAddress ?? "",
         style: TextStyle(fontSize: 12, color: Colors.grey.shade800),
-      ),
-    );
-  }
-
-  createPriceItem(String key, String value, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            key,
-            style: TextStyle(
-                color: Colors.black, fontSize: 14, fontWeight: FontWeight.w600),
-          ),
-          Text(
-            value,
-            style: TextStyle(
-                color: color, fontSize: 12, fontWeight: FontWeight.w600),
-          )
-        ],
       ),
     );
   }

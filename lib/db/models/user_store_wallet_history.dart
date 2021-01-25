@@ -6,15 +6,17 @@ import 'package:json_annotation/json_annotation.dart';
 part 'user_store_wallet_history.g.dart';
 
 @JsonSerializable(explicitToJson: true)
-class UserStoreWalletHstory {
+class UserStoreWalletHistory {
   @JsonKey(name: 'id')
   String id;
   @JsonKey(name: 'type')
-  int type; // 0 - Order Debit, 1 - Order Credit, 2 - Store offer, 3 - Referral, 4 - offer code
+  int type; // 0 - Order Debit, 1 - Order Credit, 2 - Store Transaction, 3 - Referral, 4 - offer code
   @JsonKey(name: 'details')
   String details;
   @JsonKey(name: 'store_uuid')
   String storeUUID;
+  @JsonKey(name: 'added_by')
+  String addedBy;
   @JsonKey(name: 'user_number')
   String userNumber;
   @JsonKey(name: 'amount', defaultValue: 0)
@@ -22,11 +24,11 @@ class UserStoreWalletHstory {
   @JsonKey(name: 'created_at', nullable: true)
   int createdAt;
 
-  UserStoreWalletHstory();
+  UserStoreWalletHistory();
 
-  factory UserStoreWalletHstory.fromJson(Map<String, dynamic> json) =>
-      _$UserStoreWalletHstoryFromJson(json);
-  Map<String, dynamic> toJson() => _$UserStoreWalletHstoryToJson(this);
+  factory UserStoreWalletHistory.fromJson(Map<String, dynamic> json) =>
+      _$UserStoreWalletHistoryFromJson(json);
+  Map<String, dynamic> toJson() => _$UserStoreWalletHistoryToJson(this);
 
   Query getGroupQuery() {
     return Model.db.collectionGroup('user_store_wallet');
@@ -46,6 +48,8 @@ class UserStoreWalletHstory {
   }
 
   Stream<QuerySnapshot> streamUsersStoreWallet(String storeID) {
-    return getCollectionRef(storeID).snapshots();
+    return getCollectionRef(storeID)
+        .orderBy('created_at', descending: true)
+        .snapshots();
   }
 }

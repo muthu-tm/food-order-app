@@ -76,6 +76,7 @@ class ProductCategories extends Model {
 
           QuerySnapshot snap = await getCollectionRef()
               .where('uuid', whereIn: ids.sublist(i, end))
+              .orderBy('name')
               .getDocuments();
           for (var j = 0; j < snap.documents.length; j++) {
             ProductCategories _c =
@@ -84,8 +85,11 @@ class ProductCategories extends Model {
           }
         }
       } else {
-        QuerySnapshot snap =
-            await getCollectionRef().where('uuid', whereIn: ids).getDocuments();
+        QuerySnapshot snap = await getCollectionRef()
+            .where('uuid', whereIn: ids)
+            .orderBy('name')
+            .getDocuments();
+
         for (var j = 0; j < snap.documents.length; j++) {
           ProductCategories _c =
               ProductCategories.fromJson(snap.documents[j].data);

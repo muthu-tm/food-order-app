@@ -50,7 +50,7 @@ class OrderWidget extends StatelessWidget {
                   order.storeName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: CustomColors.purple,fontSize: 16),
+                  style: TextStyle(color: CustomColors.purple, fontSize: 16),
                 ),
               ),
             ),
@@ -225,10 +225,10 @@ class OrderWidget extends StatelessWidget {
                                       ),
                                       Text(
                                         getArrival().inDays > 1
-                                            ? '${getArrival().inDays.toString()} Days'
+                                            ? '${getArrival().inDays.toString().replaceAll('-', '')} Days'
                                             : getArrival().inHours == 0
-                                                ? '${getArrival().inMinutes.toString()} Minutes'
-                                                : '${getArrival().inHours.toString()} Hours',
+                                                ? '${getArrival().inMinutes.toString().replaceAll('-', '')} Minutes'
+                                                : '${getArrival().inHours.toString().replaceAll('-', '')} Hour',
                                         style: TextStyle(
                                           color: Colors.red,
                                           fontSize: 12,
@@ -250,7 +250,9 @@ class OrderWidget extends StatelessWidget {
                                       SizedBox(width: 5),
                                       Flexible(
                                         child: Text(
-                                          "Arriving in ",
+                                          order.status == 1
+                                              ? "Delivery Expected in "
+                                              : "Arriving in ",
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -261,10 +263,10 @@ class OrderWidget extends StatelessWidget {
                                       ),
                                       Text(
                                         getArrival().inDays > 1
-                                            ? '${getArrival().inDays.toString()} Days'
+                                            ? '${getArrival().inDays.toString().replaceAll('-', '')} Days'
                                             : getArrival().inHours == 0
-                                                ? '${getArrival().inMinutes.toString()} Minutes'
-                                                : '${getArrival().inHours.toString()} Hours',
+                                                ? '${getArrival().inMinutes.toString().replaceAll('-', '')} Minutes'
+                                                : '${getArrival().inHours.toString().replaceAll('-', '')} Hour',
                                         style: TextStyle(
                                           color: order.getTextColor(),
                                           fontSize: 12,
@@ -294,7 +296,30 @@ class OrderWidget extends StatelessWidget {
                             : Container(),
               ],
             ),
-            SizedBox(height: 10),
+            (order.status < 2 || order.status == 4) &&
+                    order.delivery.expectedAt != null
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(width: 40),
+                      Icon(
+                        Icons.info_rounded,
+                        size: 15,
+                        color: CustomColors.alertRed,
+                      ),
+                      SizedBox(width: 5),
+                      Flexible(
+                          child: Text(
+                        "Delivery Time may differ as per Ordered Time & Traffic in your Area",
+                        style: TextStyle(
+                          color: CustomColors.alertRed,
+                          fontSize: 10,
+                        ),
+                      )),
+                    ],
+                  )
+                : Container(),
+            SizedBox(height: 5),
           ],
         ),
       ),
@@ -302,8 +327,7 @@ class OrderWidget extends StatelessWidget {
   }
 
   Duration getArrival() {
-    return DateTime.now().difference(
-      DateTime.fromMillisecondsSinceEpoch(order.delivery.expectedAt),
-    );
+    return DateTime.fromMillisecondsSinceEpoch(order.delivery.expectedAt)
+        .difference(DateTime.now());
   }
 }

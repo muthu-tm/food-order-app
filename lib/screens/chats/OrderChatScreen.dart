@@ -10,9 +10,9 @@ import 'package:chipchop_buyer/services/storage/image_uploader.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:toast/toast.dart';
 
 import '../../services/controllers/user/user_service.dart';
 import '../utils/CustomColors.dart';
@@ -92,7 +92,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       setState(() {
         isLoading = false;
       });
-      Fluttertoast.showToast(msg: 'This file is not an image');
+      Toast.show('This file is not an image', context, gravity: Toast.CENTER);
     }
   }
 
@@ -110,10 +110,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
       listScrollController.animateTo(0.0,
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
-      Fluttertoast.showToast(
-          msg: 'Nothing to send',
-          backgroundColor: Colors.black,
-          textColor: Colors.white);
+      Toast.show("Nothing to Send!", context, gravity: Toast.CENTER);
     }
   }
 
@@ -480,7 +477,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
         setState(() {
           isLoading = false;
         });
-        Fluttertoast.showToast(msg: 'This file is not an image');
+        Toast.show('This file is not an image', context, gravity: Toast.CENTER);
       }
     }
   }

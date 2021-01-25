@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   String number = "";
   int countryCode = 91;
   String _smsVerificationCode;
+  int _forceResendingToken;
 
   bool _rememberUser = true;
   bool _radioValue = true;
@@ -147,8 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     hintText:
                         AppLocalizations.of(context).translate('mobile_number'),
-                    hintStyle:
-                            TextStyle(fontSize: 16.0, color: Colors.black26),
+                    hintStyle: TextStyle(fontSize: 16.0, color: Colors.black26),
                     fillColor: CustomColors.white,
                     filled: true,
                     contentPadding: EdgeInsets.all(14),
@@ -422,16 +422,15 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
-      _scaffoldKey.currentState
-          .showSnackBar(CustomSnackBar.errorSnackBar("${error.toString()}", 2));
     });
   }
 
-  _smsCodeSent(String verificationId, List<int> code) {
+  _smsCodeSent(String verificationId, [code]) {
     _scaffoldKey.currentState
         .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
 
     _smsVerificationCode = verificationId;
+    _forceResendingToken = code;
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
     CustomDialogs.showLoadingDialog(context, _keyLoader);
   }
@@ -457,7 +456,8 @@ class _LoginPageState extends State<LoginPage> {
             _user.password,
             _user.firstName,
             _user.lastName,
-            _smsVerificationCode),
+            _smsVerificationCode,
+            _forceResendingToken),
       ),
     );
   }

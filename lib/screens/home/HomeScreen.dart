@@ -5,10 +5,13 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/db/models/users_shopping_details.dart';
+import 'package:chipchop_buyer/main.dart';
 import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/chats/ChatsHome.dart';
+import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/home/MoreCategoriesScreen.dart';
+import 'package:chipchop_buyer/screens/orders/OrderDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
@@ -29,6 +32,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 bool newStoreNotification = false;
+bool newOrderNotification = false;
 
 class HomeScreen extends StatefulWidget {
   HomeScreen(this.index);
@@ -42,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   bool _newStoreNotification = false;
+  bool _newOrderNotification = false;
 
   int backPressCounter = 0;
   int _selectedIndex = 0;
@@ -52,73 +57,92 @@ class _HomeScreenState extends State<HomeScreen> {
     _selectedIndex = widget.index;
 
     _newStoreNotification = newStoreNotification;
+    _newOrderNotification = newOrderNotification;
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '1') {
+        if (message['data']['type'] == '100') {
           await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
           setState(() {
             _newStoreNotification = true;
             newStoreNotification = true;
           });
+        } else if (message['data']['type'] == '000' ||
+            message['data']['type'] == '001') {
+          // Order update || Order chat
+          setState(() {
+            _newOrderNotification = true;
+            newOrderNotification = true;
+          });
         }
       },
       onLaunch: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '1') {
+        if (message['data']['type'] == '100') {
           await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
 
           setState(() {
             _newStoreNotification = true;
             newStoreNotification = true;
+          });
+        } else if (message['data']['type'] == '000' ||
+            message['data']['type'] == '001') {
+          // Order update || Order chat
+          setState(() {
+            _newOrderNotification = true;
+            newOrderNotification = true;
           });
         }
         print("onLaunch: $message");
       },
       onResume: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '1') {
+        await fcmMessageHandler(message, context);
+
+        if (message['data']['type'] == '100') {
           await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
 
           setState(() {
             _newStoreNotification = true;
             newStoreNotification = true;
           });
+        } else if (message['data']['type'] == '000' ||
+            message['data']['type'] == '001') {
+          // Order update || Order chat
+          setState(() {
+            _newOrderNotification = true;
+            newOrderNotification = true;
+          });
         }
-        print("onResume: $message");
       },
     );
-    _newStoreNotification = newStoreNotification;
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '1') {
-          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        }
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '1') {
-          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+  }
 
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
+  Future<void> fcmMessageHandler(msg, context) async {
+    switch (msg['data']['screen']) {
+      case "store-chat":
+        navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => StoreChatScreen(
+              storeID: msg['data']['store_uuid'],
+              storeName: msg['data']['store_name']),
+          settings: RouteSettings(name: '/chats/store'),
+        ));
+        break;
+      case "order":
+        navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => OrderDetailsScreen(
+              msg['data']['order_id'], msg['data']['order_uuid']),
+          settings: RouteSettings(name: '/orders/details'),
+        ));
+        break;
+      case "product":
+        Products _p =
+            await Products().getByProductID(msg['data']['product_id']);
+        if (_p != null) {
+          navigatorKey.currentState.push(MaterialPageRoute(
+            builder: (context) => ProductDetailsScreen(_p),
+            settings: RouteSettings(name: '/store/products'),
+          ));
         }
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '1') {
-          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
-
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        }
-        print("onResume: $message");
-      },
-    );
+        break;
+    }
   }
 
   void _onItemTapped(int index) {
@@ -337,28 +361,80 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-              SizedBox.fromSize(
-                size: size,
-                child: InkWell(
-                  onTap: () {
-                    _onItemTapped(3);
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        FontAwesomeIcons.shoppingBag,
-                        size: 22.0,
-                        color: CustomColors.black,
+              _newOrderNotification
+                  ? SizedBox.fromSize(
+                      size: size,
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            newOrderNotification = false;
+                            _newOrderNotification = false;
+
+                            _selectedIndex = 3;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Stack(
+                                alignment: Alignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    FontAwesomeIcons.shoppingBag,
+                                    size: 22.0,
+                                    color: CustomColors.black,
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: Container(
+                                      padding: EdgeInsets.all(1),
+                                      decoration: BoxDecoration(
+                                        color: CustomColors.alertRed,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      constraints: BoxConstraints(
+                                        minWidth: 11,
+                                        minHeight: 11,
+                                      ),
+                                    ),
+                                  )
+                                ]),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text("Orders", style: GoogleFonts.orienta()),
+                          ],
+                        ),
                       ),
-                      SizedBox(
-                        height: 5,
+                    )
+                  : SizedBox.fromSize(
+                      size: size,
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            newOrderNotification = false;
+                            _newOrderNotification = false;
+
+                            _selectedIndex = 3;
+                          });
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              FontAwesomeIcons.shoppingBag,
+                              size: 22.0,
+                              color: CustomColors.black,
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text("Orders", style: GoogleFonts.orienta()),
+                          ],
+                        ),
                       ),
-                      Text("Orders", style: GoogleFonts.orienta()),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
               SizedBox.fromSize(
                 size: size,
                 child: InkWell(

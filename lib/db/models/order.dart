@@ -4,6 +4,7 @@ import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/db/models/order_captured_image.dart';
 import 'package:chipchop_buyer/db/models/order_status.dart';
 import 'package:chipchop_buyer/db/models/order_written_details.dart';
+import 'package:chipchop_buyer/db/models/user_store_wallet_history.dart';
 import 'package:chipchop_buyer/db/models/users_shopping_details.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +106,7 @@ class Order {
         return "Cancelled By Store";
         break;
       case 4:
-        return "DisPatched";
+        return "Dispatched";
         break;
       case 5:
         return "Delivered";
@@ -215,6 +216,23 @@ class Order {
             DocumentReference docRef = this.getCollectionRef().document();
             this.uuid = docRef.documentID;
             Model().txCreate(tx, docRef, this.toJson());
+
+            UserStoreWalletHistory tran = new UserStoreWalletHistory();
+
+            tran.amount = this.amount.walletAmount * -1;
+
+            tran.details = "Paid for an Order";
+            tran.type = 0; // Order Debit
+            tran.id = this.uuid;
+            tran.storeUUID = this.storeID;
+            tran.createdAt = DateTime.now().millisecondsSinceEpoch;
+            tran.addedBy = cachedLocalUser.getID();
+            Model().txCreate(
+                tx,
+                custDocRef
+                    .collection('user_store_wallet')
+                    .document(tran.createdAt.toString()),
+                tran.toJson());
 
             Model().txUpdate(tx, custDocRef, cust.toJson());
           });

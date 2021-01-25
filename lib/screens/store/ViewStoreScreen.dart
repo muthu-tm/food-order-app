@@ -58,7 +58,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
     final double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 48),
+      padding: const EdgeInsets.only(left: 40),
       child: Container(
         padding: new EdgeInsets.only(top: statusBarHeight),
         child: Column(
@@ -273,14 +273,13 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
-            leadingWidth: 30,
+            leadingWidth: 25,
             pinned: true,
             floating: true,
             backgroundColor: CustomColors.green,
             expandedHeight: 185.0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: flexibleAppBar(context),
-            ),
+            flexibleSpace:
+                FlexibleSpaceBar(background: flexibleAppBar(context)),
           ),
           SliverPersistentHeader(
             delegate: SearchBar(widget.store),
@@ -331,11 +330,17 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   CarouselIndicatorSlider(widget.store.storeImages),
                   SizedBox(
-                    height: 10,
+                    height: 5,
+                  ),
+                  widget.store.shortDetails.isNotEmpty
+                      ? Flexible(child: Text(widget.store.shortDetails))
+                      : Container(),
+                  SizedBox(
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -374,7 +379,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -417,7 +422,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -431,7 +436,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -474,7 +479,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 5),
             InkWell(
               onTap: () {
                 Navigator.pop(context);

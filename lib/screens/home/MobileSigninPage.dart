@@ -33,6 +33,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
   bool _rememberUser = true;
   bool _radioValue = true;
+  int _forceResendingToken;
 
   @override
   void initState() {
@@ -488,11 +489,12 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
     });
   }
 
-  _smsCodeSent(String verificationId, List<int> code) {
+  _smsCodeSent(String verificationId, [code]) {
     _scaffoldKey.currentState.showSnackBar(CustomSnackBar.successSnackBar(
         AppLocalizations.of(context).translate('otp_send'), 1));
 
     _smsVerificationCode = verificationId;
+    _forceResendingToken = code;
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
     CustomDialogs.showLoadingDialog(context, _keyLoader);
   }
@@ -516,7 +518,8 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
             _passKeyController.text,
             _nameController.text,
             _lastNameController.text,
-            _smsVerificationCode),
+            _smsVerificationCode,
+            _forceResendingToken),
       ),
     );
   }

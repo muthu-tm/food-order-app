@@ -5,7 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
 import 'package:chipchop_buyer/db/models/customers.dart';
+import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
+import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
@@ -377,6 +379,34 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.store,
+                color: CustomColors.black,
+              ),
+              onPressed: () async {
+                Store store = await Store().getStoresByID(widget.storeID);
+
+                if (!store.isActive) {
+                  Fluttertoast.showToast(
+                      msg: "Store ${store.name} is not Live Now. Try Later!",
+                      backgroundColor: CustomColors.alertRed,
+                      textColor: CustomColors.white);
+                  return;
+                }
+
+                if (store != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewStoreScreen(store),
+                      settings: RouteSettings(name: '/store'),
+                    ),
+                  );
+                }
+              }),
+        ],
         backgroundColor: CustomColors.green,
       ),
       body: Stack(

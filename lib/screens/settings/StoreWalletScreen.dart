@@ -166,7 +166,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
 
   Widget getTransactionHistoryWidget() {
     return StreamBuilder(
-      stream: UserStoreWalletHstory().streamUsersStoreWallet(widget.storeID),
+      stream: UserStoreWalletHistory().streamUsersStoreWallet(widget.storeID),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         Widget widget;
 
@@ -178,7 +178,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
               primary: false,
               itemCount: snapshot.data.documents.length,
               itemBuilder: (BuildContext context, int index) {
-                UserStoreWalletHstory history = UserStoreWalletHstory.fromJson(
+                UserStoreWalletHistory history = UserStoreWalletHistory.fromJson(
                     snapshot.data.documents[index].data);
 
                 Color tileColor = CustomColors.green.withOpacity(0.5);
@@ -196,6 +196,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                     elevation: 3.0,
                     borderRadius: BorderRadius.circular(10.0),
                     child: Container(
+                      padding: EdgeInsets.all(5.0),
                       height: 90,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -203,38 +204,38 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                         color: tileColor,
                       ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.all(5.0),
+                            padding: EdgeInsets.only(left:5, right: 5),
                             child: Icon(
                               Icons.local_offer,
                               size: 35.0,
                               color: CustomColors.alertRed.withOpacity(0.6),
                             ),
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width - 150,
+                          Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                history.details.isNotEmpty ? Flexible(
-                                                                  child: Text(
-                                    history.details,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: textColor,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ) : Container(),
+                                history.details.isNotEmpty
+                                    ? Flexible(
+                                        child: Text(
+                                          history.details,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: textColor,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    : Container(),
                                 Text(
                                   '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
                                   style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: textColor),
+                                      fontSize: 12.0, color: textColor),
                                 ),
                                 Text(
                                   history.type == 0
@@ -252,16 +253,14 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                               ],
                             ),
                           ),
-                          Flexible(
-                            child: Text(
-                              '₹ ${history.amount}',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: textColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                          Text(
+                            '₹ ${history.amount}',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                color: textColor,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),

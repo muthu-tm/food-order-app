@@ -140,6 +140,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
 
                     double sCharge = await Store()
                         .getShippingChargeByID(widget.product.storeID);
+
                     double cPrice = 0.00;
                     double oPrice = 0.00;
 
@@ -148,7 +149,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                           .product.variants[int.parse(_variants)].currentPrice;
                       oPrice =
                           widget.product.variants[int.parse(_variants)].offer;
-                      _priceDetails = [cPrice, oPrice, sCharge];
+
+                      if (sCharge == -1000.0) {
+                        _priceDetails = [cPrice, oPrice];
+                      } else {
+                        _priceDetails = [cPrice, oPrice, sCharge];
+                      }
 
                       _op.productID = widget.product.uuid;
                       _op.variantID = _variants;
@@ -179,7 +185,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                       _op.quantity = _cartItems.first.quantity;
                       _op.isReturnable = widget.product.isReturnable;
 
-                      _priceDetails = [cPrice, oPrice, sCharge];
+                      if (sCharge == -1000.0) {
+                        _priceDetails = [cPrice, oPrice];
+                      } else {
+                        _priceDetails = [cPrice, oPrice, sCharge];
+                      }
                     }
 
                     Navigator.of(_keyLoader.currentContext, rootNavigator: true)
@@ -552,7 +562,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
     return Card(
       child: Column(
         children: [
-          widget.product.isAvailable
+          widget.product.variants[int.parse(_variants)].isAvailable
               ? ListTile(
                   leading: Icon(
                     FontAwesomeIcons.smile,

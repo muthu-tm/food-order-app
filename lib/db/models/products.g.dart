@@ -40,7 +40,6 @@ Products _$ProductsFromJson(Map<String, dynamic> json) {
     ..returnWithin = json['return_within'] as int ?? 1
     ..isReplaceable = json['is_replaceable'] as bool ?? false
     ..replaceWithin = json['replace_within'] as int ?? 1
-    ..isAvailable = json['is_available'] as bool ?? true
     ..isDeliverable = json['is_deliverable'] as bool ?? true
     ..isPopular = json['is_popular'] as bool ?? false
     ..keywords = (json['keywords'] as List)
@@ -96,7 +95,6 @@ Map<String, dynamic> _$ProductsToJson(Products instance) => <String, dynamic>{
       'return_within': instance.returnWithin ?? 1,
       'is_replaceable': instance.isReplaceable ?? false,
       'replace_within': instance.replaceWithin ?? 1,
-      'is_available': instance.isAvailable ?? true,
       'is_deliverable': instance.isDeliverable ?? true,
       'is_popular': instance.isPopular ?? false,
       'keywords': instance.keywords == null ? [] : instance.keywords,

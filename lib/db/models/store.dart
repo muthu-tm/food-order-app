@@ -120,8 +120,7 @@ class Store extends Model {
         return images;
       } else
         return [
-          noImagePlaceholder.replaceFirst(
-              firebase_storage_path, image_kit_path)
+          noImagePlaceholder.replaceFirst(firebase_storage_path, image_kit_path)
         ];
     }
   }
@@ -159,7 +158,8 @@ class Store extends Model {
         strictMode: true);
   }
 
-  Future<List<Store>> getStoresByTypes(String fieldName, Map<String, String> type) async {
+  Future<List<Store>> getStoresByTypes(
+      String fieldName, Map<String, String> type) async {
     List<Store> stores = [];
 
     try {
@@ -289,6 +289,11 @@ class Store extends Model {
       if (snap.exists) {
         Store _s = Store.fromJson(snap.data);
         double dis = await _s.getUserDistance();
+
+        if (!_s.deliverAnywhere && dis > _s.deliveryDetails.maxDistance) {
+          return -1000.0; // nontify the customer out of delivery range
+        }
+
         if (dis < 2.0)
           val = _s.deliveryDetails.deliveryCharges02;
         else if (dis < 5.0)

@@ -44,6 +44,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int deliveryOption = 0;
   double wAmount = 0.00;
   bool isAmountUsed = false;
+  bool isOutOfRange = false;
   bool isWithinWorkingHours;
 
   DateTime selectedDate;
@@ -53,6 +54,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void initState() {
     super.initState();
     this.selectedDate = DateTime.now().add(Duration(days: 1));
+
+    if (widget._priceDetails.length == 2) {
+      isOutOfRange = true;
+    }
   }
 
   @override
@@ -203,7 +208,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       this.deliveryOption != 0
                           ? selectedAddressSection()
                           : Container(),
-                      deliveyOption(store),
+                      isOutOfRange
+                          ? onlyPickupOption(store)
+                          : deliveyOption(store),
                       Card(
                         elevation: 2,
                         color: Colors.white,
@@ -236,6 +243,107 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           return child;
         },
+      ),
+    );
+  }
+
+  onlyPickupOption(Store store) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+      margin: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: CustomColors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Column(
+        children: [
+          Row(children: [
+            Icon(FontAwesomeIcons.infoCircle,
+                size: 20, color: CustomColors.alertRed),
+            SizedBox(width: 10),
+            Flexible(
+              child: Text(
+                  "You are out of Store delivery Range - ${store.deliveryDetails.maxDistance}KMs. Only SELF PICKUP is Applicable for your Location!"),
+            ),
+          ]),
+          Container(
+              margin: EdgeInsets.symmetric(vertical: 12.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(8.0),
+                ),
+                color: Colors.teal[100],
+                border: Border.all(color: Colors.teal[800]),
+              ),
+              child: ListTile(
+                onTap: () async {
+                  setState(() {
+                    deliveryOption = 0;
+                  });
+                },
+                trailing: Icon(Icons.check_box, color: Colors.teal[800]),
+                title: Text(
+                  getDeliveryOption(0),
+                ),
+                subtitle: Text(
+                  ' Delivery Charge : FREE ',
+                  style: TextStyle(fontSize: 12, color: Colors.teal[800]),
+                ),
+              )),
+          this.deliveryOption == 3
+              ? ListTile(
+                  leading: Icon(
+                    Icons.delivery_dining,
+                    size: 40,
+                    color: CustomColors.black,
+                  ),
+                  title: DateTimeField(
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      suffixIcon: Icon(Icons.date_range,
+                          color: CustomColors.blue, size: 30),
+                      labelText: "Deliver by",
+                      labelStyle: TextStyle(
+                        fontSize: 13,
+                        color: CustomColors.black,
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: CustomColors.white),
+                      ),
+                    ),
+                    format: format,
+                    initialValue: selectedDate,
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime.now(),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime.now().add(
+                          Duration(days: 30),
+                        ),
+                      );
+
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()),
+                        );
+                        selectedDate = DateTimeField.combine(date, time);
+                        return selectedDate;
+                      } else {
+                        return currentValue;
+                      }
+                    },
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }
@@ -552,66 +660,55 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             double walletAmount = cust.availableBalance;
 
             if (walletAmount != 0.00 && !walletAmount.isNegative) {
-              child = Container(
-                height: 120,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            if (walletAmount.isNegative) {
-                              Fluttertoast.showToast(
-                                  msg: 'Cannot Use Wallet',
-                                  backgroundColor: CustomColors.alertRed,
-                                  textColor: CustomColors.white);
-                              return;
-                            }
+              child = ListTile(
+                onTap: () {
+                  if (walletAmount.isNegative) {
+                    Fluttertoast.showToast(
+                        msg: 'Cannot Use Wallet',
+                        backgroundColor: CustomColors.alertRed,
+                        textColor: CustomColors.white);
+                    return;
+                  }
 
-                            if (!isAmountUsed) {
-                              if (walletAmount >
-                                  (widget._priceDetails[0] + deliveryOption != 0
-                                      ? widget._priceDetails[2]
-                                      : 0.00))
-                                wAmount =
-                                    widget._priceDetails[0] + deliveryOption !=
-                                            0
-                                        ? widget._priceDetails[2]
-                                        : 0.00;
-                              else
-                                wAmount = walletAmount;
-                            } else {
-                              wAmount = 0;
-                            }
-                            setState(() {
-                              isAmountUsed = !isAmountUsed;
-                            });
-                          },
-                          child: Icon(isAmountUsed
-                              ? Icons.radio_button_on
-                              : Icons.radio_button_off),
-                        ),
-                        Text(
-                          "Apply Store Wallet Balance : ",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: CustomColors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      "₹ $walletAmount",
-                      style: TextStyle(
-                        color: walletAmount.isNegative
-                            ? CustomColors.alertRed
-                            : CustomColors.blue,
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                  if (!isAmountUsed) {
+                    if (walletAmount >
+                        (widget._priceDetails[0] +
+                            (deliveryOption != 0
+                                ? widget._priceDetails[2]
+                                : 0.00)))
+                      wAmount = widget._priceDetails[0] +
+                          (deliveryOption != 0
+                              ? widget._priceDetails[2]
+                              : 0.00);
+                    else
+                      wAmount = walletAmount;
+                  } else {
+                    wAmount = 0;
+                  }
+                  setState(() {
+                    isAmountUsed = !isAmountUsed;
+                  });
+                },
+                leading: Icon(
+                  isAmountUsed ? Icons.radio_button_on : Icons.radio_button_off,
+                  color: CustomColors.green,
+                ),
+                title: Text(
+                  "Apply Store Wallet Balance",
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    color: CustomColors.blue,
+                  ),
+                ),
+                trailing: Text(
+                  "₹ $walletAmount",
+                  style: TextStyle(
+                    color: walletAmount.isNegative
+                        ? CustomColors.alertRed
+                        : CustomColors.blue,
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               );
             } else {

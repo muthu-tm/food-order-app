@@ -5,6 +5,7 @@ import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RecentStoresWidget extends StatelessWidget {
   @override
@@ -54,6 +55,25 @@ class RecentStoresWidget extends StatelessWidget {
                                 CustomDialogs.actionWaiting(context);
                                 Store _store =
                                     await Store().getStoresByID(_ua.storeID);
+
+                                if (_store == null) {
+                                  Navigator.pop(context);
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Unable to find the Store Now. Try Later!",
+                                      backgroundColor: CustomColors.alertRed,
+                                      textColor: CustomColors.white);
+                                  return;
+                                } else if (!_store.isActive) {
+                                  Navigator.pop(context);
+
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Store ${_store.name} is not Live Now. Try Later!",
+                                      backgroundColor: CustomColors.alertRed,
+                                      textColor: CustomColors.white);
+                                  return;
+                                }
 
                                 Navigator.pushReplacement(
                                   context,
