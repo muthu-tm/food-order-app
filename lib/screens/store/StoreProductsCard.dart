@@ -36,6 +36,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
       child: Stack(
         children: [
           CachedNetworkImage(
+            width: double.infinity,
             fit: BoxFit.fill,
             imageUrl: widget.product.getProductImage(),
             progressIndicatorBuilder: (context, url, downloadProgress) =>
