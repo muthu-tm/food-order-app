@@ -29,6 +29,14 @@ class ProductReviewWidget extends StatelessWidget {
 
           if (snapshot.hasData) {
             if (snapshot.data.isNotEmpty) {
+              double tRating = 0.00;
+
+              for (var i = 0; i < snapshot.data.length; i++) {
+                tRating += snapshot.data[i].rating;
+              }
+
+              tRating = tRating / snapshot.data.length;
+
               child = Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
@@ -38,12 +46,12 @@ class ProductReviewWidget extends StatelessWidget {
                       style: TextStyle(fontSize: 16, color: CustomColors.black),
                     ),
                     trailing: RatingBarIndicator(
-                      rating: product.rating,
+                      rating: tRating,
                       itemBuilder: (context, index) => Icon(
                         Icons.star,
-                        color: product.rating < 2
+                        color: tRating < 2
                             ? Colors.red
-                            : product.rating <= 3.5
+                            : tRating <= 3.5
                                 ? Colors.amber
                                 : CustomColors.green,
                       ),
