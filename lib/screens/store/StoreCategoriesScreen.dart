@@ -73,26 +73,28 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Row(
                   children: [
-                    widget.subCategories.length > 0 ? ActionChip(
-                      elevation: 6.0,
-                      backgroundColor: _subCategoryID == ""
-                          ? CustomColors.green
-                          : Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          _subCategoryID = "";
-                        });
-                      },
-                      label: Text(
-                        "All",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            color: _subCategoryID == ""
-                                ? Colors.black54
-                                : CustomColors.black),
-                      ),
-                    ) : Container(),
+                    widget.subCategories.length > 0
+                        ? ActionChip(
+                            elevation: 6.0,
+                            backgroundColor: _subCategoryID == ""
+                                ? CustomColors.green
+                                : Colors.white,
+                            onPressed: () {
+                              setState(() {
+                                _subCategoryID = "";
+                              });
+                            },
+                            label: Text(
+                              "All",
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: _subCategoryID == ""
+                                      ? Colors.black54
+                                      : CustomColors.black),
+                            ),
+                          )
+                        : Container(),
                     Container(
                       height: 60,
                       padding: const EdgeInsets.all(5.0),

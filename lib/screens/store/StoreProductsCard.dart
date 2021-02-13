@@ -49,7 +49,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
             fadeInDuration: Duration(seconds: 2),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             child: Align(
               alignment: Alignment.topCenter,
               child: Row(
@@ -88,6 +88,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                         )
                       : Card(
                           elevation: 3.0,
+                          color: Colors.grey[100],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50.0),
                           ),
@@ -116,6 +117,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                               height: 35,
                               width: 35,
                               decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white),
                                   borderRadius: BorderRadius.circular(30)),
                               child: Icon(Icons.favorite_border,
                                   size: 30, color: Colors.red),
@@ -123,106 +125,118 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                           ),
                         ),
                   widget.cartMap.containsKey(getCartID())
-                      ? Container(
-                          height: 30,
-                          width: 70,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              widget.cartMap[getCartID()] == 1.0
-                                  ? InkWell(
-                                      onTap: () async {
-                                        try {
-                                          CustomDialogs.actionWaiting(context);
-                                          await ShoppingCart().removeItem(
-                                              false,
-                                              widget.product.storeID,
-                                              widget.product.uuid,
-                                              _variant);
-                                          setState(() {
-                                            widget.cartMap.remove(getCartID());
-                                          });
-                                          Navigator.pop(context);
-                                        } catch (err) {
-                                          print(err);
-                                        }
-                                      },
-                                      child: SizedBox(
-                                        width: 25,
-                                        height: 40,
-                                        child: Icon(Icons.delete_forever),
+                      ? Card(
+                          elevation: 3.0,
+                          color: Colors.greenAccent[100],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Container(
+                            height: 35,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.blue[100]),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                widget.cartMap[getCartID()] == 1.0
+                                    ? InkWell(
+                                        onTap: () async {
+                                          try {
+                                            CustomDialogs.actionWaiting(
+                                                context);
+                                            await ShoppingCart().removeItem(
+                                                false,
+                                                widget.product.storeID,
+                                                widget.product.uuid,
+                                                _variant);
+                                            setState(() {
+                                              widget.cartMap
+                                                  .remove(getCartID());
+                                            });
+                                            Navigator.pop(context);
+                                          } catch (err) {
+                                            print(err);
+                                          }
+                                        },
+                                        child: SizedBox(
+                                          width: 30,
+                                          height: 35,
+                                          child: Icon(Icons.delete_forever),
+                                        ),
+                                      )
+                                    : InkWell(
+                                        onTap: () async {
+                                          try {
+                                            CustomDialogs.actionWaiting(
+                                                context);
+                                            await ShoppingCart()
+                                                .updateCartQuantity(
+                                                    false,
+                                                    widget.product.storeID,
+                                                    widget.product.uuid,
+                                                    _variant);
+                                            setState(() {
+                                              widget.cartMap[getCartID()] =
+                                                  widget.cartMap[getCartID()] -
+                                                      1.0;
+                                            });
+                                            Navigator.pop(context);
+                                          } catch (err) {
+                                            print(err);
+                                          }
+                                        },
+                                        child: SizedBox(
+                                          width: 30,
+                                          height: 35,
+                                          child: Icon(Icons.remove),
+                                        ),
                                       ),
-                                    )
-                                  : InkWell(
-                                      onTap: () async {
-                                        try {
-                                          CustomDialogs.actionWaiting(context);
-                                          await ShoppingCart()
-                                              .updateCartQuantity(
-                                                  false,
-                                                  widget.product.storeID,
-                                                  widget.product.uuid,
-                                                  _variant);
-                                          setState(() {
-                                            widget.cartMap[getCartID()] =
-                                                widget.cartMap[getCartID()] -
-                                                    1.0;
-                                          });
-                                          Navigator.pop(context);
-                                        } catch (err) {
-                                          print(err);
-                                        }
-                                      },
-                                      child: SizedBox(
-                                        width: 25,
-                                        height: 40,
-                                        child: Icon(Icons.remove),
-                                      ),
-                                    ),
-                              Padding(
-                                padding: EdgeInsets.only(right: 5.0, left: 5.0),
-                                child: Text(
-                                  widget.cartMap[getCartID()]
-                                      .round()
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: CustomColors.blue,
-                                      fontWeight: FontWeight.bold),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.only(right: 2.0, left: 2.0),
+                                  child: Text(
+                                    widget.cartMap[getCartID()]
+                                        .round()
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: CustomColors.blue,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  try {
-                                    CustomDialogs.actionWaiting(context);
-                                    await ShoppingCart().updateCartQuantity(
-                                        true,
-                                        widget.product.storeID,
-                                        widget.product.uuid,
-                                        _variant);
-                                    setState(() {
-                                      widget.cartMap[getCartID()] =
-                                          widget.cartMap[getCartID()] + 1.0;
-                                    });
-                                    Navigator.pop(context);
-                                  } catch (err) {
-                                    print(err);
-                                  }
-                                },
-                                child: SizedBox(
-                                  width: 25,
-                                  height: 40,
-                                  child: Icon(Icons.add),
+                                InkWell(
+                                  onTap: () async {
+                                    try {
+                                      CustomDialogs.actionWaiting(context);
+                                      await ShoppingCart().updateCartQuantity(
+                                          true,
+                                          widget.product.storeID,
+                                          widget.product.uuid,
+                                          _variant);
+                                      setState(() {
+                                        widget.cartMap[getCartID()] =
+                                            widget.cartMap[getCartID()] + 1.0;
+                                      });
+                                      Navigator.pop(context);
+                                    } catch (err) {
+                                      print(err);
+                                    }
+                                  },
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 35,
+                                    child: Icon(Icons.add),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         )
                       : Card(
                           elevation: 3.0,
+                          color: Colors.greenAccent[100],
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0),
                           ),
@@ -249,14 +263,21 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                             },
                             child: Container(
                               height: 35,
-                              width: 35,
+                              width: 80,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30)),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.shopping_cart,
-                                      color: Colors.grey[600]),
+                                  Icon(Icons.add,
+                                      size: 20, color: Colors.green),
+                                  Padding(
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Text(
+                                      "ADD",
+                                      style: TextStyle(color: Colors.green),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -269,19 +290,20 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: 45,
+              height: 50,
               color: Colors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(4.0, 0, 2, 0),
+                    padding: const EdgeInsets.fromLTRB(1.0, 5, 1, 0),
                     child: Text(
                       "${widget.product.name}",
                       maxLines: 1,
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 13.0,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w600
                       ),
                     ),
                   ),
@@ -292,7 +314,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                           ? InkWell(
                               child: Padding(
                                 padding:
-                                    const EdgeInsets.fromLTRB(4.0, 0, 0, 0),
+                                    const EdgeInsets.fromLTRB(1.0, 0, 0, 0),
                                 child: Row(
                                   children: [
                                     Text(
@@ -302,7 +324,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                                         fontSize: 13.0,
                                       ),
                                     ),
-                                    Icon(Icons.keyboard_arrow_down)
+                                    Icon(Icons.keyboard_arrow_down, color: CustomColors.green,)
                                   ],
                                 ),
                               ),
@@ -527,7 +549,7 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                               },
                             )
                           : Padding(
-                              padding: const EdgeInsets.fromLTRB(4.0, 0, 0, 0),
+                              padding: const EdgeInsets.fromLTRB(1.0, 0, 0, 0),
                               child: Text(
                                 "${widget.product.variants[int.parse(_variant)].weight} ${widget.product.variants[int.parse(_variant)].getUnit()}",
                                 style: TextStyle(
@@ -538,12 +560,12 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                             ),
                       Flexible(
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(2.0, 0, 2, 0),
+                          padding: const EdgeInsets.fromLTRB(1.0, 0, 1, 0),
                           child: Text(
                             "₹ ${widget.product.variants[int.parse(_variant)].currentPrice.toString()}",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.red,
                               fontSize: 13.0,
                             ),
                           ),

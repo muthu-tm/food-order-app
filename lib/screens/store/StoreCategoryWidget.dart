@@ -68,9 +68,8 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                 sliver: SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    crossAxisSpacing: 5,
+                    crossAxisSpacing: 8,
                     childAspectRatio: 0.78,
-                    mainAxisSpacing: 10,
                   ),
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
@@ -78,7 +77,7 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                       return InkWell(
                         onTap: () async {
                           CustomDialogs.actionWaiting(context);
-                          
+
                           List<ProductSubCategories> subCat =
                               await ProductSubCategories()
                                   .getSubCategoriesForIDs(
@@ -95,64 +94,41 @@ class _StoreCategoryWidgetState extends State<StoreCategoryWidget> {
                             ),
                           );
                         },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
-                            ),
-                            color: CustomColors.white,
-                          ),
-                          alignment: Alignment.centerLeft,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                CachedNetworkImage(
+                        child: Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: CachedNetworkImage(
+                                  width: double.infinity,
                                   imageUrl: _c.getCategoryImage(),
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10.0),
-                                      ),
-                                      shape: BoxShape.rectangle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: imageProvider),
-                                    ),
-                                  ),
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>
                                           Center(
-                                    child: SizedBox(
-                                      height: 50.0,
-                                      width: 50.0,
-                                      child: CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                          valueColor: AlwaysStoppedAnimation(
-                                              CustomColors.blue),
-                                          strokeWidth: 2.0),
-                                    ),
+                                    child: CircularProgressIndicator(
+                                        value: downloadProgress.progress,
+                                        valueColor: AlwaysStoppedAnimation(
+                                            CustomColors.blue),
+                                        strokeWidth: 2.0),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: Text(
-                                    _c.name,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: CustomColors.black,
-                                        fontSize: 12),
-                                  ),
-                                )
-                              ],
+                              ),
                             ),
-                          ),
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                _c.name,
+                                textAlign: TextAlign.center,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: CustomColors.black,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            )
+                          ],
                         ),
                       );
                     },

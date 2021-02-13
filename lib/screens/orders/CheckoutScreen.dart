@@ -41,7 +41,9 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
 
-  int deliveryOption = 0;
+  int deliveryOption;
+  double tempShippingCharge = 0.00;
+  double shippingCharge = 0.00;
   double wAmount = 0.00;
   bool isAmountUsed = false;
   bool isOutOfRange = false;
@@ -54,6 +56,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void initState() {
     super.initState();
     this.selectedDate = DateTime.now().add(Duration(days: 1));
+    this.tempShippingCharge = widget._priceDetails[2];
+    this.shippingCharge = widget._priceDetails[2];
 
     if (widget._priceDetails.length == 2) {
       isOutOfRange = true;
@@ -83,13 +87,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       floatingActionButton: InkWell(
         onTap: () async {
           try {
+            if (cachedLocalUser.primaryLocation == null) {
+              Fluttertoast.showToast(
+                  msg: 'Primary Location not found, Please add/set Location',
+                  backgroundColor: CustomColors.alertRed,
+                  textColor: CustomColors.white);
+              return;
+            }
+
+            if (deliveryOption == null) {
+              Fluttertoast.showToast(
+                  msg: 'Select any Delivery Option!!',
+                  backgroundColor: CustomColors.alertRed,
+                  textColor: CustomColors.white);
+              return;
+            }
+
             CustomDialogs.actionWaiting(context);
             Order _o = Order();
             OrderAmount _oa = OrderAmount();
             OrderDelivery _od = OrderDelivery();
 
-            _oa.deliveryCharge =
-                deliveryOption != 0 ? widget._priceDetails[2] : 0.00;
+            _oa.deliveryCharge = deliveryOption != 0 ? shippingCharge : 0.00;
             _oa.offerAmount = 0.00;
             _oa.walletAmount = wAmount;
             _oa.orderAmount = widget._priceDetails[0];
@@ -97,8 +116,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
             _od.userLocation = cachedLocalUser.primaryLocation;
             _od.deliveryType = deliveryOption;
-            _od.deliveryCharge =
-                deliveryOption != 0 ? widget._priceDetails[2] : 0.00;
+            _od.deliveryCharge = deliveryOption != 0 ? shippingCharge : 0.00;
             _od.notes = "";
             _od.scheduledDate = deliveryOption == 3
                 ? selectedDate.millisecondsSinceEpoch
@@ -371,6 +389,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             primary: false,
             itemCount: store.deliveryDetails.availableOptions.length,
             itemBuilder: (BuildContext context, int index) {
+              int dFee = getDeliveryFee(
+                  store.deliveryDetails.availableOptions[index],
+                  store.deliveryDetails);
+
+              double dCharge = tempShippingCharge;
+              double fee = 0.00;
+
+              if (dFee == 0)
+                fee = dCharge;
+              else if (dFee.isNegative) {
+                fee = dCharge - dCharge / 100 * dFee.abs();
+                if (fee.isNegative) fee = 0.00;
+              } else {
+                fee = dCharge + dCharge / 100 * dFee.abs();
+              }
+
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 12.0),
                 decoration: BoxDecoration(
@@ -380,9 +414,40 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   color: Colors.teal[100],
                   border: Border.all(color: Colors.teal[800]),
                 ),
+                // child: ListTile(
+                //   onTap: () {
+                //     setState(() {
+                //       deliveryOption =
+                //           store.deliveryDetails.availableOptions[index];
+                //     });
+                //   },
+                //   trailing: Icon(
+                //       deliveryOption ==
+                //               store.deliveryDetails.availableOptions[index]
+                //           ? Icons.check_box
+                //           : Icons.check_box_outline_blank,
+                //       color: Colors.teal[800]),
+                //   title: Text(
+                //     getDeliveryOption(
+                //       store.deliveryDetails.availableOptions[index],
+                //     ),
+                //   ),
+                //   subtitle: Text(
+                //     store.deliveryDetails.availableOptions[index] == 0
+                //         ? ' Delivery Charge : FREE '
+                //         : ' Delivery Charge : ₹  ${widget._priceDetails[2]}',
+                //     style: TextStyle(
+                //         fontSize: 12,
+                //         color:
+                //             store.deliveryDetails.availableOptions[index] == 0
+                //                 ? Colors.teal[800]
+                //                 : CustomColors.alertRed),
+                //   ),
+                // ),
                 child: ListTile(
-                  onTap: () {
+                  onTap: () async {
                     setState(() {
+                      shippingCharge = fee;
                       deliveryOption =
                           store.deliveryDetails.availableOptions[index];
                     });
@@ -393,21 +458,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       color: Colors.teal[800]),
-                  title: Text(
-                    getDeliveryOption(
-                      store.deliveryDetails.availableOptions[index],
+                  title: Text(getDeliveryOption(
+                          store.deliveryDetails.availableOptions[index]) +
+                      ': ₹  $fee'),
+                  subtitle: RichText(
+                    text: TextSpan(
+                      text: 'Delivery: ',
+                      style: TextStyle(color: CustomColors.alertRed),
+                      children: [
+                        TextSpan(
+                          text: dFee == -100
+                              ? 'FREE'
+                              : dFee == 0 || dFee == -100
+                                  ? ' Standard '
+                                  : dFee.isNegative
+                                      ? ' ${dFee.abs()}%'
+                                      : ' $dFee%',
+                          style: TextStyle(
+                              color: dFee == 0
+                                  ? CustomColors.blue
+                                  : dFee.isNegative
+                                      ? Colors.green
+                                      : CustomColors.alertRed),
+                        ),
+                        TextSpan(
+                          text: dFee == -100
+                              ? ''
+                              : dFee == 0
+                                  ? 'Charge'
+                                  : dFee.isNegative
+                                      ? " OFFER"
+                                      : " Extra Fee",
+                          style: TextStyle(
+                              color: dFee == 0
+                                  ? CustomColors.blue
+                                  : dFee.isNegative
+                                      ? Colors.green
+                                      : CustomColors.alertRed),
+                        ),
+                      ],
                     ),
-                  ),
-                  subtitle: Text(
-                    store.deliveryDetails.availableOptions[index] == 0
-                        ? ' Delivery Charge : FREE '
-                        : ' Delivery Charge : ₹  ${widget._priceDetails[2]}',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color:
-                            store.deliveryDetails.availableOptions[index] == 0
-                                ? Colors.teal[800]
-                                : CustomColors.alertRed),
                   ),
                 ),
               );
@@ -502,7 +592,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   "Delivery Charges : ",
                   '₹ ' +
                       (deliveryOption != 0
-                          ? widget._priceDetails[2].toString()
+                          ? shippingCharge.toString()
                           : 0.00.toString()),
                   CustomColors.black),
               SizedBox(
@@ -529,7 +619,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    "₹ ${widget._priceDetails[0] + (deliveryOption != 0 ? widget._priceDetails[2] : 0.00) - wAmount}",
+                    "₹ ${widget._priceDetails[0] + (deliveryOption != 0 ? shippingCharge : 0.00) - wAmount}",
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 12,
@@ -673,13 +763,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   if (!isAmountUsed) {
                     if (walletAmount >
                         (widget._priceDetails[0] +
-                            (deliveryOption != 0
-                                ? widget._priceDetails[2]
-                                : 0.00)))
+                            (deliveryOption != 0 ? shippingCharge : 0.00)))
                       wAmount = widget._priceDetails[0] +
-                          (deliveryOption != 0
-                              ? widget._priceDetails[2]
-                              : 0.00);
+                          (deliveryOption != 0 ? shippingCharge : 0.00);
                     else
                       wAmount = walletAmount;
                   } else {

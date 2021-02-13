@@ -45,9 +45,10 @@ class _StoreCartItemsState extends State<StoreCartItems> {
   List<String> _cartImagePaths = [];
   bool textBoxEnabled = false;
 
-  int deliveryOption = 0;
+  int deliveryOption;
   bool isOutOfRange = false;
   double shippingCharge = 0.00;
+  double tempShippingCharge = 0.00;
   bool isWithinWorkingHours;
 
   DateTime selectedDate;
@@ -67,6 +68,7 @@ class _StoreCartItemsState extends State<StoreCartItems> {
   @override
   void initState() {
     super.initState();
+    this.selectedDate = DateTime.now().add(Duration(days: 1));
 
     Store().getShippingChargeByID(widget.storeID).then((value) {
       if (value == -1000.0) {
@@ -76,6 +78,7 @@ class _StoreCartItemsState extends State<StoreCartItems> {
       } else {
         setState(() {
           shippingCharge = value;
+          tempShippingCharge = value;
         });
       }
     });
@@ -254,6 +257,14 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                           _cartImagePaths.isEmpty) {
                         Fluttertoast.showToast(
                             msg: 'Nothing to Order !!',
+                            backgroundColor: CustomColors.alertRed,
+                            textColor: CustomColors.white);
+                        return;
+                      }
+
+                      if (deliveryOption == null) {
+                        Fluttertoast.showToast(
+                            msg: 'Select any Delivery Option!!',
                             backgroundColor: CustomColors.alertRed,
                             textColor: CustomColors.white);
                         return;
@@ -1183,6 +1194,22 @@ class _StoreCartItemsState extends State<StoreCartItems> {
             primary: false,
             itemCount: store.deliveryDetails.availableOptions.length,
             itemBuilder: (BuildContext context, int index) {
+              int dFee = getDeliveryFee(
+                  store.deliveryDetails.availableOptions[index],
+                  store.deliveryDetails);
+
+              double dCharge = tempShippingCharge;
+              double fee = 0.00;
+
+              if (dFee == 0)
+                fee = dCharge;
+              else if (dFee.isNegative) {
+                fee = dCharge - dCharge / 100 * dFee.abs();
+                if (fee.isNegative) fee = 0.00;
+              } else {
+                fee = dCharge + dCharge / 100 * dFee.abs();
+              }
+
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 12.0),
                 decoration: BoxDecoration(
@@ -1192,9 +1219,43 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                   color: Colors.teal[100],
                   border: Border.all(color: Colors.teal[800]),
                 ),
+                //       child: ListTile(
+                //         onTap: () async {
+                //           setState(() {
+                //             deliveryOption =
+                //                 store.deliveryDetails.availableOptions[index];
+                //           });
+                //         },
+                //         trailing: Icon(
+                //             deliveryOption ==
+                //                     store.deliveryDetails.availableOptions[index]
+                //                 ? Icons.check_box
+                //                 : Icons.check_box_outline_blank,
+                //             color: Colors.teal[800]),
+                //         title: Text(
+                //           getDeliveryOption(
+                //             store.deliveryDetails.availableOptions[index],
+                //           ),
+                //         ),
+                //         subtitle: Text(
+                //           store.deliveryDetails.availableOptions[index] == 0
+                //               ? ' Delivery Charge : FREE '
+                //               : ' Delivery Charge : ₹  $shippingCharge',
+                //           style: TextStyle(
+                //               fontSize: 12,
+                //               color:
+                //                   store.deliveryDetails.availableOptions[index] == 0
+                //                       ? Colors.teal[800]
+                //                       : CustomColors.alertRed),
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
                 child: ListTile(
                   onTap: () async {
                     setState(() {
+                      shippingCharge = fee;
                       deliveryOption =
                           store.deliveryDetails.availableOptions[index];
                     });
@@ -1205,21 +1266,46 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                           ? Icons.check_box
                           : Icons.check_box_outline_blank,
                       color: Colors.teal[800]),
-                  title: Text(
-                    getDeliveryOption(
-                      store.deliveryDetails.availableOptions[index],
+                  title: Text(getDeliveryOption(
+                          store.deliveryDetails.availableOptions[index]) +
+                      ': ₹  $fee'),
+                  subtitle: RichText(
+                    text: TextSpan(
+                      text: 'Delivery: ',
+                      style: TextStyle(color: CustomColors.alertRed),
+                      children: [
+                        TextSpan(
+                          text: dFee == -100
+                              ? 'FREE'
+                              : dFee == 0 || dFee == -100
+                                  ? ' Standard '
+                                  : dFee.isNegative
+                                      ? ' ${dFee.abs()}%'
+                                      : ' $dFee%',
+                          style: TextStyle(
+                              color: dFee == 0
+                                  ? CustomColors.blue
+                                  : dFee.isNegative
+                                      ? Colors.green
+                                      : CustomColors.alertRed),
+                        ),
+                        TextSpan(
+                          text: dFee == -100
+                              ? ''
+                              : dFee == 0
+                                  ? 'Charge'
+                                  : dFee.isNegative
+                                      ? " OFFER"
+                                      : " Extra Fee",
+                          style: TextStyle(
+                              color: dFee == 0
+                                  ? CustomColors.blue
+                                  : dFee.isNegative
+                                      ? Colors.green
+                                      : CustomColors.alertRed),
+                        ),
+                      ],
                     ),
-                  ),
-                  subtitle: Text(
-                    store.deliveryDetails.availableOptions[index] == 0
-                        ? ' Delivery Charge : FREE '
-                        : ' Delivery Charge : ₹  $shippingCharge',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color:
-                            store.deliveryDetails.availableOptions[index] == 0
-                                ? Colors.teal[800]
-                                : CustomColors.alertRed),
                   ),
                 ),
               );
