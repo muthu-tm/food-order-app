@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/db/models/chat_temp.dart';
 import 'package:chipchop_buyer/db/models/product_types.dart';
 import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
+import 'package:chipchop_buyer/db/models/store_banners.dart';
 import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/db/models/users_shopping_details.dart';
 import 'package:chipchop_buyer/main.dart';
@@ -22,6 +23,7 @@ import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
 import 'package:chipchop_buyer/screens/store/RecentProductsWidget.dart';
 import 'package:chipchop_buyer/screens/store/RecentStoresWidget.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
+import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
@@ -179,6 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.fromLTRB(10, 20, 10, 5),
                       child: SearchBarWidget(),
                     ),
+                    getBanners(),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: Container(
@@ -734,6 +737,28 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return child;
         });
+  }
+
+  Widget getBanners() {
+    return FutureBuilder(
+      future: StoreBanners().getAllBanners(),
+      builder: (context, AsyncSnapshot<List<StoreBanners>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.isNotEmpty) {
+            List<String> url =
+                snapshot.data.map((element) => element.image).toList();
+            return Padding(
+              padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
+              child: CarouselIndicatorSlider(url),
+            );
+          } else {
+            return Container();
+          }
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 
   Widget getCategoryCards(BuildContext context) {
