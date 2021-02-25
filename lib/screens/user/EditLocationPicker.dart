@@ -176,10 +176,10 @@ class EditLocationPickerState extends State<EditLocationPicker> {
         'search_key': searchKey,
         'error': err.toString()
       }, 'location');
-      Fluttertoast.showToast(
-          msg: 'Error, Unable to find matching address',
-          backgroundColor: CustomColors.alertRed,
-          textColor: Colors.white);
+      // Fluttertoast.showToast(
+      //     msg: 'Error, Unable to find matching address',
+      //     backgroundColor: CustomColors.alertRed,
+      //     textColor: Colors.white);
     }
   }
 

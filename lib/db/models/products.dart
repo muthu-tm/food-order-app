@@ -333,12 +333,8 @@ class Products extends Model {
     QuerySnapshot snap = await getCollectionRef()
         .where(
           'keywords',
-          arrayContainsAny: searchKey
-              .split(" ")
-              .map(
-                (e) => e.toLowerCase(),
-              )
-              .toList(),
+          arrayContainsAny:
+              searchKey.split(" ").map((e) => e.toLowerCase()).toList(),
         )
         .get();
 

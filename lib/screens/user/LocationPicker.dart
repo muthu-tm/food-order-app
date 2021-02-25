@@ -7,7 +7,6 @@ import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -94,7 +93,7 @@ class LocationPickerState extends State<LocationPicker> {
           children: [
             GoogleMap(
               initialCameraPosition:
-                  CameraPosition(target: LatLng(12.9716, 77.5946), zoom: 6),
+                  CameraPosition(target: LatLng(11.5390, 79.4794), zoom: 12),
               onTap: (latlang) {
                 if (_markers.length >= 1) {
                   _markers.clear();
@@ -163,10 +162,10 @@ class LocationPickerState extends State<LocationPicker> {
         'search_key': searchKey,
         'error': err.toString()
       }, 'location');
-      Fluttertoast.showToast(
-          msg: 'Error, Unable to find matching address',
-          backgroundColor: CustomColors.alertRed,
-          textColor: Colors.white);
+      // Fluttertoast.showToast(
+      //     msg: 'Error, Unable to find matching address',
+      //     backgroundColor: CustomColors.alertRed,
+      //     textColor: Colors.white);
     }
   }
 

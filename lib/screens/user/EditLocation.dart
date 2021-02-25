@@ -316,7 +316,7 @@ class _EditLocationState extends State<EditLocation> {
                           children: <Widget>[
                             Flexible(
                               child: TextFormField(
-                                initialValue: updatedAddress.city,
+                                initialValue: updatedAddress.city ?? "Neyveli",
                                 textAlign: TextAlign.start,
                                 textCapitalization:
                                     TextCapitalization.sentences,
@@ -350,7 +350,8 @@ class _EditLocationState extends State<EditLocation> {
                             Padding(padding: EdgeInsets.only(left: 5)),
                             Flexible(
                               child: TextFormField(
-                                initialValue: updatedAddress.state,
+                                initialValue:
+                                    updatedAddress.state ?? "Tamil Nadu",
                                 textAlign: TextAlign.start,
                                 textCapitalization:
                                     TextCapitalization.sentences,
