@@ -25,7 +25,7 @@ class RecentStoresWidget extends StatelessWidget {
                     style: TextStyle(
                         color: CustomColors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 17),
+                        fontSize: 14),
                   ),
                 ),
                 Padding(
@@ -33,7 +33,7 @@ class RecentStoresWidget extends StatelessWidget {
                   child: Container(
                     height: 160,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100],
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListView.builder(

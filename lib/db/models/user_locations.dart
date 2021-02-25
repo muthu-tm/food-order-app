@@ -35,7 +35,7 @@ class UserLocations {
   CollectionReference getCollectionRef() {
     return Model.db
         .collection("buyers")
-        .document(cachedLocalUser.getID())
+        .doc(cachedLocalUser.getID())
         .collection("user_locations");
   }
 
@@ -45,7 +45,7 @@ class UserLocations {
 
   Future updateLocation() async {
     try {
-      await getCollectionRef().document(getID()).updateData(this.toJson());
+      await getCollectionRef().doc(getID()).update(this.toJson());
 
       if (cachedLocalUser.primaryLocation.uuid == this.uuid) {
         cachedLocalUser.primaryLocation = UserLocations.fromJson(this.toJson());

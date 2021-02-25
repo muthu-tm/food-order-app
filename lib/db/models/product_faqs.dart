@@ -44,14 +44,14 @@ class ProductFaqs {
 
   Future<void> create(String productID) async {
     try {
-      DocumentReference docRef = getCollectionRef(productID).document();
-      this.uuid = docRef.documentID;
+      DocumentReference docRef = getCollectionRef(productID).doc();
+      this.uuid = docRef.id;
       this.createdAt = DateTime.now();
       this.updatedAt = DateTime.now();
       this.userName = cachedLocalUser.firstName;
       this.userNumber = cachedLocalUser.getID();
 
-      await docRef.setData(this.toJson());
+      await docRef.set(this.toJson());
       Analytics.sendAnalyticsEvent({
         'type': 'product_faq_create',
         'product_id': productID,
@@ -69,10 +69,10 @@ class ProductFaqs {
 
   Future<void> update(String productID, String id) async {
     try {
-      DocumentReference docRef = getCollectionRef(productID).document(id);
+      DocumentReference docRef = getCollectionRef(productID).doc(id);
       this.updatedAt = DateTime.now();
 
-      await docRef.updateData(this.toJson());
+      await docRef.update(this.toJson());
     } catch (err) {
       Analytics.reportError({
         'type': 'product_faq_update_error',
@@ -86,11 +86,11 @@ class ProductFaqs {
 
   Future<List<ProductFaqs>> getAllFAQs(String productID) async {
     try {
-      QuerySnapshot qSnap = await getCollectionRef(productID).getDocuments();
+      QuerySnapshot qSnap = await getCollectionRef(productID).get();
       List<ProductFaqs> faqs = [];
 
-      for (var i = 0; i < qSnap.documents.length; i++) {
-        ProductFaqs faq = ProductFaqs.fromJson(qSnap.documents[i].data);
+      for (var i = 0; i < qSnap.docs.length; i++) {
+        ProductFaqs faq = ProductFaqs.fromJson(qSnap.docs[i].data());
         faqs.add(faq);
       }
 

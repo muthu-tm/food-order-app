@@ -133,7 +133,7 @@ class Store extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return _storeCollRef.document(uuid);
+    return _storeCollRef.doc(uuid);
   }
 
   String getID() {
@@ -166,10 +166,10 @@ class Store extends Model {
       QuerySnapshot snap = await getCollectionRef()
           .where('is_active', isEqualTo: true)
           .where(fieldName, arrayContains: type)
-          .getDocuments();
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          Store _s = Store.fromJson(snap.documents[i].data);
+          .get();
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          Store _s = Store.fromJson(snap.docs[i].data());
           stores.add(_s);
         }
       }
@@ -202,7 +202,7 @@ class Store extends Model {
         .take(1)
         .forEach((snap) {
       for (var i = 0; i < snap.length; i++) {
-        Store _s = Store.fromJson(snap[i].data);
+        Store _s = Store.fromJson(snap[i].data());
         stores.add(_s);
       }
     });
@@ -212,9 +212,9 @@ class Store extends Model {
 
   Future<Store> getStoresByID(String storeID) async {
     try {
-      DocumentSnapshot snap = await getCollectionRef().document(storeID).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(storeID).get();
       if (snap.exists) {
-        Store _s = Store.fromJson(snap.data);
+        Store _s = Store.fromJson(snap.data());
         return _s;
       }
 
@@ -233,11 +233,15 @@ class Store extends Model {
     List<Map<String, dynamic>> stores = [];
 
     QuerySnapshot snap = await getCollectionRef()
-        .where('keywords', arrayContainsAny: searchKey.split(' '))
-        .getDocuments();
-    if (snap.documents.isNotEmpty) {
-      for (var i = 0; i < snap.documents.length; i++) {
-        stores.add(snap.documents[i].data);
+        .where(
+          'keywords',
+          arrayContainsAny:
+              searchKey.split(" ").map((e) => e.toLowerCase()).toList(),
+        )
+        .get();
+    if (snap.docs.isNotEmpty) {
+      for (var i = 0; i < snap.docs.length; i++) {
+        stores.add(snap.docs[i].data());
       }
     }
 
@@ -248,10 +252,10 @@ class Store extends Model {
     List<Store> stores = [];
 
     try {
-      QuerySnapshot snap = await getCollectionRef().getDocuments();
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          Store _s = Store.fromJson(snap.documents[i].data);
+      QuerySnapshot snap = await getCollectionRef().get();
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          Store _s = Store.fromJson(snap.docs[i].data());
           stores.add(_s);
         }
       }
@@ -282,12 +286,12 @@ class Store extends Model {
 
   Future<double> getShippingChargeByID(String storeID) async {
     try {
-      DocumentSnapshot snap = await getCollectionRef().document(storeID).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(storeID).get();
 
       double val = 0.00;
 
       if (snap.exists) {
-        Store _s = Store.fromJson(snap.data);
+        Store _s = Store.fromJson(snap.data());
         double dis = await _s.getUserDistance();
 
         if (!_s.deliverAnywhere && dis > _s.deliveryDetails.maxDistance) {
@@ -317,12 +321,12 @@ class Store extends Model {
 
   Future<double> getShippingCharge(String storeID) async {
     try {
-      DocumentSnapshot snap = await getCollectionRef().document(storeID).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(storeID).get();
 
       double val = 0.00;
 
       if (snap.exists) {
-        Store _s = Store.fromJson(snap.data);
+        Store _s = Store.fromJson(snap.data());
         double dis = await _s.getUserDistance();
         if (dis < 2.0)
           val = _s.deliveryDetails.deliveryCharges02;

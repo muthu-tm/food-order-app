@@ -78,13 +78,17 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
         Widget child;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.length == 0) {
+          if (snapshot.data.docs.length == 0) {
             child = Container();
           } else {
             List<ShoppingCart> _sc = [];
 
-            snapshot.data.documents.forEach((element) {
-              _sc.add(ShoppingCart.fromJson(element.data));
+            snapshot.data.docs.forEach((element) {
+              _sc.add(
+                ShoppingCart.fromJson(
+                  element.data(),
+                ),
+              );
             });
 
             child = SingleChildScrollView(
@@ -409,8 +413,8 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
         if (snapshot.hasData) {
           List<ShoppingCart> cartItems = [];
 
-          snapshot.data.documents.forEach((element) {
-            ShoppingCart _sc = ShoppingCart.fromJson(element.data);
+          snapshot.data.docs.forEach((element) {
+            ShoppingCart _sc = ShoppingCart.fromJson(element.data());
             cartItems.add(_sc);
           });
 

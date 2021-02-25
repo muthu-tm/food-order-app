@@ -1,10 +1,12 @@
 import 'package:chipchop_buyer/db/models/product_description.dart';
 import 'package:chipchop_buyer/db/models/product_variants.dart';
+import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:chipchop_buyer/db/models/product_categories_map.dart';
+import 'package:chipchop_buyer/db/models/geopoint_data.dart';
 part 'products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -59,6 +61,8 @@ class Products extends Model {
   bool isPopular;
   @JsonKey(name: 'keywords', defaultValue: [""])
   List<String> keywords;
+  @JsonKey(name: 'geo_point', defaultValue: "")
+  GeoPointData geoPoint;
   @JsonKey(name: 'created_at', nullable: true)
   DateTime createdAt;
   @JsonKey(name: 'updated_at', nullable: true)
@@ -99,7 +103,7 @@ class Products extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return _storeCollRef.document(uuid);
+    return _storeCollRef.doc(uuid);
   }
 
   String getID() {
@@ -165,9 +169,9 @@ class Products extends Model {
       List<Products> products = [];
       QuerySnapshot snap = await getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
-        Products _c = Products.fromJson(snap.documents[j].data);
+          .get();
+      for (var j = 0; j < snap.docs.length; j++) {
+        Products _c = Products.fromJson(snap.docs[j].data());
         products.add(_c);
       }
 
@@ -207,9 +211,9 @@ class Products extends Model {
           QuerySnapshot snap = await getCollectionRef()
               .where('store_uuid', whereIn: ids.sublist(i, end))
               .where('product_category.uuid', isEqualTo: categoryID)
-              .getDocuments();
-          for (var j = 0; j < snap.documents.length; j++) {
-            Products _c = Products.fromJson(snap.documents[j].data);
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
+            Products _c = Products.fromJson(snap.docs[j].data());
             products.add(_c);
           }
         }
@@ -217,9 +221,9 @@ class Products extends Model {
         QuerySnapshot snap = await getCollectionRef()
             .where('store_uuid', whereIn: ids)
             .where('product_category.uuid', isEqualTo: categoryID)
-            .getDocuments();
-        for (var j = 0; j < snap.documents.length; j++) {
-          Products _c = Products.fromJson(snap.documents[j].data);
+            .get();
+        for (var j = 0; j < snap.docs.length; j++) {
+          Products _c = Products.fromJson(snap.docs[j].data());
           products.add(_c);
         }
       }
@@ -238,9 +242,9 @@ class Products extends Model {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_category.uuid', isEqualTo: categoryID)
           .where('product_sub_category.uuid', isEqualTo: subCategoryID)
-          .getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
-        Products _c = Products.fromJson(snap.documents[j].data);
+          .get();
+      for (var j = 0; j < snap.docs.length; j++) {
+        Products _c = Products.fromJson(snap.docs[j].data());
         products.add(_c);
       }
 
@@ -265,9 +269,9 @@ class Products extends Model {
 
   Future<Products> getByProductID(String uuid) async {
     try {
-      DocumentSnapshot snap = await getCollectionRef().document(uuid).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(uuid).get();
 
-      if (snap.exists) return Products.fromJson(snap.data);
+      if (snap.exists) return Products.fromJson(snap.data());
 
       return null;
     } catch (err) {
@@ -301,9 +305,9 @@ class Products extends Model {
           QuerySnapshot snap = await getCollectionRef()
               .where('store_uuid', whereIn: ids.sublist(i, end))
               .where('is_popular', isEqualTo: true)
-              .getDocuments();
-          for (var j = 0; j < snap.documents.length; j++) {
-            Products _p = Products.fromJson(snap.documents[j].data);
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
+            Products _p = Products.fromJson(snap.docs[j].data());
             products.add(_p);
           }
         }
@@ -311,10 +315,10 @@ class Products extends Model {
         QuerySnapshot snap = await getCollectionRef()
             .where('store_uuid', whereIn: ids)
             .where('is_popular', isEqualTo: true)
-            .getDocuments();
+            .get();
 
-        for (var j = 0; j < snap.documents.length; j++) {
-          Products _p = Products.fromJson(snap.documents[j].data);
+        for (var j = 0; j < snap.docs.length; j++) {
+          Products _p = Products.fromJson(snap.docs[j].data());
           products.add(_p);
         }
       }
@@ -327,16 +331,114 @@ class Products extends Model {
 
   Future<List<Map<String, dynamic>>> getByNameRange(String searchKey) async {
     QuerySnapshot snap = await getCollectionRef()
-        .where('keywords', arrayContainsAny: searchKey.split(" "))
-        .getDocuments();
+        .where(
+          'keywords',
+          arrayContainsAny: searchKey
+              .split(" ")
+              .map(
+                (e) => e.toLowerCase(),
+              )
+              .toList(),
+        )
+        .get();
 
     List<Map<String, dynamic>> pList = [];
-    if (snap.documents.isNotEmpty) {
-      snap.documents.forEach((p) {
-        pList.add(p.data);
+    if (snap.docs.isNotEmpty) {
+      snap.docs.forEach((p) {
+        pList.add(p.data());
       });
     }
 
     return pList;
+  }
+
+  Future<List<Map<String, dynamic>>> getByNameForStore(
+      String searchKey, String storeID) async {
+    QuerySnapshot snap = await getCollectionRef()
+        .where(
+          'keywords',
+          arrayContainsAny:
+              searchKey.split(" ").map((e) => e.toLowerCase()).toList(),
+        )
+        .where('store_uuid', isEqualTo: storeID)
+        .get();
+
+    List<Map<String, dynamic>> pList = [];
+    if (snap.docs.isNotEmpty) {
+      snap.docs.forEach((p) {
+        pList.add(p.data());
+      });
+    }
+
+    return pList;
+  }
+
+  Future<List<Products>> getTopSellingProducts(
+      List<String> ids, int limit) async {
+    try {
+      List<Products> products = [];
+
+      if (ids.length > 9) {
+        int end = 0;
+        for (int i = 0; i < ids.length; i = i + 9) {
+          if (end + 9 > ids.length)
+            end = ids.length;
+          else
+            end = end + 9;
+
+          QuerySnapshot snap = await getCollectionRef()
+              .where('store_uuid', whereIn: ids.sublist(i, end))
+              .where('orders', isGreaterThan: 0)
+              .orderBy('orders', descending: true)
+              .limit(limit)
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
+            Products _p = Products.fromJson(snap.docs[j].data());
+            products.add(_p);
+          }
+        }
+      } else {
+        QuerySnapshot snap = await getCollectionRef()
+            .where('store_uuid', whereIn: ids)
+            .where('orders', isGreaterThan: 0)
+            .orderBy('orders', descending: true)
+            .limit(limit)
+            .get();
+
+        for (var j = 0; j < snap.docs.length; j++) {
+          Products _p = Products.fromJson(snap.docs[j].data());
+          products.add(_p);
+        }
+      }
+
+      return products;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<Products>> getProductsByTypes(
+      String fieldName, Map<String, String> type) async {
+    List<Products> stores = [];
+
+    try {
+      QuerySnapshot snap =
+          await getCollectionRef().where(fieldName, isEqualTo: type).get();
+
+      for (var i = 0; i < snap.docs.length; i++) {
+        Products _s = Products.fromJson(snap.docs[i].data());
+        stores.add(_s);
+      }
+
+      return stores;
+    } catch (err) {
+      print(err);
+      Analytics.reportError({
+        'type': 'product_search_error',
+        'type_id': type,
+        'error': "Something went wrong!"
+      }, 'store');
+      throw err;
+    }
   }
 }

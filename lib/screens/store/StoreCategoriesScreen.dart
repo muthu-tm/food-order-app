@@ -2,7 +2,7 @@ import 'package:chipchop_buyer/db/models/product_sub_categories.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/CategoriesProductsWidget.dart';
-import 'package:chipchop_buyer/screens/store/SubCategoriesProductScreen.dart';
+import 'package:chipchop_buyer/screens/store/SubCategoriesProductsWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 

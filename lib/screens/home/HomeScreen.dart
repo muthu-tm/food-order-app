@@ -10,9 +10,9 @@ import 'package:chipchop_buyer/screens/app/appBar.dart';
 import 'package:chipchop_buyer/screens/app/sideDrawer.dart';
 import 'package:chipchop_buyer/screens/chats/ChatsHome.dart';
 import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
-import 'package:chipchop_buyer/screens/home/MoreCategoriesScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrderDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
+import 'package:chipchop_buyer/screens/search/SearchByCategoriesScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
 import 'package:chipchop_buyer/screens/settings/SettingsHome.dart';
@@ -25,6 +25,7 @@ import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -33,6 +34,49 @@ import 'package:google_fonts/google_fonts.dart';
 
 bool newStoreNotification = false;
 bool newOrderNotification = false;
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage event) async {
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  await Firebase.initializeApp();
+
+  Map<String, dynamic> msg = event.data;
+
+  switch (msg['screen']) {
+    case "store-chat":
+      navigatorKey.currentState.push(MaterialPageRoute(
+        builder: (context) => StoreChatScreen(
+            storeID: msg['store_uuid'], storeName: msg['store_name']),
+        settings: RouteSettings(name: '/chats/store'),
+      ));
+      break;
+    case "order":
+      navigatorKey.currentState.push(MaterialPageRoute(
+        builder: (context) =>
+            OrderDetailsScreen(msg['order_id'], msg['order_uuid']),
+        settings: RouteSettings(name: '/orders/details'),
+      ));
+      break;
+    case "product":
+      Products _p = await Products().getByProductID(msg['product_id']);
+      if (_p != null) {
+        navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => ProductDetailsScreen(_p),
+          settings: RouteSettings(name: '/store/products'),
+        ));
+      }
+      break;
+  }
+
+  if (msg['type'] == '100') {
+    await ChatTemplate().updateToUnRead(msg['store_uuid']);
+
+    newStoreNotification = true;
+  } else if (msg['type'] == '000' || msg['type'] == '001') {
+    // Order update || Order chat
+    newOrderNotification = true;
+  }
+}
 
 class HomeScreen extends StatefulWidget {
   HomeScreen(this.index);
@@ -43,8 +87,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
   bool _newStoreNotification = false;
   bool _newOrderNotification = false;
 
@@ -58,91 +100,46 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _newStoreNotification = newStoreNotification;
     _newOrderNotification = newOrderNotification;
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '100') {
-          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        } else if (message['data']['type'] == '000' ||
-            message['data']['type'] == '001') {
-          // Order update || Order chat
-          setState(() {
-            _newOrderNotification = true;
-            newOrderNotification = true;
-          });
-        }
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        if (message['data']['type'] == '100') {
-          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
 
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        } else if (message['data']['type'] == '000' ||
-            message['data']['type'] == '001') {
-          // Order update || Order chat
-          setState(() {
-            _newOrderNotification = true;
-            newOrderNotification = true;
-          });
-        }
-        print("onLaunch: $message");
-      },
-      onResume: (Map<String, dynamic> message) async {
-        await fcmMessageHandler(message, context);
+    FirebaseMessaging.onMessage.listen((event) async {
+      Map<String, dynamic> message = event.data;
 
-        if (message['data']['type'] == '100') {
-          await ChatTemplate().updateToUnRead(message['data']['store_uuid']);
+      if (message['type'] == '100') {
+        await ChatTemplate().updateToUnRead(message['store_uuid']);
+        setState(() {
+          _newStoreNotification = true;
+          newStoreNotification = true;
+        });
+      } else if (message['type'] == '000' || message['type'] == '001') {
+        // Order update || Order chat
+        setState(() {
+          _newOrderNotification = true;
+          newOrderNotification = true;
+        });
+      }
+    });
 
-          setState(() {
-            _newStoreNotification = true;
-            newStoreNotification = true;
-          });
-        } else if (message['data']['type'] == '000' ||
-            message['data']['type'] == '001') {
-          // Order update || Order chat
-          setState(() {
-            _newOrderNotification = true;
-            newOrderNotification = true;
-          });
-        }
-      },
-    );
-  }
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  Future<void> fcmMessageHandler(msg, context) async {
-    switch (msg['data']['screen']) {
-      case "store-chat":
-        navigatorKey.currentState.push(MaterialPageRoute(
-          builder: (context) => StoreChatScreen(
-              storeID: msg['data']['store_uuid'],
-              storeName: msg['data']['store_name']),
-          settings: RouteSettings(name: '/chats/store'),
-        ));
-        break;
-      case "order":
-        navigatorKey.currentState.push(MaterialPageRoute(
-          builder: (context) => OrderDetailsScreen(
-              msg['data']['order_id'], msg['data']['order_uuid']),
-          settings: RouteSettings(name: '/orders/details'),
-        ));
-        break;
-      case "product":
-        Products _p =
-            await Products().getByProductID(msg['data']['product_id']);
-        if (_p != null) {
-          navigatorKey.currentState.push(MaterialPageRoute(
-            builder: (context) => ProductDetailsScreen(_p),
-            settings: RouteSettings(name: '/store/products'),
-          ));
-        }
-        break;
-    }
+    FirebaseMessaging.onMessageOpenedApp.listen((event) async {
+      Map<String, dynamic> message = event.data;
+
+      if (message['type'] == '100') {
+        await ChatTemplate().updateToUnRead(message['store_uuid']);
+
+        setState(() {
+          _newStoreNotification = true;
+          newStoreNotification = true;
+        });
+      } else if (message['type'] == '000' || message['type'] == '001') {
+        // Order update || Order chat
+        setState(() {
+          _newOrderNotification = true;
+          newOrderNotification = true;
+        });
+      }
+      print("onLaunch: $message");
+    });
   }
 
   void _onItemTapped(int index) {
@@ -173,46 +170,77 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: appBar(context),
         drawer: sideDrawer(context),
-        backgroundColor: CustomColors.white,
+        backgroundColor: CustomColors.lightGrey,
         body: SingleChildScrollView(
           child: _selectedIndex == 0
               ? Column(
                   children: <Widget>[
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 5),
                       child: SearchBarWidget(),
                     ),
-                    ListTile(
-                      title: Text(
-                        "Top Categories",
-                        style: TextStyle(
-                            color: CustomColors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 17),
-                      ),
-                    ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: getCategoryCards(context),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MoreCategoriesScreen(),
-                            settings: RouteSettings(name: '/search/categories'),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Text(
-                          "More Categories",
-                          style: TextStyle(
-                              decoration: TextDecoration.underline,
-                              fontSize: 12),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        child: Column(children: [
+                          ListTile(
+                            title: Text(
+                              "Top Categories",
+                              style: TextStyle(
+                                  color: CustomColors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: getCategoryCards(context),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      SearchByCategoriesScreen(),
+                                  settings:
+                                      RouteSettings(name: '/search/categories'),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8, bottom: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.grid_view,
+                                    size: 15,
+                                    color: Colors.black,
+                                  ),
+                                  SizedBox(width: 3),
+                                  Text(
+                                    "More Categories",
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 10),
+                                  ),
+                                  SizedBox(width: 3),
+                                  Icon(
+                                    Icons.keyboard_arrow_right,
+                                    size: 18,
+                                    color: Colors.grey,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
                       ),
                     ),
                     RecentStoresWidget(),
@@ -481,7 +509,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(
                         color: CustomColors.black,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16),
+                        fontSize: 14),
                   ),
                 ),
                 Padding(
@@ -491,7 +519,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       height: 160,
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: ListView.builder(
@@ -661,7 +689,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                     color: CustomColors.black,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 17),
+                                    fontSize: 14),
                               ),
                             ),
                             Padding(
@@ -671,7 +699,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Container(
                                   height: 160,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[300],
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: ListView.builder(

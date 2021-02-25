@@ -75,7 +75,7 @@ class Order {
   }
 
   DocumentReference getDocumentReference(String id) {
-    return getCollectionRef().document(id);
+    return getCollectionRef().doc(id);
   }
 
   String getID() {
@@ -204,17 +204,17 @@ class Order {
       if (this.amount.walletAmount > 0.00) {
         DocumentReference custDocRef = Model.db
             .collection("stores")
-            .document(storeID)
+            .doc(storeID)
             .collection("customers")
-            .document(cachedLocalUser.getID());
+            .doc(cachedLocalUser.getID());
         await Model.db.runTransaction((tx) {
           return tx.get(custDocRef).then((doc) async {
-            Customers cust = Customers.fromJson(doc.data);
+            Customers cust = Customers.fromJson(doc.data());
 
             cust.availableBalance -= this.amount.walletAmount;
 
-            DocumentReference docRef = this.getCollectionRef().document();
-            this.uuid = docRef.documentID;
+            DocumentReference docRef = this.getCollectionRef().doc();
+            this.uuid = docRef.id;
             Model().txCreate(tx, docRef, this.toJson());
 
             UserStoreWalletHistory tran = new UserStoreWalletHistory();
@@ -231,17 +231,17 @@ class Order {
                 tx,
                 custDocRef
                     .collection('user_store_wallet')
-                    .document(tran.createdAt.toString()),
+                    .doc(tran.createdAt.toString()),
                 tran.toJson());
 
             Model().txUpdate(tx, custDocRef, cust.toJson());
           });
         });
       } else {
-        DocumentReference docRef = this.getCollectionRef().document();
-        this.uuid = docRef.documentID;
+        DocumentReference docRef = this.getCollectionRef().doc();
+        this.uuid = docRef.id;
 
-        await docRef.setData(this.toJson());
+        await docRef.set(this.toJson());
       }
 
       if (this.products.length > 0) {
@@ -249,14 +249,14 @@ class Order {
             UserShoppingDetails().getCollectionRef(cachedLocalUser.getID());
         for (var i = 0; i < this.products.length; i++) {
           String _id = '${this.storeID}_${this.products[i].productID}';
-          DocumentSnapshot _docSnap = await _collRef.document(_id).get();
+          DocumentSnapshot _docSnap = await _collRef.doc(_id).get();
 
           if (_docSnap.exists) {
             UserShoppingDetails _shoppDetails =
-                UserShoppingDetails.fromJson(_docSnap.data);
+                UserShoppingDetails.fromJson(_docSnap.data());
             _shoppDetails.quantity += this.products[i].quantity;
             _shoppDetails.updatedAt = DateTime.now().millisecondsSinceEpoch;
-            _docSnap.reference.updateData(_shoppDetails.toJson());
+            _docSnap.reference.update(_shoppDetails.toJson());
           } else {
             UserShoppingDetails _shoppDetails = UserShoppingDetails();
             _shoppDetails.productID = this.products[i].productID;
@@ -267,7 +267,7 @@ class Order {
             _shoppDetails.userName = cachedLocalUser.getFullName();
             _shoppDetails.updatedAt = DateTime.now().millisecondsSinceEpoch;
 
-            _docSnap.reference.setData(_shoppDetails.toJson());
+            _docSnap.reference.set(_shoppDetails.toJson());
           }
         }
       }
@@ -295,7 +295,7 @@ class Order {
       }),
     );
 
-    await this.getCollectionRef().document(this.getID()).updateData(
+    await this.getCollectionRef().doc(this.getID()).update(
       {
         'status_details': _newStatus?.map((e) => e?.toJson())?.toList(),
         'status': 2,
@@ -312,7 +312,7 @@ class Order {
   }
 
   Stream<DocumentSnapshot> streamOrderByID(String id) {
-    return getCollectionRef().document(id).snapshots();
+    return getCollectionRef().doc(id).snapshots();
   }
 
   Stream<QuerySnapshot> streamOrdersByStatus(int status) {
@@ -331,12 +331,12 @@ class Order {
   Future<List<Map<String, dynamic>>> getByOrderID(String id) async {
     QuerySnapshot snap = await getCollectionRef()
         .where('order_id', isGreaterThanOrEqualTo: id)
-        .getDocuments();
+        .get();
 
     List<Map<String, dynamic>> oList = [];
-    if (snap.documents.isNotEmpty) {
-      snap.documents.forEach((order) {
-        oList.add(order.data);
+    if (snap.docs.isNotEmpty) {
+      snap.docs.forEach((order) {
+        oList.add(order.data());
       });
     }
 

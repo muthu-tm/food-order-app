@@ -19,7 +19,6 @@ class StorePopulartWidget extends StatefulWidget {
 
 class _StorePopulartWidgetState extends State<StorePopulartWidget> {
   Map<String, double> _cartMap = {};
-  Map<String, List<String>> _cartsVarientsMap = {};
   List<String> _wlList = [];
 
   @override
@@ -51,7 +50,6 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
 
       setState(() {
         _cartMap = _tempMap;
-        _cartsVarientsMap = _tempCartsVarientsMap;
         _wlList = _tempList;
       });
     } catch (err) {
@@ -111,7 +109,7 @@ class _StorePopulartWidgetState extends State<StorePopulartWidget> {
                       );
                     },
                     child: StoreProductsCard(
-                        product, _cartMap, _cartsVarientsMap, _wlList),
+                        product, _cartMap, _wlList),
                   );
                 }, childCount: snapshot.data.length),
               ),

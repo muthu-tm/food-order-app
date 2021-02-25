@@ -347,7 +347,7 @@ class _OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
 
         if (snapshot.hasData) {
           if (snapshot.data.exists) {
-            Customers cust = Customers.fromJson(snapshot.data.data);
+            Customers cust = Customers.fromJson(snapshot.data.data());
 
             double walletAmount = cust.availableBalance;
 

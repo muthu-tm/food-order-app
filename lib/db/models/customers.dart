@@ -38,32 +38,26 @@ class Customers {
   Map<String, dynamic> toJson() => _$CustomersToJson(this);
 
   CollectionReference getCollectionRef(String storeID) {
-    return Model.db
-        .collection("stores")
-        .document(storeID)
-        .collection("customers");
+    return Model.db.collection("stores").doc(storeID).collection("customers");
   }
 
   Future<void> storeCreateCustomer(String storeID, String storeName) async {
     try {
-      DocumentSnapshot custSnap = await getCollectionRef(storeID)
-          .document(cachedLocalUser.getID())
-          .get();
+      DocumentSnapshot custSnap =
+          await getCollectionRef(storeID).doc(cachedLocalUser.getID()).get();
 
       if (custSnap.exists) return;
 
       if (storeName == "") {
         DocumentSnapshot docSnap =
-            await Model.db.collection("stores").document(storeID).get();
+            await Model.db.collection("stores").doc(storeID).get();
 
         if (docSnap.exists) {
-          storeName = docSnap.data['store_name'];
+          storeName = docSnap.data()['store_name'];
         }
       }
 
-      await getCollectionRef(storeID)
-          .document(cachedLocalUser.getID())
-          .setData({
+      await getCollectionRef(storeID).doc(cachedLocalUser.getID()).set({
         'contact_number': cachedLocalUser.getID(),
         'first_name': cachedLocalUser.firstName,
         'last_name': cachedLocalUser.lastName,
@@ -86,24 +80,17 @@ class Customers {
     }
   }
 
-  Stream<QuerySnapshot> streamUsersStores() {
-    return Model.db
-        .collectionGroup("customers")
-        .where('contact_number', isEqualTo: cachedLocalUser.getID())
-        .snapshots();
-  }
-
   Future<List<Customers>> getUsersStores() async {
     try {
       QuerySnapshot snap = await Model.db
           .collectionGroup("customers")
           .where('contact_number', isEqualTo: cachedLocalUser.getID())
-          .getDocuments();
+          .get();
 
       List<Customers> _stores = [];
 
-      snap.documents.forEach((element) {
-        Customers _c = Customers.fromJson(element.data);
+      snap.docs.forEach((element) {
+        Customers _c = Customers.fromJson(element.data());
         _stores.add(_c);
       });
 
@@ -116,8 +103,6 @@ class Customers {
   }
 
   Stream<DocumentSnapshot> streamUsersData(String storeID) {
-    return getCollectionRef(storeID)
-        .document(cachedLocalUser.getID())
-        .snapshots();
+    return getCollectionRef(storeID).doc(cachedLocalUser.getID()).snapshots();
   }
 }

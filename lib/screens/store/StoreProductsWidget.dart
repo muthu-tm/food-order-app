@@ -19,7 +19,6 @@ class StoreProductWidget extends StatefulWidget {
 
 class _StoreProductWidgetState extends State<StoreProductWidget> {
   Map<String, double> _cartMap = {};
-  Map<String, List<String>> _cartsVarientsMap = {};
   List<String> _wlList = [];
 
   @override
@@ -51,7 +50,6 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
 
       setState(() {
         _cartMap = _tempMap;
-        _cartsVarientsMap = _tempCartsVarientsMap;
         _wlList = _tempList;
       });
     } catch (err) {
@@ -115,7 +113,7 @@ class _StoreProductWidgetState extends State<StoreProductWidget> {
                         });
                       },
                       child: StoreProductsCard(
-                          product, _cartMap, _cartsVarientsMap, _wlList),
+                          product, _cartMap, _wlList),
                     );
                   },
                   childCount: snapshot.data.length,

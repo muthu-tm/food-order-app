@@ -88,11 +88,11 @@ class User extends Model {
   }
 
   CollectionReference getLocationCollectionRef() {
-    return _userCollRef.document(getID()).collection("user_locations");
+    return _userCollRef.doc(getID()).collection("user_locations");
   }
 
   DocumentReference getDocumentReference(String id) {
-    return _userCollRef.document(id);
+    return _userCollRef.doc(id);
   }
 
   String getID() {
@@ -119,14 +119,14 @@ class User extends Model {
   }
 
   Future<List<UserLocations>> getLocations() async {
-    QuerySnapshot snap = await getLocationCollectionRef().getDocuments();
+    QuerySnapshot snap = await getLocationCollectionRef().get();
 
     List<UserLocations> locations = [];
 
-    if (snap.documents.isEmpty) return [];
+    if (snap.docs.isEmpty) return [];
 
-    for (var loc in snap.documents) {
-      locations.add(UserLocations.fromJson(loc.data));
+    for (var loc in snap.docs) {
+      locations.add(UserLocations.fromJson(loc.data()));
     }
 
     return locations;
@@ -137,9 +137,9 @@ class User extends Model {
   }
 
   Future addLocations(UserLocations loc) async {
-    DocumentReference docRef = getLocationCollectionRef().document();
-    loc.uuid = docRef.documentID;
-    await docRef.setData(loc.toJson());
+    DocumentReference docRef = getLocationCollectionRef().doc();
+    loc.uuid = docRef.id;
+    await docRef.set(loc.toJson());
 
     return loc;
   }
@@ -148,7 +148,7 @@ class User extends Model {
     try {
       DocumentReference docRef =
           cachedLocalUser.getDocumentReference(cachedLocalUser.getID());
-      await docRef.updateData(
+      await docRef.update(
           {'primary_location': loc.toJson(), 'updated_at': DateTime.now()});
       cachedLocalUser.primaryLocation = loc;
     } catch (err) {
@@ -160,7 +160,7 @@ class User extends Model {
 
   Future removeLocation(UserLocations loc) async {
     try {
-      await getLocationCollectionRef().document(loc.uuid).delete();
+      await getLocationCollectionRef().doc(loc.uuid).delete();
     } catch (err) {
       Analytics.reportError(
           {'type': 'user_primary_loc_error', 'error': err.toString()}, 'store');
@@ -169,8 +169,8 @@ class User extends Model {
   }
 
   Future updateLocations(String uuid, Map<String, dynamic> loc) async {
-    DocumentReference docRef = getLocationCollectionRef().document(uuid);
-    await docRef.updateData(loc);
+    DocumentReference docRef = getLocationCollectionRef().doc(uuid);
+    await docRef.update(loc);
   }
 
   Future updatePlatformDetails(Map<String, dynamic> data) async {

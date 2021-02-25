@@ -53,7 +53,7 @@ class ProductCategories extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return getCollectionRef().document(uuid);
+    return getCollectionRef().doc(uuid);
   }
 
   String getID() {
@@ -61,11 +61,12 @@ class ProductCategories extends Model {
   }
 
   Future<List<ProductCategories>> getCategoriesForIDs(List<String> ids) async {
-    List<ProductCategories> categories = [];
-    try {
-      // handle empty params
-      if (ids.isEmpty) return [];
+    // handle empty params
+    if (ids.isEmpty) return [];
 
+    List<ProductCategories> categories = [];
+
+    try {
       if (ids.length > 9) {
         int end = 0;
         for (int i = 0; i < ids.length; i = i + 9) {
@@ -76,30 +77,33 @@ class ProductCategories extends Model {
 
           QuerySnapshot snap = await getCollectionRef()
               .where('uuid', whereIn: ids.sublist(i, end))
-              .orderBy('name')
-              .getDocuments();
-          for (var j = 0; j < snap.documents.length; j++) {
+              .get();
+          for (var j = 0; j < snap.docs.length; j++) {
             ProductCategories _c =
-                ProductCategories.fromJson(snap.documents[j].data);
+                ProductCategories.fromJson(snap.docs[j].data());
             categories.add(_c);
           }
         }
       } else {
         QuerySnapshot snap = await getCollectionRef()
             .where('uuid', whereIn: ids)
-            .orderBy('name')
-            .getDocuments();
-
-        for (var j = 0; j < snap.documents.length; j++) {
+            .get();
+        for (var j = 0; j < snap.docs.length; j++) {
           ProductCategories _c =
-              ProductCategories.fromJson(snap.documents[j].data);
+              ProductCategories.fromJson(snap.docs[j].data());
           categories.add(_c);
         }
       }
+
+      categories.sort((a, b) => a.name.compareTo(b.name));
+
+      return categories;
     } catch (err) {
+      Analytics.sendAnalyticsEvent(
+          {'type': 'categories_get_error', 'error': err.toString()},
+          'products');
       throw err;
     }
-    return categories;
   }
 
   Future<List<ProductCategories>> getCategoriesForType(String typeID) async {
@@ -111,12 +115,14 @@ class ProductCategories extends Model {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('type_id', isEqualTo: typeID)
-          .getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
+          .get();
+      for (var j = 0; j < snap.docs.length; j++) {
         ProductCategories _c =
-            ProductCategories.fromJson(snap.documents[j].data);
+            ProductCategories.fromJson(snap.docs[j].data());
         categories.add(_c);
       }
+
+      categories.sort((a, b) => a.name.compareTo(b.name));
 
       return categories;
     } catch (err) {
@@ -133,13 +139,13 @@ class ProductCategories extends Model {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('show_in_search', isEqualTo: true)
-          .getDocuments();
+          .get();
 
       List<ProductCategories> categories = [];
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
           ProductCategories _s =
-              ProductCategories.fromJson(snap.documents[i].data);
+              ProductCategories.fromJson(snap.docs[i].data());
           categories.add(_s);
         }
       }

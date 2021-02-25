@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:chipchop_buyer/db/models/user.dart';
+import 'package:chipchop_buyer/db/models/user.dart' as u;
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,7 +51,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   final AuthController _authController = AuthController();
-  User _user;
+  u.User _user;
 
   @override
   void initState() {
@@ -335,7 +335,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       AuthCredential authCredential, BuildContext context) async {
     FirebaseAuth.instance
         .signInWithCredential(authCredential)
-        .then((AuthResult authResult) async {
+        .then((UserCredential authResult) async {
       final SharedPreferences prefs = await _prefs;
 
       var result = await _authController.signInWithMobileNumber(_user.getID());
@@ -382,7 +382,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
     CustomDialogs.showLoadingDialog(context, _keyLoader);
   }
 
-  _verificationFailed(AuthException authException, BuildContext context) {
+  _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
     _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
         AppLocalizations.of(context).translate('verification_failed') +
@@ -404,12 +404,12 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
   }
 
   void verifyOTPAndLogin(String smsCode) async {
-    AuthCredential _authCredential = PhoneAuthProvider.getCredential(
+    AuthCredential _authCredential = PhoneAuthProvider.credential(
         verificationId: widget.verificationID, smsCode: smsCode);
 
     FirebaseAuth.instance
         .signInWithCredential(_authCredential)
-        .then((AuthResult authResult) async {
+        .then((UserCredential authResult) async {
       if (widget.isRegister) {
         dynamic result = await _authController.registerWithMobileNumber(
             int.parse(widget.number),

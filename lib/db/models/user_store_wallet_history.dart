@@ -1,3 +1,4 @@
+import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,10 +38,18 @@ class UserStoreWalletHistory {
   CollectionReference getCollectionRef(String storeID) {
     return Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(cachedLocalUser.getID())
+        .doc(cachedLocalUser.getID())
         .collection('user_store_wallet');
+  }
+
+  DocumentReference getDocumentRef(String storeID) {
+    return Model.db
+        .collection("stores")
+        .doc(storeID)
+        .collection("customers")
+        .doc(cachedLocalUser.getID());
   }
 
   String getID() {
@@ -51,5 +60,13 @@ class UserStoreWalletHistory {
     return getCollectionRef(storeID)
         .orderBy('created_at', descending: true)
         .snapshots();
+  }
+
+  Future<Customers> getStoreCustomer(String storeID) async {
+    DocumentSnapshot snap = await getDocumentRef(storeID).get();
+    if (snap.exists)
+      return Customers.fromJson(snap.data());
+    else
+      return null;
   }
 }

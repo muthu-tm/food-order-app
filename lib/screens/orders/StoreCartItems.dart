@@ -966,8 +966,8 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                             onTap: () async {
                                               CustomDialogs.showLoadingDialog(
                                                   context, _keyLoader);
-                                              bool res = await StorageUtils()
-                                                  .removeFile(
+                                              bool res =
+                                                  await StorageUtils.removeFile(
                                                       _cartImagePaths[index]);
                                               Navigator.of(
                                                       _keyLoader.currentContext,
@@ -1369,332 +1369,327 @@ class _StoreCartItemsState extends State<StoreCartItems> {
   Widget buildShoppingCartItem(
       BuildContext context, ShoppingCart sc, Products _p) {
     return Card(
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(
-              width: 110,
-              height: 125,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0),
-                child: CachedNetworkImage(
-                  imageUrl: _p.getProductImage(),
-                  imageBuilder: (context, imageProvider) => Image(
-                    fit: BoxFit.fill,
-                    image: imageProvider,
-                  ),
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                    child: SizedBox(
-                      height: 50.0,
-                      width: 50.0,
-                      child: CircularProgressIndicator(
-                          value: downloadProgress.progress,
-                          valueColor: AlwaysStoppedAnimation(CustomColors.blue),
-                          strokeWidth: 2.0),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProductDetailsScreen(_p),
+              settings: RouteSettings(name: '/store/products'),
+            ),
+          );
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 110,
+                height: 110,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: CachedNetworkImage(
+                    imageUrl: _p.getProductImage(),
+                    imageBuilder: (context, imageProvider) => Image(
+                      fit: BoxFit.fill,
+                      image: imageProvider,
                     ),
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                      child: SizedBox(
+                        height: 50.0,
+                        width: 50.0,
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress,
+                            valueColor:
+                                AlwaysStoppedAnimation(CustomColors.blue),
+                            strokeWidth: 2.0),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                      size: 35,
+                    ),
+                    fadeOutDuration: Duration(seconds: 1),
+                    fadeInDuration: Duration(seconds: 2),
                   ),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.error,
-                    size: 35,
-                  ),
-                  fadeOutDuration: Duration(seconds: 1),
-                  fadeInDuration: Duration(seconds: 2),
                 ),
               ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width - 130,
-              padding: EdgeInsets.only(left: 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _p.brandName != null && _p.brandName.isNotEmpty
-                          ? Expanded(
-                              child: Text(
-                                '${_p.brandName}',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: TextStyle(color: CustomColors.black),
-                              ),
-                            )
-                          : Expanded(child: Container()),
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductDetailsScreen(_p),
-                              settings: RouteSettings(name: '/store/products'),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Show Details",
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.indigo,
-                              decoration: TextDecoration.underline),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '${_p.name}',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: CustomColors.black, fontWeight: FontWeight.bold),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            '${_p.variants[int.parse(sc.variantID)].weight}',
-                            textAlign: TextAlign.start,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: CustomColors.black,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 5.0),
-                            child: Text(
-                              _p.variants[int.parse(sc.variantID)].getUnit(),
+              Container(
+                width: MediaQuery.of(context).size.width - 130,
+                padding: EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text(
+                      '${_p.name}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontSize: 13,
+                          color: CustomColors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '${_p.variants[int.parse(sc.variantID)].weight}',
                               textAlign: TextAlign.start,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: CustomColors.black,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.blue[100]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            sc.quantity == 1.0
-                                ? InkWell(
-                                    onTap: () async {
-                                      try {
-                                        CustomDialogs.showLoadingDialog(
-                                            context, _keyLoader);
-                                        await ShoppingCart().removeItem(false,
-                                            _p.storeID, _p.uuid, sc.variantID);
-                                        Navigator.of(_keyLoader.currentContext,
-                                                rootNavigator: true)
-                                            .pop();
-                                      } catch (err) {
-                                        print(err);
-                                      }
-                                    },
-                                    child: SizedBox(
-                                      width: 35,
-                                      height: 35,
-                                      child: Icon(Icons.delete_forever),
-                                    ),
-                                  )
-                                : InkWell(
-                                    onTap: () async {
-                                      try {
-                                        CustomDialogs.showLoadingDialog(
-                                            context, _keyLoader);
-                                        await ShoppingCart().updateCartQuantity(
-                                            false,
-                                            _p.storeID,
-                                            _p.uuid,
-                                            sc.variantID);
-                                        Navigator.of(_keyLoader.currentContext,
-                                                rootNavigator: true)
-                                            .pop();
-                                      } catch (err) {
-                                        print(err);
-                                      }
-                                    },
-                                    child: SizedBox(
-                                      width: 35,
-                                      height: 35,
-                                      child: Icon(Icons.remove),
-                                    ),
-                                  ),
                             Padding(
-                              padding: EdgeInsets.only(right: 10.0, left: 10.0),
+                              padding: EdgeInsets.symmetric(horizontal: 5.0),
                               child: Text(
-                                sc.quantity.round().toString(),
+                                _p.variants[int.parse(sc.variantID)].getUnit(),
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    fontSize: 14,
-                                    color: CustomColors.blue,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                try {
-                                  CustomDialogs.showLoadingDialog(
-                                      context, _keyLoader);
-                                  await ShoppingCart().updateCartQuantity(
-                                      true, _p.storeID, _p.uuid, sc.variantID);
-                                  Navigator.of(_keyLoader.currentContext,
-                                          rootNavigator: true)
-                                      .pop();
-                                } catch (err) {
-                                  print(err);
-                                }
-                              },
-                              child: SizedBox(
-                                width: 35,
-                                height: 35,
-                                child: Icon(Icons.add),
+                                  color: CustomColors.black,
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          '₹ ${_p.variants[int.parse(sc.variantID)].currentPrice.toStringAsFixed(2)}',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: CustomColors.black,
-                          ),
-                        ),
-                      ),
-                      !_p.isDeliverable
-                          ? Row(
-                              children: [
-                                Text(
-                                  "Only Self Pickup",
-                                  style: TextStyle(
-                                      color: CustomColors.alertRed,
-                                      fontSize: 12),
-                                ),
-                                SizedBox(
-                                  width: 2,
-                                ),
-                                InkWell(
-                                    child: Icon(
-                                      Icons.info,
-                                      size: 15,
-                                      color: CustomColors.grey,
+                        Container(
+                          width: 90,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.blue[100]),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              sc.quantity == 1.0
+                                  ? InkWell(
+                                      onTap: () async {
+                                        try {
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
+                                          await ShoppingCart().removeItem(
+                                              false,
+                                              _p.storeID,
+                                              _p.uuid,
+                                              sc.variantID);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        } catch (err) {
+                                          print(err);
+                                        }
+                                      },
+                                      child: SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: Icon(
+                                          Icons.delete_forever,
+                                          size: 18,
+                                        ),
+                                      ),
+                                    )
+                                  : InkWell(
+                                      onTap: () async {
+                                        try {
+                                          CustomDialogs.showLoadingDialog(
+                                              context, _keyLoader);
+                                          await ShoppingCart()
+                                              .updateCartQuantity(
+                                                  false,
+                                                  _p.storeID,
+                                                  _p.uuid,
+                                                  sc.variantID);
+                                          Navigator.of(
+                                                  _keyLoader.currentContext,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        } catch (err) {
+                                          print(err);
+                                        }
+                                      },
+                                      child: SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: Icon(
+                                          Icons.remove,
+                                          size: 18,
+                                        ),
+                                      ),
                                     ),
-                                    onTap: () {})
-                              ],
-                            )
-                          : Container(),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        child: InkWell(
-                          onTap: () async {
-                            try {
-                              CustomDialogs.showLoadingDialog(
-                                  context, _keyLoader);
-                              bool res = await ShoppingCart().moveToWishlist(
-                                  sc.uuid,
-                                  sc.storeID,
-                                  sc.productID,
-                                  sc.variantID);
-                              Navigator.of(_keyLoader.currentContext,
-                                      rootNavigator: true)
-                                  .pop();
+                              Padding(
+                                padding: EdgeInsets.only(right: 5.0, left: 5.0),
+                                child: Text(
+                                  sc.quantity.round().toString(),
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      color: CustomColors.blue,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  try {
+                                    CustomDialogs.showLoadingDialog(
+                                        context, _keyLoader);
+                                    await ShoppingCart().updateCartQuantity(
+                                        true,
+                                        _p.storeID,
+                                        _p.uuid,
+                                        sc.variantID);
+                                    Navigator.of(_keyLoader.currentContext,
+                                            rootNavigator: true)
+                                        .pop();
+                                  } catch (err) {
+                                    print(err);
+                                  }
+                                },
+                                child: SizedBox(
+                                  width: 30,
+                                  height: 30,
+                                  child: Icon(Icons.add, size: 18),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            '₹ ${_p.variants[int.parse(sc.variantID)].currentPrice.toStringAsFixed(2)}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: CustomColors.black,
+                            ),
+                          ),
+                        ),
+                        !_p.isDeliverable
+                            ? Row(
+                                children: [
+                                  Text(
+                                    "Only Self Pickup",
+                                    style: TextStyle(
+                                        color: CustomColors.alertRed,
+                                        fontSize: 12),
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  InkWell(
+                                      child: Icon(
+                                        Icons.info,
+                                        size: 15,
+                                        color: CustomColors.grey,
+                                      ),
+                                      onTap: () {})
+                                ],
+                              )
+                            : Container(),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: InkWell(
+                            onTap: () async {
+                              try {
+                                CustomDialogs.showLoadingDialog(
+                                    context, _keyLoader);
+                                bool res = await ShoppingCart().moveToWishlist(
+                                    sc.uuid,
+                                    sc.storeID,
+                                    sc.productID,
+                                    sc.variantID);
+                                Navigator.of(_keyLoader.currentContext,
+                                        rootNavigator: true)
+                                    .pop();
 
-                              if (!res)
-                                Fluttertoast.showToast(
-                                    msg:
-                                        'This Product already in Your WishList !');
-                            } catch (err) {
-                              print(err);
-                            }
-                          },
-                          child: Container(
-                            height: 25,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.green[100]),
-                            child: Text(
-                              "Move To Wishlist",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600),
+                                if (!res)
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          'This Product already in Your WishList !');
+                              } catch (err) {
+                                print(err);
+                              }
+                            },
+                            child: Container(
+                              height: 25,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.green[100]),
+                              child: Text(
+                                "Move To Wishlist",
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Flexible(
-                        child: InkWell(
-                          onTap: () async {
-                            try {
-                              CustomDialogs.showLoadingDialog(
-                                  context, _keyLoader);
-                              await ShoppingCart().removeItem(false, sc.storeID,
-                                  sc.productID, sc.variantID);
-                              Navigator.of(_keyLoader.currentContext,
-                                      rootNavigator: true)
-                                  .pop();
-                            } catch (err) {
-                              print(err);
-                            }
-                          },
-                          child: Container(
-                            height: 25,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                                color: Colors.red[100]),
-                            child: Text(
-                              "Remove",
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: CustomColors.black,
-                                  fontWeight: FontWeight.w600),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Flexible(
+                          child: InkWell(
+                            onTap: () async {
+                              try {
+                                CustomDialogs.showLoadingDialog(
+                                    context, _keyLoader);
+                                await ShoppingCart().removeItem(false,
+                                    sc.storeID, sc.productID, sc.variantID);
+                                Navigator.of(_keyLoader.currentContext,
+                                        rootNavigator: true)
+                                    .pop();
+                              } catch (err) {
+                                print(err);
+                              }
+                            },
+                            child: Container(
+                              height: 25,
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.red[100]),
+                              child: Text(
+                                "Remove",
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    color: CustomColors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

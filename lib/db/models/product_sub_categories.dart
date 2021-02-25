@@ -72,10 +72,10 @@ class ProductSubCategories extends Model {
 
     QuerySnapshot snap = await getCollectionRef()
         .where('category_id', isEqualTo: categoryID)
-        .getDocuments();
-    for (var j = 0; j < snap.documents.length; j++) {
+        .get();
+    for (var j = 0; j < snap.docs.length; j++) {
       ProductSubCategories _c =
-          ProductSubCategories.fromJson(snap.documents[j].data);
+          ProductSubCategories.fromJson(snap.docs[j].data());
       categories.add(_c);
     }
 
@@ -100,10 +100,10 @@ class ProductSubCategories extends Model {
         QuerySnapshot snap = await getCollectionRef()
             .where('category_id', isEqualTo: categoryID)
             .where('uuid', whereIn: ids.sublist(i, end))
-            .getDocuments();
-        for (var j = 0; j < snap.documents.length; j++) {
+            .get();
+        for (var j = 0; j < snap.docs.length; j++) {
           ProductSubCategories _c =
-              ProductSubCategories.fromJson(snap.documents[j].data);
+              ProductSubCategories.fromJson(snap.docs[j].data());
           categories.add(_c);
         }
       }
@@ -111,10 +111,10 @@ class ProductSubCategories extends Model {
       QuerySnapshot snap = await getCollectionRef()
           .where('category_id', isEqualTo: categoryID)
           .where('uuid', whereIn: ids)
-          .getDocuments();
-      for (var j = 0; j < snap.documents.length; j++) {
+          .get();
+      for (var j = 0; j < snap.docs.length; j++) {
         ProductSubCategories _c =
-            ProductSubCategories.fromJson(snap.documents[j].data);
+            ProductSubCategories.fromJson(snap.docs[j].data());
         categories.add(_c);
       }
     }
@@ -128,13 +128,13 @@ class ProductSubCategories extends Model {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('show_in_search', isEqualTo: true)
-          .getDocuments();
+          .get();
 
       List<ProductSubCategories> categories = [];
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
           ProductSubCategories _c =
-              ProductSubCategories.fromJson(snap.documents[i].data);
+              ProductSubCategories.fromJson(snap.docs[i].data());
           categories.add(_c);
         }
       }

@@ -6,6 +6,7 @@ import 'package:chipchop_buyer/screens/store/StoreProductsCard.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class SubCategoriesProductsWidget extends StatefulWidget {
   SubCategoriesProductsWidget(
@@ -23,7 +24,6 @@ class SubCategoriesProductsWidget extends StatefulWidget {
 class _SubCategoriesProductsWidgetState
     extends State<SubCategoriesProductsWidget> {
   Map<String, double> _cartMap = {};
-  Map<String, List<String>> _cartsVarientsMap = {};
   List<String> _wlList = [];
 
   @override
@@ -56,7 +56,6 @@ class _SubCategoriesProductsWidgetState
 
       setState(() {
         _cartMap = _tempMap;
-        _cartsVarientsMap = _tempCartsVarientsMap;
         _wlList = _tempList;
       });
     } catch (err) {
@@ -78,47 +77,43 @@ class _SubCategoriesProductsWidgetState
 
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data.isNotEmpty) {
-            children = Container(
-              child: GridView.count(
-                physics: ScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                primary: true,
-                crossAxisCount: 2,
-                crossAxisSpacing: 8,
-                shrinkWrap: true,
-                mainAxisSpacing: 0,
-                children: List.generate(
-                  snapshot.data.length,
-                  (index) {
-                    Products product = snapshot.data[index];
+            children = StaggeredGridView.countBuilder(
+              physics: ScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              primary: true,
+              crossAxisCount: 2,
+              crossAxisSpacing: 0,
+              shrinkWrap: true,
+              mainAxisSpacing: 0,
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                Products product = snapshot.data[index];
 
-                    return InkWell(
-                      onTap: () {
-                        UserActivityTracker _activity = UserActivityTracker();
-                        _activity.keywords = "";
-                        _activity.storeID = product.storeID;
-                        _activity.productID = product.uuid;
-                        _activity.productName = product.name;
-                        _activity.refImage = product.getProductImage();
-                        _activity.type = 2;
-                        _activity.create();
+                return InkWell(
+                  onTap: () {
+                    UserActivityTracker _activity = UserActivityTracker();
+                    _activity.keywords = "";
+                    _activity.storeID = product.storeID;
+                    _activity.productID = product.uuid;
+                    _activity.productName = product.name;
+                    _activity.refImage = product.getProductImage();
+                    _activity.type = 2;
+                    _activity.create();
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsScreen(product),
-                            settings: RouteSettings(name: '/store/products'),
-                          ),
-                        ).then((value) {
-                          _loadCartDetails();
-                        });
-                      },
-                      child: StoreProductsCard(
-                          product, _cartMap, _cartsVarientsMap, _wlList),
-                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailsScreen(product),
+                        settings: RouteSettings(name: '/store/products'),
+                      ),
+                    ).then((value) {
+                      _loadCartDetails();
+                    });
                   },
-                ),
-              ),
+                  child: StoreProductsCard(product, _cartMap, _wlList),
+                );
+              },
+              staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
             );
           } else {
             children = Container(

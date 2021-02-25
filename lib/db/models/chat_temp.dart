@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -31,18 +30,18 @@ class ChatTemplate {
   CollectionReference getOrderCollectionRef(String custID, String orderID) {
     return Model.db
         .collection("buyers")
-        .document(custID)
+        .doc(custID)
         .collection("orders")
-        .document(orderID)
+        .doc(orderID)
         .collection("order_chats");
   }
 
   CollectionReference getStoreCollectionRef(String storeID, String custID) {
     return Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(custID)
+        .doc(custID)
         .collection("chats");
   }
 
@@ -52,8 +51,8 @@ class ChatTemplate {
     this.from = cachedLocalUser.getID();
 
     await getOrderCollectionRef(cachedLocalUser.getID(), orderUUID)
-        .document(this.createdAt.millisecondsSinceEpoch.toString())
-        .setData(this.toJson());
+        .doc(this.createdAt.millisecondsSinceEpoch.toString())
+        .set(this.toJson());
   }
 
   Stream<QuerySnapshot> streamOrderChats(String orderID, int limit) {
@@ -71,18 +70,16 @@ class ChatTemplate {
     await getStoreCollectionRef(
       storeID,
       cachedLocalUser.getID(),
-    )
-        .document(this.createdAt.millisecondsSinceEpoch.toString())
-        .setData(this.toJson());
+    ).doc(this.createdAt.millisecondsSinceEpoch.toString()).set(this.toJson());
   }
 
   Future<void> updateToRead(String storeID) async {
     await Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(cachedLocalUser.getID())
-        .updateData(
+        .doc(cachedLocalUser.getID())
+        .update(
       {'has_customer_unread': false, 'updated_at': DateTime.now()},
     );
   }
@@ -90,18 +87,39 @@ class ChatTemplate {
   Future<void> updateToUnRead(String storeID) async {
     await Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
-        .document(cachedLocalUser.getID())
-        .updateData(
+        .doc(cachedLocalUser.getID())
+        .update(
       {'has_customer_unread': true, 'updated_at': DateTime.now()},
     );
+  }
+
+  Future<void> removeStoreChat(String storeID) async {
+    try {
+      await getStoreCollectionRef(
+        storeID,
+        cachedLocalUser.getID(),
+      ).doc(this.createdAt.millisecondsSinceEpoch.toString()).delete();
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> removeOrderChat(String orderUUID) async {
+    try {
+      await getOrderCollectionRef(cachedLocalUser.getID(), orderUUID)
+          .doc(this.createdAt.millisecondsSinceEpoch.toString())
+          .delete();
+    } catch (err) {
+      print(err);
+    }
   }
 
   Stream<QuerySnapshot> streamStoreCustomers(String storeID) {
     return Model.db
         .collection("stores")
-        .document(storeID)
+        .doc(storeID)
         .collection("customers")
         .snapshots();
   }
@@ -111,21 +129,5 @@ class ChatTemplate {
       storeID,
       cachedLocalUser.getID(),
     ).orderBy('created_at', descending: true).limit(limit).snapshots();
-  }
-
-  Stream<QuerySnapshot> streamStoreChatsList() {
-    try {
-      return Model.db
-          .collectionGroup('customers')
-          .where('contact_number', isEqualTo: cachedLocalUser.getID())
-          .orderBy('created_at', descending: true)
-          .snapshots();
-    } catch (err) {
-      Analytics.sendAnalyticsEvent({
-        'type': 'store_chat_get_error',
-        'error': err.toString()
-      }, 'chats');
-      throw err;
-    }
   }
 }

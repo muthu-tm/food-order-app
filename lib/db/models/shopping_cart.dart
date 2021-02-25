@@ -41,7 +41,7 @@ class ShoppingCart {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return getCollectionRef().document(uuid);
+    return getCollectionRef().doc(uuid);
   }
 
   String getID() {
@@ -54,12 +54,12 @@ class ShoppingCart {
 
   Future<void> create() async {
     try {
-      DocumentReference docRef = getCollectionRef().document();
+      DocumentReference docRef = getCollectionRef().doc();
       this.createdAt = DateTime.now();
       this.updatedAt = DateTime.now();
-      this.uuid = docRef.documentID;
+      this.uuid = docRef.id;
 
-      await docRef.setData(this.toJson());
+      await docRef.set(this.toJson());
     } catch (err) {
       Analytics.reportError({
         'type': 'cart_create_error',
@@ -80,15 +80,15 @@ class ShoppingCart {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .where('variant_id', isEqualTo: varient)
-          .getDocuments();
+          .get();
 
-      if (snap.documents.isNotEmpty) {
-        ShoppingCart _sc = ShoppingCart.fromJson(snap.documents.first.data);
+      if (snap.docs.isNotEmpty) {
+        ShoppingCart _sc = ShoppingCart.fromJson(snap.docs.first.data());
         if (isAdd)
-          await snap.documents.first.reference.updateData(
+          await snap.docs.first.reference.update(
               {'quantity': _sc.quantity + 1.0, 'updated_at': DateTime.now()});
         else
-          await snap.documents.first.reference.updateData(
+          await snap.docs.first.reference.update(
               {'quantity': _sc.quantity - 1.0, 'updated_at': DateTime.now()});
       }
     } catch (err) {
@@ -104,15 +104,15 @@ class ShoppingCart {
 
   Future<void> updateCartQuantityByID(bool isAdd, String id) async {
     try {
-      DocumentSnapshot snap = await getCollectionRef().document(id).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(id).get();
 
       if (snap.exists) {
-        ShoppingCart _sc = ShoppingCart.fromJson(snap.data);
+        ShoppingCart _sc = ShoppingCart.fromJson(snap.data());
         if (isAdd)
-          await snap.reference.updateData(
+          await snap.reference.update(
               {'quantity': _sc.quantity + 1.0, 'updated_at': DateTime.now()});
         else
-          await snap.reference.updateData(
+          await snap.reference.update(
               {'quantity': _sc.quantity - 1.0, 'updated_at': DateTime.now()});
       }
     } catch (err) {
@@ -131,15 +131,15 @@ class ShoppingCart {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .where('variant_id', isEqualTo: varient)
-          .getDocuments();
+          .get();
 
-      if (existSnap.documents.isNotEmpty) return false;
+      if (existSnap.docs.isNotEmpty) return false;
 
-      DocumentSnapshot snap = await getCollectionRef().document(id).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(id).get();
 
       if (snap.exists)
         await snap.reference
-            .updateData({'in_wishlist': false, 'updated_at': DateTime.now()});
+            .update({'in_wishlist': false, 'updated_at': DateTime.now()});
       return true;
     } catch (err) {
       Analytics.reportError(
@@ -157,15 +157,15 @@ class ShoppingCart {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .where('variant_id', isEqualTo: varient)
-          .getDocuments();
+          .get();
 
-      if (existSnap.documents.isNotEmpty) return false;
+      if (existSnap.docs.isNotEmpty) return false;
 
-      DocumentSnapshot snap = await getCollectionRef().document(id).get();
+      DocumentSnapshot snap = await getCollectionRef().doc(id).get();
 
       if (snap.exists)
         await snap.reference
-            .updateData({'in_wishlist': true, 'updated_at': DateTime.now()});
+            .update({'in_wishlist': true, 'updated_at': DateTime.now()});
 
       return true;
     } catch (err) {
@@ -184,10 +184,9 @@ class ShoppingCart {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .where('variant_id', isEqualTo: varient)
-          .getDocuments();
+          .get();
 
-      if (snap.documents.isNotEmpty)
-        await snap.documents.first.reference.delete();
+      if (snap.docs.isNotEmpty) await snap.docs.first.reference.delete();
     } catch (err) {
       Analytics.reportError({
         'type': 'cart_update_error',
@@ -201,13 +200,12 @@ class ShoppingCart {
 
   Future<void> clearCart() async {
     try {
-      QuerySnapshot snap = await getCollectionRef()
-          .where('in_wishlist', isEqualTo: false)
-          .getDocuments();
+      QuerySnapshot snap =
+          await getCollectionRef().where('in_wishlist', isEqualTo: false).get();
 
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          await snap.documents[i].reference.delete();
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          await snap.docs[i].reference.delete();
         }
       }
     } catch (err) {
@@ -220,11 +218,11 @@ class ShoppingCart {
       QuerySnapshot snap = await getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
           .where('in_wishlist', isEqualTo: false)
-          .getDocuments();
+          .get();
 
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          await snap.documents[i].reference.delete();
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          await snap.docs[i].reference.delete();
         }
       }
     } catch (err) {
@@ -238,11 +236,11 @@ class ShoppingCart {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .where('in_wishlist', isEqualTo: false)
-          .getDocuments();
+          .get();
 
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          await snap.documents[i].reference.delete();
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          await snap.docs[i].reference.delete();
         }
       }
     } catch (err) {
@@ -286,12 +284,28 @@ class ShoppingCart {
     try {
       QuerySnapshot snap = await getCollectionRef()
           .where('store_uuid', isEqualTo: storeID)
-          .getDocuments();
+          .get();
 
       List<ShoppingCart> cart = [];
 
-      for (var item in snap.documents) {
-        cart.add(ShoppingCart.fromJson(item.data));
+      for (var item in snap.docs) {
+        cart.add(ShoppingCart.fromJson(item.data()));
+      }
+
+      return cart;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  Future<List<ShoppingCart>> fetchForUser() async {
+    try {
+      QuerySnapshot snap = await getCollectionRef().get();
+
+      List<ShoppingCart> cart = [];
+
+      for (var item in snap.docs) {
+        cart.add(ShoppingCart.fromJson(item.data()));
       }
 
       return cart;
@@ -308,12 +322,12 @@ class ShoppingCart {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .where('variant_id', isEqualTo: varient)
-          .getDocuments();
+          .get();
 
-      if (snap.documents.isEmpty)
+      if (snap.docs.isEmpty)
         return null;
       else
-        return ShoppingCart.fromJson(snap.documents.first.data);
+        return ShoppingCart.fromJson(snap.docs.first.data());
     } catch (err) {
       throw err;
     }
@@ -339,12 +353,12 @@ class ShoppingCart {
           .where('store_uuid', isEqualTo: storeID)
           .where('product_uuid', isEqualTo: productID)
           .where('variant_id', isEqualTo: varient)
-          .getDocuments();
+          .get();
 
       List<ShoppingCart> _sc = [];
 
-      snap.documents.forEach((element) {
-        _sc.add(ShoppingCart.fromJson(element.data));
+      snap.docs.forEach((element) {
+        _sc.add(ShoppingCart.fromJson(element.data()));
       });
       return _sc;
     } catch (err) {

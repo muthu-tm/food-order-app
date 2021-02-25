@@ -63,35 +63,35 @@ class UserActivityTracker {
       if (this.type == 2) {
         QuerySnapshot _qSnap = await getCollectionRef(cachedLocalUser.getID())
             .where('product_uuid', isEqualTo: this.productID)
-            .getDocuments();
-        if (_qSnap.documents.isNotEmpty) {
-          await _qSnap.documents.first.reference.updateData(
-              {'updated_at': DateTime.now().millisecondsSinceEpoch});
+            .get();
+        if (_qSnap.docs.isNotEmpty) {
+          await _qSnap.docs.first.reference
+              .update({'updated_at': DateTime.now().millisecondsSinceEpoch});
           return;
         }
       } else if (this.type == 1) {
         QuerySnapshot _qSnap = await getCollectionRef(cachedLocalUser.getID())
             .where('store_uuid', isEqualTo: this.storeID)
-            .getDocuments();
-        if (_qSnap.documents.isNotEmpty) {
-          await _qSnap.documents.first.reference.updateData(
-              {'updated_at': DateTime.now().millisecondsSinceEpoch});
+            .get();
+        if (_qSnap.docs.isNotEmpty) {
+          await _qSnap.docs.first.reference
+              .update({'updated_at': DateTime.now().millisecondsSinceEpoch});
           return;
         }
       } else if (this.keywords != null) {
         QuerySnapshot _qSnap = await getCollectionRef(cachedLocalUser.getID())
             .where('keywords', isEqualTo: this.keywords)
-            .getDocuments();
-        if (_qSnap.documents.isNotEmpty) {
-          await _qSnap.documents.first.reference.updateData(
-              {'updated_at': DateTime.now().millisecondsSinceEpoch});
+            .get();
+        if (_qSnap.docs.isNotEmpty) {
+          await _qSnap.docs.first.reference
+              .update({'updated_at': DateTime.now().millisecondsSinceEpoch});
           return;
         }
       }
 
       await getCollectionRef(cachedLocalUser.getID())
-          .document(getID())
-          .setData(this.toJson());
+          .doc(getID())
+          .set(this.toJson());
     } catch (err) {
       print(err);
     }
@@ -101,12 +101,12 @@ class UserActivityTracker {
     try {
       QuerySnapshot _qSnap = await getCollectionRef(cachedLocalUser.getID())
           .orderBy('updated_at', descending: true)
-          .getDocuments();
+          .get();
 
       List<UserActivityTracker> _activities = [];
-      for (var i = 0; i < _qSnap.documents.length; i++) {
+      for (var i = 0; i < _qSnap.docs.length; i++) {
         UserActivityTracker _ua =
-            UserActivityTracker.fromJson(_qSnap.documents[i].data);
+            UserActivityTracker.fromJson(_qSnap.docs[i].data());
         _activities.add(_ua);
       }
 
@@ -132,12 +132,12 @@ class UserActivityTracker {
       QuerySnapshot _qSnap = await getCollectionRef(cachedLocalUser.getID())
           .where('type', whereIn: ids)
           .orderBy('updated_at', descending: true)
-          .getDocuments();
+          .get();
 
       List<UserActivityTracker> _activities = [];
-      for (var i = 0; i < _qSnap.documents.length; i++) {
+      for (var i = 0; i < _qSnap.docs.length; i++) {
         UserActivityTracker _ua =
-            UserActivityTracker.fromJson(_qSnap.documents[i].data);
+            UserActivityTracker.fromJson(_qSnap.docs[i].data());
         _activities.add(_ua);
       }
 
@@ -154,12 +154,12 @@ class UserActivityTracker {
           .where('store_uuid', isEqualTo: storeID)
           .where('type', whereIn: ids)
           .orderBy('updated_at', descending: true)
-          .getDocuments();
+          .get();
 
       List<UserActivityTracker> _activities = [];
-      for (var i = 0; i < _qSnap.documents.length; i++) {
+      for (var i = 0; i < _qSnap.docs.length; i++) {
         UserActivityTracker _ua =
-            UserActivityTracker.fromJson(_qSnap.documents[i].data);
+            UserActivityTracker.fromJson(_qSnap.docs[i].data());
         _activities.add(_ua);
       }
 
@@ -173,10 +173,10 @@ class UserActivityTracker {
     try {
       QuerySnapshot _qSnap = await getCollectionRef(cachedLocalUser.getID())
           .where('type', whereIn: ids)
-          .getDocuments();
+          .get();
 
-      for (var i = 0; i < _qSnap.documents.length; i++) {
-        await _qSnap.documents[i].reference.delete();
+      for (var i = 0; i < _qSnap.docs.length; i++) {
+        await _qSnap.docs[i].reference.delete();
       }
     } catch (err) {
       throw err;

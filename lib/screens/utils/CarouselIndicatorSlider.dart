@@ -4,9 +4,11 @@ import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:flutter/material.dart';
 
 class CarouselIndicatorSlider extends StatefulWidget {
-  CarouselIndicatorSlider(this.imgList, [this.height = 180]);
+  CarouselIndicatorSlider(this.imgList,
+      [this.height = 180, this.bg = Colors.transparent]);
   final double height;
   final List<String> imgList;
+  final Color bg;
   @override
   State<StatefulWidget> createState() {
     return _CarouselIndicatorSliderState(imgList: imgList);
@@ -23,6 +25,11 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
   List<Widget> getSliders() {
     return imgList
         .map((item) => Container(
+              padding: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: widget.bg,
+                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              ),
               child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(5.0)),
                   child: CachedNetworkImage(
@@ -61,9 +68,10 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
       CarouselSlider(
         items: getSliders(),
         options: CarouselOptions(
+            viewportFraction: 1.0,
             height: widget.height,
-            autoPlay: imgList.length > 1 ? true : false,
-            enlargeCenterPage: imgList.length > 1 ? true : false,
+            autoPlay: false,
+            enlargeCenterPage: false,
             enableInfiniteScroll: imgList.length <= 1 ? false : true,
             aspectRatio: 2.0,
             onPageChanged: (index, reason) {

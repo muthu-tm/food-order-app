@@ -46,6 +46,9 @@ Products _$ProductsFromJson(Map<String, dynamic> json) {
             ?.map((e) => e == null ? null : e as String)
             ?.toList() ??
         []
+    ..geoPoint = json['geo_point'] == null
+        ? null
+        : GeoPointData.fromJson(json['geo_point'] as Map<String, dynamic>)
     ..createdAt = json['created_at'] == null
         ? null : (json['created_at'] is Timestamp) ? DateTime.fromMillisecondsSinceEpoch(
             _getMillisecondsSinceEpoch(json['created_at'] as Timestamp))
@@ -98,6 +101,7 @@ Map<String, dynamic> _$ProductsToJson(Products instance) => <String, dynamic>{
       'is_deliverable': instance.isDeliverable ?? true,
       'is_popular': instance.isPopular ?? false,
       'keywords': instance.keywords == null ? [] : instance.keywords,
+      'geo_point': instance.geoPoint?.toJson(),
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

@@ -13,7 +13,8 @@ class DateUtils {
     DateFormat dateFormat = new DateFormat.Hm();
     DateTime now = DateTime.now();
     DateTime formattedTime = dateFormat.parse(time);
-    return new DateTime(now.year, now.month, now.day, formattedTime.hour, formattedTime.minute);
+    return new DateTime(
+        now.year, now.month, now.day, formattedTime.hour, formattedTime.minute);
   }
 
   static String getFormattedDateFromEpoch(int epoch) {
@@ -42,13 +43,13 @@ class DateUtils {
     );
 
     if (parsedTime.period == DayPeriod.am)
-      return parsedTime.hourOfPeriod.toString() +
-          "." +
+      return parsedTime.hourOfPeriod.toString().padLeft(2, '0') +
+          ": " +
           parsedTime.minute.toString().padLeft(2, '0') +
           " AM";
     else
-      return parsedTime.hourOfPeriod.toString() +
-          "." +
+      return parsedTime.hourOfPeriod.toString().padLeft(2, '0') +
+          ": " +
           parsedTime.minute.toString().padLeft(2, '0') +
           " PM";
   }
@@ -58,15 +59,15 @@ class DateUtils {
     return (int.parse(val[0]) * 60) + int.parse(val[1]);
   }
 
-  static getCurrentTimeInMinutes(){
+  static getCurrentTimeInMinutes() {
     return (DateTime.now().hour * 60) + DateTime.now().minute;
   }
 
   static String durationInMinutesToHoursAndMinutes(int minutes) {
-    var d = Duration(minutes:minutes);
+    var d = Duration(minutes: minutes);
     List<String> parts = d.toString().split(':');
     return '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}';
-}
+  }
 
   static String formatDateTime(DateTime dateTime) {
     if (dateTime == null) {

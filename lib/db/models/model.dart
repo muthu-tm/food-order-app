@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Model {
-  static final Firestore db = Firestore.instance;
+  static final FirebaseFirestore db = FirebaseFirestore.instance;
 
   CollectionReference getCollectionRef() {
     throw new Exception("Should be implemented by subclass");
@@ -12,30 +12,30 @@ class Model {
   }
 
   DocumentReference getDocumentRef(id) {
-    return this.getCollectionRef().document(id);
+    return this.getCollectionRef().doc(id);
   }
 
   add(data) async {
-    return await this.getCollectionRef().document(this.getID()).setData(data);
+    return await this.getCollectionRef().doc(this.getID()).set(data);
   }
 
   upsert(data, createdAt) async {
     data['created_at'] = createdAt;
     data['updated_at'] = DateTime.now();
 
-    return await this.getCollectionRef().document(this.getID()).setData(data);
+    return await this.getCollectionRef().doc(this.getID()).set(data);
   }
 
   update(Map<String, dynamic> data) async {
     data['updated_at'] = DateTime.now();
-    await this.getDocumentRef(this.getID()).updateData(data);
+    await this.getDocumentRef(this.getID()).update(data);
 
     return data;
   }
 
   updateByID(Map<String, dynamic> data, String docID) async {
     data['updated_at'] = DateTime.now();
-    await this.getDocumentRef(docID).updateData(data);
+    await this.getDocumentRef(docID).update(data);
 
     return data;
   }
@@ -60,7 +60,7 @@ class Model {
       docId = this.getID();
     }
 
-    await this.getDocumentRef(docId).updateData(fields);
+    await this.getDocumentRef(docId).update(fields);
     return data;
   }
 
@@ -82,7 +82,7 @@ class Model {
 
     DocumentSnapshot _snap = await this.getDocumentRef(id).get();
     if (_snap.exists) {
-      return _snap.data;
+      return _snap.data();
     }
 
     return null;

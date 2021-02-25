@@ -17,11 +17,10 @@ class Uploader {
         imageFile = File(localFilePath);
 
       if (imageFile != null) {
-        StorageReference reference =
-            FirebaseStorage.instance.ref().child(filePath);
-        StorageUploadTask uploadTask = reference.putFile(imageFile);
-        StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
-        return await storageTaskSnapshot.ref.getDownloadURL();
+        UploadTask uploadTask =
+            FirebaseStorage.instance.ref().child(filePath).putFile(imageFile);
+        TaskSnapshot snapshot = await uploadTask;
+        return await snapshot.ref.getDownloadURL();
       }
 
       return "";
@@ -70,9 +69,9 @@ class Uploader {
   Future<void> uploadImage(int type, String fileDir, File fileToUpload,
       String fileName, int id, Function onUploaded) async {
     String filePath = '$fileDir/$fileName.png';
-    StorageReference reference = FirebaseStorage.instance.ref().child(filePath);
-    StorageUploadTask uploadTask = reference.putFile(fileToUpload);
-    StorageTaskSnapshot storageTaskSnapshot = await uploadTask.onComplete;
+    UploadTask uploadTask =
+        FirebaseStorage.instance.ref().child(filePath).putFile(fileToUpload);
+    TaskSnapshot storageTaskSnapshot = await uploadTask;
 
     try {
       var profilePathUrl = await storageTaskSnapshot.ref.getDownloadURL();

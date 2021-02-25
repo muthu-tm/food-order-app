@@ -30,15 +30,14 @@ class ChipChopConfig {
   }
 
   Future<ChipChopConfig> getConfigByPlatform(String platform) async {
-    List<DocumentSnapshot> docSnapshot = (await getCollectionRef()
-            .where('platform', isEqualTo: platform)
-            .getDocuments())
-        .documents;
+    List<DocumentSnapshot> docSnapshot =
+        (await getCollectionRef().where('platform', isEqualTo: platform).get())
+            .docs;
 
     if (docSnapshot.isEmpty) {
       return null;
     }
-    ChipChopConfig conf = ChipChopConfig.fromJson(docSnapshot.first.data);
+    ChipChopConfig conf = ChipChopConfig.fromJson(docSnapshot.first.data());
 
     return conf;
   }

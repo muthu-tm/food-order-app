@@ -252,8 +252,8 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                                     ),
                                     onTap: () async {
                                       CustomDialogs.actionWaiting(context);
-                                      bool res = await StorageUtils()
-                                          .removeFile(imagePaths[index]);
+                                      bool res = await StorageUtils.removeFile(
+                                          imagePaths[index]);
                                       Navigator.of(context).pop();
                                       if (res)
                                         setState(() {

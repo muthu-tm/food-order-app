@@ -70,7 +70,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
         Widget child;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.length == 0) {
+          if (snapshot.data.docs.length == 0) {
             child = Padding(
               padding: EdgeInsets.all(5.0),
               child: EmptyCartWidget(),
@@ -79,8 +79,8 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
             Map<String, List<ShoppingCart>> cartItems = {};
             Map<String, String> cartStores = {};
 
-            snapshot.data.documents.forEach((element) {
-              ShoppingCart _sc = ShoppingCart.fromJson(element.data);
+            snapshot.data.docs.forEach((element) {
+              ShoppingCart _sc = ShoppingCart.fromJson(element.data());
               cartItems.update(_sc.storeID, (value) {
                 value.add(_sc);
                 return value;
@@ -101,8 +101,7 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
                     height: 0,
                   ),
                   itemBuilder: (BuildContext context, int index) {
-                    String storeID =
-                        cartStores.entries.elementAt(index).key;
+                    String storeID = cartStores.entries.elementAt(index).key;
                     String storeName =
                         cartStores.entries.elementAt(index).value;
                     return StoreCartItems(
@@ -137,14 +136,14 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
         Widget child;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.length == 0) {
+          if (snapshot.data.docs.length == 0) {
             child = Container();
           } else {
             Map<String, List<ShoppingCart>> wlItems = {};
             Map<String, String> wlStores = {};
 
-            snapshot.data.documents.forEach((element) {
-              ShoppingCart _sc = ShoppingCart.fromJson(element.data);
+            snapshot.data.docs.forEach((element) {
+              ShoppingCart _sc = ShoppingCart.fromJson(element.data());
               wlItems.update(_sc.storeID, (value) {
                 value.add(_sc);
                 return value;
@@ -215,5 +214,4 @@ class _ShoppingCartScreenState extends State<ShoppingCartScreen> {
       },
     );
   }
-
 }

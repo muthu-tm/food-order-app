@@ -36,7 +36,7 @@ class _CartCounterState extends State<CartCounter> {
           Widget child;
 
           if (snapshot.hasData) {
-            if (snapshot.data.documents.isEmpty) {
+            if (snapshot.data.docs.isEmpty) {
               child = Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -124,8 +124,10 @@ class _CartCounterState extends State<CartCounter> {
             } else {
               bool isWishlist = false;
               double quantity = 0;
-              snapshot.data.documents.forEach((element) {
-                ShoppingCart sc = ShoppingCart.fromJson(element.data);
+              snapshot.data.docs.forEach((element) {
+                ShoppingCart sc = ShoppingCart.fromJson(
+                  element.data(),
+                );
 
                 if (sc.variantID == widget.variantID) {
                   if (sc.inWishlist) {

@@ -2,7 +2,7 @@ import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_preferences.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:chipchop_buyer/services/utils/hash_generator.dart';
-import 'package:chipchop_buyer/db/models/user.dart';
+import 'package:chipchop_buyer/db/models/user.dart' as u;
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/fcm/user_token.dart';
 import 'package:chipchop_buyer/services/utils/response_utils.dart';
@@ -13,7 +13,7 @@ class AuthController {
   dynamic registerWithMobileNumber(int mobileNumber, int countryCode,
       String passkey, String firstName, String lastName, String uid) async {
     try {
-      User user = User();
+      u.User user = u.User();
       String hKey = HashGenerator.hmacGenerator(
           passkey, countryCode.toString() + mobileNumber.toString());
       user.password = hKey;
@@ -55,8 +55,8 @@ class AuthController {
 
   dynamic signInWithMobileNumber(String userID) async {
     try {
-      Map<String, dynamic> _userData = await User().getByID(userID);
-      User user = User.fromJson(_userData);
+      Map<String, dynamic> _userData = await u.User().getByID(userID);
+      u.User user = u.User.fromJson(_userData);
 
       var platformData = await UserFCM().getPlatformDetails();
 
@@ -96,6 +96,7 @@ class AuthController {
       await _auth.signOut();
       final SharedPreferences prefs = await _prefs;
       await prefs.remove("mobile_number");
+      await prefs.setBool("user_session_live", false);
 
       return CustomResponse.getSuccesReponse("Successfully signed out");
     } catch (err) {

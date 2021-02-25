@@ -39,12 +39,12 @@ class UserShoppingDetails {
     try {
       QuerySnapshot _qSnap = await getCollectionRef(cachedLocalUser.getID())
           .orderBy('quantity', descending: true)
-          .getDocuments();
+          .get();
 
       List<UserShoppingDetails> shoppDetails = [];
-      for (var i = 0; i < _qSnap.documents.length; i++) {
+      for (var i = 0; i < _qSnap.docs.length; i++) {
         UserShoppingDetails _sd =
-            UserShoppingDetails.fromJson(_qSnap.documents[i].data);
+            UserShoppingDetails.fromJson(_qSnap.docs[i].data());
         shoppDetails.add(_sd);
       }
 

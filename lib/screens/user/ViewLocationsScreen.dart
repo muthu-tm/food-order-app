@@ -54,7 +54,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           Widget child;
 
           if (snapshot.hasData) {
-            if (snapshot.data.documents.length == 0) {
+            if (snapshot.data.docs.length == 0) {
               child = Container(
                 child: Center(
                   child: Column(
@@ -87,10 +87,11 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
                       ListView.builder(
                         shrinkWrap: true,
                         primary: false,
-                        itemCount: snapshot.data.documents.length,
+                        itemCount: snapshot.data.docs.length,
                         itemBuilder: (BuildContext context, int index) {
                           UserLocations loc = UserLocations.fromJson(
-                              snapshot.data.documents[index].data);
+                            snapshot.data.docs[index].data(),
+                          );
 
                           return Card(
                             elevation: 5,

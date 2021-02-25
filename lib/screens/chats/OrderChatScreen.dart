@@ -6,7 +6,9 @@ import 'package:camera/camera.dart';
 import 'package:chipchop_buyer/db/models/chat_temp.dart';
 import 'package:chipchop_buyer/screens/app/TakePicturePage.dart';
 import 'package:chipchop_buyer/screens/utils/ImageView.dart';
+import 'package:chipchop_buyer/screens/utils/PopupMenuContainer.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
+import 'package:chipchop_buyer/services/storage/storage_utils.dart';
 import 'package:chipchop_buyer/services/utils/DateUtils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -114,19 +116,19 @@ class OrderChatScreenState extends State<OrderChatScreen> {
     }
   }
 
-  Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data['sender_type'] == 0) {
+  Widget buildItem(int index, ChatTemplate chat) {
+    if (chat.senderType == 0) {
       // Right (my message)
       return Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Row(
             children: <Widget>[
-              document.data['msg_type'] == 0
+              chat.messageType == 0
                   // Text
                   ? Container(
                       child: Text(
-                        document.data['content'],
+                        chat.content,
                         style: TextStyle(color: CustomColors.white),
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
@@ -136,58 +138,85 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                           borderRadius: BorderRadius.circular(20.0)),
                       margin: EdgeInsets.only(bottom: 3.0),
                     )
-                  : Container(
-                      child: FlatButton(
-                        child: Material(
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) => Container(
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    CustomColors.grey),
-                              ),
-                              width: 200.0,
-                              height: 200.0,
-                              padding: EdgeInsets.all(70.0),
-                              decoration: BoxDecoration(
-                                color: CustomColors.grey,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                ),
-                              ),
+                  : PopupMenuContainer<String>(
+                      child: Material(
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => Container(
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  CustomColors.grey),
                             ),
-                            errorWidget: (context, url, error) => Material(
-                              child: Image.asset(
-                                'images/img_not_available.jpeg',
-                                width: 200.0,
-                                height: 200.0,
-                                fit: BoxFit.cover,
-                              ),
+                            width: 200.0,
+                            height: 200.0,
+                            padding: EdgeInsets.all(70.0),
+                            decoration: BoxDecoration(
+                              color: CustomColors.grey,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8.0),
                               ),
-                              clipBehavior: Clip.hardEdge,
                             ),
-                            imageUrl: document.data['content'],
-                            width: 200.0,
-                            height: 200.0,
-                            fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                          clipBehavior: Clip.hardEdge,
+                          errorWidget: (context, url, error) => Material(
+                            child: Image.asset(
+                              'images/img_not_available.jpeg',
+                              width: 200.0,
+                              height: 200.0,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                            clipBehavior: Clip.hardEdge,
+                          ),
+                          imageUrl: chat.content,
+                          width: 200.0,
+                          height: 200.0,
+                          fit: BoxFit.cover,
                         ),
-                        onPressed: () {
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        clipBehavior: Clip.hardEdge,
+                      ),
+                      items: [
+                        PopupMenuItem(value: 'delete', child: Text('Delete')),
+                        PopupMenuItem(value: 'view', child: Text('View'))
+                      ],
+                      onItemSelected: (value) async {
+                        if (value == 'delete') {
+                          bool val = await showDialog(
+                              context: context,
+                              child: AlertDialog(
+                                title: Text('Delete image'),
+                                content: Text(
+                                    'Are you sure you want to delete the image?'),
+                                actions: [
+                                  FlatButton(
+                                      child: Text('NO'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      }),
+                                  FlatButton(
+                                      child: Text('YES'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      }),
+                                ],
+                              ));
+
+                          if (val) {
+                            await StorageUtils.removeFile(chat.content);
+                            await chat.removeOrderChat(widget.orderUUID);
+                          }
+                        } else if (value == 'view') {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageView(
-                                url: document.data['content'],
+                                url: chat.content,
                               ),
                             ),
                           );
-                        },
-                        padding: EdgeInsets.all(0),
-                      ),
-                      margin: EdgeInsets.only(bottom: 3.0),
+                        }
+                      },
                     )
             ],
             mainAxisAlignment: MainAxisAlignment.end,
@@ -197,12 +226,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
           isLastMessageRight(index)
               ? Container(
                   child: Text(
-                    DateUtils.formatDateTime(
-                      DateTime.fromMillisecondsSinceEpoch(
-                        (document.data['created_at'] as Timestamp)
-                            .millisecondsSinceEpoch,
-                      ),
-                    ),
+                    DateUtils.formatDateTime(chat.createdAt),
                     style: TextStyle(
                         color: CustomColors.blue,
                         fontSize: 12.0,
@@ -219,10 +243,10 @@ class OrderChatScreenState extends State<OrderChatScreen> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              document.data['msg_type'] == 0
+              chat.messageType == 0
                   ? Container(
                       child: Text(
-                        document.data['content'],
+                        chat.content,
                         style: TextStyle(color: Colors.white),
                       ),
                       padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
@@ -263,7 +287,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                               ),
                               clipBehavior: Clip.hardEdge,
                             ),
-                            imageUrl: document.data['content'],
+                            imageUrl: chat.content,
                             width: 200.0,
                             height: 200.0,
                             fit: BoxFit.cover,
@@ -276,7 +300,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ImageView(
-                                url: document.data['content'],
+                                url: chat.content,
                               ),
                             ),
                           );
@@ -292,12 +316,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
           isLastMessageLeft(index)
               ? Container(
                   child: Text(
-                    DateUtils.formatDateTime(
-                      DateTime.fromMillisecondsSinceEpoch(
-                        (document.data['created_at'] as Timestamp)
-                            .millisecondsSinceEpoch,
-                      ),
-                    ),
+                    DateUtils.formatDateTime(chat.createdAt),
                     style: TextStyle(
                         color: CustomColors.blue,
                         fontSize: 12.0,
@@ -315,8 +334,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   bool isLastMessageLeft(int index) {
     if ((index > 0 &&
             listMessage != null &&
-            listMessage[index - 1].data['sender_type'] == 0 &&
-            listMessage[index - 1].data['from'] == cachedLocalUser.getID()) ||
+            listMessage[index - 1].data()['sender_type'] == 0 &&
+            listMessage[index - 1].data()['from'] == cachedLocalUser.getID()) ||
         index == 0) {
       return true;
     } else {
@@ -327,8 +346,8 @@ class OrderChatScreenState extends State<OrderChatScreen> {
   bool isLastMessageRight(int index) {
     if ((index > 0 &&
             listMessage != null &&
-            listMessage[index - 1].data['sender_type'] == 1 &&
-            listMessage[index - 1].data['from'] != cachedLocalUser.getID()) ||
+            listMessage[index - 1].data()['sender_type'] == 1 &&
+            listMessage[index - 1].data()['from'] != cachedLocalUser.getID()) ||
         index == 0) {
       return true;
     } else {
@@ -494,7 +513,7 @@ class OrderChatScreenState extends State<OrderChatScreen> {
               ),
             );
           } else {
-            if (snapshot.data.documents.isEmpty) {
+            if (snapshot.data.docs.isEmpty) {
               return Container(
                   alignment: AlignmentDirectional.center,
                   height: 200,
@@ -505,16 +524,18 @@ class OrderChatScreenState extends State<OrderChatScreen> {
                   ));
             }
             listMessage.clear();
-            listMessage.addAll(snapshot.data.documents);
+            listMessage.addAll(snapshot.data.docs);
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Expanded(
                   child: ListView.builder(
                     padding: EdgeInsets.all(10.0),
-                    itemBuilder: (context, index) =>
-                        buildItem(index, snapshot.data.documents[index]),
-                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (context, index) => buildItem(
+                        index,
+                        ChatTemplate.fromJson(
+                            snapshot.data.docs[index].data())),
+                    itemCount: snapshot.data.docs.length,
                     reverse: true,
                     shrinkWrap: true,
                     controller: listScrollController,

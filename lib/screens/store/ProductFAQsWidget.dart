@@ -53,7 +53,7 @@ class ProductFAQsWidget extends StatelessWidget {
 
   getQuestionDialog(BuildContext context) {
     _feedbackController.text = "";
-    
+
     return showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -149,15 +149,16 @@ class ProductFAQsWidget extends StatelessWidget {
         Widget children;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.isNotEmpty) {
+          if (snapshot.data.docs.isNotEmpty) {
             children = ListView.builder(
               scrollDirection: Axis.vertical,
               primary: false,
               shrinkWrap: true,
-              itemCount: snapshot.data.documents.length,
+              itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
-                ProductFaqs _faq =
-                    ProductFaqs.fromJson(snapshot.data.documents[index].data);
+                ProductFaqs _faq = ProductFaqs.fromJson(
+                  snapshot.data.docs[index].data(),
+                );
                 return Container(
                   padding: EdgeInsets.all(5),
                   child: Column(

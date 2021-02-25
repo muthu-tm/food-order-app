@@ -101,7 +101,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
         Widget child;
 
         if (snapshot.hasData) {
-          Order order = Order.fromJson(snapshot.data.data);
+          Order order = Order.fromJson(snapshot.data.data());
 
           child = Column(
             mainAxisSize: MainAxisSize.min,

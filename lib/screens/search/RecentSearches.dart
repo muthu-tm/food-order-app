@@ -14,7 +14,7 @@ class UserRecentSearches extends StatelessWidget {
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           Widget child;
           if (snapshot.hasData) {
-            if (snapshot.data.documents.isNotEmpty) {
+            if (snapshot.data.docs.isNotEmpty) {
               child = Column(
                 children: [
                   ListTile(
@@ -55,10 +55,11 @@ class UserRecentSearches extends StatelessWidget {
                       alignment: WrapAlignment.start,
                       runAlignment: WrapAlignment.start,
                       spacing: 10.0,
-                      children: List<Widget>.generate(
-                          snapshot.data.documents.length, (int index) {
+                      children: List<Widget>.generate(snapshot.data.docs.length,
+                          (int index) {
                         UserActivityTracker _ua = UserActivityTracker.fromJson(
-                            snapshot.data.documents[index].data);
+                          snapshot.data.docs[index].data(),
+                        );
                         return ActionChip(
                             elevation: 1.0,
                             backgroundColor: CustomColors.grey,

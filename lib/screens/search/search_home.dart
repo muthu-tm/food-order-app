@@ -1,9 +1,10 @@
 import 'package:chipchop_buyer/db/models/product_categories.dart';
-import 'package:chipchop_buyer/db/models/store.dart';
-import 'package:chipchop_buyer/screens/search/ProductsListViewScreen.dart';
+import 'package:chipchop_buyer/db/models/product_sub_categories.dart';
+import 'package:chipchop_buyer/screens/search/CategoriesSearchScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/stores_in_map.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
+import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
@@ -22,133 +23,136 @@ class _SearchHomeState extends State<SearchHome> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: CustomColors.lightGrey,
-        alignment: Alignment.center,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-              child: SearchBarWidget(),
+      color: CustomColors.lightGrey,
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+            child: SearchBarWidget(),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              "OR",
+              style: TextStyle(color: CustomColors.grey, fontSize: 18),
             ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                "OR",
-                style: TextStyle(color: CustomColors.grey, fontSize: 18),
+          ),
+          InkWell(
+            onTap: () async {
+              if (cachedLocalUser.primaryLocation != null) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StoresInMap(),
+                    settings: RouteSettings(name: '/search/map'),
+                  ),
+                );
+              } else {
+                _scaffoldKey.currentState.showSnackBar(
+                  CustomSnackBar.errorSnackBar(
+                    AppLocalizations.of(context).translate('set_location'),
+                    2,
+                  ),
+                );
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 2, 10, 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.mapMarkedAlt,
+                    size: 30,
+                    color: CustomColors.positiveGreen,
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
+                    child: Text(
+                      "NearBy Stores in Map",
+                      style: TextStyle(color: CustomColors.black, fontSize: 14),
+                    ),
+                  ),
+                ],
               ),
             ),
-            InkWell(
-              onTap: () async {
-                if (cachedLocalUser.primaryLocation != null) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => StoresInMap(),
-                      settings: RouteSettings(name: '/search/map'),
-                    ),
-                  );
-                } else {
-                  _scaffoldKey.currentState.showSnackBar(
-                    CustomSnackBar.errorSnackBar(
-                      AppLocalizations.of(context).translate('set_location'),
-                      2,
-                    ),
-                  );
-                }
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 2, 10, 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.mapMarkedAlt,
-                      size: 30,
-                      color: CustomColors.positiveGreen,
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 15),
-                      child: Text(
-                        "NearBy Stores in Map",
-                        style:
-                            TextStyle(color: CustomColors.black, fontSize: 14),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          Divider(
+              indent: 10.0,
+              color: CustomColors.alertRed,
+              height: 0,
+              thickness: 1.0),
+          ListTile(
+            title: Text(
+              "Top Selling Categories",
+              style: TextStyle(
+                  color: CustomColors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17),
             ),
-            Divider(
-                indent: 10.0,
-                color: CustomColors.alertRed,
-                height: 0,
-                thickness: 1.0),
-            ListTile(
-              title: Text(
-                "Top Selling Categories",
-                style: TextStyle(
-                    color: CustomColors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17),
-              ),
-            ),
-            getDailyEssentials(context)
-          ],
-        ),
+          ),
+          getDailyEssentials(context)
+        ],
+      ),
     );
   }
 
   Widget getDailyEssentials(BuildContext context) {
     return FutureBuilder(
-        future: ProductCategories().getSearchables(),
-        builder: (context, AsyncSnapshot<List<ProductCategories>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.isEmpty) {
-              return Container();
-            } else {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Wrap(
-                  alignment: WrapAlignment.start,
-                  runAlignment: WrapAlignment.spaceEvenly,
-                  spacing: 6.0,
-                  children:
-                      List<Widget>.generate(snapshot.data.length, (int index) {
-                    return ActionChip(
-                        elevation: 6.0,
-                        backgroundColor: CustomColors.green,
-                        label: Text(
-                          snapshot.data[index].name,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onPressed: () async {
-                          List<Store> stores = await Store()
-                              .streamFavStores(cachedLocalUser.primaryLocation);
-
-                          List<String> storeIDs = [];
-                          for (var i = 0; i < stores.length; i++) {
-                            storeIDs.add(stores[i].uuid);
-                          }
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductsListViewScreen(
-                                  storeIDs, snapshot.data[index].uuid),
-                              settings:
-                                  RouteSettings(name: '/search/categories'),
-                            ),
-                          );
-                        });
-                  }),
-                ),
-              );
-            }
-          } else {
+      future: ProductCategories().getSearchables(),
+      builder: (context, AsyncSnapshot<List<ProductCategories>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.isEmpty) {
             return Container();
+          } else {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                runAlignment: WrapAlignment.spaceEvenly,
+                spacing: 6.0,
+                children:
+                    List<Widget>.generate(snapshot.data.length, (int index) {
+                  ProductCategories cat = snapshot.data[index];
+                  return ActionChip(
+                      elevation: 6.0,
+                      backgroundColor: CustomColors.green,
+                      label: Text(
+                        cat.name,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      onPressed: () async {
+                        CustomDialogs.actionWaiting(context);
+
+                        List<ProductSubCategories> subCat =
+                            await ProductSubCategories()
+                                .getSubCategoriesForCategories(cat.uuid);
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CategorySearchScreen(
+                                {'uuid': cat.uuid, 'name': cat.name},
+                                'avail_product_categories',
+                                'product_category',
+                                cat.name,
+                                subCat),
+                            settings: RouteSettings(
+                                name: '/search/categories/${cat.name}'),
+                          ),
+                        );
+                      });
+                }),
+              ),
+            );
           }
-        });
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 }

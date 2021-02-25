@@ -50,7 +50,7 @@ class ProductTypes extends Model {
   }
 
   DocumentReference getDocumentReference(String uuid) {
-    return _storeCollRef.document(uuid);
+    return _storeCollRef.doc(uuid);
   }
 
   String getID() {
@@ -63,12 +63,12 @@ class ProductTypes extends Model {
 
   Future<List<ProductTypes>> getProductTypes() async {
     try {
-      QuerySnapshot snap = await getCollectionRef().getDocuments();
+      QuerySnapshot snap = await getCollectionRef().get();
 
       List<ProductTypes> types = [];
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          ProductTypes _s = ProductTypes.fromJson(snap.documents[i].data);
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          ProductTypes _s = ProductTypes.fromJson(snap.docs[i].data());
           types.add(_s);
         }
       }
@@ -84,12 +84,12 @@ class ProductTypes extends Model {
       QuerySnapshot snap = await getCollectionRef()
           .where('show_in_dashboard', isEqualTo: true)
           .orderBy('dashboard_order')
-          .getDocuments();
+          .get();
 
       List<ProductTypes> types = [];
-      if (snap.documents.isNotEmpty) {
-        for (var i = 0; i < snap.documents.length; i++) {
-          ProductTypes _s = ProductTypes.fromJson(snap.documents[i].data);
+      if (snap.docs.isNotEmpty) {
+        for (var i = 0; i < snap.docs.length; i++) {
+          ProductTypes _s = ProductTypes.fromJson(snap.docs[i].data());
           types.add(_s);
         }
       }

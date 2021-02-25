@@ -67,8 +67,8 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
         Widget widget;
 
         if (snapshot.hasData) {
-          if (snapshot.data.exists && snapshot.data.data.isNotEmpty) {
-            Customers _cust = Customers.fromJson(snapshot.data.data);
+          if (snapshot.data.exists && snapshot.data.data().isNotEmpty) {
+            Customers _cust = Customers.fromJson(snapshot.data.data());
             double amount = _cust.availableBalance;
 
             widget = Padding(
@@ -171,15 +171,17 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
         Widget widget;
 
         if (snapshot.hasData) {
-          if (snapshot.data.documents.length > 0) {
+          if (snapshot.data.docs.length > 0) {
             widget = ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               primary: false,
-              itemCount: snapshot.data.documents.length,
+              itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
-                UserStoreWalletHistory history = UserStoreWalletHistory.fromJson(
-                    snapshot.data.documents[index].data);
+                UserStoreWalletHistory history =
+                    UserStoreWalletHistory.fromJson(
+                  snapshot.data.docs[index].data(),
+                );
 
                 Color tileColor = CustomColors.green.withOpacity(0.5);
                 Color textColor = CustomColors.white;
@@ -207,7 +209,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.only(left:5, right: 5),
+                            padding: EdgeInsets.only(left: 5, right: 5),
                             child: Icon(
                               Icons.local_offer,
                               size: 35.0,
