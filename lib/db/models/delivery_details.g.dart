@@ -26,7 +26,10 @@ DeliveryDetails _$DeliveryDetailsFromJson(Map<String, dynamic> json) {
         (json['delivery_charges_max'] as num)?.toDouble() ?? 0.00
     ..instantDelivery = json['instant_delivery_fee'] as int ?? 0
     ..sameDayDelivery = json['same_day_delivery_fee'] as int ?? 0
-    ..scheduledDelivery = json['scheduled_delivery_fee'] as int ?? 0;
+    ..scheduledDelivery = json['scheduled_delivery_fee'] as int ?? 0
+    
+    ..freeDelivery =
+        (json['free_delivery'] as num)?.toDouble() ?? null;
 }
 
 Map<String, dynamic> _$DeliveryDetailsToJson(DeliveryDetails instance) =>
@@ -44,4 +47,6 @@ Map<String, dynamic> _$DeliveryDetailsToJson(DeliveryDetails instance) =>
       'instant_delivery_fee': instance.instantDelivery ?? 50,
       'same_day_delivery_fee': instance.sameDayDelivery ?? 0,
       'scheduled_delivery_fee': instance.scheduledDelivery ?? -50,
+
+      'free_delivery': instance.freeDelivery ?? null,
     };

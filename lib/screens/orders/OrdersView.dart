@@ -47,215 +47,240 @@ class OrderViewScreen extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        ListTile(
-          title: Text("Ordered as Products"),
-        ),
-        ListView.builder(
-          shrinkWrap: true,
-          primary: false,
-          itemCount: order.products.length,
-          itemBuilder: (BuildContext context, int index) {
-            return FutureBuilder(
-              future:
-                  Products().getByProductID(order.products[index].productID),
-              builder: (context, AsyncSnapshot<Products> snapshot) {
-                Widget child;
-                if (snapshot.hasData) {
-                  Products _p = snapshot.data;
-                  child = Card(
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(15, 5, 5, 0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              '${_p.name}',
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: CustomColors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '${_p.variants[int.parse(order.products[index].variantID)].weight}',
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: CustomColors.black,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Text(
-                                      _p.variants[int.parse(
-                                              order.products[index].variantID)]
-                                          .getUnit(),
-                                      textAlign: TextAlign.start,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: CustomColors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                'X ${order.products[index].quantity.round()}',
-                                textAlign: TextAlign.start,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: CustomColors.black,
+        order.products.length > 0
+            ? Column(
+                children: [
+                  ListTile(
+                    title: Text("Ordered as Products"),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: order.products.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return FutureBuilder(
+                        future: Products()
+                            .getByProductID(order.products[index].productID),
+                        builder: (context, AsyncSnapshot<Products> snapshot) {
+                          Widget child;
+                          if (snapshot.hasData) {
+                            Products _p = snapshot.data;
+                            child = Card(
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(15, 5, 5, 0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  '₹ ${order.products[index].amount}',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: CustomColors.black,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          // if order not deliverred yet
-                          order.status != 5
-                              ? Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: FlatButton(
-                                    onPressed: () async {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              ProductDetailsScreen(_p),
-                                          settings: RouteSettings(
-                                              name: '/store/products'),
-                                        ),
-                                      );
-                                    },
-                                    child: Text("Show Details",
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        '${_p.name}',
+                                        textAlign: TextAlign.start,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
                                         style: TextStyle(
-                                            fontSize: 12,
-                                            decoration:
-                                                TextDecoration.underline,
-                                            color: Colors.indigo.shade700)),
-                                    splashColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                  ),
-                                )
-                              : Row(
-                                  children: <Widget>[
-                                    Spacer(),
-                                    FlatButton(
-                                      onPressed: () async {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductDetailsScreen(_p),
-                                            settings: RouteSettings(
-                                                name: '/store/products'),
-                                          ),
-                                        );
-                                      },
-                                      child: Text("Show Details",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.indigo.shade700)),
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
+                                            color: CustomColors.black,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                                    Spacer(),
-                                    Container(
-                                      height: 20,
-                                      width: 1,
-                                      color: Colors.grey,
-                                    ),
-                                    Spacer(),
-                                    FlatButton(
-                                      onPressed: () async {
-                                        bool reviewed = await ProductReviews()
-                                            .reviewedProduct(_p.uuid);
-
-                                        if (!reviewed) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ProductReviewScreen(_p),
-                                              settings: RouteSettings(
-                                                  name: '/product/review'),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                '${_p.variants[int.parse(order.products[index].variantID)].weight}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: CustomColors.black,
+                                                ),
+                                              ),
                                             ),
-                                          );
-                                        } else {
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "Reviewed this Product already!",
-                                              backgroundColor:
-                                                  CustomColors.alertRed,
-                                              textColor:
-                                                  CustomColors.lightGrey);
-                                        }
-                                      },
-                                      child: Text("Add Review",
+                                            Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Text(
+                                                _p.variants[int.parse(order
+                                                        .products[index]
+                                                        .variantID)]
+                                                    .getUnit(),
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  color: CustomColors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          'X ${order.products[index].quantity.round()}',
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.indigo.shade700)),
-                                      splashColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
+                                            color: CustomColors.black,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Spacer(),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: Text(
+                                            '₹ ${order.products[index].amount}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: CustomColors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    // if order not deliverred yet
+                                    order.status != 5
+                                        ? Align(
+                                            alignment: Alignment.bottomRight,
+                                            child: FlatButton(
+                                              onPressed: () async {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ProductDetailsScreen(
+                                                            _p),
+                                                    settings: RouteSettings(
+                                                        name:
+                                                            '/store/products'),
+                                                  ),
+                                                );
+                                              },
+                                              child: Text("Show Details",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: Colors
+                                                          .indigo.shade700)),
+                                              splashColor: Colors.transparent,
+                                              highlightColor:
+                                                  Colors.transparent,
+                                            ),
+                                          )
+                                        : Row(
+                                            children: <Widget>[
+                                              Spacer(),
+                                              FlatButton(
+                                                onPressed: () async {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProductDetailsScreen(
+                                                              _p),
+                                                      settings: RouteSettings(
+                                                          name:
+                                                              '/store/products'),
+                                                    ),
+                                                  );
+                                                },
+                                                child: Text("Show Details",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors
+                                                            .indigo.shade700)),
+                                                splashColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                height: 20,
+                                                width: 1,
+                                                color: Colors.grey,
+                                              ),
+                                              Spacer(),
+                                              FlatButton(
+                                                onPressed: () async {
+                                                  bool reviewed =
+                                                      await ProductReviews()
+                                                          .reviewedProduct(
+                                                              _p.uuid);
+
+                                                  if (!reviewed) {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ProductReviewScreen(
+                                                                _p),
+                                                        settings: RouteSettings(
+                                                            name:
+                                                                '/product/review'),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "Reviewed this Product already!",
+                                                        backgroundColor:
+                                                            CustomColors
+                                                                .alertRed,
+                                                        textColor: CustomColors
+                                                            .lightGrey);
+                                                  }
+                                                },
+                                                child: Text("Add Review",
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors
+                                                            .indigo.shade700)),
+                                                splashColor: Colors.transparent,
+                                                highlightColor:
+                                                    Colors.transparent,
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
                                   ],
                                 ),
-                        ],
-                      ),
-                    ),
-                  );
-                } else if (snapshot.hasError) {
-                  child = Center(
-                    child: Column(
-                      children: AsyncWidgets.asyncError(),
-                    ),
-                  );
-                } else {
-                  child = Center(
-                    child: Column(
-                      children: AsyncWidgets.asyncWaiting(),
-                    ),
-                  );
-                }
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            child = Center(
+                              child: Column(
+                                children: AsyncWidgets.asyncError(),
+                              ),
+                            );
+                          } else {
+                            child = Center(
+                              child: Column(
+                                children: AsyncWidgets.asyncWaiting(),
+                              ),
+                            );
+                          }
 
-                return child;
-              },
-            );
-          },
-        ),
+                          return child;
+                        },
+                      );
+                    },
+                  ),
+                ],
+              )
+            : Container(),
         order.capturedOrders.length > 0
             ? Column(
                 children: [
@@ -273,8 +298,7 @@ class OrderViewScreen extends StatelessWidget {
                         return Column(
                           children: [
                             Padding(
-                              padding:
-                                  EdgeInsets.only(left: 5, right: 5),
+                              padding: EdgeInsets.only(left: 5, right: 5),
                               child: InkWell(
                                 onTap: () {
                                   Navigator.push(

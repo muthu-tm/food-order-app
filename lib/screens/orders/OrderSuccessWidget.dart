@@ -49,13 +49,12 @@ class OrderSuccessWidget extends StatelessWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  Navigator.pushAndRemoveUntil(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => HomeScreen(3),
                       settings: RouteSettings(name: '/orders'),
                     ),
-                    (Route<dynamic> route) => false,
                   );
                 },
                 child: Text(

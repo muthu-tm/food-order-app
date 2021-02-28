@@ -88,22 +88,24 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                   ],
                 ),
                 SizedBox(height: 5),
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        "${widget.product.shortDetails.trim()}",
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 10.0,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 75)
-                  ],
-                ),
+                widget.product.shortDetails.trim().isNotEmpty
+                    ? Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              "${widget.product.shortDetails.trim()}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 75)
+                        ],
+                      )
+                    : Container(),
                 SizedBox(height: 5),
                 Row(
                   mainAxisSize: MainAxisSize.max,

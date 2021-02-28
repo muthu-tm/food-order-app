@@ -134,31 +134,33 @@ class StoreWidget extends StatelessWidget {
                 SizedBox(
                   height: 5,
                 ),
-                Container(
-                  padding: EdgeInsets.all(0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  child: Card(
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(5, 4, 5, 4),
-                      decoration: BoxDecoration(
-                        color: Colors.pink[100],
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(5),
+                store.deliveryDetails.freeDelivery != null
+                    ? Container(
+                        padding: EdgeInsets.all(0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                      ),
-                      child: Text(
-                        "Free delivery above ₹ 500.0",
-                        style: TextStyle(fontSize: 7),
-                      ),
-                    ),
-                  ),
-                ),
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(5, 4, 5, 4),
+                            decoration: BoxDecoration(
+                              color: Colors.pink[100],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            child: Text(
+                              "Free delivery above ₹ ${store.deliveryDetails.freeDelivery}",
+                              style: TextStyle(fontSize: 7),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
                 SizedBox(
                   height: 5,
                 ),

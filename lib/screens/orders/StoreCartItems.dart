@@ -70,9 +70,13 @@ class _StoreCartItemsState extends State<StoreCartItems> {
     super.initState();
     this.selectedDate = DateTime.now().add(Duration(days: 1));
 
+    // set stanndard delivery as default
+    this.deliveryOption = 2;
+
     Store().getShippingChargeByID(widget.storeID).then((value) {
       if (value == -1000.0) {
         setState(() {
+          deliveryOption = 0;
           isOutOfRange = true;
         });
       } else {
@@ -117,21 +121,29 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              store.name,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.blue[900]),
-                            ),
-                            Text(
-                              store.address.city,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  store.name,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.blue[900]),
+                                ),
+                              ),
+                              Text(
+                                store.address.city,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
                         ),
                         InkWell(
                           onTap: () async {
@@ -1093,79 +1105,30 @@ class _StoreCartItemsState extends State<StoreCartItems> {
             ),
           ]),
           Container(
-              margin: EdgeInsets.symmetric(vertical: 12.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(8.0),
-                ),
-                color: Colors.teal[100],
-                border: Border.all(color: Colors.teal[800]),
+            margin: EdgeInsets.symmetric(vertical: 12.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(8.0),
               ),
-              child: ListTile(
-                onTap: () async {
-                  setState(() {
-                    deliveryOption = 0;
-                  });
-                },
-                trailing: Icon(Icons.check_box, color: Colors.teal[800]),
-                title: Text(
-                  getDeliveryOption(0),
-                ),
-                subtitle: Text(
-                  ' Delivery Charge : FREE ',
-                  style: TextStyle(fontSize: 12, color: Colors.teal[800]),
-                ),
-              )),
-          this.deliveryOption == 3
-              ? ListTile(
-                  leading: Icon(
-                    Icons.delivery_dining,
-                    size: 40,
-                    color: CustomColors.black,
-                  ),
-                  title: DateTimeField(
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      suffixIcon: Icon(Icons.date_range,
-                          color: CustomColors.blue, size: 30),
-                      labelText: "Deliver by",
-                      labelStyle: TextStyle(
-                        fontSize: 13,
-                        color: CustomColors.black,
-                      ),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(color: CustomColors.white),
-                      ),
-                    ),
-                    format: format,
-                    initialValue: selectedDate,
-                    onShowPicker: (context, currentValue) async {
-                      final date = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime.now(),
-                        initialDate: currentValue ?? DateTime.now(),
-                        lastDate: DateTime.now().add(
-                          Duration(days: 30),
-                        ),
-                      );
-
-                      if (date != null) {
-                        final time = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.fromDateTime(
-                              currentValue ?? DateTime.now()),
-                        );
-                        selectedDate = DateTimeField.combine(date, time);
-                        return selectedDate;
-                      } else {
-                        return currentValue;
-                      }
-                    },
-                  ),
-                )
-              : Container(),
+              color: Colors.teal[100],
+              border: Border.all(color: Colors.teal[800]),
+            ),
+            child: ListTile(
+              onTap: () async {
+                setState(() {
+                  deliveryOption = 0;
+                });
+              },
+              trailing: Icon(Icons.check_box, color: Colors.teal[800]),
+              title: Text(
+                getDeliveryOption(0),
+              ),
+              subtitle: Text(
+                ' Delivery Charge : FREE ',
+                style: TextStyle(fontSize: 12, color: Colors.teal[800]),
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -389,7 +389,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                               ),
                             ),
                             child: Text(
-                              "Free delivery above ₹ ",
+                              "Free delivery above ₹ ${widget.store.deliveryDetails.freeDelivery ?? '--'}",
                               style: TextStyle(fontSize: 7),
                             ),
                           ),

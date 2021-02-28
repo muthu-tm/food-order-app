@@ -31,6 +31,10 @@ class DeliveryDetails {
   @JsonKey(name: 'scheduled_delivery_fee')
   int scheduledDelivery;
 
+  // static field
+  @JsonKey(name: 'free_delivery')
+  double freeDelivery;
+
   DeliveryDetails();
 
   factory DeliveryDetails.fromJson(Map<String, dynamic> json) =>

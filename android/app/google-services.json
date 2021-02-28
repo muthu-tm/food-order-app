@@ -15,6 +15,38 @@
       },
       "oauth_client": [
         {
+          "client_id": "1015866752187-60p9bjrqgq902ad0iuiohna0fkue1dmn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.buyer",
+            "certificate_hash": "ac0e87f651d2e5a2bc2cada3d35fd1efe5dcd8ba"
+          }
+        },
+        {
+          "client_id": "1015866752187-6rb4hsj59tsos05oscuq5d2bbf79qqm1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.buyer",
+            "certificate_hash": "5d7aa1f5570d34e2408f1be9079227c23d2bdea8"
+          }
+        },
+        {
+          "client_id": "1015866752187-ocmr0j04f0la9b7h44acansq4ppfo90q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.buyer",
+            "certificate_hash": "d2d6172561396b719ad6f83c8777273543d676b3"
+          }
+        },
+        {
+          "client_id": "1015866752187-q0m2j376aptfcdnh9ciq3n9ahu1l87of.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.buyer",
+            "certificate_hash": "88fdda90a06d1ae11195501aa386e6c2d4f1c37b"
+          }
+        },
+        {
           "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -22,6 +54,9 @@
       "api_key": [
         {
           "current_key": "AIzaSyDB3aK3rImYdWvrQ-d6vTQlCxMtofTrJxA"
+        },
+        {
+          "current_key": "AIzaSyB_OiEasUdPNqtFFndJ-x4gJX77AF2uVp4"
         }
       ],
       "services": {
@@ -44,6 +79,38 @@
       },
       "oauth_client": [
         {
+          "client_id": "1015866752187-4kprj50klfin9u5j9actvjhn9ho2m9qd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.seller",
+            "certificate_hash": "ac0e87f651d2e5a2bc2cada3d35fd1efe5dcd8ba"
+          }
+        },
+        {
+          "client_id": "1015866752187-h8rvr867igjt5uq435gbq6gsarido92h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.seller",
+            "certificate_hash": "88fdda90a06d1ae11195501aa386e6c2d4f1c37b"
+          }
+        },
+        {
+          "client_id": "1015866752187-kpd263j97ssnkuoundi26rgi29umkcmm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.seller",
+            "certificate_hash": "d2d6172561396b719ad6f83c8777273543d676b3"
+          }
+        },
+        {
+          "client_id": "1015866752187-tsro3ma591uo9pjtd3920g55obmj8ik5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chipchop.seller",
+            "certificate_hash": "5d7aa1f5570d34e2408f1be9079227c23d2bdea8"
+          }
+        },
+        {
           "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -51,6 +118,137 @@
       "api_key": [
         {
           "current_key": "AIzaSyDB3aK3rImYdWvrQ-d6vTQlCxMtofTrJxA"
+        },
+        {
+          "current_key": "AIzaSyB_OiEasUdPNqtFFndJ-x4gJX77AF2uVp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015866752187:android:1ab1d42e1ba93a08627d9e",
+        "android_client_info": {
+          "package_name": "com.fourcup.buyer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015866752187-0osp17e62986tdkcakhevaalt5o6lv3r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.buyer",
+            "certificate_hash": "d2d6172561396b719ad6f83c8777273543d676b3"
+          }
+        },
+        {
+          "client_id": "1015866752187-8b4dgldr54unkbbghecu3568548ekqih.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.buyer",
+            "certificate_hash": "88fdda90a06d1ae11195501aa386e6c2d4f1c37b"
+          }
+        },
+        {
+          "client_id": "1015866752187-e0mmv5qf7jp3cfvmv1ts74b95ii8pbdd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.buyer",
+            "certificate_hash": "ac0e87f651d2e5a2bc2cada3d35fd1efe5dcd8ba"
+          }
+        },
+        {
+          "client_id": "1015866752187-rli0bobvp99e7q17lhloclnokf3v5ah5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.buyer",
+            "certificate_hash": "5d7aa1f5570d34e2408f1be9079227c23d2bdea8"
+          }
+        },
+        {
+          "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB3aK3rImYdWvrQ-d6vTQlCxMtofTrJxA"
+        },
+        {
+          "current_key": "AIzaSyB_OiEasUdPNqtFFndJ-x4gJX77AF2uVp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015866752187:android:5e68d6f64586d26b627d9e",
+        "android_client_info": {
+          "package_name": "com.fourcup.seller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015866752187-0h0dc2n7bg6frjcq7ru64mhmamk8nim4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.seller",
+            "certificate_hash": "88fdda90a06d1ae11195501aa386e6c2d4f1c37b"
+          }
+        },
+        {
+          "client_id": "1015866752187-7fbb5t6pj3r7eupout6v1sp1plidstq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.seller",
+            "certificate_hash": "5d7aa1f5570d34e2408f1be9079227c23d2bdea8"
+          }
+        },
+        {
+          "client_id": "1015866752187-lvcnhiq1ki6k39h5r4q2elmndlsek7bh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.seller",
+            "certificate_hash": "d2d6172561396b719ad6f83c8777273543d676b3"
+          }
+        },
+        {
+          "client_id": "1015866752187-p2ssga0h039h3qs358q40hqprdhcvt7c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fourcup.seller",
+            "certificate_hash": "ac0e87f651d2e5a2bc2cada3d35fd1efe5dcd8ba"
+          }
+        },
+        {
+          "client_id": "1015866752187-v7eu01410ojchm9fu878m4g5cirptv42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB3aK3rImYdWvrQ-d6vTQlCxMtofTrJxA"
+        },
+        {
+          "current_key": "AIzaSyB_OiEasUdPNqtFFndJ-x4gJX77AF2uVp4"
         }
       ],
       "services": {
