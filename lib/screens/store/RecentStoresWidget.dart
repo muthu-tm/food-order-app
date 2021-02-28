@@ -109,14 +109,28 @@ class RecentStoresWidget extends StatelessWidget {
                                               image: imageProvider),
                                         ),
                                       ),
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          CircularProgressIndicator(
+                                      progressIndicatorBuilder:
+                                          (context, url, downloadProgress) =>
+                                              Container(
+                                        width: 130,
+                                        height: 100,
+                                        alignment: Alignment.center,
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
                                               value: downloadProgress.progress),
+                                        ),
+                                      ),
                                       errorWidget: (context, url, error) =>
-                                          Icon(
-                                        Icons.error,
-                                        size: 35,
+                                          Container(
+                                        width: 130,
+                                        height: 100,
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.error,
+                                          size: 35,
+                                        ),
                                       ),
                                       fadeOutDuration: Duration(seconds: 1),
                                       fadeInDuration: Duration(seconds: 2),

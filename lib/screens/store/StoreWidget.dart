@@ -84,7 +84,10 @@ class StoreWidget extends StatelessWidget {
                     image: imageProvider,
                   ),
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
+                      Container(
+                    height: 100,
+                    width: 100,
+                    alignment: Alignment.center,
                     child: SizedBox(
                       height: 50.0,
                       width: 50.0,
@@ -94,9 +97,14 @@ class StoreWidget extends StatelessWidget {
                           strokeWidth: 2.0),
                     ),
                   ),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.error,
-                    size: 35,
+                  errorWidget: (context, url, error) => Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.error,
+                      size: 35,
+                    ),
                   ),
                   fadeOutDuration: Duration(seconds: 1),
                   fadeInDuration: Duration(seconds: 2),

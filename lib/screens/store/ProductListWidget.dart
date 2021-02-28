@@ -51,11 +51,25 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                   fit: BoxFit.fill,
                   imageUrl: widget.product.getProductImage(),
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
+                      Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 50,
+                      height: 50,
+                      child: CircularProgressIndicator(
                           value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(
-                    Icons.error,
-                    size: 35,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    width: 100,
+                    height: 100,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      Icons.error,
+                      size: 35,
+                    ),
                   ),
                   fadeOutDuration: Duration(seconds: 1),
                   fadeInDuration: Duration(seconds: 2),

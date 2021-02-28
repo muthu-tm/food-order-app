@@ -56,12 +56,25 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                           fit: BoxFit.fill,
                           imageUrl: widget.product.getProductImage(),
                           progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                                      value: downloadProgress.progress),
-                          errorWidget: (context, url, error) => Icon(
-                            Icons.error,
-                            size: 35,
+                              (context, url, downloadProgress) => Container(
+                            height: 90,
+                            width: 110,
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            height: 90,
+                            width: 110,
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.error,
+                              size: 35,
+                            ),
                           ),
                           fadeOutDuration: Duration(seconds: 1),
                           fadeInDuration: Duration(seconds: 2),
