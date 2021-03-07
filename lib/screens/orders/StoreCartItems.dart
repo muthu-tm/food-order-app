@@ -121,7 +121,7 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                   padding: const EdgeInsets.all(5.0),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Flexible(
                           child: Column(
