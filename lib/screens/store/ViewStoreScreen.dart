@@ -466,6 +466,30 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
               background: flexibleAppBar(context),
             ),
           ),
+          SliverToBoxAdapter(
+            child: widget.store.notice.trim().isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          color: Colors.redAccent[200],
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          widget.store.notice,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  )
+                : Container(),
+          ),
           SliverPersistentHeader(
             delegate: SearchBar(widget.store),
             pinned: true,

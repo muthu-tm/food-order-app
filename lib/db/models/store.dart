@@ -73,6 +73,9 @@ class Store extends Model {
   @JsonKey(name: 'updated_at', nullable: true)
   DateTime updatedAt;
 
+  @JsonKey(name: 'notice')
+  String notice;
+
   Store();
 
   List<String> getStoreImages() {

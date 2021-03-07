@@ -2,6 +2,7 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/db/models/user_activity_tracker.dart';
 import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
+import 'package:chipchop_buyer/screens/store/ProductListWidget.dart';
 import 'package:chipchop_buyer/screens/store/StoreProductsCard.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -10,12 +11,15 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class SubCategoriesProductsWidget extends StatefulWidget {
   SubCategoriesProductsWidget(
-      this.storeID, this.storeName, this.categoryID, this.subCategoryID);
+      this.storeID, this.storeName, this.categoryID, this.subCategoryID,
+      [this.isListView = false]);
 
   final String storeID;
   final String storeName;
   final String categoryID;
   final String subCategoryID;
+  final bool isListView;
+
   @override
   _SubCategoriesProductsWidgetState createState() =>
       _SubCategoriesProductsWidgetState();
@@ -77,44 +81,80 @@ class _SubCategoriesProductsWidgetState
 
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data.isNotEmpty) {
-            children = StaggeredGridView.countBuilder(
-              physics: ScrollPhysics(),
-              scrollDirection: Axis.vertical,
-              primary: true,
-              crossAxisCount: 2,
-              crossAxisSpacing: 0,
-              shrinkWrap: true,
-              mainAxisSpacing: 0,
-              itemCount: snapshot.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                Products product = snapshot.data[index];
+            children = widget.isListView
+                ? ListView.separated(
+                    separatorBuilder: (BuildContext context, int index) =>
+                        Divider(
+                          color: Colors.white,
+                        ),
+                    padding: EdgeInsets.all(0),
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Products product = snapshot.data[index];
+                      return InkWell(
+                        onTap: () {
+                          UserActivityTracker _activity = UserActivityTracker();
+                          _activity.keywords = "";
+                          _activity.storeID = product.storeID;
+                          _activity.productID = product.uuid;
+                          _activity.productName = product.name;
+                          _activity.refImage = product.getProductImage();
+                          _activity.type = 2;
+                          _activity.create();
 
-                return InkWell(
-                  onTap: () {
-                    UserActivityTracker _activity = UserActivityTracker();
-                    _activity.keywords = "";
-                    _activity.storeID = product.storeID;
-                    _activity.productID = product.uuid;
-                    _activity.productName = product.name;
-                    _activity.refImage = product.getProductImage();
-                    _activity.type = 2;
-                    _activity.create();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailsScreen(product),
+                              settings: RouteSettings(name: '/store/products'),
+                            ),
+                          );
+                        },
+                        child: ProductListWidget(product, _cartMap),
+                      );
+                    })
+                : StaggeredGridView.countBuilder(
+                    physics: ScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    primary: true,
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 0,
+                    shrinkWrap: true,
+                    mainAxisSpacing: 0,
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Products product = snapshot.data[index];
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetailsScreen(product),
-                        settings: RouteSettings(name: '/store/products'),
-                      ),
-                    ).then((value) {
-                      _loadCartDetails();
-                    });
-                  },
-                  child: StoreProductsCard(product, _cartMap, _wlList),
-                );
-              },
-              staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-            );
+                      return InkWell(
+                        onTap: () {
+                          UserActivityTracker _activity = UserActivityTracker();
+                          _activity.keywords = "";
+                          _activity.storeID = product.storeID;
+                          _activity.productID = product.uuid;
+                          _activity.productName = product.name;
+                          _activity.refImage = product.getProductImage();
+                          _activity.type = 2;
+                          _activity.create();
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProductDetailsScreen(product),
+                              settings: RouteSettings(name: '/store/products'),
+                            ),
+                          ).then((value) {
+                            _loadCartDetails();
+                          });
+                        },
+                        child: StoreProductsCard(product, _cartMap, _wlList),
+                      );
+                    },
+                    staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                  );
           } else {
             children = Container(
               padding: EdgeInsets.all(10),

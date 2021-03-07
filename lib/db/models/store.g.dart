@@ -80,7 +80,8 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
                   Timestamp(json['updated_at']['_seconds'],
                       json['updated_at']['_nanoseconds']),
                 ),
-              );
+              )
+              ..notice = json['notice'] as String ?? "";
 }
 
 int _getMillisecondsSinceEpoch(Timestamp ts) {
@@ -115,4 +116,5 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'keywords': instance.keywords == null ? [] : instance.keywords,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
+      'notice': instance.notice ?? "",
     };

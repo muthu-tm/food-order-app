@@ -335,7 +335,7 @@ class _StoreAllProductsWidgetState extends State<StoreAllProductsWidget> {
                               primary: false,
                               crossAxisSpacing: 0,
                               shrinkWrap: true,
-                              mainAxisSpacing: 0,
+                              mainAxisSpacing: 10,
                               itemCount: snapshot.data.length,
                               itemBuilder: (BuildContext context, int index) {
                                 Products product = snapshot.data[index];

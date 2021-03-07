@@ -1,6 +1,5 @@
 import 'package:chipchop_buyer/db/models/product_sub_categories.dart';
 import 'package:chipchop_buyer/db/models/store.dart';
-import 'package:chipchop_buyer/screens/orders/ShoppingCartScreen.dart';
 import 'package:chipchop_buyer/screens/store/CategoriesProductsWidget.dart';
 import 'package:chipchop_buyer/screens/store/SubCategoriesProductsWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -22,10 +21,12 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   String _subCategoryID = "";
+  bool isListView;
 
   @override
   void initState() {
     super.initState();
+    isListView = true;
   }
 
   @override
@@ -33,11 +34,56 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          widget.categoryName,
-          textAlign: TextAlign.start,
-          style: TextStyle(color: CustomColors.black, fontSize: 16),
+        centerTitle: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.categoryName,
+              textAlign: TextAlign.start,
+              style: TextStyle(color: CustomColors.black, fontSize: 16),
+            ),
+            Container(
+              height: 30,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.black),
+              ),
+              child: Row(children: [
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isListView = !isListView;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Icon(Icons.grid_view,
+                        size: 20,
+                        color: isListView ? Colors.black : Colors.white),
+                  ),
+                ),
+                VerticalDivider(
+                  width: 1,
+                  thickness: 1,
+                  color: Colors.black,
+                ),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      isListView = !isListView;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.5),
+                    child: Icon(Icons.list,
+                        size: 25,
+                        color: isListView ? Colors.white : Colors.black),
+                  ),
+                ),
+              ]),
+            )
+          ],
         ),
         backgroundColor: CustomColors.green,
         automaticallyImplyLeading: false,
@@ -45,23 +91,23 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
           icon: Icon(Icons.arrow_back_ios, color: CustomColors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              color: CustomColors.black,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ShoppingCartScreen(),
-                  settings: RouteSettings(name: '/cart'),
-                ),
-              );
-            },
-          ),
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: Icon(
+        //       Icons.shopping_cart,
+        //       color: CustomColors.black,
+        //     ),
+        //     onPressed: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: (context) => ShoppingCartScreen(),
+        //           settings: RouteSettings(name: '/cart'),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -138,10 +184,14 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
               ),
             ),
             _subCategoryID.isEmpty
-                ? CategoriesProductsWidget(
-                    widget.store.uuid, widget.store.name, widget.categoryID)
-                : SubCategoriesProductsWidget(widget.store.uuid,
-                    widget.store.name, widget.categoryID, _subCategoryID)
+                ? CategoriesProductsWidget(widget.store.uuid, widget.store.name,
+                    widget.categoryID, isListView)
+                : SubCategoriesProductsWidget(
+                    widget.store.uuid,
+                    widget.store.name,
+                    widget.categoryID,
+                    _subCategoryID,
+                    isListView)
           ],
         ),
       ),
