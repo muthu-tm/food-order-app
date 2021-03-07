@@ -50,7 +50,7 @@ class _TopSellingProductsWidgetState extends State<TopSellingProductsWidget> {
                       color: Colors.grey[200],
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 7.0),
-                        height: 175,
+                        height: 180,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -101,8 +101,8 @@ class _TopSellingProductsWidgetState extends State<TopSellingProductsWidget> {
                                       Container(
                                         height: 120,
                                         alignment: Alignment.center,
-                                        padding:
-                                            const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                        padding: const EdgeInsets.fromLTRB(
+                                            5, 0, 5, 0),
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10.0),
@@ -126,14 +126,18 @@ class _TopSellingProductsWidgetState extends State<TopSellingProductsWidget> {
                                       ),
                                       Align(
                                         alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          product.name,
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              color: CustomColors.black,
-                                              fontSize: 10),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(
+                                            product.name,
+                                            textAlign: TextAlign.center,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: CustomColors.black,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 11),
+                                          ),
                                         ),
                                       )
                                     ],
