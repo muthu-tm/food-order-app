@@ -245,8 +245,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
         children: [
           Padding(
             padding: EdgeInsets.all(10),
-            child: CarouselIndicatorSlider(
-                widget.product.getProductImages(), (remainingHeight) / 2),
+            child: CarouselIndicatorSlider(widget.product.getProductImages(),
+                height: (remainingHeight) / 2),
           ),
           widget.product.brandName != null &&
                   widget.product.brandName.isNotEmpty

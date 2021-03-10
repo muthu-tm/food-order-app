@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 
 class CarouselIndicatorSlider extends StatefulWidget {
   CarouselIndicatorSlider(this.imgList,
-      [this.height = 180, this.bg = Colors.transparent]);
+      {this.height = 180, this.bg = Colors.transparent, this.onClick});
   final double height;
   final List<String> imgList;
   final Color bg;
+  final List<Function> onClick;
   @override
   State<StatefulWidget> createState() {
     return _CarouselIndicatorSliderState(imgList: imgList);
@@ -23,43 +24,56 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
   int _current = 0;
 
   List<Widget> getSliders() {
-    return imgList
-        .map((item) => Container(
-              padding: EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: widget.bg,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+    List<Widget> childs = [];
+
+    for (int i = 0; i < imgList.length; i++) {
+      String item = imgList[i];
+      childs.add(
+        Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: widget.bg,
+            borderRadius: BorderRadius.all(
+              Radius.circular(5.0),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.all(
+              Radius.circular(5.0),
+            ),
+            child: InkWell(
+              onTap: widget.onClick != null ? widget.onClick[i] : null,
+              child: CachedNetworkImage(
+                imageUrl: item,
+                imageBuilder: (context, imageProvider) => Image(
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                  image: imageProvider,
+                ),
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: SizedBox(
+                    height: 50.0,
+                    width: 50.0,
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                        valueColor: AlwaysStoppedAnimation(CustomColors.green),
+                        strokeWidth: 2.0),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.error,
+                  size: 35,
+                ),
+                fadeOutDuration: Duration(seconds: 1),
+                fadeInDuration: Duration(seconds: 2),
               ),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  child: CachedNetworkImage(
-                    imageUrl: item,
-                    imageBuilder: (context, imageProvider) => Image(
-                      width: double.infinity,
-                      fit: BoxFit.fill,
-                      image: imageProvider,
-                    ),
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                      child: SizedBox(
-                        height: 50.0,
-                        width: 50.0,
-                        child: CircularProgressIndicator(
-                            value: downloadProgress.progress,
-                            valueColor:
-                                AlwaysStoppedAnimation(CustomColors.green),
-                            strokeWidth: 2.0),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Icon(
-                      Icons.error,
-                      size: 35,
-                    ),
-                    fadeOutDuration: Duration(seconds: 1),
-                    fadeInDuration: Duration(seconds: 2),
-                  )),
-            ))
-        .toList();
+            ),
+          ),
+        ),
+      );
+    }
+    return childs;
   }
 
   @override
@@ -70,7 +84,8 @@ class _CarouselIndicatorSliderState extends State<CarouselIndicatorSlider> {
         options: CarouselOptions(
             viewportFraction: 1.0,
             height: widget.height,
-            autoPlay: false,
+            autoPlay: true,
+            autoPlayAnimationDuration: Duration(seconds: 1),
             enlargeCenterPage: false,
             enableInfiniteScroll: imgList.length <= 1 ? false : true,
             aspectRatio: 2.0,

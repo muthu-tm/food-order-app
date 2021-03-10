@@ -8,6 +8,9 @@ StoreBanners _$StoreBannersFromJson(Map<String, dynamic> json) {
     ..isDefault = json['is_default'] as bool ?? false
     ..storeID = json['store_uuid'] as String ?? ""
     ..productID = json['product_uuid'] as String ?? ""
+    ..displayOrder = json['display_order'] as int
+    ..keyword = json['search_keyword'] as String ?? ""
+    ..searchType = json['search_type'] as int
     ..geoPoint = json['geo_point'] == null
         ? null
         : GeoPointData.fromJson(json['geo_point'] as Map<String, dynamic>)
@@ -33,6 +36,9 @@ Map<String, dynamic> _$StoreBannersToJson(StoreBanners instance) =>
       'is_default': instance.isDefault ?? false,
       'store_uuid': instance.storeID ?? "",
       'product_uuid': instance.productID ?? "",
+      'display_order': instance.displayOrder,
+      'search_keyword': instance.keyword ?? "",
+      'search_type': instance.searchType,
       'geo_point': instance.geoPoint?.toJson(),
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,

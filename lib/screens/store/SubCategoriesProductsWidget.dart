@@ -85,7 +85,7 @@ class _SubCategoriesProductsWidgetState
                 ? ListView.separated(
                     separatorBuilder: (BuildContext context, int index) =>
                         Divider(
-                          color: Colors.white,
+                          color: Colors.black26,
                         ),
                     padding: EdgeInsets.all(0),
                     primary: false,

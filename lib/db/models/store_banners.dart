@@ -1,8 +1,5 @@
 import 'package:chipchop_buyer/db/models/model.dart';
-import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
-import 'package:chipchop_buyer/services/utils/constants.dart';
-import 'package:geoflutterfire/geoflutterfire.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:chipchop_buyer/db/models/geopoint_data.dart';
@@ -22,6 +19,12 @@ class StoreBanners {
   String productID;
   @JsonKey(name: 'store_uuid')
   String storeID;
+  @JsonKey(name: 'display_order')
+  int displayOrder;
+  @JsonKey(name: 'search_keyword')
+  String keyword;
+  @JsonKey(name: 'search_type')
+  int searchType;
   @JsonKey(name: 'geo_point', defaultValue: "")
   GeoPointData geoPoint;
   @JsonKey(name: 'created_at', nullable: true)
@@ -49,7 +52,7 @@ class StoreBanners {
     try {
         QuerySnapshot snap = await getCollectionRef()
             .where('is_active', isEqualTo: true)
-            // .where('is_default', isEqualTo: true)
+            .orderBy('display_order')
             .get();
         snap.docs.forEach((element) {
           StoreBanners _s = StoreBanners.fromJson(element.data());

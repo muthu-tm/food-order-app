@@ -69,7 +69,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
   }
 
   Widget flexibleAppBar(BuildContext context) {
-    final double statusBarHeight = MediaQuery.of(context).padding.top;
+    final double statusBarHeight = MediaQuery.of(context).padding.top + 50;
 
     return Padding(
       padding: EdgeInsets.only(top: statusBarHeight),
@@ -461,7 +461,7 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
             pinned: true,
             floating: true,
             backgroundColor: CustomColors.green,
-            expandedHeight: 170.0,
+            expandedHeight: 185.0,
             flexibleSpace: FlexibleSpaceBar(
               background: flexibleAppBar(context),
             ),
@@ -807,10 +807,9 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                   SizedBox(
                     height: 5,
                   ),
-                  CarouselIndicatorSlider(
-                      widget.store.storeImages,
-                      MediaQuery.of(context).size.height * 0.25,
-                      Colors.grey[500]),
+                  CarouselIndicatorSlider(widget.store.storeImages,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      bg: Colors.grey[500]),
                   SizedBox(
                     height: 5,
                   ),

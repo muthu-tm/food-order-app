@@ -12,8 +12,8 @@ class SearchOptionsRadio extends StatelessWidget {
     return Card(
       elevation: 3.0,
       child: Container(
-        height: 40.0,
-        width: 110,
+        height: 35.0,
+        width: 100,
         child: Center(
           child: Text(
             _item.buttonText,

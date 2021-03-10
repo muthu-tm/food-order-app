@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class UserFCM {
-  final FirebaseMessaging _fcm = FirebaseMessaging();
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future getPlatformDetails() async {
     String fcmToken = await _fcm.getToken();

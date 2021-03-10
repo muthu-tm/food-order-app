@@ -6,8 +6,8 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
     ..name = json['store_name'] as String ?? ''
     ..shortDetails = json['short_details'] as String ?? ''
     ..ownedBy = json['owned_by'] as String
-    ..availProducts =
-        (json['avail_products'] as List)?.map((e) => e == null
+    ..availProducts = (json['avail_products'] as List)
+        ?.map((e) => e == null
             ? null
             : ProductCategoriesMap.fromJson(e as Map<String, dynamic>))
         ?.toList()
@@ -81,7 +81,7 @@ Store _$StoreFromJson(Map<String, dynamic> json) {
                       json['updated_at']['_nanoseconds']),
                 ),
               )
-              ..notice = json['notice'] as String ?? "";
+    ..notice = json['notice'] as String ?? "";
 }
 
 int _getMillisecondsSinceEpoch(Timestamp ts) {
@@ -93,9 +93,12 @@ Map<String, dynamic> _$StoreToJson(Store instance) => <String, dynamic>{
       'store_name': instance.name,
       'short_details': instance.shortDetails,
       'owned_by': instance.ownedBy,
-      'avail_products': instance.availProducts?.map((e) => e?.toJson())?.toList(),
-      'avail_product_categories': instance.availProductCategories?.map((e) => e?.toJson())?.toList(),
-      'avail_product_sub_categories': instance.availProductSubCategories?.map((e) => e?.toJson())?.toList(),
+      'avail_products':
+          instance.availProducts?.map((e) => e?.toJson())?.toList(),
+      'avail_product_categories':
+          instance.availProductCategories?.map((e) => e?.toJson())?.toList(),
+      'avail_product_sub_categories':
+          instance.availProductSubCategories?.map((e) => e?.toJson())?.toList(),
       'working_days': instance.workingDays,
       'active_from': instance.activeFrom,
       'active_till': instance.activeTill,

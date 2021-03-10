@@ -113,14 +113,14 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Row(
-                  children: [
-                    widget.subCategories.length > 0
-                        ? ActionChip(
+            widget.subCategories.length > 0
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Row(
+                        children: [
+                          ActionChip(
                             elevation: 6.0,
                             backgroundColor: _subCategoryID == ""
                                 ? CustomColors.green
@@ -139,50 +139,50 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
                                       ? Colors.black54
                                       : CustomColors.black),
                             ),
-                          )
-                        : Container(),
-                    Container(
-                      height: 60,
-                      padding: const EdgeInsets.all(5.0),
-                      child: ListView.builder(
-                        primary: false,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.subCategories.length,
-                        padding: EdgeInsets.all(5),
-                        itemBuilder: (BuildContext context, int index) {
-                          ProductSubCategories _sc =
-                              widget.subCategories[index];
-                          return Padding(
-                            padding: EdgeInsets.only(left: 5.0, right: 5),
-                            child: ActionChip(
-                              elevation: 6.0,
-                              backgroundColor: _subCategoryID == _sc.uuid
-                                  ? CustomColors.green
-                                  : Colors.white,
-                              onPressed: () {
-                                setState(() {
-                                  _subCategoryID = _sc.uuid;
-                                });
+                          ),
+                          Container(
+                            height: 60,
+                            padding: const EdgeInsets.all(5.0),
+                            child: ListView.builder(
+                              primary: false,
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: widget.subCategories.length,
+                              padding: EdgeInsets.all(5),
+                              itemBuilder: (BuildContext context, int index) {
+                                ProductSubCategories _sc =
+                                    widget.subCategories[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(left: 5.0, right: 5),
+                                  child: ActionChip(
+                                    elevation: 6.0,
+                                    backgroundColor: _subCategoryID == _sc.uuid
+                                        ? CustomColors.green
+                                        : Colors.white,
+                                    onPressed: () {
+                                      setState(() {
+                                        _subCategoryID = _sc.uuid;
+                                      });
+                                    },
+                                    label: Text(
+                                      _sc.name,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: _subCategoryID == _sc.uuid
+                                              ? Colors.black54
+                                              : CustomColors.black),
+                                    ),
+                                  ),
+                                );
                               },
-                              label: Text(
-                                _sc.name,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: _subCategoryID == _sc.uuid
-                                        ? Colors.black54
-                                        : CustomColors.black),
-                              ),
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
+                  )
+                : Container(),
             _subCategoryID.isEmpty
                 ? CategoriesProductsWidget(widget.store.uuid, widget.store.name,
                     widget.categoryID, isListView)

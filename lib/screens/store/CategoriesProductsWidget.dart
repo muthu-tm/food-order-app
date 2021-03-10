@@ -85,7 +85,7 @@ class _CategoriesProductsWidgetState extends State<CategoriesProductsWidget> {
                 ? ListView.separated(
                     separatorBuilder: (BuildContext context, int index) =>
                         Divider(
-                          color: Colors.white,
+                          color: Colors.black26,
                         ),
                     padding: EdgeInsets.all(0),
                     primary: false,
