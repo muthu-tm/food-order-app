@@ -13,6 +13,7 @@ import 'package:chipchop_buyer/screens/chats/ChatsHome.dart';
 import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrderDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/orders/OrdersHomeScreen.dart';
+import 'package:chipchop_buyer/screens/search/SearchAppBar.dart';
 import 'package:chipchop_buyer/screens/search/SearchByCategoriesScreen.dart';
 import 'package:chipchop_buyer/screens/search/search_bar_widget.dart';
 import 'package:chipchop_buyer/screens/search/search_home.dart';
@@ -22,6 +23,7 @@ import 'package:chipchop_buyer/screens/store/ProductDetailsScreen.dart';
 import 'package:chipchop_buyer/screens/store/ProductWidget.dart';
 import 'package:chipchop_buyer/screens/store/RecentProductsWidget.dart';
 import 'package:chipchop_buyer/screens/store/RecentStoresWidget.dart';
+import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
@@ -747,9 +749,71 @@ class _HomeScreenState extends State<HomeScreen> {
           if (snapshot.data.isNotEmpty) {
             List<String> url =
                 snapshot.data.map((element) => element.image).toList();
+
+            List<Function> onClicks = snapshot.data
+                .map((e) => () async {
+                      if (e.keyword.trim().isNotEmpty) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                SearchAppBar(e.searchType, e.keyword),
+                            settings: RouteSettings(name: '/banner/search'),
+                          ),
+                        );
+                      } else if (e.storeID.trim().isNotEmpty) {
+                        CustomDialogs.actionWaiting(context);
+                        Store store = await Store().getStoresByID(e.storeID);
+
+                        if (!store.isActive) {
+                          Navigator.pop(context);
+                          Fluttertoast.showToast(
+                              msg:
+                                  "Store ${store.name} is not Live Now. Try Later!",
+                              backgroundColor: CustomColors.alertRed,
+                              textColor: CustomColors.white);
+                          return;
+                        }
+
+                        if (store != null) {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ViewStoreScreen(store),
+                              settings: RouteSettings(name: '/banner/store'),
+                            ),
+                          );
+                        }
+                      } else if (e.productID.trim().isNotEmpty) {
+                        CustomDialogs.actionWaiting(context);
+                        Products _p =
+                            await Products().getByProductID(e.productID);
+
+                        if (_p == null) {
+                          Navigator.pop(context);
+                          Fluttertoast.showToast(
+                              msg: 'Error, Unable to Load Product!',
+                              backgroundColor: CustomColors.alertRed,
+                              textColor: CustomColors.white);
+                          return;
+                        }
+
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsScreen(_p),
+                            settings: RouteSettings(name: '/banner/product'),
+                          ),
+                        );
+                      }
+                    })
+                .toList();
+
             return Padding(
               padding: EdgeInsets.fromLTRB(5, 10, 5, 0),
-              child: CarouselIndicatorSlider(url),
+              child: CarouselIndicatorSlider(url, onClick: onClicks),
             );
           } else {
             return Container();
