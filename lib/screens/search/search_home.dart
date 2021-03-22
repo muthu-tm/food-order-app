@@ -18,7 +18,6 @@ class SearchHome extends StatefulWidget {
 }
 
 class _SearchHomeState extends State<SearchHome> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,7 @@ class _SearchHomeState extends State<SearchHome> {
                   ),
                 );
               } else {
-                _scaffoldKey.currentState.showSnackBar(
+                ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
                     AppLocalizations.of(context).translate('set_location'),
                     2,

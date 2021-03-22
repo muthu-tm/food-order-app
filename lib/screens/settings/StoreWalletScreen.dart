@@ -2,7 +2,7 @@ import 'package:chipchop_buyer/db/models/customers.dart';
 import 'package:chipchop_buyer/db/models/user_store_wallet_history.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -235,7 +235,7 @@ class _StoreWalletScreenState extends State<StoreWalletScreen> {
                                       )
                                     : Container(),
                                 Text(
-                                  '${DateUtils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
+                                  '${Dateutils.formatDateTime(DateTime.fromMillisecondsSinceEpoch(history.createdAt))}',
                                   style: TextStyle(
                                       fontSize: 12.0, color: textColor),
                                 ),

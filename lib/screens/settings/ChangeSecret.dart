@@ -50,7 +50,6 @@ class _ChangeSecretState extends State<ChangeSecret> {
           AppLocalizations.of(context).translate('save'),
           style: TextStyle(
             fontSize: 17,
-            
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -150,14 +149,15 @@ class _ChangeSecretState extends State<ChangeSecret> {
       var result = await UserController().updateSecretKey(secretKey);
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.successSnackBar(
-            AppLocalizations.of(context)
-                .translate('secret_key_updated_successfully'),
-            2));
+        ScaffoldMessenger.of(context).showSnackBar(
+            CustomSnackBar.successSnackBar(
+                AppLocalizations.of(context)
+                    .translate('secret_key_updated_successfully'),
+                2));
         await Future.delayed(Duration(seconds: 1));
         Navigator.pop(context);
       }

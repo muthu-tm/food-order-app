@@ -5,7 +5,7 @@ import 'package:chipchop_buyer/screens/chats/StoreChatScreen.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,9 +19,9 @@ class StoreWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentTime = DateTime.now();
     bool businessHours = (currentTime
-            .isAfter(DateUtils.getTimeAsDateTimeObject(store.activeFrom)) &&
+            .isAfter(Dateutils.getTimeAsDateTimeObject(store.activeFrom)) &&
         currentTime
-            .isBefore(DateUtils.getTimeAsDateTimeObject(store.activeTill)));
+            .isBefore(Dateutils.getTimeAsDateTimeObject(store.activeTill)));
     bool businessDays = (DateTime.now().weekday <= 6
         ? store.workingDays.contains(DateTime.now().weekday)
         : store.workingDays.contains(0));
@@ -245,10 +245,10 @@ class StoreWidget extends StatelessWidget {
                   ),
                 ),
                 (businessDays &&
-                        currentTime.isBefore(DateUtils.getTimeAsDateTimeObject(
+                        currentTime.isBefore(Dateutils.getTimeAsDateTimeObject(
                             store.activeFrom)))
                     ? Text(
-                        "Opening in ${currentTime.difference(DateUtils.getTimeAsDateTimeObject(store.activeFrom)).abs().toString().substring(0, 4)} hours",
+                        "Opening in ${currentTime.difference(Dateutils.getTimeAsDateTimeObject(store.activeFrom)).abs().toString().substring(0, 4)} hours",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 8.0,
@@ -257,7 +257,7 @@ class StoreWidget extends StatelessWidget {
                       )
                     : isWithinWorkingHours
                         ? Text(
-                            "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
+                            "Closing in ${Dateutils.durationInMinutesToHoursAndMinutes(Dateutils.getTimeInMinutes(store.activeTill) - Dateutils.getCurrentTimeInMinutes())} hours",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 8.0,

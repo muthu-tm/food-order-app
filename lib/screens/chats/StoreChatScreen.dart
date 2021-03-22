@@ -12,7 +12,7 @@ import 'package:chipchop_buyer/screens/utils/ImageView.dart';
 import 'package:chipchop_buyer/screens/utils/PopupMenuContainer.dart';
 import 'package:chipchop_buyer/services/storage/image_uploader.dart';
 import 'package:chipchop_buyer/services/storage/storage_utils.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -206,23 +206,25 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                         if (value == 'delete') {
                           bool val = await showDialog(
                               context: context,
-                              child: AlertDialog(
-                                title: Text('Delete image'),
-                                content: Text(
-                                    'Are you sure you want to delete the image?'),
-                                actions: [
-                                  FlatButton(
-                                      child: Text('NO'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop(false);
-                                      }),
-                                  FlatButton(
-                                      child: Text('YES'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop(true);
-                                      }),
-                                ],
-                              ));
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Delete image'),
+                                  content: Text(
+                                      'Are you sure you want to delete the image?'),
+                                  actions: [
+                                    TextButton(
+                                        child: Text('NO'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop(false);
+                                        }),
+                                    TextButton(
+                                        child: Text('YES'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop(true);
+                                        }),
+                                  ],
+                                );
+                              });
 
                           if (val) {
                             await StorageUtils.removeFile(chat.content);
@@ -247,7 +249,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           isLastMessageRight(index)
               ? Container(
                   child: Text(
-                    DateUtils.formatDateTime(
+                    Dateutils.formatDateTime(
                       chat.createdAt,
                     ),
                     style: TextStyle(
@@ -281,7 +283,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                       margin: EdgeInsets.only(bottom: 3.0),
                     )
                   : Container(
-                      child: FlatButton(
+                      child: TextButton(
                         child: Material(
                           child: CachedNetworkImage(
                             placeholder: (context, url) => Container(
@@ -329,7 +331,9 @@ class StoreChatScreenState extends State<StoreChatScreen> {
                             ),
                           );
                         },
-                        padding: EdgeInsets.all(0),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.all(0),
+                        ),
                       ),
                       margin: EdgeInsets.only(left: 10.0),
                     )
@@ -340,7 +344,7 @@ class StoreChatScreenState extends State<StoreChatScreen> {
           isLastMessageLeft(index)
               ? Container(
                   child: Text(
-                    DateUtils.formatDateTime(chat.createdAt),
+                    Dateutils.formatDateTime(chat.createdAt),
                     style: TextStyle(
                         color: CustomColors.blue,
                         fontSize: 12.0,

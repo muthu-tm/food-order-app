@@ -15,7 +15,7 @@ import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
@@ -204,9 +204,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
               final currentTime = DateTime.now();
               bool businessHours = (currentTime.isAfter(
-                      DateUtils.getTimeAsDateTimeObject(store.activeFrom)) &&
+                      Dateutils.getTimeAsDateTimeObject(store.activeFrom)) &&
                   currentTime.isBefore(
-                      DateUtils.getTimeAsDateTimeObject(store.activeTill)));
+                      Dateutils.getTimeAsDateTimeObject(store.activeTill)));
               bool businessDays = (DateTime.now().weekday <= 6
                   ? store.workingDays.contains(DateTime.now().weekday)
                   : store.workingDays.contains(0));

@@ -34,7 +34,6 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         title: Text(
           "Order - ${widget.storeName}",
@@ -296,12 +295,15 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Flexible(
-                                    child: RaisedButton(
-                                      color: CustomColors.lightGrey,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          side: BorderSide(color: Colors.red)),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: CustomColors.lightGrey,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side:
+                                                BorderSide(color: Colors.red)),
+                                      ),
                                       onPressed: () async {
                                         try {
                                           CustomDialogs.showLoadingDialog(
@@ -332,13 +334,15 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                     width: 10,
                                   ),
                                   Flexible(
-                                    child: RaisedButton(
-                                      color: CustomColors.lightGrey,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                          side:
-                                              BorderSide(color: Colors.green)),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        primary: CustomColors.lightGrey,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            side: BorderSide(
+                                                color: Colors.green)),
+                                      ),
                                       onPressed: () async {
                                         try {
                                           CustomDialogs.showLoadingDialog(
@@ -608,12 +612,16 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                             ? SizedBox(
                                                 width: 35,
                                                 height: 35,
-                                                child: OutlineButton(
-                                                  padding: EdgeInsets.zero,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
+                                                child: OutlinedButton(
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    padding: EdgeInsets.zero,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
                                                   ),
                                                   child: Icon(
                                                       Icons.delete_forever),
@@ -644,12 +652,16 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                             : SizedBox(
                                                 width: 35,
                                                 height: 35,
-                                                child: OutlineButton(
-                                                  padding: EdgeInsets.zero,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
+                                                child: OutlinedButton(
+                                                  style:
+                                                      OutlinedButton.styleFrom(
+                                                    padding: EdgeInsets.zero,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
                                                   ),
                                                   child: Icon(Icons.remove),
                                                   onPressed: () async {
@@ -687,11 +699,13 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                         SizedBox(
                                           width: 35,
                                           height: 35,
-                                          child: OutlineButton(
-                                            padding: EdgeInsets.zero,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
+                                          child: OutlinedButton(
+                                            style: OutlinedButton.styleFrom(
+                                              padding: EdgeInsets.zero,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
                                             ),
                                             child: Icon(Icons.add),
                                             onPressed: () async {
@@ -743,10 +757,13 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Flexible(
-                          child: RaisedButton(
-                            shape: RoundedRectangleBorder(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side: BorderSide(color: Colors.red)),
+                                side: BorderSide(color: Colors.red),
+                              ),
+                            ),
                             onPressed: () async {
                               try {
                                 CustomDialogs.showLoadingDialog(
@@ -770,11 +787,14 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                           ),
                         ),
                         Flexible(
-                          child: RaisedButton(
-                            color: CustomColors.lightGrey,
-                            shape: RoundedRectangleBorder(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: CustomColors.lightGrey,
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                side: BorderSide(color: Colors.green)),
+                                side: BorderSide(color: Colors.green),
+                              ),
+                            ),
                             onPressed: () async {
                               try {
                                 CustomDialogs.showLoadingDialog(

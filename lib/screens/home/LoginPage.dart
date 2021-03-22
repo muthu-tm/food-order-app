@@ -237,12 +237,14 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 40,
                     width: 150,
-                    child: RaisedButton(
-                      color: CustomColors.alertRed,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          bottomLeft: Radius.circular(5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: CustomColors.alertRed,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            bottomLeft: Radius.circular(5),
+                          ),
                         ),
                       ),
                       onPressed: () {
@@ -277,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -297,7 +299,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ],
               ),
-              FlatButton.icon(
+              TextButton.icon(
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -331,7 +333,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _submit() async {
     if (_nController.text.length != 10) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('enter_valid_phone'), 2));
       return;
     } else {
@@ -343,9 +345,10 @@ class _LoginPageState extends State<LoginPage> {
             await u.User().getByID(countryCode.toString() + number);
         if (_uJSON == null) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-          _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-              AppLocalizations.of(context).translate('invalid_user_signup'),
-              2));
+          ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar.errorSnackBar(
+                  AppLocalizations.of(context).translate('invalid_user_signup'),
+                  2));
           return;
         } else {
           this._user = u.User.fromJson(_uJSON);
@@ -353,12 +356,12 @@ class _LoginPageState extends State<LoginPage> {
         }
       } on PlatformException catch (err) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Error while Login: " + err.message, 2),
         );
       } on Exception catch (err) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar(
               AppLocalizations.of(context).translate('login_error') +
                   err.toString(),
@@ -395,9 +398,9 @@ class _LoginPageState extends State<LoginPage> {
 
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
             AppLocalizations.of(context).translate('unable_to_login'), 2));
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
         if (_rememberUser) {
@@ -420,13 +423,13 @@ class _LoginPageState extends State<LoginPage> {
       }
     }).catchError((error) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
     });
   }
 
   _smsCodeSent(String verificationId, [code]) {
-    _scaffoldKey.currentState
+    ScaffoldMessenger.of(context)
         .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
 
     _smsVerificationCode = verificationId;
@@ -437,7 +440,7 @@ class _LoginPageState extends State<LoginPage> {
 
   _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
         AppLocalizations.of(context).translate('verification_failed') +
             authException.message.toString(),
         2));

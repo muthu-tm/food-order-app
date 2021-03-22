@@ -75,12 +75,18 @@ Widget contactAndSupportDialog(context) {
               Spacer(
                 flex: 2,
               ),
-              RaisedButton.icon(
+              ElevatedButton.icon(
                 icon: Icon(
                   Icons.email,
                   color: CustomColors.alertRed,
                 ),
-                elevation: 15.0,
+                style: ElevatedButton.styleFrom(
+                  elevation: 15.0,
+                  primary: CustomColors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
                 onPressed: () {
                   UrlLauncherUtils.sendEmail(
                       support_email_ID,
@@ -95,20 +101,22 @@ Widget contactAndSupportDialog(context) {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                color: CustomColors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
               ),
               Spacer(
                 flex: 1,
               ),
-              RaisedButton.icon(
+              ElevatedButton.icon(
                 icon: Icon(
                   Icons.phone,
                   color: CustomColors.alertRed,
                 ),
-                elevation: 15.0,
+                style: ElevatedButton.styleFrom(
+                  elevation: 15.0,
+                  primary: CustomColors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
                 onPressed: () {
                   UrlLauncherUtils.makePhoneCall(support_mobile_number);
                 },
@@ -119,10 +127,6 @@ Widget contactAndSupportDialog(context) {
                     fontSize: 14.0,
                     fontWeight: FontWeight.bold,
                   ),
-                ),
-                color: CustomColors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
               Spacer(

@@ -1,7 +1,7 @@
 import 'package:chipchop_buyer/db/models/product_faqs.dart';
 import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,7 +29,7 @@ class ProductFAQsWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            trailing: FlatButton.icon(
+            trailing: TextButton.icon(
               onPressed: () {
                 getQuestionDialog(context);
               },
@@ -90,7 +90,7 @@ class ProductFAQsWidget extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () async {
                           if (_feedbackController.text.trim().isEmpty) {
                             Navigator.pop(context);
@@ -116,19 +116,23 @@ class ProductFAQsWidget extends StatelessWidget {
                           }
                         },
                         child: Text("Submit"),
-                        color: CustomColors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                        style: ElevatedButton.styleFrom(
+                          primary: CustomColors.green,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
-                      RaisedButton(
+                      ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
                         child: Text("Cancel"),
-                        color: CustomColors.alertRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
+                        style: ElevatedButton.styleFrom(
+                          primary: CustomColors.alertRed,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                         ),
                       ),
                     ],
@@ -222,7 +226,7 @@ class ProductFAQsWidget extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              DateUtils.formatDateTime(
+                              Dateutils.formatDateTime(
                                 DateTime.fromMillisecondsSinceEpoch(
                                     _faq.questionedAt),
                               ),

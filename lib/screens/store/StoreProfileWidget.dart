@@ -2,7 +2,7 @@ import 'package:chipchop_buyer/db/models/store.dart';
 import 'package:chipchop_buyer/screens/store/ViewStoreScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 
 class StoreProfileWidget extends StatelessWidget {
@@ -131,7 +131,7 @@ class StoreProfileWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      DateUtils.getFormattedTime(store.activeFrom),
+                      Dateutils.getFormattedTime(store.activeFrom),
                     ),
                   ),
                 ),
@@ -149,7 +149,7 @@ class StoreProfileWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      DateUtils.getFormattedTime(store.activeTill),
+                      Dateutils.getFormattedTime(store.activeTill),
                     ),
                   ),
                 ),
@@ -187,7 +187,7 @@ class StoreProfileWidget extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(DateUtils.getFormattedTime(
+                    child: Text(Dateutils.getFormattedTime(
                         store.deliveryDetails.deliveryFrom)),
                   ),
                 ),
@@ -204,7 +204,7 @@ class StoreProfileWidget extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(DateUtils.getFormattedTime(
+                    child: Text(Dateutils.getFormattedTime(
                         store.deliveryDetails.deliveryTill)),
                   ),
                 ),

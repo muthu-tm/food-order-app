@@ -103,13 +103,15 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
               ),
               Text("Add Image"),
               ListTile(
-                leading: FlatButton.icon(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                leading: TextButton.icon(
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    padding:
+                        EdgeInsets.only(right: 15, left: 15, top: 5, bottom: 5),
+                    primary: CustomColors.grey,
                   ),
-                  padding:
-                      EdgeInsets.only(right: 15, left: 15, top: 5, bottom: 5),
-                  color: CustomColors.grey,
                   onPressed: () async {
                     try {
                       String tempPath = (await getTemporaryDirectory()).path;
@@ -131,11 +133,13 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                   ),
                   icon: Icon(FontAwesomeIcons.cameraRetro),
                 ),
-                trailing: FlatButton.icon(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
+                trailing: TextButton.icon(
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    primary: CustomColors.blueGreen,
                   ),
-                  color: CustomColors.blueGreen,
                   onPressed: () async {
                     String imageUrl = '';
                     try {
@@ -322,17 +326,19 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: Text("Cancel"),
-                    color: CustomColors.alertRed,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    style: ElevatedButton.styleFrom(
+                      primary: CustomColors.alertRed,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () async {
                       ProductReviews review = ProductReviews();
                       review.images = imagePaths;
@@ -344,9 +350,11 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                       Navigator.pop(context);
                     },
                     child: Text("Submit"),
-                    color: CustomColors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    style: ElevatedButton.styleFrom(
+                      primary: CustomColors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
                 ],

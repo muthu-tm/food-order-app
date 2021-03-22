@@ -37,7 +37,7 @@ Widget sideDrawer(BuildContext context) {
                             width: 2.0,
                           ),
                         ),
-                        child: FlatButton(
+                        child: TextButton(
                           onPressed: () {
                             showDialog(
                               context: context,
@@ -114,7 +114,7 @@ Widget sideDrawer(BuildContext context) {
                             Positioned(
                               bottom: -8,
                               left: 30,
-                              child: FlatButton(
+                              child: TextButton(
                                 onPressed: () {
                                   showDialog(
                                     context: context,

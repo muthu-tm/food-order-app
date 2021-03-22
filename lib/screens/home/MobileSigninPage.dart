@@ -232,7 +232,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       keyboardType: TextInputType.text,
                       controller: _passKeyController,
                       obscureText: _passwordVisible,
-                      maxLengthEnforced: true,
+                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
                           icon: Icon(
@@ -336,8 +336,17 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
               SizedBox(
                 height: 40,
                 width: 200,
-                child: RaisedButton(
-                  elevation: 10.0,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 10.0,
+                    primary: CustomColors.alertRed,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(5),
+                      ),
+                    ),
+                  ),
                   onPressed: startPhoneAuth,
                   child: Padding(
                     padding: EdgeInsets.all(5.0),
@@ -348,13 +357,6 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
-                  ),
-                  color: CustomColors.alertRed,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomLeft: Radius.circular(5),
                     ),
                   ),
                 ),
@@ -375,7 +377,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                       ),
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
                       AppLocalizations.of(context).translate('login'),
@@ -396,15 +398,15 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
   startPhoneAuth() async {
     if (_phoneNumberController.text.length != 10) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('invalid_number'), 2));
       return;
     } else if (_nameController.text.length <= 2) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('enter_your_name'), 2));
       return;
     } else if (_passKeyController.text.length < 4) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           "Password must have minimum 4 digits", 2));
       return;
     } else {
@@ -420,7 +422,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           'error': "Found an existing user for this mobile number"
         }, 'sign_up');
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
             "Found an existing user for this mobile number", 2));
       } else {
         await _verifyPhoneNumber();
@@ -458,7 +460,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
           authResult.user.uid);
       if (!result['is_success']) {
         Navigator.pop(context);
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
       } else {
         final SharedPreferences prefs = await _prefs;
@@ -482,15 +484,15 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
       }
     }).catchError((error) {
       Navigator.pop(context);
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
-      _scaffoldKey.currentState
+      ScaffoldMessenger.of(context)
           .showSnackBar(CustomSnackBar.errorSnackBar("${error.toString()}", 2));
     });
   }
 
   _smsCodeSent(String verificationId, [code]) {
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.successSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.successSnackBar(
         AppLocalizations.of(context).translate('otp_send'), 1));
 
     _smsVerificationCode = verificationId;
@@ -501,7 +503,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
 
   _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
         "Verification Failed:" + authException.message.toString(), 2));
   }
 

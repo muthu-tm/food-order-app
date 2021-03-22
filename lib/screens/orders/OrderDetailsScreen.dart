@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../../db/models/order.dart';
-import '../../services/utils/DateUtils.dart';
+import '../../services/utils/Dateutils.dart';
 import '../utils/AsyncWidgets.dart';
 import '../utils/CustomColors.dart';
 
@@ -125,7 +125,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               ListTile(
                 leading: Text("Ordered At"),
                 trailing: Text(
-                  DateUtils.formatDateTime(order.createdAt),
+                  Dateutils.formatDateTime(order.createdAt),
                   style: TextStyle(
                     color: CustomColors.black,
                     fontSize: 14,
@@ -147,7 +147,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                       ),
                       trailing: Text(
                         order.delivery.scheduledDate != null
-                            ? DateUtils.formatDateTime(
+                            ? Dateutils.formatDateTime(
                                 DateTime.fromMillisecondsSinceEpoch(
                                     order.delivery.scheduledDate),
                               )
@@ -188,7 +188,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                                     Text(order.getStatus(
                                         order.statusDetails[index].status)),
                                     Text(
-                                      DateUtils.formatDateTime(
+                                      Dateutils.formatDateTime(
                                         DateTime.fromMillisecondsSinceEpoch(
                                             order.statusDetails[index].status ==
                                                     5
@@ -665,8 +665,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-                color: CustomColors.green,
+            TextButton(
+                style: TextButton.styleFrom(
+                  primary: CustomColors.green,
+                ),
                 child: Text(
                   "NO",
                   style: TextStyle(
@@ -679,8 +681,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                   _pController.text = "";
                   Navigator.pop(context);
                 }),
-            FlatButton(
-              color: CustomColors.alertRed,
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: CustomColors.alertRed,
+              ),
               child: Text(
                 "YES",
                 style: TextStyle(
@@ -692,7 +696,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
               onPressed: () async {
                 if (_pController.text.trim().isEmpty) {
                   Navigator.pop(context);
-                  _scaffoldKey.currentState.showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     CustomSnackBar.errorSnackBar(
                       "Please provide the reason for cancellation!",
                       2,
@@ -706,7 +710,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                     print(err);
                     _pController.text = "";
                     Navigator.pop(context);
-                    _scaffoldKey.currentState.showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       CustomSnackBar.errorSnackBar(
                         "Unable to cancel the order!",
                         3,

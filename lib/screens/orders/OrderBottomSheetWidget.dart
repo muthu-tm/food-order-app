@@ -241,11 +241,13 @@ class _OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
           )),
           Padding(
             padding: EdgeInsets.all(5),
-            child: FlatButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0),
+            child: TextButton(
+              style: TextButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                ),
+                primary: CustomColors.green,
               ),
-              color: CustomColors.green,
               onPressed: () async {
                 CustomDialogs.actionWaiting(context);
                 Order _o = Order();

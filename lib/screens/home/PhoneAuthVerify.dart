@@ -176,8 +176,17 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                     SizedBox(
                       height: 40,
                       width: 150,
-                      child: RaisedButton(
-                        elevation: 16.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 16.0,
+                          primary: CustomColors.alertRed,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              bottomLeft: Radius.circular(5),
+                            ),
+                          ),
+                        ),
                         onPressed: signIn,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -187,13 +196,6 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
                               color: CustomColors.white,
                               fontSize: 18.0,
                             ),
-                          ),
-                        ),
-                        color: CustomColors.alertRed,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            bottomLeft: Radius.circular(5),
                           ),
                         ),
                       ),
@@ -342,9 +344,9 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
             AppLocalizations.of(context).translate('unable_to_login'), 2));
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
         if (widget._rememberUser) {
@@ -367,13 +369,13 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
       }
     }).catchError((error) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
     });
   }
 
   _smsCodeSent(String verificationId, [code]) {
-    _scaffoldKey.currentState
+    ScaffoldMessenger.of(context)
         .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
     setState(() {
       resendSMSCount = resendSMSCount + 1;
@@ -384,7 +386,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   _verificationFailed(dynamic authException, BuildContext context) {
     Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-    _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
         AppLocalizations.of(context).translate('verification_failed') +
             authException.message.toString(),
         2));
@@ -394,7 +396,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
 
   signIn() {
     if (currentText.trim().length != 6) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('invalid_otp'), 2));
       errorController.add(ErrorAnimationType.shake);
     } else {
@@ -420,7 +422,7 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             authResult.user.uid);
         if (!result['is_success']) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-          _scaffoldKey.currentState
+          ScaffoldMessenger.of(context)
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
           await _success();
@@ -430,21 +432,23 @@ class _PhoneAuthVerifyState extends State<PhoneAuthVerify> {
             widget.countryCode.toString() + widget.number);
         if (!result['is_success']) {
           Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-          _scaffoldKey.currentState
+          ScaffoldMessenger.of(context)
               .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 5));
         } else {
           try {
             await _success();
           } catch (err) {
-            _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-                AppLocalizations.of(context).translate('unable_to_login'), 2));
+            ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar.errorSnackBar(
+                    AppLocalizations.of(context).translate('unable_to_login'),
+                    2));
             return;
           }
         }
       }
     }).catchError((error) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('try_later'), 2));
     });
   }

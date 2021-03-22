@@ -6,7 +6,7 @@ import 'package:chipchop_buyer/screens/user/ViewLocationsScreen.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -316,7 +316,7 @@ class _StoresInMapState extends State<StoresInMap> {
                                     ),
                                     Container(
                                         child: Text(
-                                      "Timings - ${DateUtils.getFormattedTime(store.activeFrom)} : ${DateUtils.getFormattedTime(store.activeTill)}",
+                                      "Timings - ${Dateutils.getFormattedTime(store.activeFrom)} : ${Dateutils.getFormattedTime(store.activeTill)}",
                                       style: TextStyle(
                                         color: CustomColors.black,
                                         fontSize: 14.0,

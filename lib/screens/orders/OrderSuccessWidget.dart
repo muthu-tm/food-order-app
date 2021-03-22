@@ -65,7 +65,7 @@ class OrderSuccessWidget extends StatelessWidget {
                 ),
               ),
             ),
-            FlatButton(
+            TextButton(
               child: Text("Go to Home"),
               onPressed: () {
                 Navigator.pushReplacement(

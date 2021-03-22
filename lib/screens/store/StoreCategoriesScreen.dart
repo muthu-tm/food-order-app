@@ -38,10 +38,12 @@ class _StoreCategoriesScreenState extends State<StoreCategoriesScreen> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              widget.categoryName,
-              textAlign: TextAlign.start,
-              style: TextStyle(color: CustomColors.black, fontSize: 16),
+            Flexible(
+              child: Text(
+                widget.categoryName,
+                textAlign: TextAlign.start,
+                style: TextStyle(color: CustomColors.black, fontSize: 16),
+              ),
             ),
             Container(
               height: 30,

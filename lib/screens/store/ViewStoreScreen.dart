@@ -11,7 +11,7 @@ import 'package:chipchop_buyer/screens/store/TopSellingProductsWidget.dart';
 import 'package:chipchop_buyer/screens/utils/CarouselIndicatorSlider.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../utils/CustomColors.dart';
@@ -51,9 +51,9 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
     super.initState();
     currentTime = DateTime.now();
     businessHours = (currentTime.isAfter(
-            DateUtils.getTimeAsDateTimeObject(widget.store.activeFrom)) &&
+            Dateutils.getTimeAsDateTimeObject(widget.store.activeFrom)) &&
         currentTime.isBefore(
-            DateUtils.getTimeAsDateTimeObject(widget.store.activeTill)));
+            Dateutils.getTimeAsDateTimeObject(widget.store.activeTill)));
     businessDays = (DateTime.now().weekday <= 6
         ? widget.store.workingDays.contains(DateTime.now().weekday)
         : widget.store.workingDays.contains(0));
@@ -298,17 +298,17 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                           children: [
                             (businessDays &&
                                     currentTime.isBefore(
-                                        DateUtils.getTimeAsDateTimeObject(
+                                        Dateutils.getTimeAsDateTimeObject(
                                             widget.store.activeFrom)))
                                 ? Text(
-                                    "Opening in ${currentTime.difference(DateUtils.getTimeAsDateTimeObject(widget.store.activeFrom)).abs().toString().substring(0, 4)} hours",
+                                    "Opening in ${currentTime.difference(Dateutils.getTimeAsDateTimeObject(widget.store.activeFrom)).abs().toString().substring(0, 4)} hours",
                                     style: TextStyle(
                                         fontSize: 10,
                                         color: CustomColors.black),
                                   )
                                 : isWithinWorkingHours
                                     ? Text(
-                                        "Closing in ${DateUtils.durationInMinutesToHoursAndMinutes(DateUtils.getTimeInMinutes(widget.store.activeTill) - DateUtils.getCurrentTimeInMinutes())} hours",
+                                        "Closing in ${Dateutils.durationInMinutesToHoursAndMinutes(Dateutils.getTimeInMinutes(widget.store.activeTill) - Dateutils.getCurrentTimeInMinutes())} hours",
                                         style: TextStyle(
                                             fontSize: 10,
                                             color: CustomColors.alertRed),
@@ -873,14 +873,14 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          DateUtils.getFormattedTime(widget.store.activeFrom),
+                          Dateutils.getFormattedTime(widget.store.activeFrom),
                         ),
                       ),
                       Text("-"),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          DateUtils.getFormattedTime(widget.store.activeTill),
+                          Dateutils.getFormattedTime(widget.store.activeTill),
                         ),
                       ),
                     ],
@@ -907,13 +907,13 @@ class _ViewStoreScreenState extends State<ViewStoreScreen> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(DateUtils.getFormattedTime(
+                        child: Text(Dateutils.getFormattedTime(
                             widget.store.deliveryDetails.deliveryFrom)),
                       ),
                       Text("-"),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(DateUtils.getFormattedTime(
+                        child: Text(Dateutils.getFormattedTime(
                             widget.store.deliveryDetails.deliveryTill)),
                       ),
                     ],

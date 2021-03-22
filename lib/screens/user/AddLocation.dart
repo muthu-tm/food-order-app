@@ -64,7 +64,7 @@ class _AddLocationState extends State<AddLocation> {
               ),
             );
           } else {
-            _scaffoldKey.currentState.showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
           }
         },

@@ -25,7 +25,7 @@ class UserRecentSearches extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 17),
                     ),
-                    trailing: FlatButton.icon(
+                    trailing: TextButton.icon(
                         onPressed: () async {
                           try {
                             CustomDialogs.actionWaiting(context);

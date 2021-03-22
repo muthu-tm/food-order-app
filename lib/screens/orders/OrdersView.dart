@@ -154,7 +154,7 @@ class OrderViewScreen extends StatelessWidget {
                                     order.status != 5
                                         ? Align(
                                             alignment: Alignment.bottomRight,
-                                            child: FlatButton(
+                                            child: TextButton(
                                               onPressed: () async {
                                                 Navigator.push(
                                                   context,
@@ -168,22 +168,26 @@ class OrderViewScreen extends StatelessWidget {
                                                   ),
                                                 );
                                               },
-                                              child: Text("Show Details",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      decoration: TextDecoration
-                                                          .underline,
-                                                      color: Colors
-                                                          .indigo.shade700)),
-                                              splashColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
+                                              child: Text(
+                                                "Show Details",
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                    color:
+                                                        Colors.indigo.shade700),
+                                              ),
+                                              style: TextButton.styleFrom(
+                                                  // splashColor: Colors.transparent,
+                                                  // highlightColor:
+                                                  //     Colors.transparent,
+                                                  ),
                                             ),
                                           )
                                         : Row(
                                             children: <Widget>[
                                               Spacer(),
-                                              FlatButton(
+                                              TextButton(
                                                 onPressed: () async {
                                                   Navigator.push(
                                                     context,
@@ -197,14 +201,19 @@ class OrderViewScreen extends StatelessWidget {
                                                     ),
                                                   );
                                                 },
-                                                child: Text("Show Details",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors
-                                                            .indigo.shade700)),
-                                                splashColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
+                                                child: Text(
+                                                  "Show Details",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors
+                                                          .indigo.shade700),
+                                                ),
+                                                style: TextButton.styleFrom(
+                                                    // splashColor:
+                                                    //     Colors.transparent,
+                                                    // highlightColor:
+                                                    //     Colors.transparent,
+                                                    ),
                                               ),
                                               Spacer(),
                                               Container(
@@ -213,7 +222,7 @@ class OrderViewScreen extends StatelessWidget {
                                                 color: Colors.grey,
                                               ),
                                               Spacer(),
-                                              FlatButton(
+                                              TextButton(
                                                 onPressed: () async {
                                                   bool reviewed =
                                                       await ProductReviews()
@@ -243,14 +252,19 @@ class OrderViewScreen extends StatelessWidget {
                                                             .lightGrey);
                                                   }
                                                 },
-                                                child: Text("Add Review",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: Colors
-                                                            .indigo.shade700)),
-                                                splashColor: Colors.transparent,
-                                                highlightColor:
-                                                    Colors.transparent,
+                                                child: Text(
+                                                  "Add Review",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors
+                                                          .indigo.shade700),
+                                                ),
+                                                style: TextButton.styleFrom(
+                                                  // splashColor:
+                                                  //     Colors.transparent,
+                                                  // highlightColor:
+                                                  //     Colors.transparent,
+                                                ),
                                               ),
                                               Spacer(),
                                             ],

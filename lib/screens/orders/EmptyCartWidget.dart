@@ -70,8 +70,14 @@ class EmptyCartWidget extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  RaisedButton(
-                    elevation: 3,
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 3,
+                      primary: CustomColors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.pushAndRemoveUntil(
                         context,
@@ -85,10 +91,6 @@ class EmptyCartWidget extends StatelessWidget {
                     child: Text(
                       "Continue shopping",
                       style: TextStyle(color: CustomColors.green),
-                    ),
-                    color: CustomColors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
                     ),
                   )
                 ],

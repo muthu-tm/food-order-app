@@ -7,7 +7,7 @@ import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/services/controllers/auth/auth_controller.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_controller.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -113,8 +113,10 @@ class _UserSettingState extends State<UserSetting> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
-                color: CustomColors.green,
+            TextButton(
+                style: TextButton.styleFrom(
+                  primary: CustomColors.green,
+                ),
                 child: Text(
                   "NO",
                   style: TextStyle(
@@ -127,8 +129,10 @@ class _UserSettingState extends State<UserSetting> {
                   _pController.text = "";
                   Navigator.pop(context);
                 }),
-            FlatButton(
-              color: CustomColors.alertRed,
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: CustomColors.alertRed,
+              ),
               child: Text(
                 "YES",
                 style: TextStyle(
@@ -145,7 +149,7 @@ class _UserSettingState extends State<UserSetting> {
                     await cachedLocalUser.updateByID({
                       'is_active': false,
                       'deactivated_at':
-                          DateUtils.getUTCDateEpoch(DateTime.now())
+                          Dateutils.getUTCDateEpoch(DateTime.now())
                     }, cachedLocalUser.getID());
                     await AuthController().signOut();
                     Navigator.pushAndRemoveUntil(
@@ -159,7 +163,7 @@ class _UserSettingState extends State<UserSetting> {
                   } catch (err) {
                     _pController.text = "";
                     Navigator.pop(context);
-                    _scaffoldKey.currentState.showSnackBar(
+                    ScaffoldMessenger.of(context).showSnackBar(
                       CustomSnackBar.errorSnackBar(
                         "Unable to deactivate your account now! Please try again later.",
                         3,
@@ -169,7 +173,7 @@ class _UserSettingState extends State<UserSetting> {
                 } else {
                   _pController.text = "";
                   Navigator.pop(context);
-                  _scaffoldKey.currentState.showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     CustomSnackBar.errorSnackBar(
                       "Failed to Authenticate!",
                       3,

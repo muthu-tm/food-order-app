@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class DateUtils {
+class Dateutils {
   static DateFormat dateFormatter = new DateFormat('dd-MMM-yyyy');
   static DateFormat dateTimeFormatter = new DateFormat('dd MMM, yyyy h:mm a');
 

@@ -8,7 +8,7 @@ import 'package:chipchop_buyer/screens/utils/CustomSnackBar.dart';
 import 'package:chipchop_buyer/screens/utils/field_validator.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_controller.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 
 class EditUserProfile extends StatefulWidget {
@@ -36,10 +36,10 @@ class _EditUserProfileState extends State<EditUserProfile> {
     super.initState();
     gender = user.gender;
     if (user.dateOfBirth != null)
-      this._date.text = DateUtils.formatDate(
+      this._date.text = Dateutils.formatDate(
           DateTime.fromMillisecondsSinceEpoch(user.dateOfBirth));
     else
-      this._date.text = DateUtils.formatDate(DateTime.now());
+      this._date.text = Dateutils.formatDate(DateTime.now());
   }
 
   @override
@@ -573,7 +573,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        updatedUser['date_of_birth'] = DateUtils.getUTCDateEpoch(picked);
+        updatedUser['date_of_birth'] = Dateutils.getUTCDateEpoch(picked);
       });
   }
 
@@ -588,7 +588,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
 
       if (!result['is_success']) {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-        _scaffoldKey.currentState
+        ScaffoldMessenger.of(context)
             .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
       } else {
         Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
@@ -602,7 +602,7 @@ class _EditUserProfileState extends State<EditUserProfile> {
         );
       }
     } else {
-      _scaffoldKey.currentState.showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar.errorSnackBar("Please fill valid data!", 2));
     }
   }

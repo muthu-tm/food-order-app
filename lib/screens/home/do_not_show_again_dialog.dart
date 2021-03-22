@@ -122,7 +122,7 @@ class _DoNotAskAgainDialogState extends State<DoNotAskAgainDialog> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text(widget.positiveButtonText),
           onPressed: doNotAskAgain
               ? null
@@ -130,7 +130,7 @@ class _DoNotAskAgainDialogState extends State<DoNotAskAgainDialog> {
                   await _onUpdateNowClicked();
                 },
         ),
-        FlatButton(
+        TextButton(
           child: Text(
             widget.negativeButtonText,
             style: TextStyle(color: CustomColors.alertRed),

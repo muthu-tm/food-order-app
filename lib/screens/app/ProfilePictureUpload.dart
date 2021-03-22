@@ -86,9 +86,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.all(5),
-                              child: FlatButton(
-                                padding: EdgeInsets.all(5),
-                                color: CustomColors.green,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.all(5),
+                                  primary: CustomColors.green,
+                                ),
                                 child: Text(
                                   "Select Image",
                                   style: TextStyle(
@@ -104,9 +106,12 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                             ),
                             Padding(
                               padding: EdgeInsets.all(5),
-                              child: FlatButton(
-                                padding: EdgeInsets.all(5),
-                                color: CustomColors.alertRed.withOpacity(0.5),
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.all(5),
+                                  primary:
+                                      CustomColors.alertRed.withOpacity(0.5),
+                                ),
                                 child: Text(
                                   "Take Picture",
                                   style: TextStyle(
@@ -152,9 +157,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.all(5),
-                              child: FlatButton(
-                                padding: EdgeInsets.all(5),
-                                color: CustomColors.green,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.all(5),
+                                  primary: CustomColors.green,
+                                ),
                                 child: Text(
                                   "Change",
                                   style: TextStyle(
@@ -172,9 +179,11 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                             ),
                             Padding(
                               padding: EdgeInsets.all(5),
-                              child: FlatButton(
-                                padding: EdgeInsets.all(5),
-                                color: CustomColors.green,
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.all(5),
+                                  primary: CustomColors.green,
+                                ),
                                 child: Text(
                                   "Upload",
                                   style: TextStyle(
@@ -191,8 +200,10 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                           ],
                         ),
                         Spacer(),
-                        FlatButton(
-                          color: CustomColors.alertRed,
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            primary: CustomColors.alertRed,
+                          ),
                           child: Text(
                             "Cancel",
                             style: TextStyle(

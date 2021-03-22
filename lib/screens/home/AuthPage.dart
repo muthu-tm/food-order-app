@@ -218,7 +218,7 @@ class _AuthPageState extends State<AuthPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -268,12 +268,14 @@ class _AuthPageState extends State<AuthPage> {
                   SizedBox(
                     height: 40,
                     width: 150,
-                    child: RaisedButton(
-                      color: CustomColors.alertRed,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          bottomLeft: Radius.circular(5),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: CustomColors.alertRed,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            bottomLeft: Radius.circular(5),
+                          ),
                         ),
                       ),
                       onPressed: () {
@@ -309,7 +311,7 @@ class _AuthPageState extends State<AuthPage> {
                         color: CustomColors.alertRed.withOpacity(0.7),
                       ),
                     ),
-                    FlatButton(
+                    TextButton(
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -355,7 +357,7 @@ class _AuthPageState extends State<AuthPage> {
           if (authenticated) {
             await login(widget.userID);
           } else {
-            _scaffoldKey.currentState.showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackBar.errorSnackBar(
                   "Unable to use FingerPrint Login. Please LOGIN using Secret KEY!",
                   2),
@@ -363,7 +365,7 @@ class _AuthPageState extends State<AuthPage> {
             return;
           }
         } else {
-          _scaffoldKey.currentState.showSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar.errorSnackBar(
                 "Unable to use FingerPrint Login. Please LOGIN using Secret KEY!",
                 2),
@@ -372,7 +374,7 @@ class _AuthPageState extends State<AuthPage> {
         }
       }
     } catch (e) {
-      _scaffoldKey.currentState.showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         CustomSnackBar.errorSnackBar(
             "Unable to use FingerPrint Login. Please LOGIN using Secret KEY!",
             2),
@@ -387,9 +389,9 @@ class _AuthPageState extends State<AuthPage> {
 
     if (!result['is_success']) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('unable_to_login'), 2));
-      _scaffoldKey.currentState
+      ScaffoldMessenger.of(context)
           .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
     } else {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -414,7 +416,7 @@ class _AuthPageState extends State<AuthPage> {
 
   void _submit(String _userID) async {
     if (_pController.text.length == 0) {
-      _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
           AppLocalizations.of(context).translate('your_secret_key'), 2));
       return;
     } else {
@@ -425,8 +427,10 @@ class _AuthPageState extends State<AuthPage> {
         String hashKey =
             HashGenerator.hmacGenerator(_pController.text, _user.getID());
         if (hashKey != _user.password) {
-          _scaffoldKey.currentState.showSnackBar(CustomSnackBar.errorSnackBar(
-              AppLocalizations.of(context).translate('wrong_secret_key'), 2));
+          ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar.errorSnackBar(
+                  AppLocalizations.of(context).translate('wrong_secret_key'),
+                  2));
           return;
         } else {
           await login(_userID);
@@ -438,7 +442,7 @@ class _AuthPageState extends State<AuthPage> {
           'name': widget.userName,
           'error': err.toString()
         }, 'log_in');
-        _scaffoldKey.currentState.showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
             CustomSnackBar.errorSnackBar("Sorry, Unable to Login now!", 2));
       }
     }

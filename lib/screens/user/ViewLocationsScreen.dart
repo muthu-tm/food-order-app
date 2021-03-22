@@ -256,7 +256,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           Spacer(
             flex: 2,
           ),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () {
               Navigator.push(
                 context,
@@ -274,8 +274,10 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
               "Edit",
               style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
             ),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            style: TextButton.styleFrom(
+                // splashColor: Colors.transparent,
+                // highlightColor: Colors.transparent,
+                ),
           ),
           Spacer(
             flex: 3,
@@ -288,7 +290,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           Spacer(
             flex: 3,
           ),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () async {
               if (primaryLocID == loc.uuid) {
                 return;
@@ -315,10 +317,14 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
               Icons.location_on,
               color: CustomColors.blueGreen,
             ),
-            label: Text(primaryLocID == loc.uuid ? "Primary" : "Set Primary",
-                style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            label: Text(
+              primaryLocID == loc.uuid ? "Primary" : "Set Primary",
+              style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
+            ),
+            style: TextButton.styleFrom(
+                // splashColor: Colors.transparent,
+                // highlightColor: Colors.transparent,
+                ),
           ),
           Spacer(
             flex: 3,
@@ -331,7 +337,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
           Spacer(
             flex: 3,
           ),
-          FlatButton.icon(
+          TextButton.icon(
             onPressed: () async {
               if (primaryLocID == loc.uuid) {
                 Fluttertoast.showToast(
@@ -359,10 +365,14 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
               Icons.delete_forever,
               color: CustomColors.alertRed,
             ),
-            label: Text("Remove",
-                style: TextStyle(fontSize: 12, color: Colors.indigo.shade700)),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            label: Text(
+              "Remove",
+              style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
+            ),
+            style: TextButton.styleFrom(
+              primary: Colors.transparent,
+              // highlightColor: Colors.transparent,
+            ),
           ),
           Spacer(
             flex: 2,

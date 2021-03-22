@@ -121,7 +121,7 @@ class _UpdateAppState extends State<UpdateApp> {
                 ),
                 content: Text(message),
                 actions: <Widget>[
-                  FlatButton(
+                  TextButton(
                     child: Text(btnLabel),
                     onPressed: () async {
                       await _onUpdateNowClicked();

@@ -30,7 +30,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
   int searchMode = 0;
   Future<List<Map<String, dynamic>>> snapshot;
 
-  List<CustomRadioModel> inOutList = List<CustomRadioModel>();
+  List<CustomRadioModel> inOutList = [];
 
   @override
   void initState() {
@@ -94,7 +94,7 @@ class _SearchAppBarState extends State<SearchAppBar> {
           ),
           onFieldSubmitted: (searchKey) {
             if (searchKey.trim().isEmpty || searchKey.trim().length < 2) {
-              _scaffoldKey.currentState.showSnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar("Enter minimum 2 digits", 2));
               return null;
             } else {

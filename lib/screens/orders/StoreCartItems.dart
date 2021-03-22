@@ -15,7 +15,7 @@ import 'package:chipchop_buyer/screens/utils/AsyncWidgets.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,9 +102,9 @@ class _StoreCartItemsState extends State<StoreCartItems> {
             Store store = snapshot.data;
             final currentTime = DateTime.now();
             isWithinWorkingHours = (currentTime.isAfter(
-                        DateUtils.getTimeAsDateTimeObject(store.activeFrom)) &&
+                        Dateutils.getTimeAsDateTimeObject(store.activeFrom)) &&
                     currentTime.isBefore(
-                        DateUtils.getTimeAsDateTimeObject(store.activeTill))) &&
+                        Dateutils.getTimeAsDateTimeObject(store.activeTill))) &&
                 (DateTime.now().weekday <= 6
                     ? store.workingDays.contains(DateTime.now().weekday)
                     : store.workingDays.contains(0));
@@ -239,12 +239,15 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                 getCartDetailsCards(store),
                 Padding(
                   padding: EdgeInsets.all(5),
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      primary: isWithinWorkingHours
+                          ? CustomColors.green
+                          : Colors.grey,
                     ),
-                    color:
-                        isWithinWorkingHours ? CustomColors.green : Colors.grey,
                     onPressed: () async {
                       if (cachedLocalUser.primaryLocation == null) {
                         Fluttertoast.showToast(
@@ -370,11 +373,13 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                     Container(
                       padding: EdgeInsets.all(10),
                       width: 135,
-                      child: FlatButton.icon(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                      child: TextButton.icon(
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          primary: Colors.green,
                         ),
-                        color: Colors.green,
                         onPressed: () async {
                           if (_cartWrittenOrders.isNotEmpty &&
                               _cartWrittenOrders.last.name.isEmpty) {
@@ -818,11 +823,13 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       Container(
                         padding: EdgeInsets.all(10),
                         width: 135,
-                        child: FlatButton.icon(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
+                        child: TextButton.icon(
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            primary: Colors.green,
                           ),
-                          color: Colors.green,
                           onPressed: () async {
                             String tempPath =
                                 (await getTemporaryDirectory()).path;

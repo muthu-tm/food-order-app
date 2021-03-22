@@ -5,7 +5,7 @@ import 'package:chipchop_buyer/screens/settings/EditUserProfile.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
-import 'package:chipchop_buyer/services/utils/DateUtils.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileWidget extends StatelessWidget {
@@ -228,7 +228,7 @@ class UserProfileWidget extends StatelessWidget {
             title: TextFormField(
               initialValue: user.dateOfBirth == null
                   ? ''
-                  : DateUtils.formatDate(
+                  : Dateutils.formatDate(
                       DateTime.fromMillisecondsSinceEpoch(user.dateOfBirth)),
               decoration: InputDecoration(
                 fillColor: CustomColors.white,

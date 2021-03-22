@@ -58,7 +58,7 @@ class LocationPickerState extends State<LocationPicker> {
         backgroundColor: CustomColors.green,
         onPressed: () async {
           if (geoData == null || geoData.geoHash.isEmpty) {
-            _scaffoldKey.currentState.showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackBar.errorSnackBar(
                   "Please PIN your location correctly!", 2),
             );
@@ -76,7 +76,7 @@ class LocationPickerState extends State<LocationPicker> {
               (Route<dynamic> route) => false,
             );
           } catch (err) {
-            _scaffoldKey.currentState.showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackBar.errorSnackBar(
                   "Sorry, Unable to add your location now. Please try again later!",
                   2),
