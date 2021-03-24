@@ -188,8 +188,8 @@ class CustomDialogs {
             actions: <Widget>[
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  elevation: 10.0,
-                  // splashColor: CustomColors.green,
+                  elevation: 5.0,
+                  primary: Colors.grey[200],
                 ),
                 child: new Text(
                   'NO',
@@ -200,8 +200,8 @@ class CustomDialogs {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  elevation: 10.0,
-                  // splashColor: CustomColors.alertRed,
+                  elevation: 5.0,
+                  primary: Colors.grey[200]
                 ),
                 child: new Text(
                   'YES',

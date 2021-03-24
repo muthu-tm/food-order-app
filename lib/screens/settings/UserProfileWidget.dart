@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
 import 'package:chipchop_buyer/screens/settings/ChangeSecret.dart';
 import 'package:chipchop_buyer/screens/settings/EditUserProfile.dart';
@@ -65,7 +64,7 @@ class UserProfileWidget extends StatelessWidget {
             leading: SizedBox(
               width: 95,
               child: Text(
-                AppLocalizations.of(context).translate('name'),
+                "Name",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -92,7 +91,7 @@ class UserProfileWidget extends StatelessWidget {
             leading: SizedBox(
               width: 95,
               child: Text(
-                AppLocalizations.of(context).translate('contact_number'),
+                "Contact Number",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -120,7 +119,7 @@ class UserProfileWidget extends StatelessWidget {
                   leading: SizedBox(
                     width: 95,
                     child: Text(
-                      AppLocalizations.of(context).translate('password'),
+                      "Password",
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -143,8 +142,7 @@ class UserProfileWidget extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     highlightColor: CustomColors.alertRed.withOpacity(0.5),
-                    tooltip: AppLocalizations.of(context)
-                        .translate('change_password'),
+                    tooltip: "Change Password",
                     icon: Icon(
                       Icons.edit,
                       size: 25.0,
@@ -156,8 +154,8 @@ class UserProfileWidget extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ChangeSecret(),
-                            settings: RouteSettings(
-                                name: '/settings/user/secret'),
+                            settings:
+                                RouteSettings(name: '/settings/user/secret'),
                           ),
                         );
                       }
@@ -169,7 +167,7 @@ class UserProfileWidget extends StatelessWidget {
             leading: SizedBox(
               width: 95,
               child: Text(
-                AppLocalizations.of(context).translate('gender'),
+                "Gender",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -194,7 +192,7 @@ class UserProfileWidget extends StatelessWidget {
             leading: SizedBox(
               width: 95,
               child: Text(
-                AppLocalizations.of(context).translate('email'),
+                "Email",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -218,7 +216,7 @@ class UserProfileWidget extends StatelessWidget {
             leading: SizedBox(
               width: 95,
               child: Text(
-                AppLocalizations.of(context).translate('dob'),
+                "Date of Birth",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -250,7 +248,7 @@ class UserProfileWidget extends StatelessWidget {
             leading: SizedBox(
               width: 95,
               child: Text(
-                AppLocalizations.of(context).translate('address'),
+                "Address",
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,

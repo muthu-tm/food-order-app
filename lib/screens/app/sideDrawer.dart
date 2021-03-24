@@ -11,7 +11,6 @@ import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:chipchop_buyer/services/utils/hash_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
-import '../../app_localizations.dart';
 
 Widget sideDrawer(BuildContext context) {
   return Drawer(
@@ -71,8 +70,7 @@ Widget sideDrawer(BuildContext context) {
                                 ),
                               ),
                               Text(
-                                AppLocalizations.of(context)
-                                    .translate('upload'),
+                                "Upload",
                                 style: TextStyle(
                                   fontSize: 8.0,
                                   color: CustomColors.lightGrey,
@@ -223,7 +221,7 @@ Widget sideDrawer(BuildContext context) {
         ListTile(
           leading: Icon(Icons.settings, color: CustomColors.green),
           title: Text(
-            AppLocalizations.of(context).translate('profile_settings'),
+            "Profile Settings",
           ),
           onTap: () {
             Navigator.push(
@@ -256,7 +254,7 @@ Widget sideDrawer(BuildContext context) {
         ListTile(
           leading: Icon(Icons.headset_mic, color: CustomColors.green),
           title: Text(
-            AppLocalizations.of(context).translate('help_and_support'),
+            "Help and Support",
           ),
           onTap: () {
             showDialog(
@@ -274,13 +272,10 @@ Widget sideDrawer(BuildContext context) {
         ListTile(
           leading: Icon(Icons.error, color: CustomColors.alertRed),
           title: Text(
-            AppLocalizations.of(context).translate('logout'),
+            "Logout",
           ),
           onTap: () => CustomDialogs.confirm(
-              context,
-              AppLocalizations.of(context).translate('warning'),
-              AppLocalizations.of(context).translate('logout_message'),
-              () async {
+              context, "Warning!", "Do you really want to Logout?", () async {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
@@ -309,8 +304,7 @@ Widget sideDrawer(BuildContext context) {
             ),
             applicationName: buyer_app_name,
             applicationVersion: app_version,
-            applicationLegalese:
-                AppLocalizations.of(context).translate('copyright'),
+            applicationLegalese: "© 2020 Fourcup Inc.",
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -364,8 +358,7 @@ Widget sideDrawer(BuildContext context) {
                   size: 35.0,
                 ),
                 title: Text(
-                  AppLocalizations.of(context)
-                      .translate('terms_and_conditions'),
+                  "Terms of Services",
                   style: TextStyle(
                     color: CustomColors.lightBlue,
                     fontSize: 18.0,

@@ -7,8 +7,6 @@ import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
 import 'package:chipchop_buyer/screens/utils/url_launcher_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../app_localizations.dart';
-
 class DoNotAskAgainDialog extends StatefulWidget {
   final String title, subTitle, positiveButtonText, negativeButtonText;
   final String doNotAskAgainText;
@@ -42,7 +40,7 @@ class _DoNotAskAgainDialogState extends State<DoNotAskAgainDialog> {
       await UrlLauncherUtils.launchURL(widget.url);
     } catch (err) {
       CustomDialogs.waiting(context, "Error!",
-          AppLocalizations.of(context).translate('unable_to_open'));
+          "Unable to open update URL now. Please update manually!");
     }
   }
 

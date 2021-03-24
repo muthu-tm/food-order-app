@@ -12,7 +12,6 @@ import 'package:chipchop_buyer/services/analytics/analytics.dart';
 import 'package:chipchop_buyer/services/controllers/auth/auth_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:chipchop_buyer/app_localizations.dart';
 
 class MobileSignInPage extends StatefulWidget {
   @override
@@ -280,21 +279,18 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                          text: AppLocalizations.of(context)
-                              .translate('we_will_send'),
+                          text: "We will send",
                           style: TextStyle(
                               color: CustomColors.blue,
                               fontWeight: FontWeight.w400)),
                       TextSpan(
-                          text: AppLocalizations.of(context)
-                              .translate('one_time_password'),
+                          text: " OTP",
                           style: TextStyle(
                               color: CustomColors.alertRed,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w700)),
                       TextSpan(
-                          text: AppLocalizations.of(context)
-                              .translate('to_mobile_no'),
+                          text: " to this Mobile Number",
                           style: TextStyle(
                               color: CustomColors.blue,
                               fontWeight: FontWeight.w400)),
@@ -370,7 +366,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                 children: <Widget>[
                   Container(
                     child: Text(
-                      AppLocalizations.of(context).translate('already_account'),
+                      "Already have an account?",
                       style: TextStyle(
                         fontSize: 14,
                         color: CustomColors.positiveGreen,
@@ -380,7 +376,7 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      AppLocalizations.of(context).translate('login'),
+                      "LOGIN",
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 18,
@@ -399,11 +395,11 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
   startPhoneAuth() async {
     if (_phoneNumberController.text.length != 10) {
       ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('invalid_number'), 2));
+          "Oops! Mobile Number seems invalid", 2));
       return;
     } else if (_nameController.text.length <= 2) {
       ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('enter_your_name'), 2));
+          "Please Enter Your Name", 2));
       return;
     } else if (_passKeyController.text.length < 4) {
       ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
@@ -485,15 +481,13 @@ class _MobileSignInPageState extends State<MobileSignInPage> {
     }).catchError((error) {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('try_later'), 2));
-      ScaffoldMessenger.of(context)
-          .showSnackBar(CustomSnackBar.errorSnackBar("${error.toString()}", 2));
+          "Something went wrong. Please try again Later!", 2));
     });
   }
 
   _smsCodeSent(String verificationId, [code]) {
-    ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.successSnackBar(
-        AppLocalizations.of(context).translate('otp_send'), 1));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(CustomSnackBar.successSnackBar("OTP sent", 1));
 
     _smsVerificationCode = verificationId;
     _forceResendingToken = code;

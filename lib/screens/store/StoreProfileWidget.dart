@@ -31,40 +31,52 @@ class StoreProfileWidget extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Column(
-                  children: [
-                    Text(
-                      store.name,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      store.address.city,
-                      style: TextStyle(fontSize: 13),
-                    ),
-                  ],
-                ),
-                InkWell(
-                  onTap: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewStoreScreen(store),
-                        settings: RouteSettings(name: '/store'),
-                      ),
-                    );
-                  },
-                  child: Row(
+                Flexible(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        "View Store",
-                        style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black,
-                            decoration: TextDecoration.underline),
+                      Flexible(
+                        child: Text(
+                          store.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
-                      Icon(Icons.chevron_right)
+                      Text(
+                        store.address.city,
+                        style: TextStyle(fontSize: 13),
+                      ),
                     ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 5.0),
+                  child: InkWell(
+                    onTap: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ViewStoreScreen(store),
+                          settings: RouteSettings(name: '/store'),
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View Store",
+                          style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black,
+                              decoration: TextDecoration.underline),
+                        ),
+                        Icon(Icons.chevron_right)
+                      ],
+                    ),
                   ),
                 ),
               ],

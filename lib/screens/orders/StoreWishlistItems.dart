@@ -46,20 +46,25 @@ class _StoreWishlistItemsState extends State<StoreWishlistItems> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              store.name,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.blue[900]),
-                            ),
-                            Text(
-                              store.address.city,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                store.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.blue[900]),
+                              ),
+                              Text(
+                                store.address.city,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
                         ),
                         InkWell(
                           onTap: () async {

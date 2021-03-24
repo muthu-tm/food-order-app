@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
 import 'package:chipchop_buyer/screens/home/LoginPage.dart';
 import 'package:chipchop_buyer/screens/settings/UserProfileWidget.dart';
@@ -27,7 +26,7 @@ class _UserSettingState extends State<UserSetting> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('profile_settings'),
+          "Profile Settings",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -115,7 +114,7 @@ class _UserSettingState extends State<UserSetting> {
           actions: <Widget>[
             TextButton(
                 style: TextButton.styleFrom(
-                  primary: CustomColors.green,
+                  backgroundColor: CustomColors.green,
                 ),
                 child: Text(
                   "NO",
@@ -131,7 +130,7 @@ class _UserSettingState extends State<UserSetting> {
                 }),
             TextButton(
               style: TextButton.styleFrom(
-                primary: CustomColors.alertRed,
+                backgroundColor: CustomColors.alertRed,
               ),
               child: Text(
                 "YES",

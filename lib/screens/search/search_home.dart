@@ -10,15 +10,12 @@ import 'package:chipchop_buyer/services/controllers/user/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../app_localizations.dart';
-
 class SearchHome extends StatefulWidget {
   @override
   _SearchHomeState createState() => _SearchHomeState();
 }
 
 class _SearchHomeState extends State<SearchHome> {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -51,7 +48,7 @@ class _SearchHomeState extends State<SearchHome> {
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   CustomSnackBar.errorSnackBar(
-                    AppLocalizations.of(context).translate('set_location'),
+                    "Please set location",
                     2,
                   ),
                 );

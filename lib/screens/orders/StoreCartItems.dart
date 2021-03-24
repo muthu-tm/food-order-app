@@ -241,10 +241,11 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                   padding: EdgeInsets.all(5),
                   child: TextButton(
                     style: TextButton.styleFrom(
+                      padding: EdgeInsets.all(0),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
                       ),
-                      primary: isWithinWorkingHours
+                      backgroundColor: isWithinWorkingHours
                           ? CustomColors.green
                           : Colors.grey,
                     ),
@@ -375,10 +376,11 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                       width: 135,
                       child: TextButton.icon(
                         style: TextButton.styleFrom(
+                          padding: EdgeInsets.all(0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.0),
                           ),
-                          primary: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                         onPressed: () async {
                           if (_cartWrittenOrders.isNotEmpty &&
@@ -393,7 +395,10 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                             });
                           }
                         },
-                        icon: Icon(Icons.add),
+                        icon: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
                         label: Text(
                           "Add",
                           textAlign: TextAlign.center,
@@ -734,19 +739,19 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                               ),
                                             ),
                                             Container(
-                                              height: 40,
-                                              width: 120,
+                                              height: 35,
+                                              width: 80,
                                               decoration: BoxDecoration(
-                                                  color: Colors.lightBlue[200],
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(20))),
+                                                color: Colors.lightBlue[200],
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)),
+                                              ),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   IconButton(
-                                                      icon: Icon(Icons.remove),
+                                                      icon: Icon(Icons.remove, size: 15,),
                                                       onPressed:
                                                           _cartWrittenOrders[
                                                                           index]
@@ -767,11 +772,18 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                                                         .quantity);
                                                                   });
                                                                 }),
-                                                  Text(_cartWrittenOrders[index]
-                                                      .quantity
-                                                      .toString()),
+                                                  Text(
+                                                    _cartWrittenOrders[index]
+                                                        .quantity
+                                                        .toString(),
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ),
                                                   IconButton(
-                                                      icon: Icon(Icons.add),
+                                                      icon: Icon(
+                                                        Icons.add,
+                                                        size: 15,
+                                                      ),
                                                       onPressed: () {
                                                         setState(() {
                                                           _cartWrittenOrders[
@@ -825,10 +837,11 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                         width: 135,
                         child: TextButton.icon(
                           style: TextButton.styleFrom(
+                            padding: EdgeInsets.all(0),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
                             ),
-                            primary: Colors.green,
+                            backgroundColor: Colors.green,
                           ),
                           onPressed: () async {
                             String tempPath =
@@ -877,7 +890,10 @@ class _StoreCartItemsState extends State<StoreCartItems> {
                                 });
                             }
                           },
-                          icon: Icon(Icons.camera),
+                          icon: Icon(
+                            Icons.camera,
+                            color: Colors.white,
+                          ),
                           label: Container(
                             padding: EdgeInsets.symmetric(
                               vertical: 8.0,

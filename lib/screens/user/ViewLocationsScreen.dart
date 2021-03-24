@@ -370,7 +370,7 @@ class _ViewLocationsScreenState extends State<ViewLocationsScreen> {
               style: TextStyle(fontSize: 12, color: Colors.indigo.shade700),
             ),
             style: TextButton.styleFrom(
-              primary: Colors.transparent,
+              backgroundColor: Colors.transparent,
               // highlightColor: Colors.transparent,
             ),
           ),

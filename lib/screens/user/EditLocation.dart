@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/address.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/user/EditLocationPicker.dart';
@@ -39,7 +38,7 @@ class _EditLocationState extends State<EditLocation> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('title_add_location'),
+          "Add Location",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -101,7 +100,7 @@ class _EditLocationState extends State<EditLocation> {
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
-                      AppLocalizations.of(context).translate('location_name'),
+                      "Location Name",
                       style: TextStyle(
                           color: CustomColors.grey,
                           fontWeight: FontWeight.bold,
@@ -244,8 +243,7 @@ class _EditLocationState extends State<EditLocation> {
                                     TextCapitalization.sentences,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('building_and_street'),
+                                  labelText: "Building no. & street",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
@@ -321,8 +319,7 @@ class _EditLocationState extends State<EditLocation> {
                                 textCapitalization:
                                     TextCapitalization.sentences,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('city'),
+                                  labelText: "City",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
@@ -356,8 +353,7 @@ class _EditLocationState extends State<EditLocation> {
                                 textCapitalization:
                                     TextCapitalization.sentences,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('state'),
+                                  labelText: "State",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(
@@ -395,8 +391,7 @@ class _EditLocationState extends State<EditLocation> {
                                 initialValue: updatedAddress.pincode,
                                 textAlign: TextAlign.start,
                                 decoration: InputDecoration(
-                                  labelText: AppLocalizations.of(context)
-                                      .translate('pincode'),
+                                  labelText: "Pincode",
                                   floatingLabelBehavior:
                                       FloatingLabelBehavior.always,
                                   labelStyle: TextStyle(

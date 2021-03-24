@@ -667,7 +667,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
           actions: <Widget>[
             TextButton(
                 style: TextButton.styleFrom(
-                  primary: CustomColors.green,
+                  backgroundColor: CustomColors.green,
                 ),
                 child: Text(
                   "NO",
@@ -683,7 +683,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen>
                 }),
             TextButton(
               style: TextButton.styleFrom(
-                primary: CustomColors.alertRed,
+                backgroundColor: CustomColors.alertRed,
               ),
               child: Text(
                 "YES",

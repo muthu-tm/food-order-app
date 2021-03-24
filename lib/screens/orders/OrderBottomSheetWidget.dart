@@ -246,7 +246,7 @@ class _OrderBottomSheetWidgetState extends State<OrderBottomSheetWidget> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
-                primary: CustomColors.green,
+                backgroundColor: CustomColors.green,
               ),
               onPressed: () async {
                 CustomDialogs.actionWaiting(context);

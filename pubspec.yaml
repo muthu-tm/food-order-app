@@ -23,8 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
   firebase_core: "^0.7.0"
 
 
@@ -88,10 +86,6 @@ flutter:
     - images/store_assured.png
     - images/store_not_verified.png
     - images/icons/logo.png
-    - lang/en.json
-    - lang/ta.json
-    - lang/hi.json
-    
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

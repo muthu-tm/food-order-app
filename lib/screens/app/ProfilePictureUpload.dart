@@ -89,7 +89,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.all(5),
-                                  primary: CustomColors.green,
+                                  backgroundColor: CustomColors.green,
                                 ),
                                 child: Text(
                                   "Select Image",
@@ -109,7 +109,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.all(5),
-                                  primary:
+                                  backgroundColor:
                                       CustomColors.alertRed.withOpacity(0.5),
                                 ),
                                 child: Text(
@@ -160,7 +160,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.all(5),
-                                  primary: CustomColors.green,
+                                  backgroundColor: CustomColors.green,
                                 ),
                                 child: Text(
                                   "Change",
@@ -182,7 +182,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.all(5),
-                                  primary: CustomColors.green,
+                                  backgroundColor: CustomColors.green,
                                 ),
                                 child: Text(
                                   "Upload",
@@ -202,7 +202,7 @@ class _ProfilePictureUploadState extends State<ProfilePictureUpload> {
                         Spacer(),
                         TextButton(
                           style: TextButton.styleFrom(
-                            primary: CustomColors.alertRed,
+                            backgroundColor: CustomColors.alertRed,
                           ),
                           child: Text(
                             "Cancel",

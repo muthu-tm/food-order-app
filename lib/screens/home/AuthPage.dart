@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/user.dart';
 import 'package:chipchop_buyer/screens/Home/LoginPage.dart';
 import 'package:chipchop_buyer/screens/Home/MobileSigninPage.dart';
@@ -207,8 +206,7 @@ class _AuthPageState extends State<AuthPage> {
                         style: BorderStyle.none,
                       ),
                     ),
-                    hintText:
-                        AppLocalizations.of(context).translate('secret_key'),
+                    hintText: "Password",
                     fillColor: CustomColors.white,
                     filled: true,
                     contentPadding: EdgeInsets.all(14),
@@ -227,7 +225,7 @@ class _AuthPageState extends State<AuthPage> {
                       );
                     },
                     child: Text(
-                      AppLocalizations.of(context).translate('forget_key'),
+                      "Not YOU, Forgot Password?",
                       textAlign: TextAlign.end,
                       style: TextStyle(
                         color: CustomColors.alertRed,
@@ -283,7 +281,7 @@ class _AuthPageState extends State<AuthPage> {
                       },
                       child: Center(
                         child: Text(
-                          AppLocalizations.of(context).translate('login'),
+                          "LOGIN",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18.0,
@@ -304,7 +302,7 @@ class _AuthPageState extends State<AuthPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      AppLocalizations.of(context).translate('no_account'),
+                      "Don't have an account?",
                       style: TextStyle(
                         fontSize: 13.0,
                         fontWeight: FontWeight.bold,
@@ -322,7 +320,7 @@ class _AuthPageState extends State<AuthPage> {
                         );
                       },
                       child: Text(
-                        AppLocalizations.of(context).translate('sign_up'),
+                        "SIGN UP",
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
@@ -390,7 +388,7 @@ class _AuthPageState extends State<AuthPage> {
     if (!result['is_success']) {
       Navigator.of(_keyLoader.currentContext, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('unable_to_login'), 2));
+          "Unable to Login, Something went wrong. Please try again Later!", 2));
       ScaffoldMessenger.of(context)
           .showSnackBar(CustomSnackBar.errorSnackBar(result['message'], 2));
     } else {
@@ -416,8 +414,8 @@ class _AuthPageState extends State<AuthPage> {
 
   void _submit(String _userID) async {
     if (_pController.text.length == 0) {
-      ScaffoldMessenger.of(context).showSnackBar(CustomSnackBar.errorSnackBar(
-          AppLocalizations.of(context).translate('your_secret_key'), 2));
+      ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackBar.errorSnackBar("Enter Your Secret KEY", 2));
       return;
     } else {
       try {
@@ -429,8 +427,7 @@ class _AuthPageState extends State<AuthPage> {
         if (hashKey != _user.password) {
           ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackBar.errorSnackBar(
-                  AppLocalizations.of(context).translate('wrong_secret_key'),
-                  2));
+                  "Wrong Secret KEY. Please try again!", 2));
           return;
         } else {
           await login(_userID);

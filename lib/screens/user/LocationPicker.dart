@@ -1,4 +1,3 @@
-import 'package:chipchop_buyer/app_localizations.dart';
 import 'package:chipchop_buyer/db/models/geopoint_data.dart';
 import 'package:chipchop_buyer/db/models/user_locations.dart';
 import 'package:chipchop_buyer/screens/home/HomeScreen.dart';
@@ -40,7 +39,7 @@ class LocationPickerState extends State<LocationPicker> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context).translate('title_add_location'),
+          "Add Location",
           textAlign: TextAlign.start,
           style: TextStyle(color: CustomColors.black, fontSize: 16),
         ),
@@ -84,7 +83,7 @@ class LocationPickerState extends State<LocationPicker> {
           }
         },
         label: Text(
-          AppLocalizations.of(context).translate('button_add_location'),
+          "Add Location",
         ),
       ),
       body: Container(

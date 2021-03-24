@@ -110,7 +110,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                     ),
                     padding:
                         EdgeInsets.only(right: 15, left: 15, top: 5, bottom: 5),
-                    primary: CustomColors.grey,
+                    backgroundColor: CustomColors.grey,
                   ),
                   onPressed: () async {
                     try {
@@ -138,7 +138,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
-                    primary: CustomColors.blueGreen,
+                    backgroundColor: CustomColors.blueGreen,
                   ),
                   onPressed: () async {
                     String imageUrl = '';

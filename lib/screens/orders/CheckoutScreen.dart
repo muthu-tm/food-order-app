@@ -56,11 +56,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void initState() {
     super.initState();
     this.selectedDate = DateTime.now().add(Duration(days: 1));
-    this.tempShippingCharge = widget._priceDetails[2];
-    this.shippingCharge = widget._priceDetails[2];
 
     if (widget._priceDetails.length == 2) {
       isOutOfRange = true;
+    } else {
+      this.tempShippingCharge = widget._priceDetails[2];
+      this.shippingCharge = widget._priceDetails[2];
     }
   }
 
