@@ -7,6 +7,8 @@ import 'package:chipchop_buyer/db/models/model.dart';
 import 'package:chipchop_buyer/services/utils/constants.dart';
 import 'package:chipchop_buyer/db/models/product_categories_map.dart';
 import 'package:chipchop_buyer/db/models/geopoint_data.dart';
+import 'package:chipchop_buyer/services/utils/Dateutils.dart';
+
 part 'products.g.dart';
 
 @JsonSerializable(explicitToJson: true)
@@ -130,6 +132,33 @@ class Products extends Model {
     else
       return noImagePlaceholder.replaceFirst(
           firebase_storage_path, image_kit_path + ik_medium_size);
+  }
+
+  bool isAvailableNow(variantID) {
+    if (this.variants[variantID].isAvailable) {
+      final currentTime = DateTime.now();
+      bool isAvailable = this.variants[variantID].availableTimes != null &&
+              this.variants[variantID].availableTimes.length > 0
+          ? false
+          : true;
+
+      if (this.variants[variantID].availableTimes != null) {
+        for (var item in this.variants[variantID].availableTimes) {
+          isAvailable = (currentTime.isAfter(
+                  Dateutils.getTimeAsDateTimeObject(item.activeFrom)) &&
+              currentTime.isBefore(
+                  Dateutils.getTimeAsDateTimeObject(item.activeTill)));
+
+          if (isAvailable) {
+            isAvailable = true;
+            break;
+          }
+        }
+      }
+      return isAvailable;
+    }
+
+    return false;
   }
 
   List<String> getProductImages() {

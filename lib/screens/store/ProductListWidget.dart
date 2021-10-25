@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 class ProductListWidget extends StatefulWidget {
@@ -503,30 +504,40 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                                 ),
                                 child: InkWell(
                                   onTap: () async {
-                                    try {
-                                      CustomDialogs.actionWaiting(context);
-                                      ShoppingCart wl = ShoppingCart();
-                                      wl.storeName = widget.product.storeName;
-                                      wl.storeID = widget.product.storeID;
-                                      wl.productID = widget.product.uuid;
-                                      wl.productName = widget.product.name;
-                                      wl.variantID = _variant;
-                                      wl.inWishlist = false;
-                                      wl.quantity = 1.0;
-                                      await wl.create();
-                                      setState(() {
-                                        widget.cartMap[getCartID()] = 1.0;
-                                      });
-                                      Navigator.pop(context);
-                                    } catch (err) {
-                                      print(err);
+                                    if (widget.product
+                                        .isAvailableNow(int.parse(_variant))) {
+                                      try {
+                                        CustomDialogs.actionWaiting(context);
+                                        ShoppingCart wl = ShoppingCart();
+                                        wl.storeName = widget.product.storeName;
+                                        wl.storeID = widget.product.storeID;
+                                        wl.productID = widget.product.uuid;
+                                        wl.productName = widget.product.name;
+                                        wl.variantID = _variant;
+                                        wl.inWishlist = false;
+                                        wl.quantity = 1.0;
+                                        await wl.create();
+                                        setState(() {
+                                          widget.cartMap[getCartID()] = 1.0;
+                                        });
+                                        Navigator.pop(context);
+                                      } catch (err) {
+                                        print(err);
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              "Oops. The Product isn't available NOW");
                                     }
                                   },
                                   child: Container(
                                     height: 25,
                                     width: 75,
                                     decoration: BoxDecoration(
-                                        color: Colors.lightBlue[100],
+                                        color: widget.product.isAvailableNow(
+                                                int.parse(_variant))
+                                            ? Colors.lightBlue[100]
+                                            : Colors.grey,
                                         borderRadius:
                                             BorderRadius.circular(30)),
                                     child: Row(
@@ -566,21 +577,20 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                         children: [
                           widget.product.variants[int.parse(_variant)].offer > 0
                               ? Row(
-                                children: [
-                                  Text(
-                                    "₹ ${widget.product.variants[int.parse(_variant)].originalPrice.toStringAsFixed(2)}",
-                                    style: TextStyle(
-                                      decoration:
-                                          TextDecoration.lineThrough,
-                                      color: Colors.black,
-                                      fontSize: 10.0,
+                                  children: [
+                                    Text(
+                                      "₹ ${widget.product.variants[int.parse(_variant)].originalPrice.toStringAsFixed(2)}",
+                                      style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                        color: Colors.black,
+                                        fontSize: 10.0,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                ],
-                              )
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                  ],
+                                )
                               : Container(),
                           Flexible(
                             child: Text(

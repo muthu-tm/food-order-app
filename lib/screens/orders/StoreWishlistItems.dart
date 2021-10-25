@@ -300,23 +300,29 @@ class _StoreWishlistItemsState extends State<StoreWishlistItems> {
                       Flexible(
                         child: InkWell(
                           onTap: () async {
-                            try {
-                              CustomDialogs.showLoadingDialog(
-                                  context, _keyLoader);
-                              bool res = await ShoppingCart().moveToCart(
-                                  sc.uuid,
-                                  sc.storeID,
-                                  sc.productID,
-                                  sc.variantID);
-                              Navigator.of(_keyLoader.currentContext,
-                                      rootNavigator: true)
-                                  .pop();
+                            if (_p.isAvailableNow(int.parse(sc.variantID))) {
+                              try {
+                                CustomDialogs.showLoadingDialog(
+                                    context, _keyLoader);
+                                bool res = await ShoppingCart().moveToCart(
+                                    sc.uuid,
+                                    sc.storeID,
+                                    sc.productID,
+                                    sc.variantID);
+                                Navigator.of(_keyLoader.currentContext,
+                                        rootNavigator: true)
+                                    .pop();
 
-                              if (!res)
-                                Fluttertoast.showToast(
-                                    msg: 'This Product already in Your Cart !');
-                            } catch (err) {
-                              print(err);
+                                if (!res)
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          'This Product already in Your Cart !');
+                              } catch (err) {
+                                print(err);
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Oops. The Product isn't available NOW");
                             }
                           },
                           child: Container(
@@ -324,8 +330,11 @@ class _StoreWishlistItemsState extends State<StoreWishlistItems> {
                             alignment: Alignment.center,
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.green[100]),
+                              borderRadius: BorderRadius.circular(5),
+                              color: _p.isAvailableNow(int.parse(sc.variantID))
+                                  ? Colors.green[100]
+                                  : Colors.grey,
+                            ),
                             child: Text(
                               "Move To Cart",
                               style: TextStyle(

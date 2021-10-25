@@ -344,22 +344,29 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                                 color: Colors.green)),
                                       ),
                                       onPressed: () async {
-                                        try {
-                                          CustomDialogs.showLoadingDialog(
-                                              context, _keyLoader);
-                                          bool res = await ShoppingCart()
-                                              .moveToCart(sc.uuid, sc.storeID,
-                                                  sc.productID, sc.variantID);
-                                          Navigator.of(
-                                                  _keyLoader.currentContext,
-                                                  rootNavigator: true)
-                                              .pop();
-                                          if (!res)
-                                            Fluttertoast.showToast(
-                                                msg:
-                                                    'This Product already in Your Cart !');
-                                        } catch (err) {
-                                          print(err);
+                                        if (_p.isAvailableNow(
+                                            int.parse(sc.variantID))) {
+                                          try {
+                                            CustomDialogs.showLoadingDialog(
+                                                context, _keyLoader);
+                                            bool res = await ShoppingCart()
+                                                .moveToCart(sc.uuid, sc.storeID,
+                                                    sc.productID, sc.variantID);
+                                            Navigator.of(
+                                                    _keyLoader.currentContext,
+                                                    rootNavigator: true)
+                                                .pop();
+                                            if (!res)
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      'This Product already in Your Cart !');
+                                          } catch (err) {
+                                            print(err);
+                                          }
+                                        } else {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Oops. The Product isn't available NOW");
                                         }
                                       },
                                       child: Text(
@@ -367,7 +374,10 @@ class _StoreOrderScreenState extends State<StoreOrderScreen> {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 12,
-                                          color: Colors.green,
+                                          color: _p.isAvailableNow(
+                                                  int.parse(sc.variantID))
+                                              ? Colors.green
+                                              : Colors.grey,
                                         ),
                                       ),
                                     ),

@@ -10,6 +10,11 @@ ProductVariants _$ProductVarientsFromJson(Map<String, dynamic> json) {
     ..availableUnit = json['available_unit'] as int ?? 1
     ..quantity = json['quantity'] as int ?? 0
     ..isAvailable = json['is_available'] as bool ?? true
+    ..availableTimes = (json['available_times'] as List)
+        ?.map((e) => e == null
+            ? ProductAvailTime.fromJson({'id': "0"})
+            : ProductAvailTime.fromJson(e as Map<String, dynamic>))
+        ?.toList()
     ..id = json['id'] as String ?? "0";
 }
 
@@ -23,5 +28,7 @@ Map<String, dynamic> _$ProductVarientsToJson(ProductVariants instance) =>
       'weight': instance.weight ?? 0.00,
       'unit': instance.unit ?? 1,
       'available_unit': instance.availableUnit ?? 1,
+      'available_times':
+          instance.availableTimes?.map((e) => e?.toJson())?.toList(),
       'quantity': instance.quantity ?? 1,
     };

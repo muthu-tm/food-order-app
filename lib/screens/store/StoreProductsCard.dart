@@ -3,6 +3,7 @@ import 'package:chipchop_buyer/db/models/products.dart';
 import 'package:chipchop_buyer/db/models/shopping_cart.dart';
 import 'package:chipchop_buyer/screens/utils/CustomColors.dart';
 import 'package:chipchop_buyer/screens/utils/CustomDialogs.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 class StoreProductsCard extends StatefulWidget {
@@ -493,30 +494,40 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
                                 ),
                                 child: InkWell(
                                   onTap: () async {
-                                    try {
-                                      CustomDialogs.actionWaiting(context);
-                                      ShoppingCart wl = ShoppingCart();
-                                      wl.storeName = widget.product.storeName;
-                                      wl.storeID = widget.product.storeID;
-                                      wl.productID = widget.product.uuid;
-                                      wl.productName = widget.product.name;
-                                      wl.variantID = _variant;
-                                      wl.inWishlist = false;
-                                      wl.quantity = 1.0;
-                                      await wl.create();
-                                      setState(() {
-                                        widget.cartMap[getCartID()] = 1.0;
-                                      });
-                                      Navigator.pop(context);
-                                    } catch (err) {
-                                      print(err);
+                                    if (widget.product
+                                        .isAvailableNow(int.parse(_variant))) {
+                                      try {
+                                        CustomDialogs.actionWaiting(context);
+                                        ShoppingCart wl = ShoppingCart();
+                                        wl.storeName = widget.product.storeName;
+                                        wl.storeID = widget.product.storeID;
+                                        wl.productID = widget.product.uuid;
+                                        wl.productName = widget.product.name;
+                                        wl.variantID = _variant;
+                                        wl.inWishlist = false;
+                                        wl.quantity = 1.0;
+                                        await wl.create();
+                                        setState(() {
+                                          widget.cartMap[getCartID()] = 1.0;
+                                        });
+                                        Navigator.pop(context);
+                                      } catch (err) {
+                                        print(err);
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              "Oops. The Product isn't available NOW");
                                     }
                                   },
                                   child: Container(
                                     height: 25,
                                     width: 73,
                                     decoration: BoxDecoration(
-                                        color: Colors.lightBlue[100],
+                                        color: widget.product.isAvailableNow(
+                                                int.parse(_variant))
+                                            ? Colors.lightBlue[100]
+                                            : Colors.grey,
                                         borderRadius:
                                             BorderRadius.circular(30)),
                                     child: Row(
@@ -647,10 +658,9 @@ class _StoreProductsCardState extends State<StoreProductsCard> {
             textAlign: TextAlign.center,
             maxLines: 2,
             style: TextStyle(
-              color: Colors.black,
-              fontSize: 12.0,
-              fontWeight: FontWeight.bold
-            ),
+                color: Colors.black,
+                fontSize: 12.0,
+                fontWeight: FontWeight.bold),
           ),
         ],
       ),

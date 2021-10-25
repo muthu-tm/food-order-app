@@ -82,7 +82,7 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
               Text("Rate the Product"),
               Align(
                 alignment: Alignment.centerRight,
-                child: RatingBar(
+                child: RatingBar.builder(
                   initialRating: ratings,
                   minRating: 1,
                   direction: Axis.horizontal,
